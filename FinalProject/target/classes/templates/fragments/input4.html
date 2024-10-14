@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> 작업 주문</title>
+    <link rel="stylesheet" href="production.css">
+    
+</head>
+
+<body>
+    <header id="header"></header>
+    <div class="custom-container">
+        <aside id="sidebar"></aside>
+        <div class="form-container">
+            <h1> 작업 주문</h1>
+            <form id="input-form">
+                <div class="form-group">
+                    <label for="production-date">주문 날짜:</label>
+                    <input type="date" id="production-date" name="production-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="production-date">납기 날짜:</label>
+                    <input type="date" id="production-date" name="production-date" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="production-period">생산품목:</label>
+                    <input type="text" id="production-period" name="production-period" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="base-item">주문 수량:</label>
+                    <input type="text" id="base-item" name="base-item" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="production-calculation">생산수량:</label>
+                    <input type="text" id="production-calculation" name="production-calculation" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="mrp-calculation">종결여부:</label>
+                    <input type="text" id="mrp-calculation" name="mrp-calculation" required>
+                </div>
+
+                
+
+                <button type="submit" class="submit-button">등록</button>
+            </form>
+        </div>
+    </div>
+    <script src="loadContent.js"></script>
+</body>
+
+</html>
