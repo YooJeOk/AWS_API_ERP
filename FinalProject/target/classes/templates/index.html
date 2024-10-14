@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메인 페이지</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <!-- 헤더 부분은 header.html에서 불러옵니다 -->
+    <header th:replace="fragments/header :: header"></header>
+
+    <!-- 메인 콘텐츠 -->
+    <main>
+        <h1>메인 화면</h1>
+        <p>여기는 메인 페이지입니다.</p>
+        <!-- 필요한 내용을 여기에 추가하면 됩니다 -->
+    </main>
+
+    <!-- JS 파일 불러오기 -->
+    <script src="/js/loadContent.js"></script>
+</body>
+</html>
