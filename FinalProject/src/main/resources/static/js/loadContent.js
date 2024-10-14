@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 처음 로드될 때 메인 대시보드 화면으로 시작
     loadContent('header.html', 'header');
     loadContent('main-dashboard.html', 'main-content');
-    
+
     // 사이드바 열기/닫기 함수
     function toggleSidebar(show) {
         const sidebar = document.getElementById('sidebar');
@@ -88,4 +88,48 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 페이지 로드 시 네비게이션 설정
     setTimeout(setupNavigation, 100);
+    
+    // 드롭다운 이벤트 설정
+    const dropdowns = document.querySelectorAll('.dropdown-toggle');
+
+    dropdowns.forEach((dropdown) => {
+        dropdown.addEventListener('click', function (e) {
+            dropdowns.forEach((otherDropdown) => {
+                if (otherDropdown !== e.currentTarget) {
+                    const otherMenu = otherDropdown.nextElementSibling;
+                    if (otherMenu.classList.contains('show')) {
+                        otherDropdown.classList.remove('show');
+                        otherMenu.classList.remove('show');
+                    }
+                }
+            });
+
+            const currentMenu = this.nextElementSibling;
+            if (currentMenu.classList.contains('show')) {
+                currentMenu.classList.remove('show');
+            } else {
+                currentMenu.classList.add('show');
+            }
+        });
+    });
+
+    dropdowns.forEach(dropdown => {
+        dropdown.addEventListener('mouseover', function () {
+            const currentMenu = this.nextElementSibling;
+            currentMenu.classList.add('show');
+            const siblingButtons = currentMenu.closest('.dropdown').nextElementSibling;
+            if (siblingButtons) {
+                siblingButtons.style.transform = 'translateY(' + currentMenu.scrollHeight + 'px)';
+            }
+        });
+
+        dropdown.addEventListener('mouseout', function () {
+            const currentMenu = this.nextElementSibling;
+            currentMenu.classList.remove('show');
+            const siblingButtons = currentMenu.closest('.dropdown').nextElementSibling;
+            if (siblingButtons) {
+                siblingButtons.style.transform = 'translateY(0)';
+            }
+        });
+    });
 });
