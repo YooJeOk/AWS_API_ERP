@@ -11,7 +11,7 @@ public class WebController {
 
     @GetMapping("/")
     public String home() {
-        log.info("Home page accessed.");  // 로그 출력
+        log.info("Homeㅏㅓ page accessed.");  // 로그 출력
         return "index";  // index.html 파일을 반환
     }
 }
