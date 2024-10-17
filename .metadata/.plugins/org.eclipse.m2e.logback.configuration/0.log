@@ -125,3 +125,24 @@
 2024-10-17 19:34:58,967 [Worker-18: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
 2024-10-17 19:34:58,968 [Worker-18: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered properties files.
 2024-10-17 19:34:58,968 [Worker-18: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Fullstack\Project3\AWS_API_ERP\FinalProject\src\test\resources
+2024-10-17 19:48:02,068 [Worker-23: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2024-10-17 19:48:02,068 [Worker-23: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered properties files.
+2024-10-17 19:48:02,068 [Worker-23: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2024-10-17 19:48:02,083 [Worker-23: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 60 resources
+2024-10-17 19:48:02,083 [Worker-23: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2024-10-17 19:48:02,083 [Worker-23: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered properties files.
+2024-10-17 19:48:02,083 [Worker-23: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Fullstack\Project3\AWS_API_ERP\FinalProject\src\test\resources
+2024-10-17 19:48:06,459 [Worker-25: Updating Maven Project] INFO  o.e.m.c.i.p.ProjectConfigurationManager - Update started
+2024-10-17 19:48:08,200 [Worker-25: Updating Maven Project] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: com.ERP:FinalProject:0.0.1-SNAPSHOT @ C:\Fullstack\Project3\AWS_API_ERP\FinalProject\pom.xml.
+2024-10-17 19:48:08,589 [Worker-25: Updating Maven Project] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /FinalProject/src/main/java
+2024-10-17 19:48:08,589 [Worker-25: Updating Maven Project] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /FinalProject/src/main/resources
+2024-10-17 19:48:08,590 [Worker-25: Updating Maven Project] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /FinalProject/src/main/resources
+2024-10-17 19:48:08,590 [Worker-25: Updating Maven Project] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /FinalProject/src/test/java
+2024-10-17 19:48:08,952 [Worker-25: Updating Maven Project] INFO  o.e.m.c.i.p.ProjectConfigurationManager - Update completed: 2 sec
+2024-10-17 19:48:09,624 [Worker-23: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2024-10-17 19:48:09,624 [Worker-23: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered properties files.
+2024-10-17 19:48:09,625 [Worker-23: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2024-10-17 19:48:09,633 [Worker-23: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 60 resources
+2024-10-17 19:48:09,704 [Worker-23: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2024-10-17 19:48:09,704 [Worker-23: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered properties files.
+2024-10-17 19:48:09,704 [Worker-23: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Fullstack\Project3\AWS_API_ERP\FinalProject\src\test\resources
