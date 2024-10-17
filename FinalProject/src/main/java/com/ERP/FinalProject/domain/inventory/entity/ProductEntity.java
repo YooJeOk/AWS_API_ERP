@@ -1,4 +1,4 @@
-package com.ERP.FinalProject.entity;
+package com.ERP.FinalProject.domain.inventory.entity;
 
 import java.time.LocalDateTime;
 
