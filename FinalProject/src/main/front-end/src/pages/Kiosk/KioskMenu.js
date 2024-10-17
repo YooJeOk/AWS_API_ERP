@@ -40,7 +40,7 @@ const KioskMenu = () => {
         id: 4,
         name: '아메리카노',
         price: 3200,
-        image: '/images/coffee/아메리카노ice.jpg',
+        image: '/images/coffee/아메리카노.ice',
         description: '진한 에스프레소에 차가운 물을 더해 시원하고 깔끔한 맛을 느낄 수 있는 아이스 커피',
         type: 'coffee',
         temperature: 'ICE'
