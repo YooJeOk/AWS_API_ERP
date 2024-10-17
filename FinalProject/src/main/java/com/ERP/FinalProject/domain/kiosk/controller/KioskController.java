@@ -28,7 +28,7 @@ public class KioskController {
 		Pageable pageable = PageRequest.of(page, 6);
 		Page<Product> KioskMenuPage = service.findAll(pageable);
 		log.info("키오스크 메뉴 데이터:" + KioskMenuPage);	
-		//test
+		//test=ds
 		return "";
 	}
 }
