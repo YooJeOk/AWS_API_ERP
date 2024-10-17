@@ -14,11 +14,11 @@ import lombok.Data;
 @Entity
 @Table(name = "Product", schema = "ERP")
 @Data
-public class ProductEntity {
+public class Product {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ProductID")
-    private Integer productId;
+    private Long productId;
 	
     @Column(name = "ProductName")
     private String productName;
