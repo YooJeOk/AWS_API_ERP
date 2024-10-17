@@ -22,10 +22,13 @@ public class KioskController {
 	private KioskService service;
 	
 	@GetMapping("/kioskmenu")
-	public String kioskmenu(Model model,@RequestParam(defaultValue = "0") int page) {
+	public String kioskmenu(Model model,
+			@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "추천메뉴") String category) {
 		Pageable pageable = PageRequest.of(page, 6);
 		Page<Product> KioskMenuPage = service.findAll(pageable);
-		log.info("키오스크 메뉴 데이터:" + KioskMenuPage);		
+		log.info("키오스크 메뉴 데이터:" + KioskMenuPage);	
+		//test
 		return "";
 	}
 }
