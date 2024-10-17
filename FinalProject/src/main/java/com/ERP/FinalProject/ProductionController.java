@@ -9,8 +9,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ProductionController {
 
-    @GetMapping("/production")
+    @GetMapping("/productionPage/production.html")
     public String productionPage() {
-        return "fragments/production"; 
+        return "fragments/production.html"; 
     }
+    @GetMapping("/productionPage1/production8.html")
+    public String productionPage1() {
+        return "fragments/production8.html"; 
+    }
+    @GetMapping("/productionPage2/production5.html")
+    public String productionPage2() {
+        return "fragments/production5.html"; 
+    }
+    @GetMapping("/productionPage3/production7.html")
+    public String productionPage3() {
+        return "fragments/production7.html"; 
+    }
+    @GetMapping("/productionPage4/production9.html")
+    public String productionPage4() {
+        return "fragments/production9.html"; 
+    }
+   
 }
