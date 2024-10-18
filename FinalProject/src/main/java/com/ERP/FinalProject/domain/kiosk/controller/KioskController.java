@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ERP.FinalProject.domain.inventory.entity.Product;
 import com.ERP.FinalProject.domain.kiosk.entity.Coffee;
+import com.ERP.FinalProject.domain.kiosk.entity.Coffee;
 import com.ERP.FinalProject.domain.kiosk.service.KioskService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,23 +37,43 @@ public class KioskController {
 		
 		log.info("키오스크컨트롤러 /recommended 실행");
 		Pageable pageable = PageRequest.of(page, size);
-		Page<Product> recommendedProducts = kioskservice.getRecommendedProducts(pageable);
-		Page<Coffee> recommendedCoffees = kioskservice.getRecommendedCoffees(pageable);
+		Page<Product> Products = kioskservice.getProducts(pageable);
+		Page<Coffee> Coffees = kioskservice.getCoffees(pageable);
 
-		List<Object> recommendedItems = new ArrayList<Object>();
-		recommendedItems.addAll(recommendedProducts.getContent());
-		recommendedItems.addAll(recommendedCoffees.getContent());
+		
+        List<Object> recommendedItems = new ArrayList<>();
+        List<Object> breadItems = new ArrayList<>();
+        List<Object> coffeeIceItems = new ArrayList<>();
+        List<Object> coffeeHotItems = new ArrayList<>();
+        
+        for (Product product : Products.getContent()) {
+            if ("Y".equals(product.getRecommend())) {
+                recommendedItems.add(product);  
+            } else {
+                breadItems.add(product);
+            }
+        }
+        for (Coffee coffee : Coffees) {
+            if ("Y".equals(coffee.getRecommend())) {
+                recommendedItems.add(coffee); 
+            } else if ("ICE".equals(coffee.getTemperature())) {
+                coffeeIceItems.add(coffee); 
+            } else if ("HOT".equals(coffee.getTemperature())) {
+                coffeeHotItems.add(coffee); 
+            }
+        }
 
-		int totalElements = (int) (recommendedProducts.getTotalElements() + recommendedCoffees.getTotalElements());
-		int totalPages = (int) Math.ceil((double) totalElements / size);
+        Map<String, Object> response = new HashMap<>();
+        response.put("추천메뉴", recommendedItems);  
+        response.put("빵", breadItems);  
+        response.put("커피(ice)", coffeeIceItems);  
+        response.put("커피(hot)", coffeeHotItems);  
+        
+        System.out.println("추천메뉴: "+recommendedItems);
+        System.out.println("빵: "+breadItems);
+        System.out.println("커피(ice): "+coffeeIceItems);
+        System.out.println("커피(hot): "+coffeeHotItems);
 
-		System.out.println("totalElements: "+totalElements);
-		System.out.println("recommendedItems: "+recommendedItems);
-		Map<String, Object> response = new HashMap<>();
-		response.put("items", recommendedItems);
-        response.put("currentPage", page);
-        response.put("totalItems", totalElements);
-        response.put("totalPages", totalPages);
 
         return ResponseEntity.ok(response);
 		

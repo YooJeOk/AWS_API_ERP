@@ -1,5 +1,6 @@
 package com.ERP.FinalProject.domain.kiosk.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -10,18 +11,31 @@ import lombok.NoArgsConstructor;
 
 
 @Entity
-@Table(name = "StoreCoffeeTypes")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "Coffee", schema = "ERP")
 public class Coffee {
 	
 	@Id
+	@Column(name="CoffeeID")
     private Long coffeeId;
+	
+	@Column(name="CoffeeName")
     private String coffeeName;
+	
+	@Column(name="SalePrice")
     private Integer salePrice;
+	
+	@Column(name="CoffeeImage")
     private String coffeeImage;
+	
+	@Column(name="Recommend")
     private String recommend;
-    private String temperature;
+	
+	@Column(name="Temperature")
+	private String temperature;
+	
+	@Column(name="DetailDescription")
     private String detailDescription;
 }
