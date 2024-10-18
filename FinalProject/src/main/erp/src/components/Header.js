@@ -4,12 +4,12 @@ import './Header.css';  // 필요에 따라 CSS 파일 추가
 
 function Header() {
     return (
-        <div className="navbar">
-            <div className="top-section">
+        <div className="navbar" style={{ backgroundColor: '#F0C490'}}>
+            <div className="top-section" style={{ backgroundColor: '#F0C490'}}>
                 <img src="logo.png" alt="숨쉰당 로고" className="logo" />
                 <div className="nav-menu">
-                    <div id="main-button" className="nav-button">
-                        <Link to="/">메인 화면</Link>  {/* 메인 화면으로 이동 */}
+                    <div id="main-button" className="nav-button" >
+                        <Link to="/"   style={{textDecoration: 'none', color: '#703103' }}>메인 화면</Link>  {/* 메인 화면으로 이동 */}
                     </div>
                     <div id="production-button" className="nav-button">
                         생산 관리
