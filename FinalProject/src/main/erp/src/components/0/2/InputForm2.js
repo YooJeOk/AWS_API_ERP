@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './0/ProductionPage.css';  // CSS 파일을 적용할 경우 사용
+import 'chart.js'  // CSS 파일을 적용할 경우 사용
 
 function InputArrivalForm() {
     // 폼 데이터를 관리할 상태를 생성

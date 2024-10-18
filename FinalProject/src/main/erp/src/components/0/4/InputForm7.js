@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './0/production.css';  // 필요한 경우 스타일 연결
+
 
 function QualityInspectionRegistration() {
     // 폼 데이터를 관리할 상태를 생성

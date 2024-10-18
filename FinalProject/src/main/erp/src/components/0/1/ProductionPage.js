@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import './styles.css';  // CSS 파일을 불러옴
-import './ProductionPage.css';
+
+import './prodution.css';
 
 function ProductionPage() {
     const [data, setData] = useState([]);  // 데이터를 관리할 state

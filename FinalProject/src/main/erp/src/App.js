@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
-import ProductionSidebar from './components/0/ProductionSidebar';
+import ProductionSidebar from './components/ProductionSidebar';
 import InputForm from './components/0/1/InputForm';  
 import InputForm2 from './components/0/2/InputForm2';
 import InputForm3 from './components/0/2/InputForm3'; // 추가된 컴포넌트들

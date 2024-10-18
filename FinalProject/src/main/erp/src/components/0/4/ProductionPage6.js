@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './styles.css'; // CSS 파일을 불러옴
+
 
 function Production6() {
     const [data, setData] = useState([]);  // 데이터를 관리할 state

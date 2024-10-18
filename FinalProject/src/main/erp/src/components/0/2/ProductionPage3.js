@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './0/ProductionPage.css';
+
 
 function ProductionPage3() {
     const [data, setData] = useState([]);

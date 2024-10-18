@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './0/ProductionPage.css';
+import 'chart.js'
 
 function InputForm3() {
     // 폼 데이터를 관리할 상태를 생성

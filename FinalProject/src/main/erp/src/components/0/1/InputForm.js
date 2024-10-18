@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import '.production.css';  // 필요한 경우 스타일 연결
-
+import './production.css';
 function InputForm() {
     // 폼 데이터를 관리할 상태를 생성
     const [formData, setFormData] = useState({

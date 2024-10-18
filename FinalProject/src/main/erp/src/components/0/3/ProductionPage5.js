@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './0/production.css'; // 필요한 경우 스타일 연결
+
 
 function Production5() {
     const [data, setData] = useState([]);  // 데이터를 관리할 상태

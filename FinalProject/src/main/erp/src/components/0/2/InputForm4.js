@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './0/ProductionPage.css';
+import 'chart.js'
 
 function InputForm4() {
     const [formData, setFormData] = useState({
