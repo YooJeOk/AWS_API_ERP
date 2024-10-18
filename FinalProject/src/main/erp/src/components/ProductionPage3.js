@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import './ProductionPage.css';
 
-
-function Production5() {
-    const [data, setData] = useState([]);  // 데이터를 관리할 상태
+function ProductionPage3() {
+    const [data, setData] = useState([]);
     const [isDataLoaded, setIsDataLoaded] = useState(false);
 
     useEffect(() => {
-        // 데이터를 불러오는 부분 (추후에 비동기 통신으로 대체 가능)
+        // 데이터를 불러오는 비동기 처리 (임시 데이터 사용)
         const fetchData = () => {
             const dummyData = [
                 {
-                    productionItem: 'Item A',
-                    consumedItem: 'Consumed A',
-                    productionProcess: 'Process 1',
-                    itemCode: 'A123',
-                    itemNameSpec: 'Item Name (Spec)',
+                    workDate: "2024-10-17",
+                    itemCode: "A123",
+                    itemName: "Item A",
+                    spec: "Spec A",
+                    quantity: "100",
+                    workItemName: "Work Item A",
+                    resources: "Resource X, 2 hours"
                 }
             ];
             setData(dummyData);
@@ -30,33 +32,37 @@ function Production5() {
             <main className="production-content">
                 <div className="production-mainbar">
                     <div className="productionbar">
-                        <h1>소요량 현황</h1>
+                        <h1>작업 내역 조회</h1>
                         <button className="create-button">생성</button>
                     </div>
                     <table className="production-table">
                         <thead>
                             <tr>
-                                <th>생산품목</th>
-                                <th>소모품목</th>
-                                <th>생산공정</th>
-                                <th>품목코드</th>
-                                <th>품목명(규격)</th>
+                                <th>작업 일자</th>
+                                <th>생산품목 코드</th>
+                                <th>생산품목명</th>
+                                <th>규격</th>
+                                <th>수량</th>
+                                <th>작업 품목명</th>
+                                <th>투입자원&작업시간</th>
                             </tr>
                         </thead>
                         <tbody>
                             {isDataLoaded ? (
                                 data.map((row, index) => (
                                     <tr key={index}>
-                                        <td>{row.productionItem}</td>
-                                        <td>{row.consumedItem}</td>
-                                        <td>{row.productionProcess}</td>
+                                        <td>{row.workDate}</td>
                                         <td>{row.itemCode}</td>
-                                        <td>{row.itemNameSpec}</td>
+                                        <td>{row.itemName}</td>
+                                        <td>{row.spec}</td>
+                                        <td>{row.quantity}</td>
+                                        <td>{row.workItemName}</td>
+                                        <td>{row.resources}</td>
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="5">등록된 데이터가 없습니다</td>
+                                    <td colSpan="7">등록된 데이터가 없습니다</td>
                                 </tr>
                             )}
                         </tbody>
@@ -67,4 +73,4 @@ function Production5() {
     );
 }
 
-export default Production5;
+export default ProductionPage3;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import './ProductionPage.css';
 
 function ProductionMonitoringPage() {
     const [data, setData] = useState([]);  // 데이터를 관리할 상태

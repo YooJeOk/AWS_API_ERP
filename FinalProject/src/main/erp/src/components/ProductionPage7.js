@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import './ProductionPage.css';
 
-import './prodution.css';
-
-function ProductionPage() {
+function Production7() {
     const [data, setData] = useState([]);  // 데이터를 관리할 state
     const [isDataLoaded, setIsDataLoaded] = useState(false);
 
@@ -11,13 +10,13 @@ function ProductionPage() {
         const fetchData = () => {
             const dummyData = [
                 {
-                    productionDate: "2024-10-17",
-                    productionPeriod: "2024-10-01 ~ 2024-10-31",
-                    item: "Item A",
-                    productionCalculation: "50 units",
-                    mrpCalculation: "45 units",
-                    status: "In Progress",
-                    etc: "None"
+                    inspectionDate: "2024-10-17",
+                    inspectionMethod: "Method A",
+                    productCode: "P001",
+                    productName: "Product A",
+                    quantity: "100 units",
+                    sample: "Sample A",
+                    passStatus: "Pass"
                 }
             ];
             setData(dummyData);
@@ -33,32 +32,32 @@ function ProductionPage() {
             <main className="production-content">
                 <div className="production-mainbar">
                     <div className="productionbar">
-                        <h1>생산관리/MRP 리스트</h1>
+                        <h1>품질검사 조회</h1>
                         <button className="create-button">생성</button>
                     </div>
                     <table className="production-table">
                         <thead>
                             <tr>
-                                <th>생산일자</th>
-                                <th>생산계획기간</th>
-                                <th>기준품목</th>
-                                <th>생산계획계산</th>
-                                <th>MRP계산</th>
-                                <th>생산계획/MRP현황</th>
-                                <th>기타</th>
+                                <th>검사일자</th>
+                                <th>검사방법</th>
+                                <th>품목코드</th>
+                                <th>품목명</th>
+                                <th>수량</th>
+                                <th>시료</th>
+                                <th>합격여부</th>
                             </tr>
                         </thead>
                         <tbody>
                             {isDataLoaded ? (
                                 data.map((row, index) => (
                                     <tr key={index}>
-                                        <td>{row.productionDate}</td>
-                                        <td>{row.productionPeriod}</td>
-                                        <td>{row.item}</td>
-                                        <td>{row.productionCalculation}</td>
-                                        <td>{row.mrpCalculation}</td>
-                                        <td>{row.status}</td>
-                                        <td>{row.etc}</td>
+                                        <td>{row.inspectionDate}</td>
+                                        <td>{row.inspectionMethod}</td>
+                                        <td>{row.productCode}</td>
+                                        <td>{row.productName}</td>
+                                        <td>{row.quantity}</td>
+                                        <td>{row.sample}</td>
+                                        <td>{row.passStatus}</td>
                                     </tr>
                                 ))
                             ) : (
@@ -74,4 +73,4 @@ function ProductionPage() {
     );
 }
 
-export default ProductionPage;
+export default Production7;

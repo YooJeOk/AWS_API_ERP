@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
+import './production.css';
 
-
-function DefectRegistration() {
+function InputForm3() {
     // 폼 데이터를 관리할 상태를 생성
     const [formData, setFormData] = useState({
         productionDate: '',
         productionPeriod: '',
         baseItem: '',
+        productionCalculation: '',
         mrpCalculation: '',
         status: '',
         others: ''
@@ -30,10 +31,10 @@ function DefectRegistration() {
     return (
         <div className="custom-container">
             <div className="form-container">
-                <h1>불량 등록</h1>
+                <h1>작업 내역 입력</h1>
                 <form id="input-form" onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label htmlFor="production-date">입력 일자:</label>
+                        <label htmlFor="production-date">작업 일자:</label>
                         <input
                             type="date"
                             id="production-date"
@@ -69,6 +70,18 @@ function DefectRegistration() {
                     </div>
 
                     <div className="form-group">
+                        <label htmlFor="production-calculation">규격:</label>
+                        <input
+                            type="text"
+                            id="production-calculation"
+                            name="productionCalculation"
+                            value={formData.productionCalculation}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
                         <label htmlFor="mrp-calculation">수량:</label>
                         <input
                             type="text"
@@ -81,7 +94,7 @@ function DefectRegistration() {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="status">불량 유형:</label>
+                        <label htmlFor="status">작업 품목명:</label>
                         <input
                             type="text"
                             id="status"
@@ -93,7 +106,7 @@ function DefectRegistration() {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="others">처리 방법:</label>
+                        <label htmlFor="others">투입자원&작업시간:</label>
                         <input
                             type="text"
                             id="others"
@@ -110,4 +123,4 @@ function DefectRegistration() {
     );
 }
 
-export default DefectRegistration;
+export default InputForm3;

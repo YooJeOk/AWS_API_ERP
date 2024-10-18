@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import './production.css';
 
-
-function InputForm8() {
+function QualityInspectionRegistration() {
     // 폼 데이터를 관리할 상태를 생성
     const [formData, setFormData] = useState({
         productionDate: '',
@@ -10,6 +10,7 @@ function InputForm8() {
         baseItem: '',
         mrpCalculation: '',
         status: '',
+        others: ''
     });
 
     // 폼 데이터가 변경될 때 상태를 업데이트
@@ -30,10 +31,10 @@ function InputForm8() {
     return (
         <div className="custom-container">
             <div className="form-container">
-                <h1>소요량 계산</h1>
+                <h1>품질검사 등록</h1>
                 <form id="input-form" onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label htmlFor="production-date">일자:</label>
+                        <label htmlFor="production-date">검사 일자:</label>
                         <input
                             type="date"
                             id="production-date"
@@ -45,7 +46,7 @@ function InputForm8() {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="production-calculation">NO:</label>
+                        <label htmlFor="production-calculation">검사 방법:</label>
                         <input
                             type="text"
                             id="production-calculation"
@@ -81,7 +82,7 @@ function InputForm8() {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="mrp-calculation">규격:</label>
+                        <label htmlFor="mrp-calculation">수량:</label>
                         <input
                             type="text"
                             id="mrp-calculation"
@@ -93,7 +94,7 @@ function InputForm8() {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="status">수량:</label>
+                        <label htmlFor="status">시료:</label>
                         <input
                             type="text"
                             id="status"
@@ -104,6 +105,17 @@ function InputForm8() {
                         />
                     </div>
 
+                    <div className="form-group">
+                        <label htmlFor="others">합격 여부:</label>
+                        <input
+                            type="text"
+                            id="others"
+                            name="others"
+                            value={formData.others}
+                            onChange={handleChange}
+                        />
+                    </div>
+
                     <button type="submit" className="submit-button">등록</button>
                 </form>
             </div>
@@ -111,4 +123,4 @@ function InputForm8() {
     );
 }
 
-export default InputForm8;
+export default QualityInspectionRegistration;

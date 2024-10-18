@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto'; // Chart.js에서 자동으로 필요한 요소를 불러옴
-import '.Prodution.css';
+import './ProductionPage.css';
 
 function ProductionPage9() {
     const [chartData, setChartData] = useState({});

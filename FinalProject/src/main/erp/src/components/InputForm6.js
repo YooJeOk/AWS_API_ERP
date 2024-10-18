@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
+import './production.css';
 
-
-function InputForm5() {
+function DefectRegistration() {
     // 폼 데이터를 관리할 상태를 생성
     const [formData, setFormData] = useState({
+        productionDate: '',
         productionPeriod: '',
         baseItem: '',
-        productionCalculation: '',
         mrpCalculation: '',
+        status: '',
+        others: ''
     });
 
     // 폼 데이터가 변경될 때 상태를 업데이트
@@ -28,10 +30,22 @@ function InputForm5() {
     return (
         <div className="custom-container">
             <div className="form-container">
-                <h1>소요량 현황</h1>
+                <h1>불량 등록</h1>
                 <form id="input-form" onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label htmlFor="production-period">생산품목:</label>
+                        <label htmlFor="production-date">입력 일자:</label>
+                        <input
+                            type="date"
+                            id="production-date"
+                            name="productionDate"
+                            value={formData.productionDate}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="production-period">생산품목 코드:</label>
                         <input
                             type="text"
                             id="production-period"
@@ -43,7 +57,7 @@ function InputForm5() {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="base-item">소모품목:</label>
+                        <label htmlFor="base-item">생산품목명:</label>
                         <input
                             type="text"
                             id="base-item"
@@ -55,19 +69,7 @@ function InputForm5() {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="production-calculation">생산공정:</label>
-                        <input
-                            type="text"
-                            id="production-calculation"
-                            name="productionCalculation"
-                            value={formData.productionCalculation}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="mrp-calculation">품목코드:</label>
+                        <label htmlFor="mrp-calculation">수량:</label>
                         <input
                             type="text"
                             id="mrp-calculation"
@@ -79,14 +81,25 @@ function InputForm5() {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="mrp-calculation">품목명(규격):</label>
+                        <label htmlFor="status">불량 유형:</label>
                         <input
                             type="text"
-                            id="mrp-calculation"
-                            name="mrpCalculation"
-                            value={formData.mrpCalculation}
+                            id="status"
+                            name="status"
+                            value={formData.status}
                             onChange={handleChange}
                             required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="others">처리 방법:</label>
+                        <input
+                            type="text"
+                            id="others"
+                            name="others"
+                            value={formData.others}
+                            onChange={handleChange}
                         />
                     </div>
 
@@ -97,4 +110,4 @@ function InputForm5() {
     );
 }
 
-export default InputForm5;
+export default DefectRegistration;

@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
+import './production.css';
 
-
-function QualityInspectionRegistration() {
+function InputArrivalForm() {
     // 폼 데이터를 관리할 상태를 생성
     const [formData, setFormData] = useState({
-        productionDate: '',
-        productionCalculation: '',
-        productionPeriod: '',
-        baseItem: '',
-        mrpCalculation: '',
-        status: '',
-        others: ''
+        arrivalDate: '',
+        productCode: '',
+        productName: '',
+        specification: '',
+        quantity: '',
+        others: '',
+        workOrder: ''
     });
 
     // 폼 데이터가 변경될 때 상태를 업데이트
@@ -24,94 +24,93 @@ function QualityInspectionRegistration() {
     // 폼 제출 처리
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('폼 제출됨:', formData);
+        console.log('입고 등록 데이터:', formData);
         // 여기서 formData를 서버로 전송하는 비동기 처리 등을 추가 가능
     };
 
     return (
         <div className="custom-container">
             <div className="form-container">
-                <h1>품질검사 등록</h1>
+                <h1>입고 등록</h1>
                 <form id="input-form" onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label htmlFor="production-date">검사 일자:</label>
+                        <label htmlFor="arrival-date">입고 일자:</label>
                         <input
                             type="date"
-                            id="production-date"
-                            name="productionDate"
-                            value={formData.productionDate}
+                            id="arrival-date"
+                            name="arrivalDate"
+                            value={formData.arrivalDate}
                             onChange={handleChange}
                             required
                         />
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="production-calculation">검사 방법:</label>
+                        <label htmlFor="product-code">생산품목 코드:</label>
                         <input
                             type="text"
-                            id="production-calculation"
-                            name="productionCalculation"
-                            value={formData.productionCalculation}
+                            id="product-code"
+                            name="productCode"
+                            value={formData.productCode}
                             onChange={handleChange}
                             required
                         />
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="production-period">품목 코드:</label>
+                        <label htmlFor="product-name">생산품목명:</label>
                         <input
                             type="text"
-                            id="production-period"
-                            name="productionPeriod"
-                            value={formData.productionPeriod}
+                            id="product-name"
+                            name="productName"
+                            value={formData.productName}
                             onChange={handleChange}
                             required
                         />
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="base-item">품목명:</label>
+                        <label htmlFor="specification">규격:</label>
                         <input
                             type="text"
-                            id="base-item"
-                            name="baseItem"
-                            value={formData.baseItem}
+                            id="specification"
+                            name="specification"
+                            value={formData.specification}
                             onChange={handleChange}
                             required
                         />
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="mrp-calculation">수량:</label>
+                        <label htmlFor="quantity">수량:</label>
                         <input
                             type="text"
-                            id="mrp-calculation"
-                            name="mrpCalculation"
-                            value={formData.mrpCalculation}
+                            id="quantity"
+                            name="quantity"
+                            value={formData.quantity}
                             onChange={handleChange}
                             required
                         />
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="status">시료:</label>
-                        <input
-                            type="text"
-                            id="status"
-                            name="status"
-                            value={formData.status}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="others">합격 여부:</label>
+                        <label htmlFor="others">기타:</label>
                         <input
                             type="text"
                             id="others"
                             name="others"
                             value={formData.others}
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="work-order">작업지시서:</label>
+                        <input
+                            type="text"
+                            id="work-order"
+                            name="workOrder"
+                            value={formData.workOrder}
                             onChange={handleChange}
                         />
                     </div>
@@ -123,4 +122,4 @@ function QualityInspectionRegistration() {
     );
 }
 
-export default QualityInspectionRegistration;
+export default InputArrivalForm;

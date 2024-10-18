@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
 
+import './ProductionPage.css';
 
-function ProductionPage3() {
-    const [data, setData] = useState([]);
+function ProductionPage() {
+    const [data, setData] = useState([]);  // 데이터를 관리할 state
     const [isDataLoaded, setIsDataLoaded] = useState(false);
 
     useEffect(() => {
-        // 데이터를 불러오는 비동기 처리 (임시 데이터 사용)
+        // 데이터를 불러오는 부분 (추후에 비동기 통신으로 대체 가능)
         const fetchData = () => {
             const dummyData = [
                 {
-                    workDate: "2024-10-17",
-                    itemCode: "A123",
-                    itemName: "Item A",
-                    spec: "Spec A",
-                    quantity: "100",
-                    workItemName: "Work Item A",
-                    resources: "Resource X, 2 hours"
+                    productionDate: "2024-10-17",
+                    productionPeriod: "2024-10-01 ~ 2024-10-31",
+                    item: "Item A",
+                    productionCalculation: "50 units",
+                    mrpCalculation: "45 units",
+                    status: "In Progress",
+                    etc: "None"
                 }
             ];
             setData(dummyData);
@@ -32,32 +33,32 @@ function ProductionPage3() {
             <main className="production-content">
                 <div className="production-mainbar">
                     <div className="productionbar">
-                        <h1>작업 내역 조회</h1>
+                        <h1>생산관리/MRP 리스트</h1>
                         <button className="create-button">생성</button>
                     </div>
                     <table className="production-table">
                         <thead>
                             <tr>
-                                <th>작업 일자</th>
-                                <th>생산품목 코드</th>
-                                <th>생산품목명</th>
-                                <th>규격</th>
-                                <th>수량</th>
-                                <th>작업 품목명</th>
-                                <th>투입자원&작업시간</th>
+                                <th>생산일자</th>
+                                <th>생산계획기간</th>
+                                <th>기준품목</th>
+                                <th>생산계획계산</th>
+                                <th>MRP계산</th>
+                                <th>생산계획/MRP현황</th>
+                                <th>기타</th>
                             </tr>
                         </thead>
                         <tbody>
                             {isDataLoaded ? (
                                 data.map((row, index) => (
                                     <tr key={index}>
-                                        <td>{row.workDate}</td>
-                                        <td>{row.itemCode}</td>
-                                        <td>{row.itemName}</td>
-                                        <td>{row.spec}</td>
-                                        <td>{row.quantity}</td>
-                                        <td>{row.workItemName}</td>
-                                        <td>{row.resources}</td>
+                                        <td>{row.productionDate}</td>
+                                        <td>{row.productionPeriod}</td>
+                                        <td>{row.item}</td>
+                                        <td>{row.productionCalculation}</td>
+                                        <td>{row.mrpCalculation}</td>
+                                        <td>{row.status}</td>
+                                        <td>{row.etc}</td>
                                     </tr>
                                 ))
                             ) : (
@@ -73,4 +74,4 @@ function ProductionPage3() {
     );
 }
 
-export default ProductionPage3;
+export default ProductionPage;

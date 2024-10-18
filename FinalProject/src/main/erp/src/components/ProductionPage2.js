@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import './ProductionPage.css';
 
 function InputArrivalForm() {
     // 폼 데이터를 관리할 상태

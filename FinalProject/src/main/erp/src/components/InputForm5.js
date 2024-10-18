@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import 'chart.js'
+import './production.css';
 
-function InputForm4() {
+function InputForm5() {
+    // 폼 데이터를 관리할 상태를 생성
     const [formData, setFormData] = useState({
-        productionDate: '',
-        deliveryDate: '',
         productionPeriod: '',
         baseItem: '',
         productionCalculation: '',
-        mrpCalculation: ''
+        mrpCalculation: '',
     });
 
     // 폼 데이터가 변경될 때 상태를 업데이트
@@ -23,37 +22,14 @@ function InputForm4() {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('폼 제출됨:', formData);
+        // 여기서 formData를 서버로 전송하는 비동기 처리 등을 추가 가능
     };
 
     return (
         <div className="custom-container">
             <div className="form-container">
-                <h1>작업 주문</h1>
+                <h1>소요량 현황</h1>
                 <form id="input-form" onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="production-date">주문 날짜:</label>
-                        <input
-                            type="date"
-                            id="production-date"
-                            name="productionDate"
-                            value={formData.productionDate}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="delivery-date">납기 날짜:</label>
-                        <input
-                            type="date"
-                            id="delivery-date"
-                            name="deliveryDate"
-                            value={formData.deliveryDate}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
                     <div className="form-group">
                         <label htmlFor="production-period">생산품목:</label>
                         <input
@@ -67,7 +43,7 @@ function InputForm4() {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="base-item">주문 수량:</label>
+                        <label htmlFor="base-item">소모품목:</label>
                         <input
                             type="text"
                             id="base-item"
@@ -79,7 +55,7 @@ function InputForm4() {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="production-calculation">생산수량:</label>
+                        <label htmlFor="production-calculation">생산공정:</label>
                         <input
                             type="text"
                             id="production-calculation"
@@ -91,7 +67,19 @@ function InputForm4() {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="mrp-calculation">종결여부:</label>
+                        <label htmlFor="mrp-calculation">품목코드:</label>
+                        <input
+                            type="text"
+                            id="mrp-calculation"
+                            name="mrpCalculation"
+                            value={formData.mrpCalculation}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="mrp-calculation">품목명(규격):</label>
                         <input
                             type="text"
                             id="mrp-calculation"
@@ -109,4 +97,4 @@ function InputForm4() {
     );
 }
 
-export default InputForm4;
+export default InputForm5;
