@@ -2,24 +2,24 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import ProductionSidebar from './components/ProductionSidebar';
-import InputForm from './components/InputForm';  
-import InputForm2 from './components/InputForm2';
-import InputForm3 from './components/InputForm3'; // 추가된 컴포넌트들
-import InputForm4 from './components/InputForm4';
-import InputForm5 from './components/InputForm5';
-import ProductionPage from './components/ProductionPage';
-import ProductionPage2 from './components/ProductionPage2';  
-import ProductionPage3 from './components/ProductionPage3';
-import ProductionPage4 from './components/ProductionPage4';
-import ProductionPage8 from './components/ProductionPage8';  // 모니터링
-import InputForm8 from './components/InputForm8';
-import ProductionPage5 from './components/ProductionPage5';
-import InputForm6 from './components/InputForm6';
-import ProductionPage6 from './components/ProductionPage6';
-import InputForm7 from './components/InputForm7';
-import ProductionPage7 from './components/ProductionPage7';
-import InputForm9 from './components/InputForm9';
-import ProductionPage9 from './components/ProductionPage9'; // 날짜별 가동율 실적
+import InputForm from './components/prodution/InputForm';  
+import InputForm2 from './components/prodution/InputForm2';
+import InputForm3 from './components/prodution/InputForm3'; // 추가된 컴포넌트들
+import InputForm4 from './components/prodution/InputForm4';
+import InputForm5 from './components/prodution/InputForm5';
+import ProductionPage from './components/prodution/ProductionPage';
+import ProductionPage2 from './components/prodution/ProductionPage2';  
+import ProductionPage3 from './components/prodution/ProductionPage3';
+import ProductionPage4 from './components/prodution/ProductionPage4';
+import ProductionPage8 from './components/prodution/ProductionPage8';  // 모니터링
+import InputForm8 from './components/prodution/InputForm8';
+import ProductionPage5 from './components/prodution/ProductionPage5';
+import InputForm6 from './components/prodution/InputForm6';
+import ProductionPage6 from './components/prodution/ProductionPage6';
+import InputForm7 from './components/prodution/InputForm7';
+import ProductionPage7 from './components/prodution/ProductionPage7';
+import InputForm9 from './components/prodution/InputForm9';
+import ProductionPage9 from './components/prodution/ProductionPage9'; // 날짜별 가동율 실적
 
 function App() {
     return (
