@@ -33,8 +33,7 @@ public class KioskController {
 	@GetMapping("/recommended")
 	public ResponseEntity<Map<String, Object>> kioskmenu(Model model, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "6") int size) {
-		
-		log.info("키오스크컨트롤러 /recommended 실행");
+	
 		Pageable pageable = PageRequest.of(page, size);
 		Page<Product> recommendedProducts = kioskservice.getRecommendedProducts(pageable);
 		Page<Coffee> recommendedCoffees = kioskservice.getRecommendedCoffees(pageable);
