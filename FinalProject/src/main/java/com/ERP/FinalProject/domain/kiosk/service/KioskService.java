@@ -20,12 +20,14 @@ public class KioskService {
 	@Autowired
 	private KioskCoffeeRepository kioskCoffeeRepository;
 	
-	public Page<Product> getRecommendedProducts(Pageable pageable) {
-		return kioskProductRepository.findByRecommend("Y",pageable);
+	public Page<Product> getProducts(Pageable pageable) {
+		return kioskProductRepository.findAll(pageable);
 	}
 
-	public Page<Coffee> getRecommendedCoffees(Pageable pageable) {
-		return kioskCoffeeRepository.findByRecommend("Y",pageable);
+	public Page<Coffee> getCoffees(Pageable pageable) {
+		// TODO Auto-generated method stub
+		System.out.println("키오스크 서비스의 모든 커피 가져오기: "+kioskCoffeeRepository.findAll(pageable));
+		return kioskCoffeeRepository.findAll(pageable);
 	}
 
 }

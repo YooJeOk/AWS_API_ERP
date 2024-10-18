@@ -8,6 +8,4 @@ import com.ERP.FinalProject.domain.inventory.entity.Product;
 
 public interface KioskProductRepository extends JpaRepository<Product, Long>{
 
-	Page<Product> findByRecommend(String string, Pageable pageable);
-
 }
