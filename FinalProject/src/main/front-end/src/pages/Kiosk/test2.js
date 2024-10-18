@@ -1,22 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import './KioskMenu.css';
 import CategorySelector from '../../components/Kiosk/CategorySelector';
 import MenuList from '../../components/Kiosk/MenuList';
 import Cart from '../../components/Kiosk/Cart';
 
-
 const KioskMenu = () => {
-
   const [selectedCategory, setSelectedCategory] = useState('추천메뉴');
   const [cartItems, setCartItems] = useState([]);
-  const [menuItems, setMenuItems] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
+  const [menuItems, setMenuItems] = useState({});
 
   const categories = ['추천메뉴', '빵', '커피(ice)', '커피(hot)'];
   
-
   const additionalOptions = [
     { id: 1, name: '에스프레소 샷', price: 500 },
     { id: 2, name: '헤이즐넛 시럽', price: 300 },
@@ -27,42 +21,11 @@ const KioskMenu = () => {
     { id: 7, name: '우유', price: 500 },
   ];
 
-  useEffect(()=>{
-    fetchMenuItems();
-  },[selectedCategory,currentPage]);
+  useEffect(() => {
+    // 여기서 API를 호출하여 메뉴 아이템을 가져올 수 있습니다.
+    // 예: fetchMenuItems(selectedCategory);
+  }, [selectedCategory]);
 
-  const fetchMenuItems = async () => {
-    let endpoint;
-    switch(selectedCategory) {
-      case '추천메뉴':
-        endpoint = '/recommended';
-        break;
-      case '빵':
-        endpoint = '/bread';
-        break;
-      case '커피(ice)':
-        endpoint = '/coffee/ice';
-        break;
-      case '커피(hot)':
-        endpoint = '/coffee/hot';
-        break;
-      default:
-        endpoint = '/recommended';
-    }
-    try {
-      const response = await axios.get(endpoint, {
-        params: { page: currentPage, size: 6 }
-      });
-      console.log('Fetched menu items:', response.data); // 전체 응답 데이터 로그
-    console.log('Menu items:', response.data.content); // 메뉴 아이템 배열 로그
-    console.log('Total pages:', response.data.totalPages); // 총 페이지 수 로그
-
-      setMenuItems(response.data.content);
-      setTotalPages(response.data.totalPages);
-    } catch (error) {
-      console.error('Error fetching menu items:', error);
-    }
-  };
   const addToCart = (item, quantity, options, totalPrice) => {
     const newItem = {
       ...item,
@@ -77,7 +40,7 @@ const KioskMenu = () => {
       const existingItem = cartItems.find(cartItem => cartItem.id === item.id);
       if (existingItem) {
         setCartItems(cartItems.map(cartItem =>
-          cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity + quantity,totalPrice : cartItem.totalPrice+totalPrice} : cartItem
+          cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity + quantity, totalPrice: cartItem.totalPrice + totalPrice } : cartItem
         ));
       } else {
         setCartItems([...cartItems, newItem]);
@@ -90,7 +53,7 @@ const KioskMenu = () => {
       if (existingItem) {
         setCartItems(cartItems.map(cartItem =>
           (cartItem.id === item.id && JSON.stringify(cartItem.options) === JSON.stringify(options))
-            ? { ...cartItem, quantity: cartItem.quantity + quantity, totalPrice : cartItem.totalPrice+totalPrice }
+            ? { ...cartItem, quantity: cartItem.quantity + quantity, totalPrice: cartItem.totalPrice + totalPrice }
             : cartItem
         ));
       } else {
@@ -100,7 +63,6 @@ const KioskMenu = () => {
       setCartItems([...cartItems, newItem]);
     }
   };
-  
 
   const removeFromCart = (index) => {
     setCartItems(prevItems => prevItems.filter((_, i) => i !== index));
@@ -115,6 +77,7 @@ const KioskMenu = () => {
       ));
     }
   };
+
   const calculateItemPrice = (item, quantity) => {
     const basePrice = item.price * quantity;
     const sizeCharge = (item.options?.sizeCharge || 0) * quantity;
@@ -129,8 +92,6 @@ const KioskMenu = () => {
   };
 
   return (
-
-
     <div className="home-container text-center container-md body-center">
       <nav className="menubar text-bold"><i className="bi bi-house" id="back-home"></i>숨쉰당</nav>
       <CategorySelector
@@ -139,12 +100,9 @@ const KioskMenu = () => {
         onSelectCategory={setSelectedCategory}
       />
       <MenuList
-        items={menuItems[selectedCategory]}
+        items={menuItems[selectedCategory] || []}
         onAddToCart={addToCart}
         additionalOptions={additionalOptions}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={setCurrentPage}
       />
       <Cart className="cart-fixed"
         items={cartItems}

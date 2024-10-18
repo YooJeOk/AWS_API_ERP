@@ -9,11 +9,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "Product", schema = "ERP")
+@Table(name = "Product")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,5 +47,7 @@ public class Product {
 
     @Column(name = "DetailDescription")
     private String detailDescription;
+    
+    
 	
 }
