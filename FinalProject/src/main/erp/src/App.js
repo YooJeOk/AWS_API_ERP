@@ -21,7 +21,6 @@ import InputForm7 from './components/prodution/InputForm7';
 import ProductionPage7 from './components/prodution/ProductionPage7';
 import InputForm9 from './components/prodution/InputForm9';
 import ProductionPage9 from './components/prodution/ProductionPage9'; // 날짜별 가동율 실적
-<<<<<<< HEAD
 
 //매출관리 섹터
 import SalesRecord from './pages/SalesManagement/SalesRecord';
@@ -31,8 +30,7 @@ import ProductSalesAnalysis from '../../erp/src/pages/SalesManagement/ProductSal
 import SalesStatus from '../../erp/src/pages/SalesManagement/SalesStatus';
 
 
-=======
->>>>>>> e920f33a3a39e2e598d69932d2d6b5f4b17cabd8
+
 
 function App() {
     return (

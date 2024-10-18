@@ -26,7 +26,7 @@ public class KioskService {
 
 	public Page<Coffee> getCoffees(Pageable pageable) {
 		// TODO Auto-generated method stub
-		System.out.println("키오스크 서비스의 모든 커피 가져오기: "+kioskCoffeeRepository.findAll(pageable));
+		System.out.println("키오스크 서비스의 모든 커피 가져오기: "+kioskCoffeeRepository.findAll(pageable).getContent());
 		return kioskCoffeeRepository.findAll(pageable);
 	}
 
