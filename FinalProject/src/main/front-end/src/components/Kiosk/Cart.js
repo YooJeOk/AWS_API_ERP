@@ -1,10 +1,15 @@
 import React from 'react';
 import { DashSquare, PlusSquare, XLg } from 'react-bootstrap-icons';
+import {useNavigate } from 'react-router-dom';
 
 const Cart = ({ items, updateQuantity, removeItem, clearCart }) => {
   const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
   const totalAmount = items.reduce((sum, item) => sum + item.totalPrice, 0);
+  const navigate = useNavigate();
 
+  const handleClick = () => {
+      navigate('/detail');
+  };
 
   return (
     <div className="pay-container container-md cart-fixed">
@@ -51,7 +56,7 @@ const Cart = ({ items, updateQuantity, removeItem, clearCart }) => {
         </div>
         <div className="pay-btn-container fs-5">
           <button type="button" className="btn-basic btn-cancle" onClick={clearCart}>전체 취소</button>
-          <button type="button" className="btn-basic btn-pay">
+          <button type="button" className="btn-basic btn-pay"  onClick={handleClick}>
             결제하기
           </button>
         </div>
