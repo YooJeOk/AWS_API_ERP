@@ -6,6 +6,9 @@ import {createBrowserRouter, RouterProvider } from 'react-router-dom';
 import KioskMenu from './pages/Kiosk/KioskMenu';
 import Home from './pages/Main/Home';
 import NotFound from './pages/Error/NotFound';
+import DetailPage from './pages/Kiosk/DetailPage';
+import EarnPage from './pages/Kiosk/EarnPage';
+import PaymentPage from './pages/Kiosk/PaymentPage';
 
 
 //경로설정!
@@ -17,7 +20,10 @@ const router = createBrowserRouter([
 
     children : [
       {index : true, element:<Home />},
-      {path:'/KioskMenu',element:<KioskMenu />},
+      {path:'/kioskMenu',element:<KioskMenu />},
+      {path:'/detail',element:<DetailPage />},
+      {path:'/earn',element:<EarnPage />},
+      {path:'/payment',element:<PaymentPage />},
     ],
   }
 ]);

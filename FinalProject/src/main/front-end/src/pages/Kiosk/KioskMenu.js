@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import './KioskMenu.css';
 import CategorySelector from '../../components/Kiosk/CategorySelector';
 import MenuList from '../../components/Kiosk/MenuList';
 import Cart from '../../components/Kiosk/Cart';
+import './KioskMenu.css';
+
 const KioskMenu = () => {
 
   const [selectedCategory, setSelectedCategory] = useState('추천메뉴');
