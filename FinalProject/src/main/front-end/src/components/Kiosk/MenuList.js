@@ -6,6 +6,8 @@ import CoffeeModal from './CoffeeModal.js';
 
 
 const MenuList = ({ items, onAddToCart, additionalOptions,currentPage, totalPages, onPageChange }) => {
+  console.log('Current page:', currentPage); // 추가된 로그
+
   const [selectedItem, setSelectedItem] = useState(null);
   const handlePrevPage = () => {
     if (currentPage > 0) {
@@ -24,10 +26,10 @@ const MenuList = ({ items, onAddToCart, additionalOptions,currentPage, totalPage
         <CaretLeft/>
       </button>
       <div className="menu-container">
-        {Array.isArray(items) && items.map((item) => (
+        {Array.isArray(items) && items.map((item,index) => (
           <MenuItem 
-            key={item.id} 
-            item={item} 
+          key={`${item.type}-${item.name}-${index}`} // 더 안전한 고유 키 생성
+          item={item} 
             onSelect={() => setSelectedItem(item)}
           />
         ))}

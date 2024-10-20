@@ -1,24 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import './KioskMenu.css';
 import CategorySelector from '../../components/Kiosk/CategorySelector';
 import MenuList from '../../components/Kiosk/MenuList';
 import Cart from '../../components/Kiosk/Cart';
-
 const KioskMenu = () => {
 
   const [selectedCategory, setSelectedCategory] = useState('추천메뉴');
   const [cartItems, setCartItems] = useState([]);
-  const [menuItems, setMenuItems] = useState({
-    '추천메뉴': [],
-    '빵': [],
-    '커피(ice)': [],
-    '커피(hot)': []
-  });  
+  const [menuItems, setMenuItems] = useState({});
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const categories = ['추천메뉴', '빵', '커피(ice)', '커피(hot)'];
 
+  const categories = ['추천메뉴', '빵', '커피(ice)', '커피(hot)'];
   const additionalOptions = [
     { id: 1, name: '에스프레소 샷', price: 500 },
     { id: 2, name: '헤이즐넛 시럽', price: 300 },
@@ -29,29 +22,68 @@ const KioskMenu = () => {
     { id: 7, name: '우유', price: 500 },
   ];
 
+  const fetchMenuItems = async (category, page = 0, size = 6) => {
+    let endpoint;
+    switch (category) {
+      case '추천메뉴':
+        endpoint = '/api/menu/recommended';
+        break;
+      case '빵':
+        endpoint = '/api/menu/bread';
+        break;
+      case '커피(ice)':
+        endpoint = '/api/menu/coffee/ice';
+        break;
+      case '커피(hot)':
+        endpoint = '/api/menu/coffee/hot';
+        break;
+      default:
+        endpoint = '/api/menu/recommended';
+    }
+    try {
+      const response = await fetch(`http://localhost:8080${endpoint}?page=${page}&size=${size}`);
+      if (!response.ok) {
+        const errorBody = await response.text();
+      throw new Error(`HTTP error! status: ${response.status}, body: ${errorBody}`);
+      }
+      const data = await response.json();
+      console.log('Fetched data:', data); 
+      return data;
+    } catch (error) {
+      console.error("Fetching menu items failed:", error);
+      return null;
+    }
+  };
+
   useEffect(() => {
-    const fetchMenuItems = async () => {
-      try {
-        const response = await axios.get('/recommended',  {
-          params: {
-            page: currentPage,
-            size: 6 // 원하는 페이지 크기 (예: 6개 항목)
-          },
-        });
-        setMenuItems({
-          '추천메뉴': response.data['추천메뉴'],
-          '빵': response.data['빵'],
-          '커피(ice)': response.data['커피(ice)'],
-          '커피(hot)': response.data['커피(hot)'],
-        });
-        setTotalPages(response.data.totalPages); // 서버에서 반환한 totalPages를 사용
-      } catch (error) {
-        console.error('메뉴 항목을 가져오는 데 실패했습니다:', error);
+    console.log('Fetching items for page:', currentPage); // 추가된 로그
+    const loadMenuItems = async () => {
+
+      const data = await fetchMenuItems(selectedCategory, currentPage);
+      if (data) {
+        const formattedItems = data.items.map(item => ({
+          id: item.productId || item.coffeeId,
+          name: item.productName || item.coffeeName,
+          price: item.salePrice,
+          image: item.productImage || item.coffeeImage,
+          description: item.detailDescription,
+          type: item.productCategory === 'bread' ? 'bread' : 'coffee',
+          temperature: item.temperature
+        }));
+        setMenuItems(prevState => ({
+          ...prevState,
+          [selectedCategory]: formattedItems
+        }));
+        setTotalPages(data.totalPages);
+        setTotalPages(data.totalPages); // 전체 페이지 수 설정
       }
     };
+    loadMenuItems();
+  }, [selectedCategory, currentPage]);
 
-    fetchMenuItems();
-  }, [selectedCategory, currentPage]); //
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
 
 
   const addToCart = (item, quantity, options, totalPrice) => {
@@ -118,9 +150,7 @@ const KioskMenu = () => {
   const clearCart = () => {
     setCartItems([]);
   };
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
-  };
+
   return (
 
 
@@ -129,17 +159,19 @@ const KioskMenu = () => {
       <CategorySelector
         categories={categories}
         selectedCategory={selectedCategory}
-        onSelectCategory={setSelectedCategory}
+        onSelectCategory={(category) => {
+          setSelectedCategory(category);
+          setCurrentPage(0); 
+        }}
       />
-      {menuItems[selectedCategory]&&(<MenuList
-        items={menuItems[selectedCategory]}
+      <MenuList
+        items={menuItems[selectedCategory] || []}
         onAddToCart={addToCart}
         additionalOptions={additionalOptions}
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}
-      />)}
-      
+      />
       <Cart className="cart-fixed"
         items={cartItems}
         updateQuantity={updateCartItemQuantity}
