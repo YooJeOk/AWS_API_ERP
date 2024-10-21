@@ -8,11 +8,11 @@ const Cart = ({ items, updateQuantity, removeItem, clearCart }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-      navigate('/detail');
+    navigate('/detail', { state: { cartItems: items } });
   };
 
   return (
-    <div className="pay-container container-md cart-fixed">
+    <div className="menu-pay-container container-md cart-fixed">
       <div id="cartContainer" className="cart fs-4 p-2 px-3">
         {items.map((item, index) => (
           <div key={index} className="cart-item space-btw">

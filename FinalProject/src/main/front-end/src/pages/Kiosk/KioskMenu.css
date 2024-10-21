@@ -359,10 +359,12 @@ button {
   margin-right: auto;
   width: 95%;
   height: 140px;
+  overflow: scroll;
 }
 
 .cart-item {
   font-size: 18px;
+  width: 100%;
 }
 
 .cart-counter-btn,
