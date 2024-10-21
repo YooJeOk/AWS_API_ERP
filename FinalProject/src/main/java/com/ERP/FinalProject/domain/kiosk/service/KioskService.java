@@ -62,10 +62,12 @@ public class KioskService {
 	        }
 	    }
 
-	    log.info("Total Recommended Products: {}", totalProducts);
-	    log.info("Total Recommended Coffees: {}", totalCoffees);
-	    log.info("Total Recommended Items: {}", totalItems);
-	    log.info("Current Page Items: {}", recommendedItems.size());
+		/*
+		 * log.info("Total Recommended Products: {}", totalProducts);
+		 * log.info("Total Recommended Coffees: {}", totalCoffees);
+		 * log.info("Total Recommended Items: {}", totalItems);
+		 * log.info("Current Page Items: {}", recommendedItems.size());
+		 */
 
 	    return new PageImpl<>(recommendedItems, pageable, totalItems);
 	}
