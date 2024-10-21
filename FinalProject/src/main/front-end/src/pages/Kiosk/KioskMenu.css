@@ -46,10 +46,17 @@ button {
   padding: 10px;
   font-size: 28px;
   display: flex;
-  justify-content: center;
+  justify-self: center;
   align-items: center;
 }
-
+.goHome {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-self: center;
+  align-items: center;
+}
 .menubar i.bi-house {
   position: absolute;
   left: 30px;
