@@ -1,4 +1,4 @@
-package com.ERP.FinalProject.global.config;
+package com.ERP.FinalProject.global.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

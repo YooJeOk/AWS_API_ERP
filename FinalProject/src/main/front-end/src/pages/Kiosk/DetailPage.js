@@ -12,7 +12,9 @@ const DetailPage = () => {
     const handleCancel = () => {
       navigate('/');
     };
-  
+    const handlePrevious = () => {
+      navigate('/kioskMenu', { state: { cartItems } });
+    };
     return (
       <div className="detail-page container-md body-center">
         <nav className="detail-header text-bold">주문 세부내역을 다시 확인해주세요</nav>
@@ -42,7 +44,7 @@ const DetailPage = () => {
           discountAmount={0}
           totalAmount={totalAmount}
           onCancel={handleCancel}
-          previousPath="/kioskMenu"
+          onPrevious={handlePrevious}
           nextPath="/earn"
         />
       </div>

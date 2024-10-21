@@ -22,7 +22,7 @@ const MenuList = ({ items, onAddToCart, additionalOptions,currentPage, totalPage
   };
   return (
     <div className="tab-content pt-1">
-      <button onClick={handlePrevPage} disabled={currentPage === 0} className="page-button">
+      <button onClick={handlePrevPage} disabled={currentPage === 0} className="menu-page-button">
         <CaretLeft/>
       </button>
       <div className="menu-container">
@@ -34,7 +34,7 @@ const MenuList = ({ items, onAddToCart, additionalOptions,currentPage, totalPage
           />
         ))}
       </div>
-      <button onClick={handleNextPage} disabled={currentPage === totalPages - 1} className="page-button">
+      <button onClick={handleNextPage} disabled={currentPage === totalPages - 1} className="menu-page-button">
         <CaretRight />
       </button>
       {selectedItem && selectedItem.type === 'bread' && (

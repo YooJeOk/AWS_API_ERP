@@ -359,7 +359,7 @@ button {
   margin-right: auto;
   width: 95%;
   height: 140px;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 
 .cart-item {
@@ -420,4 +420,18 @@ button {
 
 .pay-btn-container .btn-cancle {
   margin-right: 20px;
+}
+.menu-page-button{
+  border: none;
+  background-color: #E2E2E2;
+}
+.menu-page-button:first-child{
+  position: absolute;
+  left: 0;
+  top:340px;
+}
+.menu-page-button:last-child{
+  position: absolute;
+  right: 0;
+  top:340px;
 }
