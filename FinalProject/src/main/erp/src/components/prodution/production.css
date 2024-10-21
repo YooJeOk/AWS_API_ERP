@@ -47,7 +47,7 @@ body {
 
 .create-button {
     padding: 10px 50px;
-    background-color: #4CAF50;
+    background-color: rgb(187, 216, 118);
     color: white;
     border: none;
     cursor: pointer;
@@ -74,7 +74,7 @@ body {
     width: 60%;
     margin: 50px auto;
     padding: 20px;
-    background-color: #f2f4ec;
+    background-color: #ffe4c3;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
@@ -96,7 +96,8 @@ body {
 .form-group input {
     width: 100%;
     padding: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid #f2f4ec;
+    background-color: #f2f4ec;
     border-radius: 4px;
 }
 
@@ -104,8 +105,8 @@ body {
     display: block;
     width: 100%;
     padding: 10px;
-    background-color: #4CAF50;
-    color: white;
+    background-color: rgb(231, 255, 160);
+    color: rgb(0, 0, 0);
     border: none;
     cursor: pointer;
     font-size: 16px;
@@ -113,7 +114,7 @@ body {
 }
 
 .submit-button:hover {
-    background-color: #45a049;
+    background-color: rgb(231, 245, 160);
 }
 
 #sidebar {
@@ -253,7 +254,7 @@ body {
     display: flex;
     flex-direction: column;
     height: calc(100vh - 100px);
-    background-color: #f0f0f0;
+    background-color: #eeeeee;
 }
 
 #main-dashboard-content {
