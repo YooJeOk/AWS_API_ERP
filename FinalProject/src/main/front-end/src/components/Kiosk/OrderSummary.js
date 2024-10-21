@@ -6,7 +6,7 @@ const OrderSummary = ({
   discountAmount, 
   totalAmount, 
   onCancel, 
-  previousPath, 
+  onPrevious,
   nextPath, 
   showNextButton = true 
 }) => {
@@ -24,7 +24,7 @@ const OrderSummary = ({
           <button type="button" className="button-cancel" onClick={onCancel}>전체취소</button>
         </div>
         <div className="pay-certain-container space-btw">
-          <button className="button-previous" onClick={() => navigate(previousPath)}>이전</button>
+          <button className="button-previous" onClick={onPrevious}>이전</button>
           {showNextButton && (
             <button className="button-next" onClick={() => navigate(nextPath)}>다음</button>
           )}

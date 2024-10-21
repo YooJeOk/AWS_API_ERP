@@ -3,6 +3,7 @@ import CategorySelector from '../../components/Kiosk/CategorySelector';
 import MenuList from '../../components/Kiosk/MenuList';
 import Cart from '../../components/Kiosk/Cart';
 import './KioskMenu.css';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const KioskMenu = () => {
 
@@ -11,6 +12,14 @@ const KioskMenu = () => {
   const [menuItems, setMenuItems] = useState({});
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state && location.state.cartItems) {
+      setCartItems(location.state.cartItems);
+    }
+  }, [location]);
 
   const categories = ['추천메뉴', '빵', '커피(ice)', '커피(hot)'];
   const additionalOptions = [
@@ -98,17 +107,17 @@ const KioskMenu = () => {
     };
 
     if (item.type === 'bread') {
-      const existingItem = cartItems.find(cartItem => cartItem.id === item.id);
+      const existingItem = cartItems.find(cartItem => cartItem.id === item.id && cartItem.type===item.type);
       if (existingItem) {
         setCartItems(cartItems.map(cartItem =>
-          cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity + quantity, totalPrice: cartItem.totalPrice + totalPrice } : cartItem
+          cartItem.id === item.id && cartItem.type===item.type ? { ...cartItem, quantity: cartItem.quantity + quantity, totalPrice: cartItem.totalPrice + totalPrice } : cartItem
         ));
       } else {
         setCartItems([...cartItems, newItem]);
       }
     } else if (item.type === 'coffee') {
       const existingItem = cartItems.find(cartItem =>
-        cartItem.id === item.id &&
+        cartItem.id === item.id && cartItem.type===item.type &&
         JSON.stringify(cartItem.options) === JSON.stringify(options)
       );
       if (existingItem) {
@@ -130,10 +139,10 @@ const KioskMenu = () => {
     setCartItems(prevItems => prevItems.filter((_, i) => i !== index));
   };
 
-  const updateCartItemQuantity = (itemId, options, newQuantity) => {
+  const updateCartItemQuantity = (itemId,itemType, options, newQuantity) => {
     if (newQuantity >= 1) {
       setCartItems(cartItems.map(item =>
-        item.id === itemId && JSON.stringify(item.options) === JSON.stringify(options)
+        item.id === itemId && item.type ===  itemType &&  JSON.stringify(item.options) === JSON.stringify(options)
           ? { ...item, quantity: newQuantity, totalPrice: calculateItemPrice(item, newQuantity) }
           : item
       ));
@@ -151,7 +160,9 @@ const KioskMenu = () => {
   const clearCart = () => {
     setCartItems([]);
   };
-
+  const handlePayment = () => {
+    navigate('/detail', { state: { cartItems } });
+  };
   return (
 
 
@@ -178,6 +189,8 @@ const KioskMenu = () => {
         updateQuantity={updateCartItemQuantity}
         removeItem={removeFromCart}
         clearCart={clearCart}
+        onPayment={handlePayment}
+
       />
     </div>
   );

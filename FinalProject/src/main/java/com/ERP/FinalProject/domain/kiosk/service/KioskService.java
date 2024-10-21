@@ -58,6 +58,7 @@ public class KioskService {
 	            Page<Coffee> recommendedCoffees = coffeeRepository.findByRecommend("Y", 
 	                PageRequest.of(coffeeStartItem / pageSize, coffeesToFetch));
 	            recommendedItems.addAll(recommendedCoffees.getContent());
+	            
 	        }
 	    }
 
