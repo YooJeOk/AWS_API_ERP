@@ -1,0 +1,27 @@
+
+.custom-padding {
+    padding-top: 18px;
+    color: #703103;
+    font-weight: bold;
+    margin-right: 20px;
+    font-size: 25px;
+}
+.custom-search-button {
+    background-color: #F0C490;
+    color: white;
+    border-color: #F0C490;
+    border-radius: 10%;
+    width: 120px;
+  }
+  
+  .custom-search-button:hover {
+    background-color: #e0b080; /* Hover 효과 */
+    border-color: #e0b080;
+  }
+
+ 
+.custom-form-control:focus {
+    border-color: #F0C490 !important;
+    box-shadow: 0 0 0 0.2rem rgba(240, 196, 144, 0.5); /* 테두리 강조 효과 */
+  }
+  

@@ -181,3 +181,5 @@
 2024-10-17 20:08:31,846 [Worker-29: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
 2024-10-17 20:08:31,846 [Worker-29: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered properties files.
 2024-10-17 20:08:31,846 [Worker-29: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Fullstack\Project3\AWS_API_ERP\FinalProject\src\test\resources
+
+

@@ -1,226 +1,152 @@
+-- 1. 제품 (Product) 테이블 더미 데이터
+-- 상품 insert문
+INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, Recommend, DetailDescription)
+VALUES ('갈릭꽈베기', 'bread', 2000, 3500, '2024-01-01', '/images/bread/갈릭꽈배기.jpg', 'Y', '결결이 바삭한 식감의 패스트리에 알싸한 남해 마늘의 진한 맛과 향이 더해진 간식형 제품');
+INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, Recommend, DetailDescription)
+VALUES ('단팥도넛', 'bread', 2500, 3700, '2024-01-01', '/images/bread/단팥도넛.jpg', 'N', '달콤한 팥 앙금이 가득한 부드러운 도넛으로 전통과 현대의 맛이 조화로운 디저트');
+INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, Recommend, DetailDescription)
+VALUES ('고구마케이크빵', 'bread', 1800, 3000, '2024-01-01', '/images/bread/고구마케이크빵.jpg', 'Y', '부드러운 빵 속에 달콤한 고구마 필링이 가득한 케이크 스타일의 빵');
+INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, Recommend, DetailDescription)
+VALUES ('꽈베기', 'bread', 2000, 2500, '2024-01-01', '/images/bread/꽈베기.jpg', 'N', '쫄깃한 식감과 달콤한 맛이 일품인 전통적인 꽈배기');
+INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, Recommend, DetailDescription)
+VALUES ('라우겐', 'bread', 2400, 4000, '2024-01-01', '/images/bread/라우겐.jpg', 'Y', '독일식 프레첼 빵으로, 짭짤하고 쫄깃한 식감이 특징인 빵');
+INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, Recommend, DetailDescription)
+VALUES ('베이글빵', 'bread', 2000, 3800, '2024-01-01', '/images/bread/베이글빵.jpg', 'Y', '쫄깃한 식감과 부드러운 맛이 일품인 클래식한 베이글');
+INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, Recommend, DetailDescription)
+VALUES ('생크림소보로', 'bread', 2000, 3800, '2024-01-01', '/images/bread/생크림소보로.jpg', 'Y', '부드러운 생크림과 바삭한 소보로의 조화가 매력적인 달콤한 빵');
+INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, Recommend, DetailDescription)
+VALUES ('꿀버터바게트', 'bread', 2000, 3800, '2024-01-01', '/images/bread/꿀버터바게트.jpg', 'N', '바삭한 바게트에 꿀과 버터가 스며들어 고소하고 달콤한 맛이 돋보이는 빵');
 
-CREATE SCHEMA ERP;
-USE ERP;
+-- 2. 공급업체 (Suppliers) 테이블 더미 데이터
+INSERT INTO ERP.Suppliers (SupplierName, ContactInfo, Address, SupplierType, RegistrationDate)
+VALUES
+('공급업체X', '010-1111-2222', '서울특별시 강남구', '식자재 공급', '2024-04-01 08:00:00'),
+('공급업체Y', '010-3333-4444', '부산광역시 해운대구', '포장재 공급', '2024-04-02 09:00:00'),
+('공급업체Z', '010-5555-6666', '대구광역시 북구', '기계 공급', '2024-04-03 10:00:00');
 
--- 1. 제품 (Product)
-CREATE TABLE ERP.Product (
-    ProductID INT NOT NULL, -- 제품ID
-    ProductName VARCHAR(100) NULL, -- 제품명
-    ProductCategory VARCHAR(50) NULL, -- 제품 카테고리
-    UnitPrice INT NULL, -- 단가
-    SalePrice INT NULL, -- 판매가
-    ProductionDate DATETIME NULL, -- 생산 날짜
-    ProductImage VARCHAR(2500) NULL, -- 제품 이미지
-    PRIMARY KEY (ProductID)
-);
+-- 3. 원자재 재고 (MaterialsInventory) 테이블 더미 데이터
+INSERT INTO ERP.MaterialsInventory (SupplierID, MaterialName, Category, UnitPrice, LastUpdated)
+VALUES
+(1, '자재X', '식자재', 5000, '2024-04-05 10:30:00'),
+(2, '자재Y', '포장재', 3000, '2024-04-06 11:00:00'),
+(3, '자재Z', '기계 부품', 10000, '2024-04-07 12:00:00');
 
--- 2. 공급업체 (Suppliers)
-CREATE TABLE ERP.Suppliers (
-    SupplierID INT NOT NULL, -- 공급업체ID
-    SupplierName VARCHAR(100) NULL, -- 공급업체명
-    ContactInfo VARCHAR(100) NULL, -- 연락처 정보
-    Address VARCHAR(200) NULL, -- 주소
-    SupplierType VARCHAR(50) NULL, -- 공급업체 유형
-    RegistrationDate DATETIME NULL, -- 등록 날짜
-    PRIMARY KEY (SupplierID)
-);
+-- 4. 원자재 재입고 이력 (RawMaterialRestockHistory) 테이블 더미 데이터
+INSERT INTO ERP.RawMaterialRestockHistory (MaterialID, SupplierID, RestockQuantity, UnitPrice, RestockDate)
+VALUES
+(1, 1, 500, 5000, '2024-04-08 09:30:00'),
+(2, 2, 300, 3000, '2024-04-09 10:00:00'),
+(3, 3, 400, 10000, '2024-04-10 11:00:00');
 
--- 3. 원자재 재고 (MaterialsInventory)
-CREATE TABLE ERP.MaterialsInventory (
-    MaterialID INT NOT NULL, -- 자재ID
-    SupplierID INT NOT NULL, -- 공급업체ID
-    MaterialName VARCHAR(100) NULL, -- 자재명
-    Category VARCHAR(50) NULL, -- 카테고리
-    UnitPrice INT NULL, -- 단가
-    LastUpdated DATETIME NULL, -- 최종 업데이트
-    PRIMARY KEY (MaterialID),
-    FOREIGN KEY (SupplierID) REFERENCES ERP.Suppliers(SupplierID)
-);
+-- 5. 생산 소비 (ProductionConsumption) 테이블 더미 데이터
+INSERT INTO ERP.ProductionConsumption (MaterialID, QuantityUsed, ProductionDate)
+VALUES
+(1, 100, '2024-04-11 10:00:00'),
+(2, 200, '2024-04-12 11:00:00'),
+(3, 150, '2024-04-13 12:00:00');
 
--- 4. 원자재 재입고 이력 (RawMaterialRestockHistory)
-CREATE TABLE ERP.RawMaterialRestockHistory (
-    RestockID INT NOT NULL, -- 재입고ID
-    MaterialID INT NOT NULL, -- 자재ID
-    SupplierID INT NOT NULL, -- 공급업체ID
-    RestockQuantity INT NULL, -- 재입고 수량
-    UnitPrice INT NULL, -- 단가
-    RestockDate DATETIME NULL, -- 재입고 날짜
-    PRIMARY KEY (RestockID),
-    FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID),
-    FOREIGN KEY (SupplierID) REFERENCES ERP.Suppliers(SupplierID)
-);
+-- 6. 공장 재고 (FactoryInventory) 테이블 더미 데이터
+INSERT INTO ERP.FactoryInventory (ProductID, MaterialID, DisposalID, QuantityInFactory, FactoryDate)
+VALUES
+(1, 1, 1, 500, '2024-04-14 09:00:00'),
+(2, 2, 2, 300, '2024-04-15 10:00:00'),
+(3, 3, 3, 400, '2024-04-16 11:00:00');
 
--- 5. 생산 소비 (ProductionConsumption)
-CREATE TABLE ERP.ProductionConsumption (
-    ConsumptionID INT NOT NULL, -- 소비ID
-    MaterialID INT NOT NULL, -- 자재ID
-    QuantityUsed INT NULL, -- 사용된 수량
-    ProductionDate DATETIME NULL, -- 생산 날짜
-    PRIMARY KEY (ConsumptionID),
-    FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
-);
+-- 7. 폐기 기록 (DisposedRecords) 테이블 더미 데이터
+INSERT INTO ERP.DisposedRecords (ProductID, QuantityDisposed, DisposalDate, DisposalReason)
+VALUES
+(1, 100, '2024-04-17 10:00:00', '불량품 폐기'),
+(2, 200, '2024-04-18 11:00:00', '유통기한 초과'),
+(3, 150, '2024-04-19 12:00:00', '고객 반품');
 
--- 6. 공장 재고 (FactoryInventory)
-CREATE TABLE ERP.FactoryInventory (
-    FactoryInventoryID INT NOT NULL, -- 공장 재고ID
-    ProductID INT NOT NULL, -- 제품ID
-    MaterialID INT NOT NULL, -- 자재ID
-    DisposalID INT NOT NULL, -- 폐기ID
-    QuantityInFactory INT NULL, -- 공장 내 수량
-    FactoryDate DATETIME NULL, -- 공장 날짜
-    PRIMARY KEY (FactoryInventoryID),
-    FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID),
-    FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
-);
+-- 8. 판매 기록 (SalesRecords) 테이블 더미 데이터
+INSERT INTO ERP.SalesRecords (ProductID, CoffeeID, ProductName, QuantitySold, SalePrice, SaleDate, PaymentType)
+VALUES
+(1, 1, '갈릭꽈베기', 300, 3500, '2024-04-20 10:00:00', '카드'),
+(2, 2, '단팥도넛', 150, 3700, '2024-04-21 11:00:00', '현금'),
+(3, 3, '고구마케이크빵', 200, 3000, '2024-04-22 12:00:00', '모바일 결제');
 
--- 7. 폐기 기록 (DisposedRecords)
-CREATE TABLE ERP.DisposedRecords (
-    DisposalID INT NOT NULL, -- 폐기ID
-    ProductID INT NOT NULL, -- 제품ID
-    QuantityDisposed INT NULL, -- 폐기된 수량
-    DisposalDate DATETIME NULL, -- 폐기 날짜
-    DisposalReason VARCHAR(255) NULL, -- 폐기 이유
-    PRIMARY KEY (DisposalID),
-    FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
-);
+-- 9. 커피 종류 (Coffee) 테이블 더미 데이터
+INSERT INTO ERP.Coffee (CoffeeName, SalePrice, CoffeeImage, Recommend, Temperature, DetailDescription)
+VALUES 
+('아메리카노', 3200, '/images/coffee/아메리카노ice.jpg', 'Y', 'ICE', '진한 에스프레소에 차가운 물을 더해 시원하고 깔끔한 맛을 느낄 수 있는 아이스 커피'),
+('카라멜 마끼야또', 3000, '/images/coffee/마끼야또ice.jpg', 'Y', 'ICE', '카라멜 시럽의 달콤함과 에스프레소의 진한 맛이 조화롭게 어우러진 아이스 커피'),
+('카페라떼', 3500, '/images/coffee/카페라떼ice.jpg', 'N', 'ICE', '에스프레소와 우유가 조화롭게 어우러진 부드러운 맛의 아이스 커피');
 
--- 8. 판매 기록 (SalesRecords)
-CREATE TABLE ERP.SalesRecords (
-    SaleID INT NOT NULL, -- 판매ID
-    ProductID INT NOT NULL, -- 제품ID
-    CoffeeID INT NOT NULL, -- 커피ID
-    ProductName VARCHAR(100) NULL, -- 제품명
-    QuantitySold INT NULL, -- 판매된 수량
-    SalePrice INT NULL, -- 판매가
-    SaleDate DATETIME NULL, -- 판매 날짜
-    PaymentType VARCHAR(50) NULL, -- 결제 유형
-    PRIMARY KEY (SaleID, ProductID, CoffeeID),
-    FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
-);
+-- 10. 작업 지시 (WorkOrders) 테이블 더미 데이터
+INSERT INTO ERP.WorkOrders (ProductID, Quantity, StartDate, EndDate, Status, Priority)
+VALUES
+(1, 500, '2024-04-23', '2024-04-30', '진행 중', '높음'),
+(2, 300, '2024-05-01', '2024-05-05', '대기', '중간'),
+(3, 400, '2024-05-06', '2024-05-12', '완료', '낮음');
 
--- 9. 매장 커피 종류 (StoreCoffeeTypes)
-CREATE TABLE ERP.StoreCoffeeTypes (
-    CoffeeID INT NOT NULL, -- 커피ID
-    CoffeeName VARCHAR(50) NULL, -- 커피 이름
-    SalePrice INT NULL, -- 판매가
-    CoffeeImage VARCHAR(200) NULL, -- 커피 이미지
-    PRIMARY KEY (CoffeeID)
-);
+-- 11. 생산 계획 (ProductionPlanning) 테이블 더미 데이터
+INSERT INTO ERP.ProductionPlanning (OrderID, ProductID, RequiredDate, MaterialsNeeded, StartDate, EndDate)
+VALUES
+(1, 1, '2024-04-24', 1000, '2024-04-23', '2024-04-30'),
+(2, 2, '2024-05-02', 500, '2024-05-01', '2024-05-05'),
+(3, 3, '2024-05-07', 800, '2024-05-06', '2024-05-12');
 
--- 10. 작업 지시 (WorkOrders)
-CREATE TABLE ERP.WorkOrders (
-    OrderID INT NOT NULL, -- 작업 지시ID
-    ProductID INT NOT NULL, -- 제품ID
-    Quantity INT NULL, -- 수량
-    StartDate DATE NULL, -- 시작 날짜
-    EndDate DATE NULL, -- 종료 날짜
-    Status VARCHAR(50) NULL, -- 상태
-    Priority VARCHAR(50) NULL, -- 우선순위
-    PRIMARY KEY (OrderID),
-    FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
-);
+-- 12. 생산 모니터링 (ProductionMonitoring) 테이블 더미 데이터
+INSERT INTO ERP.ProductionMonitoring (OrderID, Temperature, Humidity, ProductionRate, OperationTime)
+VALUES
+(1, 75.5, 45, 95, 8),
+(2, 80.0, 50, 85, 7),
+(3, 70.0, 40, 90, 6);
 
--- 11. 생산 계획 (ProductionPlanning)
-CREATE TABLE ERP.ProductionPlanning (
-    PlanID INT NOT NULL, -- 계획ID
-    OrderID INT NOT NULL, -- 작업 지시ID
-    ProductID INT NOT NULL, -- 제품ID
-    RequiredDate DATE NULL, -- 필요 날짜
-    MaterialsNeeded INT NULL, -- 필요 자재
-    StartDate DATE NULL, -- 시작 날짜
-    EndDate DATE NULL, -- 종료 날짜
-    PRIMARY KEY (PlanID),
-    FOREIGN KEY (OrderID) REFERENCES ERP.WorkOrders(OrderID),
-    FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
-);
+-- 13. 생산 입력 (ProductionEntry) 테이블 더미 데이터
+INSERT INTO ERP.ProductionEntry (OrderID, ProductID, Quantity, EntryDate)
+VALUES
+(1, 1, 500, '2024-04-30'),
+(2, 2, 300, '2024-05-05'),
+(3, 3, 400, '2024-05-12');
 
--- 12. 생산 모니터링 (ProductionMonitoring)
-CREATE TABLE ERP.ProductionMonitoring (
-    MonitorID INT NOT NULL, -- 모니터링ID
-    OrderID INT NOT NULL, -- 작업 지시ID
-    Temperature FLOAT NULL, -- 온도
-    Humidity FLOAT NULL, -- 습도
-    ProductionRate INT NULL, -- 생산률
-    OperationTime INT NULL, -- 작업 시간
-    PRIMARY KEY (MonitorID),
-    FOREIGN KEY (OrderID) REFERENCES ERP.WorkOrders(OrderID)
-);
+-- 14. 품질 관리 (QualityControl) 테이블 더미 데이터
+INSERT INTO ERP.QualityControl (EntryID, ProductID, TestResult, TestDate, DefectRate)
+VALUES
+(1, 1, '합격', '2024-05-01 10:00:00', 2),
+(2, 2, '불합격', '2024-05-06 11:00:00', 10),
+(3, 3, '합격', '2024-05-13 12:00:00', 0);
 
--- 13. 생산 입력 (ProductionEntry)
-CREATE TABLE ERP.ProductionEntry (
-    EntryID INT NOT NULL, -- 입력ID
-    OrderID INT NOT NULL, -- 작업 지시ID
-    ProductID INT NOT NULL, -- 제품ID
-    Quantity INT NULL, -- 수량
-    EntryDate DATE NULL, -- 입력 날짜
-    PRIMARY KEY (EntryID),
-    FOREIGN KEY (OrderID) REFERENCES ERP.WorkOrders(OrderID),
-    FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
-);
+-- 15. 매장 재고 (StoreInventory) 테이블 더미 데이터
+INSERT INTO ERP.StoreInventory (ProductID, MaterialID, SaleID, DisposalID, ProductName, QuantityInStore, StoreDate)
+VALUES
+(1, 1, 1, 1, '갈릭꽈베기', 500, '2024-05-14 10:00:00'),
+(2, 2, 2, 2, '단팥도넛', 300, '2024-05-15 11:00:00'),
+(3, 3, 3, 3, '고구마케이크빵', 400, '2024-05-16 12:00:00');
 
--- 14. 품질 관리 (QualityControl)
-CREATE TABLE ERP.QualityControl (
-    QCID INT NOT NULL, -- 품질관리ID
-    EntryID INT NOT NULL, -- 입력ID
-    ProductID INT NOT NULL, -- 제품ID
-    TestResult VARCHAR(50) NULL, -- 테스트 결과
-    TestDate DATETIME NULL, -- 테스트 날짜
-    DefectRate INT DEFAULT 0 NULL, -- 불량률
-    PRIMARY KEY (QCID),
-    FOREIGN KEY (EntryID) REFERENCES ERP.ProductionEntry(EntryID),
-    FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
-);
+-- 16. MBOM (MBOM) 테이블 더미 데이터
+INSERT INTO ERP.MBOM (ProductID, MaterialID, ProductName, Quantity, Unit, ProductionProcess)
+VALUES
+(1, 1, '갈릭꽈베기', 1000, '개', '조립'),
+(2, 2, '단팥도넛', 800, '개', '포장'),
+(3, 3, '고구마케이크빵', 600, '개', '검사');
 
--- 15. 매장 재고 (StoreInventory)
-CREATE TABLE ERP.StoreInventory (
-    StoreInventoryID INT NOT NULL, -- 매장 재고ID
-    ProductID INT NOT NULL, -- 제품ID
-    MaterialID INT NOT NULL, -- 자재ID
-    SaleID INT NOT NULL, -- 판매ID
-    DisposalID INT NOT NULL, -- 폐기ID
-    ProductName VARCHAR(100) NULL, -- 제품명
-    QuantityInStore INT NULL, -- 매장 내 수량
-    StoreDate DATETIME NULL, -- 매장 날짜
-    PRIMARY KEY (StoreInventoryID, ProductID, MaterialID, SaleID, DisposalID, ProductName),
-    FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID),
-    FOREIGN KEY (ProductName) REFERENCES ERP.Product(ProductName),
-    FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID),
-    FOREIGN KEY (SaleID) REFERENCES ERP.SalesRecords(SaleID),
-    FOREIGN KEY (DisposalID) REFERENCES ERP.DisposedRecords(DisposalID)
-);
+-- 17. 사용자 (Users) 테이블 더미 데이터
+INSERT INTO ERP.Users (UserID, Name, PhoneNumber, Email, Username, Password)
+VALUES
+('user001', '김철수', '010-1111-2222', 'chulsoo@example.com', 'chulsoo', 'pass1234'),
+('user002', '이영희', '010-3333-4444', 'younghee@example.com', 'younghee', 'pass5678'),
+('user003', '박민수', '010-5555-6666', 'minsoo@example.com', 'minsoo', 'pass9101');
 
--- 16. MBOM (MBOM)
-CREATE TABLE ERP.MBOM (
-    BOMID INT NOT NULL, -- BOMID
-    ProductID INT NOT NULL, -- 제품ID
-    MaterialID INT NOT NULL, -- 자재ID
-    ProductName VARCHAR(100) NULL, -- 제품명
-    Quantity INT NOT NULL, -- 수량
-    Unit VARCHAR(50) NOT NULL, -- 단위
-    ProductionProcess VARCHAR(50) NOT NULL, -- 생산 공정
-    PRIMARY KEY (BOMID, ProductID, MaterialID, ProductName),
-    FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID),
-    FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
-);
-
--- 17. 사용자 (Users)
-CREATE TABLE ERP.Users (
-    UserID VARCHAR(255) NOT NULL, -- 사용자ID
-    Name VARCHAR(30) NULL, -- 이름
-    PhoneNumber VARCHAR(30) NULL, -- 전화번호
-    Email VARCHAR(30) NULL, -- 이메일
-    Username VARCHAR(30) NULL, -- 사용자 이름
-    Password VARCHAR(30) NULL, -- 비밀번호
-    PRIMARY KEY (UserID)
-);
-
--- 18. Untitled (커피 재료)
-CREATE TABLE ERP.Untitled (
-    CoffeeMaterialID INT NOT NULL, -- 커피 재료ID
-    CoffeeID INT NOT NULL, -- 커피ID
-    MaterialID INT NOT NULL, -- 자재ID
-    RawMaterialQuantity INT NULL, -- 원재료 수량
-    PRIMARY KEY (CoffeeMaterialID, CoffeeID, MaterialID),
-    FOREIGN KEY (CoffeeID) REFERENCES ERP.StoreCoffeeTypes(CoffeeID),
-    FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
-);
+-- 18. 커피 재료 (Untitled) 테이블 더미 데이터
+-- 커피 insert문
+INSERT INTO ERP.Coffee (CoffeeID, CoffeeName, SalePrice, CoffeeImage, Recommend, Temperature, DetailDescription)
+VALUES 
+(1, '아메리카노', 3200, '/images/coffee/아메리카노ice.jpg', 'Y', 'ICE', '진한 에스프레소에 차가운 물을 더해 시원하고 깔끔한 맛을 느낄 수 있는 아이스 커피'),
+(2, '카라멜 마끼야또', 3000, '/images/coffee/마끼야또ice.jpg', 'Y', 'ICE', '카라멜 시럽의 달콤함과 에스프레소의 진한 맛이 조화롭게 어우러진 아이스 커피'),
+(3, '카페라떼', 3500, '/images/coffee/카페라떼ice.jpg', 'N', 'ICE', '에스프레소와 우유가 조화롭게 어우러진 부드러운 맛의 아이스 커피'),
+(4, '바닐라라떼', 3800, '/images/coffee/바닐라라떼hot.jpg', 'Y', 'HOT', '바닐라 시럽의 달콤함과 에스프레소, 우유가 조화롭게 어우러진 따뜻한 커피'),
+(5, '카푸치노', 3500, '/images/coffee/카푸치노hot.jpg', 'N', 'HOT', '에스프레소와 스팀 밀크, 우유 거품이 1:1:1 비율로 어우러진 클래식한 이탈리안 커피'),
+(6, '헤이즐넛라떼', 3800, '/images/coffee/헤이즐넛라떼ice.jpg', 'Y', 'ICE', '헤이즐넛 시럽의 고소한 향과 에스프레소, 우유가 조화롭게 어우러진 시원한 라떼'),
+(7, '헤이즐넛아메리카노', 3500, '/images/coffee/헤이즐넛아메리카노ice.jpg', 'N', 'ICE', '헤이즐넛 시럽의 고소함과 에스프레소의 깔끔한 맛이 어우러진 시원한 아메리카노'),
+(8, '바닐라아메리카노', 3500, '/images/coffee/바닐라아메리카노ice.jpg', 'Y', 'ICE', '바닐라 시럽의 달콤함과 에스프레소의 깊은 맛이 조화를 이루는 시원한 아메리카노'),
+(9, '카페모카', 4000, '/images/coffee/카페모카hot.jpg', 'Y', 'HOT', '초콜릿의 달콤함과 에스프레소의 쌉쌀함이 어우러진 따뜻한 모카 커피'),
+(10, '콜드브루라떼', 4200, '/images/coffee/콜드브루라떼hot.jpg', 'N', 'HOT', '차갑게 추출한 콜드브루 커피에 따뜻한 우유를 더해 부드러운 맛을 즐길 수 있는 라떼'),
+(11, '헤이즐넛라떼', 3800, '/images/coffee/헤이즐넛라떼hot.jpg', 'Y', 'HOT', '헤이즐넛 시럽의 고소한 향과 에스프레소, 스팀 밀크가 어우러진 따뜻한 라떼'),
+(12, '헤이즐넛아메리카노', 3500, '/images/coffee/헤이즐넛아메리카노hot.jpg', 'N', 'HOT', '헤이즐넛 시럽의 고소함과 에스프레소의 깊은 맛이 어우러진 따뜻한 아메리카노'),
+(13, '연유라떼', 4000, '/images/coffee/연유라떼ice.jpg', 'Y', 'ICE', '달콤한 연유와 에스프레소, 차가운 우유가 조화롭게 어우러진 시원한 라떼'),
+(14, '에스프레소', 2500, '/images/coffee/에스프레소hot.jpg', 'N', 'HOT', '진한 커피의 맛과 향을 온전히 즐길 수 있는 에스프레소 샷');
+SELECT * FROM ERP.Product;
+SELECT * FROM ERP.Coffee;
+SELECT * FROM ERP.SalesRecords;

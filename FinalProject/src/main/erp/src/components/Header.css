@@ -1,4 +1,4 @@
-f4f4f4/* 기본 설정 */
+
 * {
     margin: 0;
     padding: 0;
@@ -16,7 +16,7 @@ html {
     width: 100%;
     height: calc(100vh - 100px);
     overflow: hidden;
-    background-color: #ffffff;
+    background-color: #F6F6F6 !important;
 }
 
 /* 사이드바 설정 */
@@ -54,7 +54,7 @@ html {
 
 .sidebar-menu .menu-item:hover {
     font-weight: bold;
-    color: #5436ff;
+    color: #703103 !important;
     
 }
 
@@ -83,11 +83,11 @@ html {
 
 .dropdown-menu li a:hover {
     font-weight: bold;
-    color: #5436ff;
+    color: #703103 !important;
 }
 
 .navbar {
-    background-color: #f2f4ec;
+    background-color: #F0C490;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -132,7 +132,7 @@ html {
 
 .nav-button:hover {
     
-    color: #5436ff;
+    color: #703103 !important;
 }
 
 /* 드롭다운 메뉴 설정 */
@@ -171,7 +171,7 @@ html {
 
 .dropdown-content a:hover {
     font-weight: bold;
-    color: #5436ff;
+    color: #703103 !important;
     
 }
 

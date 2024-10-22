@@ -1,13 +1,18 @@
 import React from 'react';
 import { DashSquare, PlusSquare, XLg } from 'react-bootstrap-icons';
+import {useNavigate } from 'react-router-dom';
 
 const Cart = ({ items, updateQuantity, removeItem, clearCart }) => {
   const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
   const totalAmount = items.reduce((sum, item) => sum + item.totalPrice, 0);
+  const navigate = useNavigate();
 
+  const DetailClick = () => {
+    navigate('/detail', { state: { cartItems: items } });
+  };
 
   return (
-    <div className="pay-container container-md cart-fixed">
+    <div className="menu-pay-container container-md cart-fixed">
       <div id="cartContainer" className="cart fs-4 p-2 px-3">
         {items.map((item, index) => (
           <div key={index} className="cart-item space-btw">
@@ -17,15 +22,15 @@ const Cart = ({ items, updateQuantity, removeItem, clearCart }) => {
             <div className="cart-counter w-25 text-right">
               <button
                 className="cart-decrease cart-counter-btn"
-                onClick={() => updateQuantity(item.id, item.options, item.quantity - 1)}
+                onClick={() => updateQuantity(item.id, item.type,item.options, item.quantity - 1)}
                 disabled={item.quantity === 1}
               ><DashSquare />
-
+            
               </button>
               <span className="cart-count">{item.quantity}</span>
               <button
                 className="cart-increase cart-counter-btn"
-                onClick={() => updateQuantity(item.id, item.options, item.quantity + 1)}
+                onClick={() => updateQuantity(item.id, item.type, item.options, item.quantity + 1)}
               ><PlusSquare /></button>
             </div>
             <div className="cart-price w-25 text-right mb-3">
@@ -51,7 +56,7 @@ const Cart = ({ items, updateQuantity, removeItem, clearCart }) => {
         </div>
         <div className="pay-btn-container fs-5">
           <button type="button" className="btn-basic btn-cancle" onClick={clearCart}>전체 취소</button>
-          <button type="button" className="btn-basic btn-pay">
+          <button type="button" className="btn-basic btn-pay"  onClick={DetailClick}>
             결제하기
           </button>
         </div>

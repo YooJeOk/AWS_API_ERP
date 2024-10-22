@@ -1,14 +1,16 @@
 .container {
   display: flex;
+  
 }
 
 .main-content {
   flex-grow: 1;
   padding: 20px;
+  background-color: #F6F6F6 !important;
 }
 
 aside {
   width: 200px;
-  background-color: #f2f4ec;
+  background-color: #F6F6F6 !important;
   padding: 20px;
 }

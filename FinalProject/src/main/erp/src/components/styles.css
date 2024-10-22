@@ -40,21 +40,22 @@ html {
 }
 
 .sidebar-menu .menu-item {
-    background-color: #f2f4ec;
+    background-color: #F0C490;
     color: rgb(0, 0, 0);
-    padding: 18px;
-    margin-bottom: 10px;
+    padding: 10px !important;
+    margin-top: 13px !important;
     border: none;
     text-align: center;
     cursor: pointer;
-
+    border-radius: 5%;
     font-size: 16px;
     width: 200px;
+    height: 40px;
 }
 
 .sidebar-menu .menu-item:hover {
     font-weight: bold;
-    color: #5436ff;
+    color: #703103 !important;
 
 }
 
@@ -84,7 +85,7 @@ html {
 
 .dropdown-menu li a:hover {
     font-weight: bold;
-    color: #5436ff;
+    color: #703103 !important;
 }
 
 .navbar {
@@ -133,7 +134,7 @@ html {
 
 .nav-button:hover {
 
-    color: #5436ff;
+    color: #703103;
 }
 
 /* 드롭다운 메뉴 설정 */
@@ -172,7 +173,7 @@ html {
 
 .dropdown-content a:hover {
     font-weight: bold;
-    color: #5436ff;
+    color: #703103;
 
 }
 

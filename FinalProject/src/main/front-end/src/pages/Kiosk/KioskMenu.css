@@ -1,3 +1,13 @@
+@font-face {
+  font-family: 'NanumSquareRound';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/NanumSquareRound.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+body{
+  font-family: 'NanumSquareRound';
+}
+
 .body-center {
   margin-left: auto;
   margin-right: auto;
@@ -40,23 +50,31 @@ button {
 
 .menubar {
   position: relative;
-  background-color: #D9BBA0;
+  background-color: #f0cfa4;
   height: 70px;
   width: 100%;
   padding: 10px;
   font-size: 28px;
   display: flex;
-  justify-content: center;
+  justify-self: center;
   align-items: center;
 }
-
+.goHome {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-self: center;
+  align-items: center;
+}
 .menubar i.bi-house {
   position: absolute;
   left: 30px;
 }
-
+/* #E2E2E2 */
 .home-container {
-  background-color: #E2E2E2;
+  background: linear-gradient(to bottom, white, #eee7d4);
+  background-color: white;
   height: 870px;
   padding: 0px;
   position: relative;
@@ -118,7 +136,8 @@ button {
 .nav-pills .nav-link {
   border: 2px solid transparent;
   color: #495057;
-  background-color: #e9ecef;
+  /* background-color: #e9ecef; */
+  background-color: white;
   padding: 10px 15px;
   border-radius: 5px;
   transition: background-color 0.3s, border-color 0.3s;
@@ -359,10 +378,12 @@ button {
   margin-right: auto;
   width: 95%;
   height: 140px;
+  overflow-y: scroll;
 }
 
 .cart-item {
   font-size: 18px;
+  width: 100%;
 }
 
 .cart-counter-btn,
@@ -418,4 +439,18 @@ button {
 
 .pay-btn-container .btn-cancle {
   margin-right: 20px;
+}
+.menu-page-button{
+  border: none;
+  background-color: #faf5e8;
+}
+.menu-page-button:first-child{
+  position: absolute;
+  left: 0;
+  top:340px;
+}
+.menu-page-button:last-child{
+  position: absolute;
+  right: 0;
+  top:340px;
 }

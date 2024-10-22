@@ -57,7 +57,7 @@ const CoffeeModal = ({ item, onClose, onAddToCart, additionalOptions }) => {
     }, []);
     return (
         <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1">
-            <div className="coffee-modal modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div className="coffee-modal modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                     <div className="large-border">
                         <div className="small-border">
