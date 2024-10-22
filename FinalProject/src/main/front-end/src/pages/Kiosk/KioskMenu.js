@@ -29,8 +29,7 @@ const KioskMenu = () => {
     { id: 3, name: '바닐라 시럽', price: 300 },
     { id: 4, name: '메이플 시럽', price: 300 },
     { id: 5, name: '아이스크림', price: 1000 },
-    { id: 6, name: '펄', price: 500 },
-    { id: 7, name: '우유', price: 500 },
+    { id: 6, name: '우유', price: 500 },
   ];
 
   const fetchMenuItems = async (category, page = 0, size = 6) => {
