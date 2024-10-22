@@ -109,11 +109,13 @@ VALUES
 (3, 3, '합격', '2024-05-13 12:00:00', 0);
 
 -- 15. 매장 재고 (StoreInventory) 테이블 더미 데이터
-INSERT INTO ERP.StoreInventory (ProductID, MaterialID, SaleID, DisposalID, ProductName, QuantityInStore, StoreDate)
+
+INSERT INTO ERP.StoreInventory (ProductID, MaterialID, SaleID, DisposalID, QuantityInStore, StoreDate)
 VALUES
-(1, 1, 1, 1, '갈릭꽈베기', 500, '2024-05-14 10:00:00'),
-(2, 2, 2, 2, '단팥도넛', 300, '2024-05-15 11:00:00'),
-(3, 3, 3, 3, '고구마케이크빵', 400, '2024-05-16 12:00:00');
+(1, 1, 1, 1, 500, '2024-05-14 10:00:00'),
+(2, 2, 2, 2, 300, '2024-05-15 11:00:00'),
+(3, 3, 3, 3, 400, '2024-05-16 12:00:00');
+
 
 -- 16. MBOM (MBOM) 테이블 더미 데이터
 INSERT INTO ERP.MBOM (ProductID, MaterialID, ProductName, Quantity, Unit, ProductionProcess)
@@ -131,22 +133,62 @@ VALUES
 
 -- 18. 커피 재료 (Untitled) 테이블 더미 데이터
 -- 커피 insert문
-INSERT INTO ERP.Coffee (CoffeeID, CoffeeName, SalePrice, CoffeeImage, Recommend, Temperature, DetailDescription)
-VALUES 
-(1, '아메리카노', 3200, '/images/coffee/아메리카노ice.jpg', 'Y', 'ICE', '진한 에스프레소에 차가운 물을 더해 시원하고 깔끔한 맛을 느낄 수 있는 아이스 커피'),
-(2, '카라멜 마끼야또', 3000, '/images/coffee/마끼야또ice.jpg', 'Y', 'ICE', '카라멜 시럽의 달콤함과 에스프레소의 진한 맛이 조화롭게 어우러진 아이스 커피'),
-(3, '카페라떼', 3500, '/images/coffee/카페라떼ice.jpg', 'N', 'ICE', '에스프레소와 우유가 조화롭게 어우러진 부드러운 맛의 아이스 커피'),
-(4, '바닐라라떼', 3800, '/images/coffee/바닐라라떼hot.jpg', 'Y', 'HOT', '바닐라 시럽의 달콤함과 에스프레소, 우유가 조화롭게 어우러진 따뜻한 커피'),
-(5, '카푸치노', 3500, '/images/coffee/카푸치노hot.jpg', 'N', 'HOT', '에스프레소와 스팀 밀크, 우유 거품이 1:1:1 비율로 어우러진 클래식한 이탈리안 커피'),
-(6, '헤이즐넛라떼', 3800, '/images/coffee/헤이즐넛라떼ice.jpg', 'Y', 'ICE', '헤이즐넛 시럽의 고소한 향과 에스프레소, 우유가 조화롭게 어우러진 시원한 라떼'),
-(7, '헤이즐넛아메리카노', 3500, '/images/coffee/헤이즐넛아메리카노ice.jpg', 'N', 'ICE', '헤이즐넛 시럽의 고소함과 에스프레소의 깔끔한 맛이 어우러진 시원한 아메리카노'),
-(8, '바닐라아메리카노', 3500, '/images/coffee/바닐라아메리카노ice.jpg', 'Y', 'ICE', '바닐라 시럽의 달콤함과 에스프레소의 깊은 맛이 조화를 이루는 시원한 아메리카노'),
-(9, '카페모카', 4000, '/images/coffee/카페모카hot.jpg', 'Y', 'HOT', '초콜릿의 달콤함과 에스프레소의 쌉쌀함이 어우러진 따뜻한 모카 커피'),
-(10, '콜드브루라떼', 4200, '/images/coffee/콜드브루라떼hot.jpg', 'N', 'HOT', '차갑게 추출한 콜드브루 커피에 따뜻한 우유를 더해 부드러운 맛을 즐길 수 있는 라떼'),
-(11, '헤이즐넛라떼', 3800, '/images/coffee/헤이즐넛라떼hot.jpg', 'Y', 'HOT', '헤이즐넛 시럽의 고소한 향과 에스프레소, 스팀 밀크가 어우러진 따뜻한 라떼'),
-(12, '헤이즐넛아메리카노', 3500, '/images/coffee/헤이즐넛아메리카노hot.jpg', 'N', 'HOT', '헤이즐넛 시럽의 고소함과 에스프레소의 깊은 맛이 어우러진 따뜻한 아메리카노'),
-(13, '연유라떼', 4000, '/images/coffee/연유라떼ice.jpg', 'Y', 'ICE', '달콤한 연유와 에스프레소, 차가운 우유가 조화롭게 어우러진 시원한 라떼'),
-(14, '에스프레소', 2500, '/images/coffee/에스프레소hot.jpg', 'N', 'HOT', '진한 커피의 맛과 향을 온전히 즐길 수 있는 에스프레소 샷');
+-- coffee_materials 테이블에 더미 데이터 삽입
+INSERT INTO ERP.coffee_materials (CoffeeID, MaterialID, RawMaterialQuantity)
+VALUES
+(1, 1, 50),  -- 아메리카노에 자재 1번 사용, 50 단위
+(2, 2, 30),  -- 카라멜 마끼야또에 자재 2번 사용, 30 단위
+(3, 3, 20);  -- 카페라떼에 자재 3번 사용, 20 단위
+-- 1. Product 테이블 조회
 SELECT * FROM ERP.Product;
+
+-- 2. Coffee 테이블 조회
 SELECT * FROM ERP.Coffee;
+
+-- 3. Suppliers 테이블 조회
+SELECT * FROM ERP.Suppliers;
+
+-- 4. MaterialsInventory 테이블 조회
+SELECT * FROM ERP.MaterialsInventory;
+
+-- 5. RawMaterialRestockHistory 테이블 조회
+SELECT * FROM ERP.RawMaterialRestockHistory;
+
+-- 6. ProductionConsumption 테이블 조회
+SELECT * FROM ERP.ProductionConsumption;
+
+-- 7. FactoryInventory 테이블 조회
+SELECT * FROM ERP.FactoryInventory;
+
+-- 8. DisposedRecords 테이블 조회
+SELECT * FROM ERP.DisposedRecords;
+
+-- 9. SalesRecords 테이블 조회
 SELECT * FROM ERP.SalesRecords;
+
+-- 10. WorkOrders 테이블 조회
+SELECT * FROM ERP.WorkOrders;
+
+-- 11. ProductionPlanning 테이블 조회
+SELECT * FROM ERP.ProductionPlanning;
+
+-- 12. ProductionMonitoring 테이블 조회
+SELECT * FROM ERP.ProductionMonitoring;
+
+-- 13. ProductionEntry 테이블 조회
+SELECT * FROM ERP.ProductionEntry;
+
+-- 14. QualityControl 테이블 조회
+SELECT * FROM ERP.QualityControl;
+
+-- 15. StoreInventory 테이블 조회
+SELECT * FROM ERP.StoreInventory;
+
+-- 16. MBOM 테이블 조회
+SELECT * FROM ERP.MBOM;
+
+-- 17. Users 테이블 조회
+SELECT * FROM ERP.Users;
+
+-- 18. Untitled 테이블 조회 (커피 재료)
+SELECT * FROM ERP.coffee_materials;
