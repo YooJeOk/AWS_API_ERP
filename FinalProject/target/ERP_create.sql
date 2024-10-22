@@ -1,7 +1,7 @@
 
 
 
-DROP TABLE IF EXISTS ERP.Untitled;
+DROP TABLE IF EXISTS ERP.coffee_materials;
 DROP TABLE IF EXISTS ERP.Users;
 DROP TABLE IF EXISTS ERP.MBOM;
 DROP TABLE IF EXISTS ERP.StoreInventory;
@@ -236,7 +236,7 @@ CREATE TABLE ERP.MBOM (
 
 -- 17. 사용자 (Users)
 CREATE TABLE ERP.Users (
-    UserID VARCHAR(255) NOT NULL AUTO_INCREMENT,-- 사용자ID
+    UserID INT NOT NULL AUTO_INCREMENT,-- 사용자ID
     Name VARCHAR(30) NULL, -- 이름
     PhoneNumber VARCHAR(30) NULL, -- 전화번호
     Email VARCHAR(30) NULL, -- 이메일
@@ -245,7 +245,7 @@ CREATE TABLE ERP.Users (
     PRIMARY KEY (UserID)
 );
 
--- 18. Untitled (커피 재료)
+-- 18. ERP.coffee_materials (커피 재료)
 CREATE TABLE ERP.coffee_materials (
     CoffeeMaterialID INT NOT NULL AUTO_INCREMENT,-- 커피 재료ID
     CoffeeID INT NOT NULL, -- 커피ID
@@ -292,6 +292,5 @@ VALUES
 (13, '연유라떼', 4000, '/images/coffee/연유라떼ice.jpg', 'Y', 'ICE', '달콤한 연유와 에스프레소, 차가운 우유가 조화롭게 어우러진 시원한 라떼'),
 (14, '에스프레소', 2500, '/images/coffee/에스프레소hot.jpg', 'N', 'HOT', '진한 커피의 맛과 향을 온전히 즐길 수 있는 에스프레소 샷');
 
-select * from Product;
-select * from Coffee;
+
 
