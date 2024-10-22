@@ -184,18 +184,34 @@ button {
   background-color: white;
   box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
   border-radius: 8px;
+  position: relative; /* 부모 요소에 상대적인 위치 */
+
 }
 
 .menu-item img {
   width: 150px;
   height: 140px;
+
 }
 
 .item-front .won {
   color: #D98C5F;
 }
 
-/* 모달창 */
+.best-label {
+  font-size: 14px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: gold;
+  color: white;
+  padding: 4px;
+  border-radius: 5px;
+  font-weight: bold;
+  z-index: 10;
+  opacity: 1;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;/* 모달창 */
+}
 .coffee-modal {
   max-width: 680px;
 }

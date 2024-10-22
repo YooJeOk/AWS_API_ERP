@@ -22,22 +22,32 @@ const KeypadModal = ({ onClose, onSubmit, purpose }) => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (purpose === 'joinMember') {
       if (step === 1) {
         setStep(2);
-        console.log('번호를 한번 더 입력해주세요.');
         alert('번호를 한번 더 입력해주세요.');
       } else {
         if (input === secondInput) {
-          console.log('회원가입이 완료되었습니다.');
-          alert('회원가입이 완료되었습니다.');
-
-          onSubmit(secondInput);
+          try {
+            const response = await fetch('http://localhost:8080/api/user/join', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ phone: secondInput, stamp: 0, coupon: 0 }),
+            });
+            if (!response.ok) {
+              throw new Error('Failed to register user');
+            }
+            alert('회원가입이 완료되었습니다.');
+            onSubmit(secondInput);
+          } catch (error) {
+            console.error(error);
+            alert('등록에 실패했습니다.');
+          }
         } else {
-          console.log('두 번호가 일치하지 않습니다.');
-          alert('두 번호가 일치하지 않습니다.');
-
+          alert('두 번호가 일치하지 않습니다!');
           setInput('');
           setSecondInput('');
           setStep(1);

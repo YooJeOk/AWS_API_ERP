@@ -4,7 +4,7 @@ import { CaretLeft, CaretRight } from 'react-bootstrap-icons';
 import BreadModal from './BreadModal.js';
 import CoffeeModal from './CoffeeModal.js';
 
-const MenuList = ({ items, onAddToCart, additionalOptions, currentPage, totalPages, onPageChange }) => {
+const MenuList = ({ items, onAddToCart, additionalOptions, currentPage, totalPages, onPageChange, selectedCategory }) => {
   console.log('Current page:', currentPage); // 추가된 로그
 
   const [selectedItem, setSelectedItem] = useState(null);
@@ -42,6 +42,7 @@ const MenuList = ({ items, onAddToCart, additionalOptions, currentPage, totalPag
             key={`${item.type}-${item.name}-${index}`} 
             item={item}
             onSelect={() => setSelectedItem(item)}
+            isBest={selectedCategory === '추천메뉴'}
           />
         ))}
       </div>
