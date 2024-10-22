@@ -113,18 +113,27 @@ CREATE TABLE ERP.DisposedRecords (
 -- 8. 판매 기록 (SalesRecords)
 CREATE TABLE ERP.SalesRecords (
     SaleID INT NOT NULL AUTO_INCREMENT, -- 판매ID
-    ProductID INT NOT NULL, -- 제품ID
-    CoffeeID INT NOT NULL, -- 커피ID
-    ProductName VARCHAR(100) NULL, -- 제품명
-    QuantitySold INT NULL, -- 판매된 수량
-    SalePrice INT NULL, -- 판매가
     SaleDate DATETIME NULL, -- 판매 날짜
     PaymentType VARCHAR(50) NULL, -- 결제 유형
-    PRIMARY KEY (SaleID, ProductID, CoffeeID),
-    FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
+    TotalSalePrice INT NULL, -- 총 판매가
+    PRIMARY KEY (SaleID)
 );
 
--- 9. 매장 커피 종류 (StoreCoffeeTypes)
+-- 9. 판매 세부 기록 (SalesDetails)
+CREATE TABLE ERP.SalesDetails (
+    SaleDetailID INT NOT NULL AUTO_INCREMENT, -- 판매 세부 ID
+    SaleID INT NOT NULL, -- 판매ID (SalesRecords와 연결)
+    ProductID INT NULL, -- 제품ID
+    CoffeeID INT NULL, -- 커피ID
+    QuantitySold INT NULL, -- 판매된 수량
+    SalePrice INT NULL, -- 판매가
+    PRIMARY KEY (SaleDetailID),
+    FOREIGN KEY (SaleID) REFERENCES ERP.SalesRecords(SaleID), 
+    FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID), 
+    FOREIGN KEY (CoffeeID) REFERENCES ERP.Coffee(CoffeeID) 
+);
+
+-- 10. 매장 커피 종류 (StoreCoffeeTypes)
 CREATE TABLE ERP.Coffee (
     CoffeeID INT NOT NULL AUTO_INCREMENT, -- 커피ID
     CoffeeName VARCHAR(50) NULL, -- 커피 이름
@@ -136,7 +145,7 @@ CREATE TABLE ERP.Coffee (
     PRIMARY KEY (CoffeeID)
 );
 
--- 10. 작업 지시 (WorkOrders)
+-- 11. 작업 지시 (WorkOrders)
 CREATE TABLE ERP.WorkOrders (
     OrderID INT NOT NULL AUTO_INCREMENT, -- 작업 지시ID
     ProductID INT NOT NULL, -- 제품ID
@@ -149,7 +158,7 @@ CREATE TABLE ERP.WorkOrders (
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
 );
 
--- 11. 생산 계획 (ProductionPlanning)
+-- 12. 생산 계획 (ProductionPlanning)
 CREATE TABLE ERP.ProductionPlanning (
     PlanID INT NOT NULL AUTO_INCREMENT, -- 계획ID
     OrderID INT NOT NULL, -- 작업 지시ID
@@ -163,7 +172,7 @@ CREATE TABLE ERP.ProductionPlanning (
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
 );
 
--- 12. 생산 모니터링 (ProductionMonitoring)
+-- 13. 생산 모니터링 (ProductionMonitoring)
 CREATE TABLE ERP.ProductionMonitoring (
     MonitorID INT NOT NULL AUTO_INCREMENT, -- 모니터링ID
     OrderID INT NOT NULL, -- 작업 지시ID
@@ -175,7 +184,7 @@ CREATE TABLE ERP.ProductionMonitoring (
     FOREIGN KEY (OrderID) REFERENCES ERP.WorkOrders(OrderID)
 );
 
--- 13. 생산 입력 (ProductionEntry)
+-- 14. 생산 입력 (ProductionEntry)
 CREATE TABLE ERP.ProductionEntry (
     EntryID INT NOT NULL AUTO_INCREMENT, -- 입력ID
     OrderID INT NOT NULL, -- 작업 지시ID
@@ -187,7 +196,7 @@ CREATE TABLE ERP.ProductionEntry (
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
 );
 
--- 14. 품질 관리 (QualityControl)
+-- 15. 품질 관리 (QualityControl)
 CREATE TABLE ERP.QualityControl (
     QCID INT NOT NULL AUTO_INCREMENT, -- 품질관리ID
     EntryID INT NOT NULL, -- 입력ID
@@ -200,7 +209,7 @@ CREATE TABLE ERP.QualityControl (
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
 );
 
--- 15. 매장 재고 (StoreInventory)
+-- 16. 매장 재고 (StoreInventory)
 
 CREATE TABLE ERP.StoreInventory (
     StoreInventoryID INT NOT NULL AUTO_INCREMENT, -- 매장 재고ID
@@ -218,7 +227,7 @@ CREATE TABLE ERP.StoreInventory (
 );
 
 
--- 16. MBOM (MBOM)
+-- 17. MBOM (MBOM)
 
 CREATE TABLE ERP.MBOM (
     BOMID INT NOT NULL AUTO_INCREMENT, -- BOMID
@@ -234,7 +243,7 @@ CREATE TABLE ERP.MBOM (
 );
 
 
--- 17. 사용자 (Users)
+-- 18. 사용자 (Users)
 CREATE TABLE ERP.Users (
     UserID INT NOT NULL AUTO_INCREMENT,-- 사용자ID
     Name VARCHAR(30) NULL, -- 이름
@@ -245,7 +254,7 @@ CREATE TABLE ERP.Users (
     PRIMARY KEY (UserID)
 );
 
--- 18. ERP.coffee_materials (커피 재료)
+-- 19. ERP.coffee_materials (커피 재료)
 CREATE TABLE ERP.coffee_materials (
     CoffeeMaterialID INT NOT NULL AUTO_INCREMENT,-- 커피 재료ID
     CoffeeID INT NOT NULL, -- 커피ID
