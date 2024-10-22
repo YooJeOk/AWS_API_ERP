@@ -20,17 +20,17 @@ VALUES ('꿀버터바게트', 'bread', 2000, 3800, '2024-01-01', '/images/bread/
 -- 2. 공급업체 (Suppliers) 테이블 더미 데이터
 INSERT INTO ERP.Suppliers (SupplierName, ContactInfo, Address, SupplierType, RegistrationDate)
 VALUES
-('공급업체X', '010-1111-2222', '서울특별시 강남구', '식자재 공급', '2024-04-01 08:00:00'),
-('공급업체Y', '010-3333-4444', '부산광역시 해운대구', '포장재 공급', '2024-04-02 09:00:00'),
-('공급업체Z', '010-5555-6666', '대구광역시 북구', '기계 공급', '2024-04-03 10:00:00');
+
+('공급업체Z', '010-5555-6666', '대구광역시 북구', '원자재', '2024-04-03 10:00:00');
 
 -- 3. 원자재 재고 (MaterialsInventory) 테이블 더미 데이터
 INSERT INTO ERP.MaterialsInventory (SupplierID, MaterialName, Category, UnitPrice, LastUpdated)
 VALUES
-(1, '자재X', '식자재', 5000, '2024-04-05 10:30:00'),
-(2, '자재Y', '포장재', 3000, '2024-04-06 11:00:00'),
-(3, '자재Z', '기계 부품', 10000, '2024-04-07 12:00:00');
+(1, '밀가루', '식자재', 5000, '2024-04-05 10:30:00'),
+(2, '설탕', '식자재', 3000, '2024-04-06 11:00:00'),
+(3, '버터', '식자재', 10000, '2024-04-07 12:00:00');
 
+drop table ERP.MaterialsInventory;
 -- 4. 원자재 재입고 이력 (RawMaterialRestockHistory) 테이블 더미 데이터
 INSERT INTO ERP.RawMaterialRestockHistory (MaterialID, SupplierID, RestockQuantity, UnitPrice, RestockDate)
 VALUES

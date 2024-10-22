@@ -47,8 +47,8 @@ body {
 
 .create-button {
     padding: 10px 50px;
-    background-color: rgb(187, 216, 118);
-    color: white;
+    background-color:#0a917f;
+    color: #DFE0DF;
     border: none;
     cursor: pointer;
     margin-bottom: 20px;
@@ -74,7 +74,7 @@ body {
     width: 60%;
     margin: 50px auto;
     padding: 20px;
-    background-color: #ffe4c3;
+    background-color: #DFE0DF;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
@@ -96,8 +96,8 @@ body {
 .form-group input {
     width: 100%;
     padding: 8px;
-    border: 1px solid #f2f4ec;
-    background-color: #f2f4ec;
+    border: 1px solid #ffffff;
+    background-color: #ffffff;
     border-radius: 4px;
 }
 
@@ -105,8 +105,8 @@ body {
     display: block;
     width: 100%;
     padding: 10px;
-    background-color: rgb(231, 255, 160);
-    color: rgb(0, 0, 0);
+    background-color: #0a917f;
+    color: #DFE0DF;
     border: none;
     cursor: pointer;
     font-size: 16px;
@@ -114,7 +114,7 @@ body {
 }
 
 .submit-button:hover {
-    background-color: rgb(231, 245, 160);
+    background-color: #005f52;
 }
 
 #sidebar {
@@ -123,7 +123,7 @@ body {
     left: -250px;
     width: 250px;
     height: calc(100vh - 100px);
-    background-color: #f2f4ec;
+    background-color: #DFE0DF;
     padding: 20px;
     transition: left 0.3s ease;
     z-index: 9999;
@@ -134,8 +134,8 @@ body {
 }
 
 .sidebar-menu .menu-item {
-    background-color: #f2f4ec;
-    color: rgb(0, 0, 0);
+    background-color: #ffc368;
+    color: black;
     padding: 18px;
     margin-bottom: 10px;
     border: none;
@@ -147,7 +147,7 @@ body {
 
 .sidebar-menu .menu-item:hover {
     font-weight: bold;
-    color: #5436ff;
+    color: #5F1000;
 }
 
 .dropdown-menu {
@@ -173,11 +173,11 @@ body {
 
 .dropdown-menu li a:hover {
     font-weight: bold;
-    color: #5436ff;
+    color: #5F1000;
 }
 
 .navbar {
-    background-color: #f2f4ec;
+    background-color:#ffc368;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -205,6 +205,7 @@ body {
     display: flex;
     gap: 10px;
     margin-left: auto;
+    background-color: #ffc164;
 }
 
 .nav-button {
@@ -219,7 +220,7 @@ body {
 }
 
 .nav-button:hover {
-    color: #5436ff;
+    color: #5F1000;
 }
 
 .nav-button-dropdown {
@@ -247,7 +248,7 @@ body {
 
 .dropdown-content a:hover {
     font-weight: bold;
-    color: #5436ff;
+    color:  #5F1000;
 }
 
 .main-dashboard-container {
