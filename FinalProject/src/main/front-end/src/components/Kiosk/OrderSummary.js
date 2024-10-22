@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const OrderSummary = ({ 
   orderAmount, 
@@ -7,11 +6,9 @@ const OrderSummary = ({
   totalAmount, 
   onCancel, 
   onPrevious,
-  nextPath, 
+  onNext,
   showNextButton = true 
 }) => {
-  const navigate = useNavigate();
-
   return (
     <>
       <div className="summary fs-4">
@@ -26,7 +23,7 @@ const OrderSummary = ({
         <div className="pay-certain-container space-btw">
           <button className="button-previous" onClick={onPrevious}>이전</button>
           {showNextButton && (
-            <button className="button-next" onClick={() => navigate(nextPath)}>다음</button>
+            <button className="button-next" onClick={onNext}>다음</button>
           )}
         </div>
       </div>

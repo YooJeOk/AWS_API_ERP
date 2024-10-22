@@ -12,16 +12,21 @@ const DetailPage = () => {
   const handleCancel = () => {
     navigate('/');
   };
+
   const handlePrevious = () => {
     navigate('/kioskMenu', { state: { cartItems } });
   };
+
+  const handleNext = () => {
+    navigate('/earn', { state: { cartItems } });
+  };
+
   return (
     <div className="detail-page container-md body-center">
       <nav className="detail-header text-bold">주문 세부내역을 다시 확인해주세요</nav>
       <div className="detail-content">
         {cartItems.map((item, index) => (
           <div key={index} className="detail-item row fs-4">
-
             <div className='col-3 detail-item-image-container'>
               <img src={item.image} alt={item.name} className="detail-item-image col-3" />
             </div>
@@ -40,7 +45,6 @@ const DetailPage = () => {
               <div>{item.quantity}개</div>
               <div className="item-price">₩{item.totalPrice}</div>
             </div>
-
           </div>
         ))}
       </div>
@@ -50,6 +54,7 @@ const DetailPage = () => {
         totalAmount={totalAmount}
         onCancel={handleCancel}
         onPrevious={handlePrevious}
+        onNext={handleNext}
         nextPath="/earn"
       />
     </div>

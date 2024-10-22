@@ -31,13 +31,19 @@
 
 }
 .select-place button{
-    border: none;
     border-radius: 10px;
     width: 40%;
     height: 110px;
     margin-left: 30px;
-    background-color: #E6B980;
     font-size: 30px;
+}
+.take-out-btn{
+    background-color: #E6B980;
     color: white;
-    border: 3px solid white;
+    border: none;
+}
+.here-btn{
+    border: 3px solid #E6B980;
+    background-color: white;
+    color: #E6B980;
 }

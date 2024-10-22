@@ -26,7 +26,7 @@ const Home = ()=>{
 
              <div className="select-place ">
            <button type='button' className='take-out-btn' onClick={handleClick}>포장하기</button>
-          <button type='button' className='take-out-btn' onClick={handleClick}>먹고가기</button>
+          <button type='button' className='here-btn' onClick={handleClick}>먹고가기</button>
          </div>
 
 
