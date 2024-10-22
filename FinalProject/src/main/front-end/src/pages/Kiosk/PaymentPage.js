@@ -9,6 +9,9 @@ const PaymentPage = () => {
   const handleCancel = () => {
     navigate('/');
   };
+  const handlePrevious = () =>{
+    navigate('/earn');
+  }
 
   return (
     <div className="detail-page container-md body-center">
@@ -49,7 +52,7 @@ const PaymentPage = () => {
         discountAmount={0}
         totalAmount={7500}
         onCancel={handleCancel}
-        previousPath="/earn"
+        onPrevious={handlePrevious}
         nextPath="/"
         showNextButton={false}
       />
