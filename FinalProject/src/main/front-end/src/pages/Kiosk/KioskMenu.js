@@ -4,6 +4,7 @@ import MenuList from '../../components/Kiosk/MenuList';
 import Cart from '../../components/Kiosk/Cart';
 import './KioskMenu.css';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { House } from 'react-bootstrap-icons';
 
 const KioskMenu = () => {
 
@@ -163,11 +164,19 @@ const KioskMenu = () => {
   const handlePayment = () => {
     navigate('/detail', { state: { cartItems } });
   };
+  const handleHome=()=>{
+    navigate('/');
+  }
+
   return (
 
 
     <div className="home-container text-center container-md body-center">
-      <nav className="menubar text-bold"><i className="bi bi-house" id="back-home"></i>숨쉰당</nav>
+      
+      <nav className="menubar text-bold">
+        <button className='goHome' onClick={handleHome}><House/></button>
+        <div className='body-center'>숨쉰당</div>
+      </nav>
       <CategorySelector
         categories={categories}
         selectedCategory={selectedCategory}
