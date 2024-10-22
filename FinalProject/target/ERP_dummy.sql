@@ -87,7 +87,7 @@ VALUES
 (2, 2, '단팥도넛', 150, 3700, '2024-04-21 11:00:00', '카드'),
 (3, 3, '고구마케이크빵', 200, 3000, '2024-04-22 12:00:00', '카드');
 
--- 9. 커피 종류 (Coffee) 테이블 더미 데이터
+-- 10. 커피 종류 (Coffee) 테이블 더미 데이터
 INSERT INTO ERP.Coffee (CoffeeName, SalePrice, CoffeeImage, Recommend, Temperature, DetailDescription)
 VALUES 
 (1, '아메리카노', 3200, '/images/coffee/아메리카노ice.jpg', 'Y', 'ICE', '진한 에스프레소에 차가운 물을 더해 시원하고 깔끔한 맛을 느낄 수 있는 아이스 커피'),
@@ -105,42 +105,42 @@ VALUES
 (13, '연유라떼', 4000, '/images/coffee/연유라떼ice.jpg', 'Y', 'ICE', '달콤한 연유와 에스프레소, 차가운 우유가 조화롭게 어우러진 시원한 라떼'),
 (14, '에스프레소', 2500, '/images/coffee/에스프레소hot.jpg', 'N', 'HOT', '진한 커피의 맛과 향을 온전히 즐길 수 있는 에스프레소 샷');
 
--- 10. 작업 지시 (WorkOrders) 테이블 더미 데이터
+-- 11. 작업 지시 (WorkOrders) 테이블 더미 데이터
 INSERT INTO ERP.WorkOrders (ProductID, Quantity, StartDate, EndDate, Status, Priority)
 VALUES
 (1, 500, '2024-04-23', '2024-04-23', '진행 중', '높음'),
 (2, 300, '2024-05-01', '2024-05-01', '대기', '중간'),
 (3, 400, '2024-05-06', '2024-05-06', '완료', '낮음');
 
--- 11. 생산 계획 (ProductionPlanning) 테이블 더미 데이터
+-- 12. 생산 계획 (ProductionPlanning) 테이블 더미 데이터
 INSERT INTO ERP.ProductionPlanning (OrderID, ProductID, RequiredDate, MaterialsNeeded, StartDate, EndDate)
 VALUES
 (1, 1, '2024-04-24', 1000, '2024-04-23', '2024-04-30'),
 (2, 2, '2024-05-02', 500, '2024-05-01', '2024-05-05'),
 (3, 3, '2024-05-07', 800, '2024-05-06', '2024-05-12');
 
--- 12. 생산 모니터링 (ProductionMonitoring) 테이블 더미 데이터
+-- 13. 생산 모니터링 (ProductionMonitoring) 테이블 더미 데이터
 INSERT INTO ERP.ProductionMonitoring (OrderID, Temperature, Humidity, ProductionRate, OperationTime)
 VALUES
 (1, 75.5, 45, 95, 8),
 (2, 80.0, 50, 85, 7),
 (3, 70.0, 40, 90, 6);
 
--- 13. 생산 입력 (ProductionEntry) 테이블 더미 데이터
+-- 14. 생산 입력 (ProductionEntry) 테이블 더미 데이터
 INSERT INTO ERP.ProductionEntry (OrderID, ProductID, Quantity, EntryDate)
 VALUES
 (1, 1, 500, '2024-04-30'),
 (2, 2, 300, '2024-05-05'),
 (3, 3, 400, '2024-05-12');
 
--- 14. 품질 관리 (QualityControl) 테이블 더미 데이터
+-- 15. 품질 관리 (QualityControl) 테이블 더미 데이터
 INSERT INTO ERP.QualityControl (EntryID, ProductID, TestResult, TestDate, DefectRate)
 VALUES
 (1, 1, '합격', '2024-05-01 10:00:00', 2),
 (2, 2, '불합격', '2024-05-06 11:00:00', 10),
 (3, 3, '합격', '2024-05-13 12:00:00', 0);
 
--- 15. 매장 재고 (StoreInventory) 테이블 더미 데이터
+-- 16. 매장 재고 (StoreInventory) 테이블 더미 데이터
 
 INSERT INTO ERP.StoreInventory (ProductID, MaterialID, SaleID, DisposalID, QuantityInStore, StoreDate)
 VALUES
@@ -149,20 +149,20 @@ VALUES
 (3, 3, 3, 3, 400, '2024-05-16 12:00:00');
 
 
--- 16. MBOM (MBOM) 테이블 더미 데이터
+-- 17. MBOM (MBOM) 테이블 더미 데이터
 INSERT INTO ERP.MBOM (ProductID, MaterialID, ProductName, Quantity, Unit, ProductionProcess)
 VALUES
 (1, 1, '갈릭꽈베기', 1000, '개', '조립'),
 (2, 2, '단팥도넛', 800, '개', '포장'),
 (3, 3, '고구마케이크빵', 600, '개', '검사');
 
--- 17. 사용자 (Users) 테이블 더미 데이터
+-- 18. 사용자 (Users) 테이블 더미 데이터
 INSERT INTO ERP.Users (UserID, Name, PhoneNumber, Email, Username, Password)
 VALUES
 
 ('user003', '박민수', '010-5555-6666', 'minsoo@example.com', 'minsoo', 'pass9101');
 
--- 18. 커피 재료 테이블 더미 데이터
+-- 19. 커피 재료 테이블 더미 데이터
 INSERT INTO ERP.coffee_materials (CoffeeID, MaterialID, RawMaterialQuantity)
 VALUES
 (1, 1, 50),  -- 아메리카노에 자재 1번 사용, 50 단위
