@@ -22,7 +22,7 @@ const EarnPage = () => {
     navigate('/detail', { state: { cartItems } });
   };
   const handleNext=()=>{
-    navigate('/payment')
+    navigate('/payment',{ state: { cartItems } })
   }
 
   const handlePhoneCheck = () => {
@@ -41,7 +41,6 @@ const EarnPage = () => {
 
 
   const handleKeypadSubmit = async (number) => {
-    console.log(`Submitted number for ${keypadPurpose}:`, number);
     if (keypadPurpose === 'phoneCheck') {
       try {
         const response = await fetch(`http://localhost:8080/api/user/${number}`);
@@ -55,7 +54,7 @@ const EarnPage = () => {
         alert('조회된 번호가 없습니다.');
       }
     } else if (keypadPurpose === 'joinMember') {
-      console.log('회원가입이 완료되었습니다.');
+      console.log("회원가입완료")
     }
     setShowKeypad(false);
   };

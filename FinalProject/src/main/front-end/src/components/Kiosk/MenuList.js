@@ -54,7 +54,7 @@ const MenuList = ({ items, onAddToCart, additionalOptions, currentPage, totalPag
       >
         <CaretRight 
           style={{ 
-            opacity: currentPage === totalPages - 1 ? 0.5 : 1,
+            opacity: currentPage === totalPages - 1 ? 0.2 : 1,
             transition: 'opacity 0.3s ease' 
           }} 
         />
