@@ -1,0 +1,28 @@
+.payment-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .payment-modal-content {
+    font-size: 28px;
+    width: 50%;
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+  }
+  
+  .payment-modal-content button {
+    margin-top: 10px;
+    width: 100%;
+    color: #D9BBA0;
+    border: 1px solid #D9BBA0;
+    border-radius: 5px;
+  }
