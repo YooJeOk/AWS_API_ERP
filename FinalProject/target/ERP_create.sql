@@ -260,7 +260,9 @@ CREATE TABLE ERP.MBOM (
 
 -- 18. 사용자 (Users)
 CREATE TABLE ERP.Users (
+
     UserID INT NOT NULL AUTO_INCREMENT,-- 사용자ID
+
     Name VARCHAR(30) NULL, -- 이름
     PhoneNumber VARCHAR(30) NULL, -- 전화번호
     Email VARCHAR(30) NULL, -- 이메일

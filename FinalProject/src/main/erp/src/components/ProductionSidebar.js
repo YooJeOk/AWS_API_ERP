@@ -20,18 +20,18 @@ function ProductionSidebar() {
             className="sidebar" 
             style={{
                 position: 'fixed',
-                left: isSidebarOpen ? '0' : '-250px',  // 열리면 0, 닫히면 -250px
+                left: isSidebarOpen ? '0' : '-250px', 
                 transition: 'left 0.3s ease',
                 width: '220px',
                 height: '100vh',
                 padding: '10px',
                 zIndex: 2,
-                backgroundColor: '#F6F6F6'
+                
             }}
         >
             <div className="sidebar-menu" >
                 <div className="dropdown">
-                    <button className="menu-item" style={{backgroundColor: '#F0C490', color:'white'}}>생산 계획 관리</button>
+                    <button className="menu-item" >생산 계획 관리</button>
                     <ul className="dropdown-menu">
                         <li><Link to="/input">● 생산 계획 등록</Link></li>
                         <li><Link to="/production">● 생산 계획 조회</Link></li>
@@ -39,7 +39,7 @@ function ProductionSidebar() {
                 </div>
 
                 <div className="dropdown">
-                    <button className="menu-item" style={{backgroundColor: '#F0C490', color:'white'}}>생산 공정 관리</button>
+                    <button className="menu-item" >생산 공정 관리</button>
                     <ul className="dropdown-menu">
                         <li><Link to="/input2">● 생산 입고 등록</Link></li>
                         <li><Link to="/production2">● 생산 입고 조회</Link></li>
@@ -52,7 +52,7 @@ function ProductionSidebar() {
                 </div>
 
                 <div className="dropdown">
-                    <button className="menu-item" style={{backgroundColor: '#F0C490', color:'white'}}>소요량 관리</button>
+                    <button className="menu-item" >소요량 관리</button>
                     <ul className="dropdown-menu">
                         <li><Link to="/input8">● 소요량 계산</Link></li>
                         <li><Link to="/input5">● 소요량 현황</Link></li>
@@ -61,7 +61,7 @@ function ProductionSidebar() {
                 </div>
 
                 <div className="dropdown">
-                    <button className="menu-item" style={{backgroundColor: '#F0C490', color:'white'}}>품질 관리</button>
+                    <button className="menu-item" >품질 관리</button>
                     <ul className="dropdown-menu">
                         <li><Link to="/input6">● 불량 등록</Link></li>
                         <li><Link to="/production6">● 불량 조회</Link></li>
@@ -71,7 +71,7 @@ function ProductionSidebar() {
                 </div>
 
                 <div className="dropdown">
-                    <button className="menu-item" style={{backgroundColor: '#F0C490', color:'white'}}>생산실적 관리</button>
+                    <button className="menu-item" >생산실적 관리</button>
                     <ul className="dropdown-menu">
                         <li><Link to="/input9">● 생산실적 등록</Link></li>
                         <li><Link to="/production9">● 날짜별 가동율 실적</Link></li>

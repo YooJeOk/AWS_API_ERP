@@ -20,14 +20,17 @@ VALUES ('꿀버터바게트', 'bread', 2000, 3800, '2024-01-01', '/images/bread/
 -- 2. 공급업체 (Suppliers) 테이블 더미 데이터
 INSERT INTO ERP.Suppliers (SupplierName, ContactInfo, Address, SupplierType, RegistrationDate)
 VALUES
+
 ('공급업체X', '010-1111-2222', '서울특별시 강남구', '식자재(빵) 공급', '2024-04-01 08:00:00'),
 ('공급업체Y', '010-3333-4444', '서울특별시 강남구', '식자재(커피) 공급', '2024-04-02 09:00:00'),
 ('공급업체O', '010-1111-2222', '서울특별시 강남구', '부자재 공급', '2024-04-01 08:00:00');
 
 
+
 -- 3. 원자재 재고 (MaterialsInventory) 테이블 더미 데이터
 INSERT INTO ERP.MaterialsInventory (SupplierID, MaterialName, Category, UnitPrice, LastUpdated)
 VALUES
+
 -- 빵 관련 식자재 (1번 공급업체)
 (1, '계란', '식자재', 'g', 4, '2024-04-05 10:30:00'),           -- 5원/g
 (1, '고구마필링', '식자재', 'g', 8, '2024-04-05 10:35:00'),    -- 12원/g
@@ -67,6 +70,8 @@ VALUES
 
 
 
+
+drop table ERP.MaterialsInventory;
 -- 4. 원자재 재입고 이력 (RawMaterialRestockHistory) 테이블 더미 데이터
 INSERT INTO ERP.RawMaterialRestockHistory (MaterialID, SupplierID, RestockQuantity, UnitPrice, RestockDate)
 VALUES
