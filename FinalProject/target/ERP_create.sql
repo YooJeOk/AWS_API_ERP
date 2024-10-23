@@ -57,6 +57,7 @@ CREATE TABLE ERP.MaterialsInventory (
     SupplierID INT NOT NULL, -- 공급업체ID
     MaterialName VARCHAR(100) NULL, -- 자재명
     Category VARCHAR(50) NULL, -- 카테고리
+    Unit VARCHAR(50) NULL, -- 단위 (g, ml 등)
     UnitPrice INT NULL, -- 단가
     LastUpdated DATETIME NULL, -- 최종 업데이트
     PRIMARY KEY (MaterialID),
@@ -146,6 +147,8 @@ CREATE TABLE ERP.Coffee (
 );
 
 -- 11. 작업 지시 (WorkOrders)
+-- 각 공정 단계에 대해 완료 여부를 기록할 수 있도록 BOOLEAN 컬럼을 추가했습니다. 각 단계가 완료될 때마다 해당 컬럼을 TRUE로 업데이트하여 
+-- 각 제품의 공정 진행 상태를 추적할 수 있습니다. 이 방식으로 세부적인 생산 공정을 관리하고, 전체 생산 상태를 확인할 수 있습니다.
 CREATE TABLE ERP.WorkOrders (
     OrderID INT NOT NULL AUTO_INCREMENT, -- 작업 지시ID
     ProductID INT NOT NULL, -- 제품ID
@@ -154,6 +157,18 @@ CREATE TABLE ERP.WorkOrders (
     EndDate DATE NULL, -- 종료 날짜
     Status VARCHAR(50) NULL, -- 상태
     Priority VARCHAR(50) NULL, -- 우선순위
+    WeighingComplete BOOLEAN DEFAULT FALSE, -- 재료 계량 완료 여부
+    DoughComplete BOOLEAN DEFAULT FALSE, -- 반죽 완료 여부
+    FirstFermentationComplete BOOLEAN DEFAULT FALSE, -- 1차 발효 완료 여부
+    DivisionComplete BOOLEAN DEFAULT FALSE, -- 분할 완료 여부
+    RoundingComplete BOOLEAN DEFAULT FALSE, -- 둥글리기 완료 여부
+    IntermediateFermentationComplete BOOLEAN DEFAULT FALSE, -- 중간 발효 완료 여부
+    ShapingComplete BOOLEAN DEFAULT FALSE, -- 정형 완료 여부
+    PanningComplete BOOLEAN DEFAULT FALSE, -- 팬닝 완료 여부
+    SecondFermentationComplete BOOLEAN DEFAULT FALSE, -- 2차 발효 완료 여부
+    BakingComplete BOOLEAN DEFAULT FALSE, -- 굽기 완료 여부
+    CoolingComplete BOOLEAN DEFAULT FALSE, -- 냉각 완료 여부
+    PackagingComplete BOOLEAN DEFAULT FALSE, -- 포장 완료 여부
     PRIMARY KEY (OrderID),
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
 );
@@ -227,20 +242,20 @@ CREATE TABLE ERP.StoreInventory (
 );
 
 
--- 17. MBOM (MBOM)
-
+-- 17 MBOM 테이블 수정 (UnitPrice 추가)
 CREATE TABLE ERP.MBOM (
     BOMID INT NOT NULL AUTO_INCREMENT, -- BOMID
     ProductID INT NOT NULL, -- 제품ID
     MaterialID INT NOT NULL, -- 자재ID
-    ProductName VARCHAR(100) NOT NULL, -- 제품명 (참고용 필드, 외래 키로 사용 안 함)
+    ProductName VARCHAR(100) NOT NULL, -- 제품명 
     Quantity INT NOT NULL, -- 수량
     Unit VARCHAR(50) NOT NULL, -- 단위
-    ProductionProcess VARCHAR(50) NOT NULL, -- 생산 공정
-    PRIMARY KEY (BOMID, ProductID, MaterialID), -- ProductName을 PRIMARY KEY에서 제외
-    FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID), -- ProductID만 외래 키로 설정
+    UnitPrice INT NOT NULL, -- 단가 (자재별 단가)
+    PRIMARY KEY (BOMID, ProductID, MaterialID),
+    FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID),
     FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
 );
+
 
 
 -- 18. 사용자 (Users)
