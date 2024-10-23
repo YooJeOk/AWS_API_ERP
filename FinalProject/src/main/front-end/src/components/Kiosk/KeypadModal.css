@@ -1,0 +1,78 @@
+.keypad-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  .input-num{
+    border-radius: 5px;
+    border: 1px solid #4F4A4A;
+  }
+  .keypad-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+  }
+  
+  .keypad-content h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .keypad-content input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 18px;
+    text-align: center;
+  }
+  
+  .keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  
+  .keypad button {
+    padding: 15px;
+    font-size: 18px;
+    border: none;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .keypad button:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .keypad-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .keypad-actions button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .keypad-actions button:first-child {
+    background-color: #4F4A4A;
+    color: white;
+  }
+  
+  .keypad-actions button:last-child {
+    background-color: #D9BBA0;
+    color: white;
+  }

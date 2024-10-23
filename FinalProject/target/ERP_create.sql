@@ -1,7 +1,7 @@
 
 
 
-DROP TABLE IF EXISTS ERP.Untitled;
+DROP TABLE IF EXISTS ERP.coffee_materials;
 DROP TABLE IF EXISTS ERP.Users;
 DROP TABLE IF EXISTS ERP.MBOM;
 DROP TABLE IF EXISTS ERP.StoreInventory;
@@ -57,6 +57,7 @@ CREATE TABLE ERP.MaterialsInventory (
     SupplierID INT NOT NULL, -- 공급업체ID
     MaterialName VARCHAR(100) NULL, -- 자재명
     Category VARCHAR(50) NULL, -- 카테고리
+    Unit VARCHAR(50) NULL, -- 단위 (g, ml 등)
     UnitPrice INT NULL, -- 단가
     LastUpdated DATETIME NULL, -- 최종 업데이트
     PRIMARY KEY (MaterialID),
@@ -113,18 +114,27 @@ CREATE TABLE ERP.DisposedRecords (
 -- 8. 판매 기록 (SalesRecords)
 CREATE TABLE ERP.SalesRecords (
     SaleID INT NOT NULL AUTO_INCREMENT, -- 판매ID
-    ProductID INT NOT NULL, -- 제품ID
-    CoffeeID INT NOT NULL, -- 커피ID
-    ProductName VARCHAR(100) NULL, -- 제품명
-    QuantitySold INT NULL, -- 판매된 수량
-    SalePrice INT NULL, -- 판매가
     SaleDate DATETIME NULL, -- 판매 날짜
     PaymentType VARCHAR(50) NULL, -- 결제 유형
-    PRIMARY KEY (SaleID, ProductID, CoffeeID),
-    FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
+    TotalSalePrice INT NULL, -- 총 판매가
+    PRIMARY KEY (SaleID)
 );
 
--- 9. 매장 커피 종류 (StoreCoffeeTypes)
+-- 9. 판매 세부 기록 (SalesDetails)
+CREATE TABLE ERP.SalesDetails (
+    SaleDetailID INT NOT NULL AUTO_INCREMENT, -- 판매 세부 ID
+    SaleID INT NOT NULL, -- 판매ID (SalesRecords와 연결)
+    ProductID INT NULL, -- 제품ID
+    CoffeeID INT NULL, -- 커피ID
+    QuantitySold INT NULL, -- 판매된 수량
+    SalePrice INT NULL, -- 판매가
+    PRIMARY KEY (SaleDetailID),
+    FOREIGN KEY (SaleID) REFERENCES ERP.SalesRecords(SaleID), 
+    FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID), 
+    FOREIGN KEY (CoffeeID) REFERENCES ERP.Coffee(CoffeeID) 
+);
+
+-- 10. 매장 커피 종류 (StoreCoffeeTypes)
 CREATE TABLE ERP.Coffee (
     CoffeeID INT NOT NULL AUTO_INCREMENT, -- 커피ID
     CoffeeName VARCHAR(50) NULL, -- 커피 이름
@@ -136,7 +146,9 @@ CREATE TABLE ERP.Coffee (
     PRIMARY KEY (CoffeeID)
 );
 
--- 10. 작업 지시 (WorkOrders)
+-- 11. 작업 지시 (WorkOrders)
+-- 각 공정 단계에 대해 완료 여부를 기록할 수 있도록 BOOLEAN 컬럼을 추가했습니다. 각 단계가 완료될 때마다 해당 컬럼을 TRUE로 업데이트하여 
+-- 각 제품의 공정 진행 상태를 추적할 수 있습니다. 이 방식으로 세부적인 생산 공정을 관리하고, 전체 생산 상태를 확인할 수 있습니다.
 CREATE TABLE ERP.WorkOrders (
     OrderID INT NOT NULL AUTO_INCREMENT, -- 작업 지시ID
     ProductID INT NOT NULL, -- 제품ID
@@ -145,11 +157,23 @@ CREATE TABLE ERP.WorkOrders (
     EndDate DATE NULL, -- 종료 날짜
     Status VARCHAR(50) NULL, -- 상태
     Priority VARCHAR(50) NULL, -- 우선순위
+    WeighingComplete BOOLEAN DEFAULT FALSE, -- 재료 계량 완료 여부
+    DoughComplete BOOLEAN DEFAULT FALSE, -- 반죽 완료 여부
+    FirstFermentationComplete BOOLEAN DEFAULT FALSE, -- 1차 발효 완료 여부
+    DivisionComplete BOOLEAN DEFAULT FALSE, -- 분할 완료 여부
+    RoundingComplete BOOLEAN DEFAULT FALSE, -- 둥글리기 완료 여부
+    IntermediateFermentationComplete BOOLEAN DEFAULT FALSE, -- 중간 발효 완료 여부
+    ShapingComplete BOOLEAN DEFAULT FALSE, -- 정형 완료 여부
+    PanningComplete BOOLEAN DEFAULT FALSE, -- 팬닝 완료 여부
+    SecondFermentationComplete BOOLEAN DEFAULT FALSE, -- 2차 발효 완료 여부
+    BakingComplete BOOLEAN DEFAULT FALSE, -- 굽기 완료 여부
+    CoolingComplete BOOLEAN DEFAULT FALSE, -- 냉각 완료 여부
+    PackagingComplete BOOLEAN DEFAULT FALSE, -- 포장 완료 여부
     PRIMARY KEY (OrderID),
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
 );
 
--- 11. 생산 계획 (ProductionPlanning)
+-- 12. 생산 계획 (ProductionPlanning)
 CREATE TABLE ERP.ProductionPlanning (
     PlanID INT NOT NULL AUTO_INCREMENT, -- 계획ID
     OrderID INT NOT NULL, -- 작업 지시ID
@@ -163,7 +187,7 @@ CREATE TABLE ERP.ProductionPlanning (
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
 );
 
--- 12. 생산 모니터링 (ProductionMonitoring)
+-- 13. 생산 모니터링 (ProductionMonitoring)
 CREATE TABLE ERP.ProductionMonitoring (
     MonitorID INT NOT NULL AUTO_INCREMENT, -- 모니터링ID
     OrderID INT NOT NULL, -- 작업 지시ID
@@ -175,7 +199,7 @@ CREATE TABLE ERP.ProductionMonitoring (
     FOREIGN KEY (OrderID) REFERENCES ERP.WorkOrders(OrderID)
 );
 
--- 13. 생산 입력 (ProductionEntry)
+-- 14. 생산 입력 (ProductionEntry)
 CREATE TABLE ERP.ProductionEntry (
     EntryID INT NOT NULL AUTO_INCREMENT, -- 입력ID
     OrderID INT NOT NULL, -- 작업 지시ID
@@ -187,7 +211,7 @@ CREATE TABLE ERP.ProductionEntry (
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
 );
 
--- 14. 품질 관리 (QualityControl)
+-- 15. 품질 관리 (QualityControl)
 CREATE TABLE ERP.QualityControl (
     QCID INT NOT NULL AUTO_INCREMENT, -- 품질관리ID
     EntryID INT NOT NULL, -- 입력ID
@@ -200,7 +224,7 @@ CREATE TABLE ERP.QualityControl (
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
 );
 
--- 15. 매장 재고 (StoreInventory)
+-- 16. 매장 재고 (StoreInventory)
 
 CREATE TABLE ERP.StoreInventory (
     StoreInventoryID INT NOT NULL AUTO_INCREMENT, -- 매장 재고ID
@@ -218,25 +242,27 @@ CREATE TABLE ERP.StoreInventory (
 );
 
 
--- 16. MBOM (MBOM)
-
+-- 17 MBOM 테이블 수정 (UnitPrice 추가)
 CREATE TABLE ERP.MBOM (
     BOMID INT NOT NULL AUTO_INCREMENT, -- BOMID
     ProductID INT NOT NULL, -- 제품ID
     MaterialID INT NOT NULL, -- 자재ID
-    ProductName VARCHAR(100) NOT NULL, -- 제품명 (참고용 필드, 외래 키로 사용 안 함)
+    ProductName VARCHAR(100) NOT NULL, -- 제품명 
     Quantity INT NOT NULL, -- 수량
     Unit VARCHAR(50) NOT NULL, -- 단위
-    ProductionProcess VARCHAR(50) NOT NULL, -- 생산 공정
-    PRIMARY KEY (BOMID, ProductID, MaterialID), -- ProductName을 PRIMARY KEY에서 제외
-    FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID), -- ProductID만 외래 키로 설정
+    UnitPrice INT NOT NULL, -- 단가 (자재별 단가)
+    PRIMARY KEY (BOMID, ProductID, MaterialID),
+    FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID),
     FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
 );
 
 
--- 17. 사용자 (Users)
+
+-- 18. 사용자 (Users)
 CREATE TABLE ERP.Users (
-    UserID INT NOT NULL AUTO_INCREMENT, -- 사용자ID
+
+    UserID INT NOT NULL AUTO_INCREMENT,-- 사용자ID
+
     Name VARCHAR(30) NULL, -- 이름
     PhoneNumber VARCHAR(30) NULL, -- 전화번호
     Email VARCHAR(30) NULL, -- 이메일
@@ -245,7 +271,7 @@ CREATE TABLE ERP.Users (
     PRIMARY KEY (UserID)
 );
 
--- 18. Untitled (커피 재료)
+-- 19. ERP.coffee_materials (커피 재료)
 CREATE TABLE ERP.coffee_materials (
     CoffeeMaterialID INT NOT NULL AUTO_INCREMENT,-- 커피 재료ID
     CoffeeID INT NOT NULL, -- 커피ID
@@ -292,6 +318,5 @@ VALUES
 (13, '연유라떼', 4000, '/images/coffee/연유라떼ice.jpg', 'Y', 'ICE', '달콤한 연유와 에스프레소, 차가운 우유가 조화롭게 어우러진 시원한 라떼'),
 (14, '에스프레소', 2500, '/images/coffee/에스프레소hot.jpg', 'N', 'HOT', '진한 커피의 맛과 향을 온전히 즐길 수 있는 에스프레소 샷');
 
-select * from Product;
-select * from Coffee;
+
 

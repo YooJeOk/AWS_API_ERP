@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ERP.FinalProject.domain.inventory.entity.Product;
@@ -73,7 +74,12 @@ public class KioskService {
 	}
 
     public Page<Product> getBreadItems(Pageable pageable) {
-        return productRepository.findByRecommendAndProductCategory("N", "bread", pageable);
+	    long totalBread = productRepository.countByProductCategoryAndRecommend("bread", "N");
+	    int pageSize = pageable.getPageSize();
+	    int currentPage = pageable.getPageNumber();
+        Page<Product> Breads = productRepository.findByRecommendAndProductCategory("N", "bread",PageRequest.of(currentPage, pageSize));
+     
+	    return new PageImpl<>(Breads.getContent(), pageable, totalBread);
     }
 
     public Page<Coffee> getIceCoffeeItems(Pageable pageable) {

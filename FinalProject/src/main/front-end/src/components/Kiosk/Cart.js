@@ -7,7 +7,7 @@ const Cart = ({ items, updateQuantity, removeItem, clearCart }) => {
   const totalAmount = items.reduce((sum, item) => sum + item.totalPrice, 0);
   const navigate = useNavigate();
 
-  const handleClick = () => {
+  const DetailClick = () => {
     navigate('/detail', { state: { cartItems: items } });
   };
 
@@ -25,7 +25,7 @@ const Cart = ({ items, updateQuantity, removeItem, clearCart }) => {
                 onClick={() => updateQuantity(item.id, item.type,item.options, item.quantity - 1)}
                 disabled={item.quantity === 1}
               ><DashSquare />
-
+            
               </button>
               <span className="cart-count">{item.quantity}</span>
               <button
@@ -56,7 +56,7 @@ const Cart = ({ items, updateQuantity, removeItem, clearCart }) => {
         </div>
         <div className="pay-btn-container fs-5">
           <button type="button" className="btn-basic btn-cancle" onClick={clearCart}>전체 취소</button>
-          <button type="button" className="btn-basic btn-pay"  onClick={handleClick}>
+          <button type="button" className="btn-basic btn-pay"  onClick={DetailClick}>
             결제하기
           </button>
         </div>

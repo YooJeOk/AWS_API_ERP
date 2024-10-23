@@ -29,8 +29,7 @@ const KioskMenu = () => {
     { id: 3, name: '바닐라 시럽', price: 300 },
     { id: 4, name: '메이플 시럽', price: 300 },
     { id: 5, name: '아이스크림', price: 1000 },
-    { id: 6, name: '펄', price: 500 },
-    { id: 7, name: '우유', price: 500 },
+    { id: 6, name: '우유', price: 500 },
   ];
 
   const fetchMenuItems = async (category, page = 0, size = 6) => {
@@ -55,13 +54,13 @@ const KioskMenu = () => {
       const response = await fetch(`http://localhost:8080${endpoint}?page=${page}&size=${size}`);
       if (!response.ok) {
         const errorBody = await response.text();
-      throw new Error(`HTTP error! status: ${response.status}, body: ${errorBody}`);
+      throw new Error(`error : ${response.status}, body: ${errorBody}`);
       }
       const data = await response.json();
-      console.log('Fetched data:', data); 
+      console.log('data', data); 
       return data;
     } catch (error) {
-      console.error("Fetching menu items failed:", error);
+      console.error("error:", error);
       return null;
     }
   };
@@ -192,6 +191,8 @@ const KioskMenu = () => {
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}
+        selectedCategory={selectedCategory} // 추가
+
       />
       <Cart className="cart-fixed"
         items={cartItems}
