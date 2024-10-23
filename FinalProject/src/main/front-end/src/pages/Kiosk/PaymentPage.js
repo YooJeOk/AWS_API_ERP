@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './payment.css';
 import OrderSummary from '../../components/Kiosk/OrderSummary';
 import PaymentModal from '../../components/Kiosk/PaymentModal';
+import axios from 'axios';
 
 const PaymentPage = () => {
   const navigate = useNavigate();
@@ -13,6 +14,16 @@ const PaymentPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
 
+    // 포트원 스크립트 로드
+    useEffect(() => {
+      const script = document.createElement('script');
+      script.src = "https://cdn.iamport.kr/v1/iamport.js";
+      document.body.appendChild(script);
+      return () => {
+        document.body.removeChild(script);
+      };
+    }, []);
+
   const handleCancel = () => {
     navigate('/');
   };
@@ -22,8 +33,33 @@ const PaymentPage = () => {
   };
 
   const handlePaymentClick = (paymentType) => {
-    setModalMessage(`${paymentType} 결제가 완료되었습니다.`);
-    setShowModal(true);
+    const { IMP } = window;
+    IMP.init('imp71261721'); // 포트원 상점아이디로 변경
+
+    IMP.request_pay({
+      pg: paymentType === '카카오페이' ? 'kakaopay' : paymentType === '네이버페이' ? 'naverpay' : 'tosspay',
+      pay_method: 'card',
+      amount: totalAmount,
+      name: 'Kiosk Order Payment',
+    }, async (response) => {
+      if (response.success) {
+        setModalMessage(`${paymentType} 결제가 완료되었습니다.`);
+        setShowModal(true);
+
+        // 백엔드로 판매 기록 저장
+        try {
+          await axios.post('/api/sales', {
+            paymentType,
+            totalSalePrice: totalAmount,
+          });
+        } catch (error) {
+          console.error("판매 기록 저장 실패", error);
+        }
+      } else {
+        setModalMessage(`결제가 실패하였습니다: ${response.error_msg}`);
+        setShowModal(true);
+      }
+    });
   };
 
   const closeModal = () => {
