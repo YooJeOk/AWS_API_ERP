@@ -24,8 +24,7 @@ function SalesDwtdAnalysis() {
             {/* 상품 판매 기록 테이블 */}
             <SalesDwtdAnalysisTable />
 
-            {/* 액션 버튼 */}
-            <ActionButtons />
+
           </Col>
         </Row>
       </Container>

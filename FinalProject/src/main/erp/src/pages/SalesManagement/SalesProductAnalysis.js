@@ -1,10 +1,10 @@
 import React from 'react';
-import SearchBar from '../../components/SalesManagement/SearchBar';
-import SalesTable from '../../components/SalesManagement/SalesTable';
+import SalesProductAnalysisSearchBar from '../../components/SalesManagement/SalesProductAnalysis/SalesProductAnalysisSearchBar';
+import SalesProductAnalysisTable from '../../components/SalesManagement/SalesProductAnalysis/SalesProductAnalysisTable';
 import ActionButtons from '../../components/SalesManagement/ActionButtons';
 import { Container, Row, Col } from 'react-bootstrap';
 import '../../css/SalesManagement/SalesRecord.css'
-function SalesRecord() {
+function SalesProductAnalysis() {
   return (
     <div className="custom-background">
     
@@ -17,13 +17,11 @@ function SalesRecord() {
           </Col>
           <Col sm={10}>
             {/* 검색 바 */}
-            <SearchBar />
+            <SalesProductAnalysisSearchBar />
             
             {/* 상품 판매 기록 테이블 */}
-            <SalesTable />
+            <SalesProductAnalysisTable />
 
-            {/* 액션 버튼 */}
-            <ActionButtons />
           </Col>
         </Row>
       </Container>
@@ -31,4 +29,4 @@ function SalesRecord() {
   );
 }
 
-export default SalesRecord;
+export default SalesProductAnalysis;
