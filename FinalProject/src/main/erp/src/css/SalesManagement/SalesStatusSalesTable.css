@@ -1,0 +1,53 @@
+.SalesStatusSalesTable-box {
+  border: 4px solid #F0C490; /* Border 색상 */
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  width: 100%;
+  height: 130px;
+
+}
+.col{
+  background-color: white;
+  width: 100px;
+  border: 9px solid #F6F6F6;
+  border-radius: 5px; /* 선택 사항: 테두리를 둥글게 할 수 있음 */
+}
+
+.SalesStatusSalesTable-box .amount {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.SalesStatusSalesTable-box .label {
+  font-size: 14px;
+  color: gray;
+ 
+}
+
+.today {
+  color: #00a3ff;
+  text-align: left;
+}
+.todaysub {
+  display: flex;
+  justify-content: space-between; /* 요소 간의 간격을 조정할 수 있음 */
+  padding-bottom: 10px;
+  
+}
+
+.this-week {
+  color: #ff6f6f;
+  text-align: left;
+}
+
+.this-month {
+  color: #00a3ff;
+  text-align: left;
+}
+
+.this-year {
+  color: #9370db;
+  text-align: left;
+}
