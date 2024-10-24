@@ -19,44 +19,7 @@ html {
     background-color: #F6F6F6 !important;
 }
 
-/* 사이드바 설정 */
-#sidebar {
-    position: fixed;
-    top: 100px;
-    /* 사이드바가 헤더 아래에 위치하도록 */
-    left: -250px;
-    width: 250px;
-    height: calc(100vh - 100px);
-    background-color: #f2f4ec;
-   
-    padding: 20px;
-    transition: left 0.3s ease;
-    z-index: 9999;
-    /* 사이드바가 다른 요소보다 앞에 표시되도록 */
-}
 
-.sidebar-open {
-    left: 0;
-}
-
-.sidebar-menu .menu-item {
-    background-color: #f2f4ec;
-    color: rgb(0, 0, 0);
-    padding: 18px;
-    margin-bottom: 10px;
-    border: none;
-    text-align: center;
-    cursor: pointer;
-
-    font-size: 16px;
-    width: 200px;
-}
-
-.sidebar-menu .menu-item:hover {
-    font-weight: bold;
-    color: #703103 !important;
-    
-}
 
 .dropdown-menu {
     display: none;
@@ -67,24 +30,6 @@ html {
     
 }
 
-.dropdown:hover .dropdown-menu {
-    display: block;
-    position: relative;
-    top: -10px;
-}
-
-.dropdown-menu li a {
-    color: #000000;
-    text-decoration: none;
-    padding: 5px;
-    display: block;
-    font-size: 14px;
-}
-
-.dropdown-menu li a:hover {
-    font-weight: bold;
-    color: #703103 !important;
-}
 
 .navbar {
     background-color: #F0C490 !important;
@@ -136,23 +81,23 @@ html {
     color: #703103 !important;
 }
 
-/* 드롭다운 메뉴 설정 */
+
 .nav-button-dropdown {
     display: flex;
     flex-direction: column;
-    /* 세로로 항목 나열 */
+   
     position: absolute;
     top: 100%;
-    /* 버튼 바로 아래에 위치 */
+   
     left: 0;
     width: 100%;
     /* 가로로 확장 */
     z-index: 3000;
-    /* 헤더의 다른 요소 위에 표시되도록 */
+   
     display: none;
-    /* 기본적으로 숨김 */
+    
     white-space: nowrap;
-    /* 텍스트가 줄바꿈되지 않도록 */
+    
 }
 
 /* 호버 시 드롭다운 표시 */
@@ -206,24 +151,7 @@ html {
     width: 100%;
 }
 
-/* 생산 콘텐츠 */
-.production-content {
-    background-color: #ffffff;
-    color: #000000;
-    height: calc(100vh - 100px);
-    width: 100%;
-    overflow-y: auto;
-    margin-left: 250px;
-}
 
-.production-content h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-.production-content p {
-    line-height: 1.6;
-}
 
 
 
