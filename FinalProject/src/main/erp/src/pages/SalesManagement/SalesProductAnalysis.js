@@ -1,6 +1,11 @@
 import React from 'react';
+<<<<<<< HEAD
 import SalesProductAnalysisSearchBar from '../../components/SalesManagement/SalesProductAnalysis/SalesProductAnalysisSearchBar';
 import SalesProductAnalysisTable from '../../components/SalesManagement/SalesProductAnalysis/SalesProductAnalysisTable';
+=======
+import SearchBar from '../../components/SalesManagement/SalesProductAnalysis/SalesDwtdAnalysisSearchBar';
+import SalesTable from '../../components/SalesManagement/SalesTable';
+>>>>>>> 9edde368b850e768d5d55644339bd4a775ff5cec
 import ActionButtons from '../../components/SalesManagement/ActionButtons';
 import { Container, Row, Col } from 'react-bootstrap';
 import '../../css/SalesManagement/SalesRecord.css'

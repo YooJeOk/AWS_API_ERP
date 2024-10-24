@@ -1,6 +1,5 @@
 package com.ERP.FinalProject.domain.kiosk.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +16,8 @@ public class SalesRecordsController {
     @PostMapping
     public SalesRecords saveSalesRecord(@RequestBody SalesRecords salesRecords) {
         return salesRecordsService.saveSalesRecord(
-                salesRecords.getPaymentType(),
-                salesRecords.getTotalSalePrice()
+            salesRecords.getPaymentType(), 
+            salesRecords.getTotalSalePrice()
         );
     }
 }
