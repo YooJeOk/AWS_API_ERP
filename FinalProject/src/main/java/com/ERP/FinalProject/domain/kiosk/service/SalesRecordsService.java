@@ -22,7 +22,5 @@ public class SalesRecordsService {
         salesRecord.setOrderAmount(orderAmount);
         salesRecord.setDiscountAmount(discountAmount);
         return salesRecordsRepository.save(salesRecord);
-    }
-    
-    
+    }  
 }
