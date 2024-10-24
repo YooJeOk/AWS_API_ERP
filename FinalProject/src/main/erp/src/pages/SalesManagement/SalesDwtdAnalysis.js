@@ -1,26 +1,23 @@
 import React from 'react';
-import Sidebar from '../../components/SalesManagement/Sidebar';
-import SearchBar from '../../components/SalesManagement/SearchBar';
+import SalesDwtdAnalysisSearchBar from '../../components/SalesManagement/SalesDwtdAnalysis/SalesDwtdAnalysisSearchBar';
 import SalesTable from '../../components/SalesManagement/SalesTable';
 import ActionButtons from '../../components/SalesManagement/ActionButtons';
 import { Container, Row, Col } from 'react-bootstrap';
 import '../../css/SalesManagement/SalesRecord.css'
-function DwmAnalysis() {
+function SalesRecord() {
   return (
     <div className="custom-background">
     
-<h1>일/주/월 분석</h1>
+
 
       {/* 메인 콘텐츠 */}
       <Container fluid>
         <Row>
-          <Col sm={3}>
-            {/* 사이드바 */}
-            <Sidebar />
+          <Col sm={2}>
           </Col>
-          <Col sm={9}>
+          <Col sm={10}>
             {/* 검색 바 */}
-            <SearchBar />
+            <SalesDwtdAnalysisSearchBar />
             
             {/* 상품 판매 기록 테이블 */}
             <SalesTable />
@@ -34,5 +31,4 @@ function DwmAnalysis() {
   );
 }
 
-
-export default DwmAnalysis;
+export default SalesRecord;

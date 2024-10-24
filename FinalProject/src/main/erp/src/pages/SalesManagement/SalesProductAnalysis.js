@@ -1,24 +1,21 @@
 import React from 'react';
-import Sidebar from '../../components/SalesManagement/Sidebar';
 import SearchBar from '../../components/SalesManagement/SearchBar';
 import SalesTable from '../../components/SalesManagement/SalesTable';
 import ActionButtons from '../../components/SalesManagement/ActionButtons';
 import { Container, Row, Col } from 'react-bootstrap';
 import '../../css/SalesManagement/SalesRecord.css'
-function DwtdAnalysis() {
+function SalesRecord() {
   return (
     <div className="custom-background">
     
-<h1>요일별/시간대별 분석</h1>
+
 
       {/* 메인 콘텐츠 */}
       <Container fluid>
         <Row>
-          <Col sm={3}>
-            {/* 사이드바 */}
-            <Sidebar />
+          <Col sm={2}>
           </Col>
-          <Col sm={9}>
+          <Col sm={10}>
             {/* 검색 바 */}
             <SearchBar />
             
@@ -34,5 +31,4 @@ function DwtdAnalysis() {
   );
 }
 
-
-export default DwtdAnalysis;
+export default SalesRecord;

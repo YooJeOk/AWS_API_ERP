@@ -1,7 +1,6 @@
 import React from 'react';
-import Sidebar from '../../components/SalesManagement/Sidebar';
-import SalesStatusSearchBar from '../../components/SalesManagement/SalesStatus/SalesStatusSearchBar';
-import SalesStatusSalesTable from '../../components/SalesManagement/SalesStatus/SalesStatusSalesTable';
+import SalesDwmAnalysisTable from '../../components/SalesManagement/SalesDwmAnalysis/SalesDwmAnalysisTable';
+import SalesDwmAnalysisSearchBar from '../../components/SalesManagement/SalesDwmAnalysis/SalesDwmAnalysisSearchBar';
 import ActionButtons from '../../components/SalesManagement/ActionButtons';
 import { Container, Row, Col } from 'react-bootstrap';
 import '../../css/SalesManagement/SalesRecord.css'
@@ -9,7 +8,7 @@ function SalesStatus() {
   return (
     <div className="custom-background">
     
-<h1>매출분석</h1>
+
 
       {/* 메인 콘텐츠 */}
       <Container fluid>
@@ -18,17 +17,17 @@ function SalesStatus() {
           </Col>
           <Col sm={10}>
             {/* 검색 바 */}
-            <SalesStatusSearchBar />
+            <SalesDwmAnalysisSearchBar />
             
             {/* 상품 판매 기록 테이블 */}
-            <SalesStatusSalesTable />
-
+            <SalesDwmAnalysisTable />
+            {/* 액션 버튼 */}
+            <ActionButtons />
           </Col>
         </Row>
       </Container>
     </div>
   );
 }
-
 
 export default SalesStatus;
