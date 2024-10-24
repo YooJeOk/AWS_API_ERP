@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';  // Link를 이용하여 페이지 전환
+import { Link } from 'react-router-dom';  
 import './Header.css';  
 
 
