@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './earn.css';
 import OrderSummary from '../../components/Kiosk/OrderSummary';
@@ -21,9 +21,15 @@ const EarnPage = () => {
   const handlePrevious = () => {
     navigate('/detail', { state: { cartItems } });
   };
-  const handleNext=()=>{
-    navigate('/payment',{ state: { cartItems } })
-  }
+  const handleNext = () => {
+    navigate('/payment', { state: { cartItems, userData } });
+  };
+
+  useEffect(() => {
+    if (location.state?.userData) {
+      setUserData(location.state.userData);
+    }
+  }, [location.state]);
 
   const handlePhoneCheck = () => {
     setKeypadPurpose('phoneCheck');
@@ -94,12 +100,7 @@ const EarnPage = () => {
           </tbody>
         </table>
       )}
-
-
-
       </div>
-
-      
       <OrderSummary 
         orderAmount={totalAmount}
         discountAmount={0}

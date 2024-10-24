@@ -46,7 +46,7 @@ const MenuList = ({ items, onAddToCart, additionalOptions, currentPage, totalPag
           />
         ))}
       </div>
-
+      
       <button
         onClick={handleNextPage}
         disabled={currentPage === totalPages - 1}
