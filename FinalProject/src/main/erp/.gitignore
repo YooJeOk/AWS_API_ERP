@@ -21,3 +21,16 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# node_modules 폴더를 Git에서 제외
+node_modules/
+
+# .cache 폴더를 Git에서 제외
+.cache/
+
+# 특정 파일을 Git에서 제외
+FinalProject/src/main/erp/node_modules/.cache/.eslintcache
+
+# .cache 폴더와 그 안의 모든 파일 제외
+.cache/
+FinalProject/src/main/erp/node_modules/.cache/
