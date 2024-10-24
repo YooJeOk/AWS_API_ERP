@@ -3,9 +3,10 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ProductionSidebar from './components/ProductionSidebar';
+import SalesSidebar from './components/SalesSidebar';  // SalesSidebar 추가
 import InputForm from './components/prodution/InputForm';  
 import InputForm2 from './components/prodution/InputForm2';
-import InputForm3 from './components/prodution/InputForm3'; // 추가된 컴포넌트들
+import InputForm3 from './components/prodution/InputForm3';
 import InputForm4 from './components/prodution/InputForm4';
 import InputForm5 from './components/prodution/InputForm5';
 import ProductionPage from './components/prodution/ProductionPage';
@@ -24,70 +25,67 @@ import ProductionPage9 from './components/prodution/ProductionPage9'; // 날짜�
 
 //매출관리 섹터
 import SalesRecord from './pages/SalesManagement/SalesRecord';
-import DwmAnalysis from '../../erp/src/pages/SalesManagement/DwmAnalysis';
-import DwtdAnalysis from '../../erp/src/pages/SalesManagement/DwtdAnalysis';
-import ProductSalesAnalysis from '../../erp/src/pages/SalesManagement/ProductSalesAnalysis';
+import SalesDwmAnalysis from '../../erp/src/pages/SalesManagement/SalesDwmAnalysis';
+import SalesDwtdAnalysis from '../../erp/src/pages/SalesManagement/SalesDwtdAnalysis';
+import SalesProductAnalysis from '../../erp/src/pages/SalesManagement/SalesProductAnalysis';
 import SalesStatus from '../../erp/src/pages/SalesManagement/SalesStatus';
-
-
-
 
 function App() {
     return (
         <Router>
             <Header />
-            <div className="custom-container" >
-                <ProductionSidebar />
-                <div className="main-content" style={{ padding: '0%' }}>
-                    <Routes>
-                        {/* 메인 페이지 */}
-                        <Route path="/" element={<div>Main Page Content</div>} />
-                        
-                        {/* 생산 계획 관리 */}
-                        <Route path="/input" element={<InputForm />} />
-                        <Route path="/production" element={<ProductionPage />} />
+            <div className="custom-container">
+                {/* 생산 관리 경로에만 ProductionSidebar 사용 */}
+                <Routes>
+                    {/* 메인 페이지 */}
+                    <Route path="/" element={<div>Main Page Content</div>} />
 
-                        {/* 생산 공정 관리 */}
-                        <Route path="/input2" element={<InputForm2 />} />
-                        <Route path="/production2" element={<ProductionPage2 />} />
-                        <Route path="/input3" element={<InputForm3 />} />
-                        <Route path="/production3" element={<ProductionPage3 />} />
-                        <Route path="/input4" element={<InputForm4 />} />
-                        <Route path="/production4" element={<ProductionPage4 />} />
-                        <Route path="/production8" element={<ProductionPage8 />} />
+                    {/* 생산 관리 페이지들 */}
+                    <Route path="/input" element={<ProductionSidebarWrapper><InputForm /></ProductionSidebarWrapper>} />
+                    <Route path="/production" element={<ProductionSidebarWrapper><ProductionPage /></ProductionSidebarWrapper>} />
+                    <Route path="/input2" element={<ProductionSidebarWrapper><InputForm2 /></ProductionSidebarWrapper>} />
+                    <Route path="/production2" element={<ProductionSidebarWrapper><ProductionPage2 /></ProductionSidebarWrapper>} />
+                    <Route path="/input3" element={<ProductionSidebarWrapper><InputForm3 /></ProductionSidebarWrapper>} />
+                    <Route path="/production3" element={<ProductionSidebarWrapper><ProductionPage3 /></ProductionSidebarWrapper>} />
+                    <Route path="/input4" element={<ProductionSidebarWrapper><InputForm4 /></ProductionSidebarWrapper>} />
+                    <Route path="/production4" element={<ProductionSidebarWrapper><ProductionPage4 /></ProductionSidebarWrapper>} />
+                    <Route path="/production8" element={<ProductionSidebarWrapper><ProductionPage8 /></ProductionSidebarWrapper>} />
+                    <Route path="/input8" element={<ProductionSidebarWrapper><InputForm8 /></ProductionSidebarWrapper>} />
+                    <Route path="/input5" element={<ProductionSidebarWrapper><InputForm5 /></ProductionSidebarWrapper>} />
+                    <Route path="/production5" element={<ProductionSidebarWrapper><ProductionPage5 /></ProductionSidebarWrapper>} />
+                    <Route path="/input6" element={<ProductionSidebarWrapper><InputForm6 /></ProductionSidebarWrapper>} />
+                    <Route path="/production6" element={<ProductionSidebarWrapper><ProductionPage6 /></ProductionSidebarWrapper>} />
+                    <Route path="/input7" element={<ProductionSidebarWrapper><InputForm7 /></ProductionSidebarWrapper>} />
+                    <Route path="/production7" element={<ProductionSidebarWrapper><ProductionPage7 /></ProductionSidebarWrapper>} />
+                    <Route path="/input9" element={<ProductionSidebarWrapper><InputForm9 /></ProductionSidebarWrapper>} />
+                    <Route path="/production9" element={<ProductionSidebarWrapper><ProductionPage9 /></ProductionSidebarWrapper>} />
 
-                        {/* 소요량 관리 */}
-                        <Route path="/input8" element={<InputForm8 />} />
-                        <Route path="/input5" element={<InputForm5 />} />
-                        <Route path="/production5" element={<ProductionPage5 />} />
-
-                        {/* 품질 관리 */}
-                        <Route path="/input6" element={<InputForm6 />} />
-                        <Route path="/production6" element={<ProductionPage6 />} />
-                        <Route path="/input7" element={<InputForm7 />} />
-                        <Route path="/production7" element={<ProductionPage7 />} />
-
-                        {/* 생산실적 관리 */}
-                        <Route path="/input9" element={<InputForm9 />} />
-                        <Route path="/production9" element={<ProductionPage9 />} />
-
-                        {/* 매출 관리 */}
-                        <Route path="/SalesRecord" element={<SalesRecord />} />
-                        <Route path="/DwmAnalysis" element={<DwmAnalysis />} />
-                        <Route path="/DwtdAnalysis" element={<DwtdAnalysis />} />
-                        <Route path="/ProductSalesAnalysis" element={<ProductSalesAnalysis />} />
-                        <Route path="/SalesStatus" element={<SalesStatus />} />
-
-
-
-
-
-
-                    </Routes>
-                </div>
+                    {/* 매출 관리 페이지들에 SalesSidebar 사용 */}
+                    <Route path="/SalesRecord" element={<SalesSidebarWrapper><SalesRecord /></SalesSidebarWrapper>} />
+                    <Route path="/SalesDwmAnalysis" element={<SalesSidebarWrapper><SalesDwmAnalysis /></SalesSidebarWrapper>} />
+                    <Route path="/SalesDwtdAnalysis" element={<SalesSidebarWrapper><SalesDwtdAnalysis /></SalesSidebarWrapper>} />
+                    <Route path="/SalesProductAnalysis" element={<SalesSidebarWrapper><SalesProductAnalysis /></SalesSidebarWrapper>} />
+                    <Route path="/SalesStatus" element={<SalesSidebarWrapper><SalesStatus /></SalesSidebarWrapper>} />
+                </Routes>
             </div>
         </Router>
     );
 }
+
+// Wrapper 컴포넌트: ProductionSidebar를 생산 관리 페이지에 적용
+const ProductionSidebarWrapper = ({ children }) => (
+    <div className="main-content" style={{ padding: '0%' }}>
+        <ProductionSidebar />
+        {children}
+    </div>
+);
+
+// Wrapper 컴포넌트: SalesSidebar를 매출 관리 페이지에 적용
+const SalesSidebarWrapper = ({ children }) => (
+    <div className="main-content" style={{ padding: '0%' }}>
+        <SalesSidebar />
+        {children}
+    </div>
+);
 
 export default App;
