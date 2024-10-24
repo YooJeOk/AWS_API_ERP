@@ -1,5 +1,5 @@
 import React from 'react';
-import SearchBar from '../../components/SalesManagement/SearchBar';
+import SearchBar from '../../components/SalesManagement/SalesProductAnalysis/SalesDwtdAnalysisSearchBar';
 import SalesTable from '../../components/SalesManagement/SalesTable';
 import ActionButtons from '../../components/SalesManagement/ActionButtons';
 import { Container, Row, Col } from 'react-bootstrap';
