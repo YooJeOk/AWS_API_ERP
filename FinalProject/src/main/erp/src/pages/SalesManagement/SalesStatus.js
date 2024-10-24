@@ -9,8 +9,6 @@ function SalesStatus() {
   return (
     <div className="custom-background">
     
-<h1>매출분석</h1>
-
       {/* 메인 콘텐츠 */}
       <Container fluid>
         <Row>

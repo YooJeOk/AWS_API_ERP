@@ -27,8 +27,8 @@ html {
     left: -250px;
     width: 250px;
     height: calc(100vh - 100px);
-    background-color: #ffc368;
-    color: #DFE0DF;
+    background-color: #F0C490 !important;
+    color: #DFE0DF !important;
     padding: 20px;
     transition: left 0.3s ease;
     z-index: 9999;
@@ -40,7 +40,7 @@ html {
 }
 
 .sidebar-menu .menu-item {
-    background-color: #ffc368;
+    background-color: #F0C490 !important; 
     color: rgb(0, 0, 0);
     padding: 10px !important;
     margin-top: 13px !important;
@@ -89,7 +89,7 @@ html {
 }
 
 .navbar {
-    background-color: #f2f4ec;
+    background-color: #F0C490;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
