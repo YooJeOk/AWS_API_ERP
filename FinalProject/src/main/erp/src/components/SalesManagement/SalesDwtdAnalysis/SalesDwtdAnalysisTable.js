@@ -1,123 +1,100 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { createChart } from 'lightweight-charts';
-import '../../../css/SalesManagement/SalesDwmAnalysisTable.css';
+import React from 'react';
+import { PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import '../../../css/SalesManagement/SalesDwtdAnalysisTable.css';
 
+const SalesDwtdAnalysisTable = () => {
+    // 예시 데이터: 요일별 매출
+    const dayOfWeekSalesDataRaw = [500, 700, 400, 900, 650, 800, 300];
 
-const SalesDwmAnalysisTable = () => {
-  const chartContainerRef = useRef();
-  const chartInstanceRef = useRef();
-  const [timePeriod, setTimePeriod] = useState('day');
+    // 요일별 매출 비율 계산
+    const totalDaySales = dayOfWeekSalesDataRaw.reduce((acc, curr) => acc + curr, 0);
+    const dayOfWeekSalesData = [
+        { name: '일요일', value: (500 / totalDaySales) * 100 },
+        { name: '월요일', value: (700 / totalDaySales) * 100 },
+        { name: '화요일', value: (400 / totalDaySales) * 100 },
+        { name: '수요일', value: (900 / totalDaySales) * 100 },
+        { name: '목요일', value: (650 / totalDaySales) * 100 },
+        { name: '금요일', value: (800 / totalDaySales) * 100 },
+        { name: '토요일', value: (300 / totalDaySales) * 100 },
+    ];
 
-  // 1년간의 일간 데이터 (더미 데이터)
-  const dayData = [];
-  for (let i = 1; i <= 365; i++) {
-    const day = new Date(2024, 0, i); // 2024년의 각 날짜
-    const formattedDate = day.toISOString().split('T')[0]; // "YYYY-MM-DD" 형식
-    const value = Math.floor(30000000 + Math.random() * 50000000); // 매출 데이터(더미)
-    dayData.push({ time: formattedDate, value });
-  }
+    // 예시 데이터: 시간대별 매출 (실제 매출 금액 사용)
+    const timeOfDaySalesData = [
+        { time: '00:00', sales: 30 },
+        { time: '01:00', sales: 20 },
+        { time: '02:00', sales: 50 },
+        { time: '03:00', sales: 70 },
+        { time: '04:00', sales: 90 },
+        { time: '05:00', sales: 60 },
+        { time: '06:00', sales: 100 },
+        { time: '07:00', sales: 120 },
+        { time: '08:00', sales: 140 },
+        { time: '09:00', sales: 160 },
+        { time: '10:00', sales: 180 },
+        { time: '11:00', sales: 200 },
+        { time: '12:00', sales: 220 },
+        { time: '13:00', sales: 240 },
+        { time: '14:00', sales: 260 },
+        { time: '15:00', sales: 280 },
+        { time: '16:00', sales: 300 },
+        { time: '17:00', sales: 320 },
+        { time: '18:00', sales: 340 },
+        { time: '19:00', sales: 360 },
+        { time: '20:00', sales: 380 },
+        { time: '21:00', sales: 400 },
+        { time: '22:00', sales: 420 },
+        { time: '23:00', sales: 440 },
+    ];
 
-  // 1년(52주) 동안의 주간 데이터
-  const weekData = [];
-  const startOfYear = new Date(2024, 0, 1); // 2024년 1월 1일
-  for (let i = 0; i < 52; i++) {
-    const startOfWeek = new Date(startOfYear);
-    startOfWeek.setDate(startOfWeek.getDate() + i * 7); // 매주 7일씩 더하기
-    const formattedDate = startOfWeek.toISOString().split('T')[0]; // "YYYY-MM-DD" 형식
-    const value = Math.floor(300000000 + Math.random() * 500000000); // 주간 매출 데이터(더미)
-    weekData.push({ time: formattedDate, value });
-  }
+    // 색상 배열
+    const COLORS = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF6384'];
 
-  // 월간 데이터를 ISO 날짜 형식으로 변환 (각 달의 첫 번째 날을 사용)
-  const monthData = [
-    { time: '2024-01-01', value: 1500000000 },
-    { time: '2024-02-01', value: 1600000000 },
-    { time: '2024-03-01', value: 1800000000 },
-    { time: '2024-04-01', value: 1700000000 },
-    { time: '2024-05-01', value: 1750000000 },
-    { time: '2024-06-01', value: 1650000000 },
-    { time: '2024-07-01', value: 1800000000 },
-    { time: '2024-08-01', value: 1900000000 },
-    { time: '2024-09-01', value: 1850000000 },
-    { time: '2024-10-01', value: 1950000000 },
-    { time: '2024-11-01', value: 2000000000 },
-    { time: '2024-12-01', value: 2100000000 },
-  ];
+    // 사용자 정의 라벨 함수 (요일과 매출 비율을 함께 표시)
+    const renderCustomLabel = ({ name, value }) => `${name}: ${value.toFixed(2)}%`;
 
-  // getData 함수 메모이제이션
-  const getData = useCallback(() => {
-    if (timePeriod === 'day') return dayData;
-    if (timePeriod === 'week') return weekData;
-    if (timePeriod === 'month') return monthData;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timePeriod]);
+    return (
+        <div className="sales-dashboard">
+            {/* 요일별 매출 파이 차트 */}
+            <div className="daychart-container">
+                <h3 className="daychart-title"> 요일별 매출 그래프</h3>
+                <PieChart width={600} height={400}>
+                    <Pie
+                        data={dayOfWeekSalesData}
+                        cx={300}  // x축의 중심을 중앙으로 조정
+                        cy={200}
+                        outerRadius={150}
+                        fill="#8884d8"
+                        dataKey="value"
+                        label={renderCustomLabel}  // 사용자 정의 라벨
+                        labelLine={false}  // 라벨 선을 제거
+                    >
+                        {dayOfWeekSalesData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                    </Pie>
+                    <Tooltip formatter={(value) => `${value.toFixed(2)}%`} />
+                </PieChart>
+            </div>
 
-  useEffect(() => {
-    // 차트 생성
-    const chart = createChart(chartContainerRef.current, {
-      width: 1254,
-      height: 400,
-      layout: {
-        backgroundColor: '#ffffff',
-        textColor: '#703103',
-      },
-      grid: {
-        vertLines: {
-          color: 'white',
-        },
-        horzLines: {
-          color: 'white',
-        },
-      },
-      timeScale: {
-        timeVisible: true,
-        secondsVisible: false,
-      },
-    });
-
-    chartInstanceRef.current = chart;
-
-    // 막대형 차트 추가
-    const barSeries = chart.addHistogramSeries({
-      color: 'rgba(75, 192, 192, 1)', // 막대의 색상을 #703103으로 변경
-      priceLineVisible: false, // 가격선 비활성화
-    });
-
-    // 막대형 차트 데이터 설정
-    barSeries.setData(getData());
-     // y축 레이블의 소수점 제거
-     chart.priceScale('right').applyOptions({
-      tickMarkFormatter: (value) => Math.floor(value), // 소수점 제거
-    });
-
-    // Cleanup on component unmount
-    return () => {
-      chart.remove();
-    };
-  }, [timePeriod, getData]);
-
-  return (
-    <div>
-      {/* 일간/주간/월간 드롭다운 */}
-      <div className="d-flex justify-content-end ">
-        <select
-           className="form-select m-2 custom-select" // custom-select 클래스 추가
-          style={{ width: '100px', 
-                   
-           }}
-          value={timePeriod}
-          onChange={(e) => setTimePeriod(e.target.value)}
-        >
-          <option value="day" className='custom-option'>일</option>
-          <option value="week" className='custom-option'>주</option>
-          <option value="month" className='custom-option'>월</option>
-        </select>
-      </div>
-
-      {/* 차트 렌더링 공간 */}
-      <div ref={chartContainerRef} style={{ width: '100%', height: '500px', position: 'relative' }} />
-    </div>
-  );
+            {/* 시간대별 매출 라인 그래프 */}
+            <div className="timechart-container">
+                <h3 className="timechart-title">시간대 매출 그래프</h3>
+                <LineChart
+                    width={500}
+                    height={400}
+                    data={timeOfDaySalesData}
+                    margin={{ top: 30, right: 30, left: 20, bottom: 5 }}
+                >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="time" />
+                    <YAxis />  {/* Y축을 실제 매출 금액으로 표시 */}
+                    <Tooltip formatter={(value) => `${value} 원`} />
+                    <Legend />
+                    <Line type="monotone" dataKey="sales" stroke="#8884d8" />
+                </LineChart>
+            </div>
+        </div>
+    );
 };
 
-export default SalesDwmAnalysisTable;
+export default SalesDwtdAnalysisTable;

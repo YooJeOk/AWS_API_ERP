@@ -1,10 +1,12 @@
 import React from 'react';
 import SalesDwtdAnalysisSearchBar from '../../components/SalesManagement/SalesDwtdAnalysis/SalesDwtdAnalysisSearchBar';
-import SalesTable from '../../components/SalesManagement/SalesTable';
-import ActionButtons from '../../components/SalesManagement/ActionButtons';
+import ActionButtons from '../../components/SalesManagement/SalesDwtdAnalysis/SalesDwtdAnalysisActionButtons';
 import { Container, Row, Col } from 'react-bootstrap';
 import '../../css/SalesManagement/SalesRecord.css'
-function SalesRecord() {
+import SalesDwtdAnalysisTable from '../../components/SalesManagement/SalesDwtdAnalysis/SalesDwtdAnalysisTable'
+function SalesDwtdAnalysis() {
+
+
   return (
     <div className="custom-background">
     
@@ -20,7 +22,7 @@ function SalesRecord() {
             <SalesDwtdAnalysisSearchBar />
             
             {/* 상품 판매 기록 테이블 */}
-            <SalesTable />
+            <SalesDwtdAnalysisTable />
 
             {/* 액션 버튼 */}
             <ActionButtons />
@@ -31,4 +33,4 @@ function SalesRecord() {
   );
 }
 
-export default SalesRecord;
+export default SalesDwtdAnalysis;

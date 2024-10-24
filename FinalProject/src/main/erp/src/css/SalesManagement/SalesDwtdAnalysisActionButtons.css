@@ -1,0 +1,21 @@
+/* ActionButtons.css */
+.custom-button {
+    background-color: #F0C490;
+    color: white;
+    border-color: #F0C490;
+    width: 120px;
+    text-align: center;
+    font-weight: bold;
+   
+    align-self: flex-end;
+    margin-right: 145px;
+
+  }
+  .custom-button-primary{
+    align-items: end;
+  }
+  .custom-button:hover {
+    background-color: #e0b080; /* Hover 효과 */
+    border-color: #e0b080;
+  }
+  
