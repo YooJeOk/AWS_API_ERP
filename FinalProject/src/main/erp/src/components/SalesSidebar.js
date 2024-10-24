@@ -44,7 +44,7 @@ function ProductionSidebar() {
                         <li><Link to="/SalesStatus">● 매출현황</Link></li>
                         <li><Link to="/SalesDwmAnalysis">● 일/주/월 매출 분석</Link></li>
                         <li><Link to="/SalesDwtdAnalysis">● 요일별/시간대별 분석</Link></li>
-                        <li><Link to="/ProductAnalysis">● 제품별 판매 분석</Link></li>
+                        <li><Link to="/SalesProductAnalysis">● 제품별 판매 분석</Link></li>
                     </ul>
                 </div>
 

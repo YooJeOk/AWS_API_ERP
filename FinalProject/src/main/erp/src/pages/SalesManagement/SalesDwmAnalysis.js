@@ -21,8 +21,7 @@ function SalesStatus() {
             
             {/* 상품 판매 기록 테이블 */}
             <SalesDwmAnalysisTable />
-            {/* 액션 버튼 */}
-            <ActionButtons />
+
           </Col>
         </Row>
       </Container>
