@@ -32,7 +32,7 @@ html {
 
 
 .navbar {
-    background-color: #F0C490;
+    background-color: #F0C490 !important;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -61,6 +61,7 @@ html {
     display: flex;
     gap: 10px;
     margin-left: auto;
+    background-color: #F0C490 !important;
 }
 
 .nav-button {

@@ -3,27 +3,21 @@ package com.ERP.FinalProject.domain.elasticsearch.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
-@Document(indexName = "products")  // Elasticsearch에 저장될 인덱스 이름
+@Document(indexName = "products")  // Elasticsearch 인덱스명
 public class ElasticsearchProduct {
 
     @Id
-    private String id;  // Elasticsearch에서의 ID
+    private String id; // ProductID를 String으로 변환하여 사용
+    private String productName;
+    private String productCategory;
+    private int unitPrice;
+    private int salePrice;
+    private String productionDate;  // Elasticsearch는 String으로 저장
+    private String productImage;
+    private String recommend;       // 'Y' 또는 'N'
+    private String detailDescription;
 
-    private String name;
-    private String category;
-    private Double price;
-
-    // Constructors, Getters and Setters
-    public ElasticsearchProduct() {}
-
-    public ElasticsearchProduct(String id, String name, String category, Double price) {
-        this.id = id;
-        this.name = name;
-        this.category = category;
-        this.price = price;
-    }
-
-    // Getters and setters for each field
+    // Getters and Setters
     public String getId() {
         return id;
     }
@@ -32,27 +26,67 @@ public class ElasticsearchProduct {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
-    public String getCategory() {
-        return category;
+    public String getProductCategory() {
+        return productCategory;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setProductCategory(String productCategory) {
+        this.productCategory = productCategory;
     }
 
-    public Double getPrice() {
-        return price;
+    public int getUnitPrice() {
+        return unitPrice;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setUnitPrice(int unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public int getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(int salePrice) {
+        this.salePrice = salePrice;
+    }
+
+    public String getProductionDate() {
+        return productionDate;
+    }
+
+    public void setProductionDate(String productionDate) {
+        this.productionDate = productionDate;
+    }
+
+    public String getProductImage() {
+        return productImage;
+    }
+
+    public void setProductImage(String productImage) {
+        this.productImage = productImage;
+    }
+
+    public String getRecommend() {
+        return recommend;
+    }
+
+    public void setRecommend(String recommend) {
+        this.recommend = recommend;
+    }
+
+    public String getDetailDescription() {
+        return detailDescription;
+    }
+
+    public void setDetailDescription(String detailDescription) {
+        this.detailDescription = detailDescription;
     }
 }

@@ -14,6 +14,7 @@ const KeypadModal = ({ onClose, onSubmit, purpose }) => {
     }
   };
 
+  
   const handleDelete = () => {
     if (step === 1) {
       setInput(prev => prev.slice(0, -1));

@@ -14,11 +14,13 @@ public class SalesRecordsService {
     @Autowired
     private SalesRecordsRepository salesRecordsRepository;
 
-    public SalesRecords saveSalesRecord(String paymentType, int totalSalePrice) {
+    public SalesRecords saveSalesRecord(String paymentType, int totalSalePrice, int orderAmount, int discountAmount) {
         SalesRecords salesRecord = new SalesRecords();
         salesRecord.setSaleDate(LocalDateTime.now());
         salesRecord.setPaymentType(paymentType);
         salesRecord.setTotalSalePrice(totalSalePrice);
+        salesRecord.setOrderAmount(orderAmount);
+        salesRecord.setDiscountAmount(discountAmount);
         return salesRecordsRepository.save(salesRecord);
-    }
+    }  
 }
