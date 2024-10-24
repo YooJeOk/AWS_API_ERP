@@ -28,8 +28,8 @@ function Header() {
                         매출 관리
                         <div className="nav-button-dropdown">
                             <div className="dropdown-content">
-                                <a href="#">상품 판매 기록 조회</a>
-                                <a href="#">매출 분석</a>
+                                <a href="/SalesRecord">상품 판매 기록 조회</a>
+                                <a href="/SalesStatus">매출 분석</a>
                             </div>
                         </div>
                     </div>
