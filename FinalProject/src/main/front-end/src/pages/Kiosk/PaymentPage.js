@@ -60,7 +60,18 @@ const PaymentPage = () => {
               orderAmount: totalAmount + discountAmount,
               discountAmount,
             },
-            userData,  // 분리된 유저 정보 전송
+            // cartItems: cartItems.map(item => ({
+            //   productId: item.productId || null,
+            //   coffeeId: item.coffeeId || null,
+            //   quantitySold: item.quantity,
+            //   salePrice: item.totalPrice,
+            //   options: item.options?.additionalOptions.map(option => ({
+            //     optionId: option.id,
+            //     optionQuantity: option.quantity,
+            //     optionPrice: option.price,
+            //   })) || [],
+            // })),
+            userData,   
           });
         } catch (error) {
           console.error("판매 기록 저장 실패", error);

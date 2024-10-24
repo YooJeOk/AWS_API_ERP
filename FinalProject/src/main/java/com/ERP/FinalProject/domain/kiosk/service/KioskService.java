@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import com.ERP.FinalProject.domain.inventory.entity.Product;
 import com.ERP.FinalProject.domain.kiosk.entity.Coffee;
+import com.ERP.FinalProject.domain.kiosk.entity.CoffeeOption;
+import com.ERP.FinalProject.domain.kiosk.repository.CoffeeOptionsRepository;
 import com.ERP.FinalProject.domain.kiosk.repository.KioskCoffeeRepository;
 import com.ERP.FinalProject.domain.kiosk.repository.KioskProductRepository;
 
@@ -30,6 +32,9 @@ public class KioskService {
 	@Autowired
 	private KioskCoffeeRepository coffeeRepository;
 
+	@Autowired
+	private CoffeeOptionsRepository coffeeOptionsRepository;
+	
 	public Page<Object> getRecommendedItems(Pageable pageable) {
 	    // 전체 추천 아이템 수를 먼저 계산
 	    long totalProducts = productRepository.countByProductCategoryAndRecommend("bread", "Y");
@@ -88,5 +93,14 @@ public class KioskService {
 
     public Page<Coffee> getHotCoffeeItems(Pageable pageable) {
         return coffeeRepository.findByRecommendAndTemperature("N", "HOT", pageable);
+    }
+    
+    //커피옵션
+    public List<CoffeeOption> getAllCoffeeOptions() {
+        return coffeeOptionsRepository.findAll();
+    }
+
+    public CoffeeOption getCoffeeOptionById(Long id) {
+        return coffeeOptionsRepository.findById(id).orElse(null);
     }
 }

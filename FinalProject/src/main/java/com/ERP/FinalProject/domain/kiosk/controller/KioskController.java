@@ -1,6 +1,7 @@
 package com.ERP.FinalProject.domain.kiosk.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +12,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ERP.FinalProject.domain.inventory.entity.Product;
 import com.ERP.FinalProject.domain.kiosk.entity.Coffee;
+import com.ERP.FinalProject.domain.kiosk.entity.CoffeeOption;
 import com.ERP.FinalProject.domain.kiosk.service.KioskService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -77,4 +80,20 @@ public class KioskController {
         response.put("totalPages", page.getTotalPages());
         return ResponseEntity.ok(response);
     }
+    
+ // 모든 옵션 가져오기
+    @GetMapping("/coffee-option")
+    public List<CoffeeOption> getAllCoffeeOptions() {
+        return kioskService.getAllCoffeeOptions();
+    }
+
+    // 특정 ID의 옵션 가져오기
+    @GetMapping("/coffee-option/{id}")
+    public CoffeeOption getCoffeeOptionById(@PathVariable Long id) {
+        return kioskService.getCoffeeOptionById(id);
+    }
+    
+    
+    
+    
 }
