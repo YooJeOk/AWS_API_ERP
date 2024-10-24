@@ -11,13 +11,21 @@ import com.ERP.FinalProject.domain.kiosk.repository.KioskUserStampRepository;
 @Service
 public class KioskUserService {
 	@Autowired
-    private KioskUserStampRepository repository;
+	private KioskUserStampRepository repository;
 
-    public UserStamp saveUserStamp(UserStamp userStamp) {
-        return repository.save(userStamp);
-    }
+	public UserStamp saveUserStamp(UserStamp userStamp) {
+		return repository.save(userStamp);
+	}
 
 	public Optional<UserStamp> findByPhone(String phone) {
-	    return repository.findByPhone(phone);
+		return repository.findByPhone(phone);
+	}
+
+	public void incrementStampByPhone(String phone) {
+		UserStamp userStamp = repository.findByPhone(phone)
+				.orElseThrow(() -> new RuntimeException("폰 번호 없음: " + phone));
+
+		userStamp.setStamp(userStamp.getStamp() + 1);
+		repository.save(userStamp);
 	}
 }
