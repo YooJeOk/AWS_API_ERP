@@ -123,40 +123,74 @@ VALUES
 (13, '연유라떼', 4000, '/images/coffee/연유라떼ice.jpg', 'Y', 'ICE', '달콤한 연유와 에스프레소, 차가운 우유가 조화롭게 어우러진 시원한 라떼'),
 (14, '에스프레소', 2500, '/images/coffee/에스프레소hot.jpg', 'N', 'HOT', '진한 커피의 맛과 향을 온전히 즐길 수 있는 에스프레소 샷');
 
--- 11. 작업 지시 (WorkOrders) 테이블 더미 데이터
-INSERT INTO ERP.WorkOrders (ProductID, Quantity, StartDate, EndDate, Status, Priority)
+-- 11.작업 주문 (WorkOrders) 테이블 더미 데이터 (1~2시간 전에 종료되도록 수정)
+INSERT INTO ERP.WorkOrders (ProductID, Quantity, StartDate, EndDate, Status, Priority, WeighingComplete, DoughComplete, FirstFermentationComplete, DivisionComplete, RoundingComplete, IntermediateFermentationComplete, ShapingComplete, PanningComplete, SecondFermentationComplete, BakingComplete, CoolingComplete, PackagingComplete)
 VALUES
-(1, 500, '2024-04-23', '2024-04-23', '진행 중', '높음'),
-(2, 300, '2024-05-01', '2024-05-01', '대기', '중간'),
-(3, 400, '2024-05-06', '2024-05-06', '완료', '낮음');
+(1, 500, '2024-04-23 08:00:00', '2024-04-23 13:30:00', '진행 중', '높음', TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE), 
+(2, 300, '2024-05-01 09:00:00', '2024-05-01 14:00:00', '대기', '중간', TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE), 
+(3, 400, '2024-05-06 10:00:00', '2024-05-06 15:30:00', '완료', '낮음', TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE), 
+(4, 200, '2024-05-10 08:30:00', '2024-05-10 12:30:00', '진행 중', '높음', TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE), 
+(5, 350, '2024-06-01 07:45:00', '2024-06-01 12:45:00', '대기', '낮음', TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE); 
+
+
+
 
 -- 12. 생산 계획 (ProductionPlanning) 테이블 더미 데이터
-INSERT INTO ERP.ProductionPlanning (OrderID, ProductID, RequiredDate, MaterialsNeeded, StartDate, EndDate)
+INSERT INTO ERP.ProductionPlanning (OrderID, ProductID, RequiredDate, StartDate, EndDate)
 VALUES
-(1, 1, '2024-04-24', 1000, '2024-04-23', '2024-04-30'),
-(2, 2, '2024-05-02', 500, '2024-05-01', '2024-05-05'),
-(3, 3, '2024-05-07', 800, '2024-05-06', '2024-05-12');
+(1, 1, '2024-04-23 15:30:00', '2024-04-23 08:00:00', '2024-04-23 13:30:00'), 
+(2, 2, '2024-05-01 16:00:00', '2024-05-01 09:00:00', '2024-05-01 14:00:00'), 
+(3, 3, '2024-05-06 17:30:00', '2024-05-06 10:00:00', '2024-05-06 15:30:00'), 
+(4, 4, '2024-05-10 14:30:00', '2024-05-10 08:30:00', '2024-05-10 12:30:00'), 
+(5, 5, '2024-06-01 15:45:00', '2024-06-01 07:45:00', '2024-06-01 13:45:00'); 
+-- 사용시 쿼리문 옮길예정
+-- SELECT 
+--     pp.OrderID,
+--     pp.ProductID,
+--     pp.RequiredDate,
+--     pp.StartDate,
+--     pp.EndDate,
+--     mbom.MaterialID,
+--     mbom.ProductName,
+--     mbom.Quantity AS RequiredMaterialQuantity,
+--     mbom.UnitPrice,
+--     (mbom.Quantity * mbom.UnitPrice) AS TotalMaterialCost
+-- FROM 
+--     ERP.ProductionPlanning pp
+-- JOIN 
+--     ERP.MBOM mbom
+--     ON pp.ProductID = mbom.ProductID
+-- WHERE 
+--     pp.OrderID = ?;  -- 특정 OrderID를 조회할 경우 ? 부분에 원하는 OrderID를 넣습니다.
 
--- 13. 생산 모니터링 (ProductionMonitoring) 테이블 더미 데이터
-INSERT INTO ERP.ProductionMonitoring (OrderID, Temperature, Humidity, ProductionRate, OperationTime)
+-- 13. 생산 모니터링 (ProductionMonitoring) 테이블 더미 데이터 (OrderID 1, 4가 진행 중인 작업)
+INSERT INTO ERP.ProductionMonitoring (OrderID, Temperature, Humidity, ProductionRate, OperationTime, StartTime)
 VALUES
-(1, 75.5, 45, 95, 8),
-(2, 80.0, 50, 85, 7),
-(3, 70.0, 40, 90, 6);
+-- 진행 중인 작업 (OrderID 1) (온도와 습도를 적정 범위 내에서 설정)
+(1, 28.0, 65, 83, 5, '2024-04-23 08:00:00'), -- 적정 온도 28°C, 적정 습도 65%
+-- 진행 중인 작업 (OrderID 4) (온도와 습도를 적정 범위 내에서 설정)
+(4, 27.5, 67, 25, 3, '2024-05-10 08:30:00'); -- 적정 온도 27.5°C, 적정 습도 67%
 
--- 14. 생산 입력 (ProductionEntry) 테이블 더미 데이터
+
+
+
+-- 14. 생산입고 (ProductionEntry) 테이블 더미 데이터 (20분 후 입고되도록 수정)
 INSERT INTO ERP.ProductionEntry (OrderID, ProductID, Quantity, EntryDate)
 VALUES
-(1, 1, 500, '2024-04-30'),
-(2, 2, 300, '2024-05-05'),
-(3, 3, 400, '2024-05-12');
+(1, 1, 500, '2024-04-23 13:50:00'), 
+(2, 2, 300, '2024-05-01 14:20:00'), 
+(3, 3, 400, '2024-05-06 15:50:00'), 
+(4, 4, 200, '2024-05-10 12:50:00'), 
+(5, 5, 350, '2024-06-01 13:05:00'); 
 
--- 15. 품질 관리 (QualityControl) 테이블 더미 데이터
+-- 15. 품질 관리 (QualityControl) 테이블 더미 데이터 (입고 후 10분 이내에 검사되도록 수정)
 INSERT INTO ERP.QualityControl (EntryID, ProductID, TestResult, TestDate, DefectRate)
 VALUES
-(1, 1, '합격', '2024-05-01 10:00:00', 2),
-(2, 2, '불합격', '2024-05-06 11:00:00', 10),
-(3, 3, '합격', '2024-05-13 12:00:00', 0);
+(1, 1, '합격', '2024-04-23 14:00:00', 2), 
+(2, 2, '불합격', '2024-05-01 14:30:00', 10), 
+(3, 3, '합격', '2024-05-06 16:00:00', 0), 
+(4, 4, '합격', '2024-05-10 13:00:00', 1), 
+(5, 5, '합격', '2024-06-01 13:15:00', 0); 
 
 -- 16. 매장 재고 (StoreInventory) 테이블 더미 데이터
 
