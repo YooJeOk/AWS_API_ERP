@@ -244,15 +244,16 @@ CREATE TABLE ERP.StoreInventory (
 );
 
 
--- 17 MBOM 테이블 수정 (UnitPrice 추가)
+-- 17 MBOM 
 CREATE TABLE ERP.MBOM (
     BOMID INT NOT NULL AUTO_INCREMENT, -- BOMID
     ProductID INT NOT NULL, -- 제품ID
-    MaterialID INT NOT NULL, -- 자재ID
+    MaterialID INT  NULL, -- 자재ID
     ProductName VARCHAR(100) NOT NULL, -- 제품명 
     Quantity INT NOT NULL, -- 수량
-    Unit VARCHAR(50) NOT NULL, -- 단위
-    UnitPrice INT NOT NULL, -- 단가 (자재별 단가)
+    Unit VARCHAR(50)  NULL, -- 단위
+    UnitPrice INT  NULL, -- 단가 (자재별 단가)
+    TotalCost INT  NULL, -- 제품원가
     PRIMARY KEY (BOMID, ProductID, MaterialID),
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID),
     FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
