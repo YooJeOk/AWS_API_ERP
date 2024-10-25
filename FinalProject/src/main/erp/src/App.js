@@ -22,6 +22,7 @@ import InputForm7 from './components/prodution/InputForm7';
 import ProductionPage7 from './components/prodution/ProductionPage7';
 import InputForm9 from './components/prodution/InputForm9';
 import ProductionPage9 from './components/prodution/ProductionPage9'; // 날짜별 가동율 실적
+import MainPage from './components/MainPage';
 
 //매출관리 섹터
 import SalesRecord from './pages/SalesManagement/SalesRecord';
@@ -38,7 +39,8 @@ function App() {
                 {/* 생산 관리 경로에만 ProductionSidebar 사용 */}
                 <Routes>
                     {/* 메인 페이지 */}
-                    <Route path="/" element={<div>Main Page Content</div>} />
+                    <Route path="/" element={<MainPage />} />
+
 
                     {/* 생산 관리 페이지들 */}
                     <Route path="/input" element={<ProductionSidebarWrapper><InputForm /></ProductionSidebarWrapper>} />

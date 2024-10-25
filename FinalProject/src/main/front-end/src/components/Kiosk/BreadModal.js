@@ -12,6 +12,8 @@ const BreadModal = ({ item, onClose, onAddToCart }) => {
 
   const handleAddToCart = () => {
     const totalPrice = item.price * quantity
+    console.log("아이템이름:"+item.name)
+    console.log("아이템 번호:"+item.id)
     onAddToCart(item, quantity,'없음',totalPrice);
     onClose();
   };

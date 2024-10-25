@@ -84,13 +84,13 @@ const KioskMenu = () => {
   };
 
   useEffect(() => {
-    console.log('Fetching items for page:', currentPage); // 추가된 로그
+    console.log('Fetching items for page:', currentPage); 
     const loadMenuItems = async () => {
 
       const data = await fetchMenuItems(selectedCategory, currentPage);
       if (data) {
         const formattedItems = data.items.map(item => ({
-          id: item.productId || item.coffeeId,
+          id: item.productID || item.coffeeId,
           name: item.productName || item.coffeeName,
           price: item.salePrice,
           image: item.productImage || item.coffeeImage,

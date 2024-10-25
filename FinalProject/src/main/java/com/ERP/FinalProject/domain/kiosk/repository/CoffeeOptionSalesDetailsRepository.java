@@ -2,8 +2,8 @@ package com.ERP.FinalProject.domain.kiosk.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.ERP.FinalProject.domain.kiosk.entity.CoffeeOptionSalesDetails;
+import com.ERP.FinalProject.domain.kiosk.entity.CoffeeOptionSalesDetail;
 
-public interface CoffeeOptionSalesDetailsRepository extends JpaRepository<CoffeeOptionSalesDetails, Integer>{
+public interface CoffeeOptionSalesDetailsRepository extends JpaRepository<CoffeeOptionSalesDetail, Long>{
 
 }
