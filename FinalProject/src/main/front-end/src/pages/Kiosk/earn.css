@@ -61,6 +61,7 @@ button:active,button:focus{
     padding: 5px;
     padding-top: 24px;
     text-align: center;
+    cursor: pointer;
 }
 .phone-check img,.join-member img{
     width: 55%;
@@ -128,6 +129,6 @@ button:active,button:focus{
   }
   
   .user-data-table th {
-    background-color: #D9BBA0;
+    background-color: #f0cfa4;
     font-weight: bold;
   }

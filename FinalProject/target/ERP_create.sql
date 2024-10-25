@@ -153,22 +153,22 @@ CREATE TABLE ERP.WorkOrders (
     OrderID INT NOT NULL AUTO_INCREMENT, -- 작업 지시ID
     ProductID INT NOT NULL, -- 제품ID
     Quantity INT NULL, -- 수량
-    StartDate DATE NULL, -- 시작 날짜
-    EndDate DATE NULL, -- 종료 날짜
+    StartDate DATETIME NULL, -- 시작 날짜
+    EndDate DATETIME NULL, -- 종료 날짜
     Status VARCHAR(50) NULL, -- 상태
     Priority VARCHAR(50) NULL, -- 우선순위
-    WeighingComplete BOOLEAN DEFAULT FALSE, -- 재료 계량 완료 여부
-    DoughComplete BOOLEAN DEFAULT FALSE, -- 반죽 완료 여부
-    FirstFermentationComplete BOOLEAN DEFAULT FALSE, -- 1차 발효 완료 여부
-    DivisionComplete BOOLEAN DEFAULT FALSE, -- 분할 완료 여부
-    RoundingComplete BOOLEAN DEFAULT FALSE, -- 둥글리기 완료 여부
-    IntermediateFermentationComplete BOOLEAN DEFAULT FALSE, -- 중간 발효 완료 여부
-    ShapingComplete BOOLEAN DEFAULT FALSE, -- 정형 완료 여부
-    PanningComplete BOOLEAN DEFAULT FALSE, -- 팬닝 완료 여부
-    SecondFermentationComplete BOOLEAN DEFAULT FALSE, -- 2차 발효 완료 여부
-    BakingComplete BOOLEAN DEFAULT FALSE, -- 굽기 완료 여부
-    CoolingComplete BOOLEAN DEFAULT FALSE, -- 냉각 완료 여부
-    PackagingComplete BOOLEAN DEFAULT FALSE, -- 포장 완료 여부
+    WeighingComplete BOOLEAN DEFAULT FALSE, -- 재료 계량 완료 여부 (약 10분)
+    DoughComplete BOOLEAN DEFAULT FALSE, -- 반죽 완료 여부 (약 20분)
+    FirstFermentationComplete BOOLEAN DEFAULT FALSE, -- 1차 발효 완료 여부 (약 1시간)
+    DivisionComplete BOOLEAN DEFAULT FALSE, -- 분할 완료 여부 (약 10분)
+    RoundingComplete BOOLEAN DEFAULT FALSE, -- 둥글리기 완료 여부 (약 10분)
+    IntermediateFermentationComplete BOOLEAN DEFAULT FALSE, -- 중간 발효 완료 여부 (약 30분)
+    ShapingComplete BOOLEAN DEFAULT FALSE, -- 정형 완료 여부 (약 10분)
+    PanningComplete BOOLEAN DEFAULT FALSE, -- 팬닝 완료 여부 (약 10분)
+    SecondFermentationComplete BOOLEAN DEFAULT FALSE, -- 2차 발효 완료 여부 (약 1시간)
+    BakingComplete BOOLEAN DEFAULT FALSE, -- 굽기 완료 여부 (약 30분)
+    CoolingComplete BOOLEAN DEFAULT FALSE, -- 냉각 완료 여부 (약 20분)
+    PackagingComplete BOOLEAN DEFAULT FALSE, -- 포장 완료 여부 (약 10분)
     PRIMARY KEY (OrderID),
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
 );
@@ -178,14 +178,15 @@ CREATE TABLE ERP.ProductionPlanning (
     PlanID INT NOT NULL AUTO_INCREMENT, -- 계획ID
     OrderID INT NOT NULL, -- 작업 지시ID
     ProductID INT NOT NULL, -- 제품ID
-    RequiredDate DATE NULL, -- 필요 날짜
-    MaterialsNeeded INT NULL, -- 필요 자재
-    StartDate DATE NULL, -- 시작 날짜
-    EndDate DATE NULL, -- 종료 날짜
+    RequiredDate DATETIME NULL, -- 필요 시간
+	StartDate DATETIME NULL, -- 시작 시간
+    EndDate DATETIME NULL, -- 종료 시간
     PRIMARY KEY (PlanID),
-    FOREIGN KEY (OrderID) REFERENCES ERP.WorkOrders(OrderID),
-    FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
+    FOREIGN KEY (OrderID) REFERENCES ERP.WorkOrders(OrderID)
+    
 );
+
+
 
 -- 13. 생산 모니터링 (ProductionMonitoring)
 CREATE TABLE ERP.ProductionMonitoring (
@@ -194,18 +195,19 @@ CREATE TABLE ERP.ProductionMonitoring (
     Temperature FLOAT NULL, -- 온도
     Humidity FLOAT NULL, -- 습도
     ProductionRate INT NULL, -- 생산률
-    OperationTime INT NULL, -- 작업 시간
+    OperationTime INT NULL, -- 작업 시간 (분 단위로 기록)
+    StartTime DATETIME NULL, -- 작업 시작 시간
     PRIMARY KEY (MonitorID),
     FOREIGN KEY (OrderID) REFERENCES ERP.WorkOrders(OrderID)
 );
 
--- 14. 생산 입력 (ProductionEntry)
+-- 14. 생산 입고 (ProductionEntry)
 CREATE TABLE ERP.ProductionEntry (
     EntryID INT NOT NULL AUTO_INCREMENT, -- 입력ID
     OrderID INT NOT NULL, -- 작업 지시ID
     ProductID INT NOT NULL, -- 제품ID
     Quantity INT NULL, -- 수량
-    EntryDate DATE NULL, -- 입력 날짜
+    EntryDate DATETIME NULL, -- 입력 날짜
     PRIMARY KEY (EntryID),
     FOREIGN KEY (OrderID) REFERENCES ERP.WorkOrders(OrderID),
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
@@ -242,15 +244,16 @@ CREATE TABLE ERP.StoreInventory (
 );
 
 
--- 17 MBOM 테이블 수정 (UnitPrice 추가)
+-- 17 MBOM 
 CREATE TABLE ERP.MBOM (
     BOMID INT NOT NULL AUTO_INCREMENT, -- BOMID
     ProductID INT NOT NULL, -- 제품ID
-    MaterialID INT NOT NULL, -- 자재ID
+    MaterialID INT  NULL, -- 자재ID
     ProductName VARCHAR(100) NOT NULL, -- 제품명 
     Quantity INT NOT NULL, -- 수량
-    Unit VARCHAR(50) NOT NULL, -- 단위
-    UnitPrice INT NOT NULL, -- 단가 (자재별 단가)
+    Unit VARCHAR(50)  NULL, -- 단위
+    UnitPrice INT  NULL, -- 단가 (자재별 단가)
+    TotalCost INT  NULL, -- 제품원가
     PRIMARY KEY (BOMID, ProductID, MaterialID),
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID),
     FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)

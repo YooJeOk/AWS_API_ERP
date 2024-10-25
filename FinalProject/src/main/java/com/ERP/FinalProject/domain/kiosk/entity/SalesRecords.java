@@ -15,18 +15,18 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SalesRecords {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long saleID;
+    private int saleID;
 
-    @Column(nullable = false)
     private LocalDateTime saleDate;
 
-    @Column(nullable = false)
     private String paymentType;
 
-    @Column(nullable = false)
     private int totalSalePrice;
+
+    private int orderAmount;
+
+    private int discountAmount;
 
 }

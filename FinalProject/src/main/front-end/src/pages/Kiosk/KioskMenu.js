@@ -9,6 +9,7 @@ import { House } from 'react-bootstrap-icons';
 const KioskMenu = () => {
 
   const [selectedCategory, setSelectedCategory] = useState('추천메뉴');
+  const [additionalOptions, setAdditionalOptions] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const [menuItems, setMenuItems] = useState({});
   const [currentPage, setCurrentPage] = useState(0);
@@ -23,14 +24,31 @@ const KioskMenu = () => {
   }, [location]);
 
   const categories = ['추천메뉴', '빵', '커피(ice)', '커피(hot)'];
-  const additionalOptions = [
-    { id: 1, name: '에스프레소 샷', price: 500 },
-    { id: 2, name: '헤이즐넛 시럽', price: 300 },
-    { id: 3, name: '바닐라 시럽', price: 300 },
-    { id: 4, name: '메이플 시럽', price: 300 },
-    { id: 5, name: '아이스크림', price: 1000 },
-    { id: 6, name: '우유', price: 500 },
-  ];
+
+  useEffect(() => {
+    const fetchAdditionalOptions = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/menu/coffee-option');
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+        const data = await response.json();
+
+        // 데이터 매핑
+        const mappedOptions = data.map(option => ({
+          id: option.optionId,
+          name: option.name,
+          price: option.price
+        }));
+
+        setAdditionalOptions(mappedOptions);
+      } catch (error) {
+        console.error("Failed to fetch additional options:", error);
+      }
+    };
+
+    fetchAdditionalOptions();
+  }, []);
 
   const fetchMenuItems = async (category, page = 0, size = 6) => {
     let endpoint;

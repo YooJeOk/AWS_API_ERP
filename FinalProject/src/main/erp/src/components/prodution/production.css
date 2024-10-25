@@ -47,7 +47,7 @@ body {
 
 .create-button {
     padding: 10px 50px;
-    background-color:#0a917f;
+    background-color:#009952;
     color: #DFE0DF;
     border: none;
     cursor: pointer;
@@ -74,7 +74,7 @@ body {
     width: 60%;
     margin: 50px auto;
     padding: 20px;
-    background-color: #DFE0DF;
+    background-color: #e9c191;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
@@ -105,7 +105,7 @@ body {
     display: block;
     width: 100%;
     padding: 10px;
-    background-color: #0a917f;
+    background-color: #009952;
     color: #DFE0DF;
     border: none;
     cursor: pointer;
@@ -114,7 +114,7 @@ body {
 }
 
 .submit-button:hover {
-    background-color: #005f52;
+    background-color: #00703c;
 }
 
 #sidebar {
@@ -134,7 +134,7 @@ body {
 }
 
 .sidebar-menu .menu-item {
-    background-color: #ffc368;
+    background-color: #F0C490;
     color: black;
     padding: 18px;
     margin-bottom: 10px;
@@ -177,7 +177,7 @@ body {
 }
 
 .navbar {
-    background-color:#ffc368;
+    background-color:#F0C490;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -205,7 +205,7 @@ body {
     display: flex;
     gap: 10px;
     margin-left: auto;
-    background-color: #ffc164;
+    background-color: #F0C490;
 }
 
 .nav-button {

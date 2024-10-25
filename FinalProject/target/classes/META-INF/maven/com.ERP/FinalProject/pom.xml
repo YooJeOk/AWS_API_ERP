@@ -67,11 +67,7 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- Spring Data Elasticsearch -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
-        </dependency>
+       
 
         <!-- Testing Dependencies -->
         <dependency>
