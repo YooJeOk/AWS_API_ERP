@@ -76,11 +76,10 @@ public class SalesRecordsController {
             }
             
             salesRecord.setSalesDetails(salesDetailsList);
-            
-            // 판매 기록 저장 로직
+   
             SalesRecord savedSalesRecord = salesRecordsService.saveSalesRecord(salesRecord);
             
-            // UserData 처리 (필요한 경우)
+
             Map<String, Object> userDataMap = (Map<String, Object>) requestData.get("userData");
             if (userDataMap != null && userDataMap.get("phone") != null) {
                 kioskUserService.incrementStampByPhone((String) userDataMap.get("phone"));
