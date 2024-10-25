@@ -6,27 +6,32 @@ function ProductionMonitoringPage() {
     const [isDataLoaded, setIsDataLoaded] = useState(false);
 
     useEffect(() => {
-        const fetchData = () => {
-            const dummyData = [
-                {
-                    status: "In Progress",
-                    workOrderNo: "WO12345",
-                    process: "Cutting",
-                    itemCode: "P001",
-                    itemName: "Product A",
-                    orderQty: 100,
-                    workQty: 90,
-                    goodQty: 85,
-                    defectQty: 5,
-                    progressRate: "90%"
-                }
-            ];
-            setData(dummyData);
-            setIsDataLoaded(true);
+        const fetchCSVData = async () => {
+            try {
+                const response = await fetch('/api/production-monitoring');  // 백엔드 API 경로
+                const result = await response.json();  // CSV 데이터를 JSON 형태로 변환
+    
+                console.log(result);  // 데이터를 콘솔에 출력
+                const formattedData = result.map((row, index) => ({
+                    id: index + 1,
+                    orderId: row.orderId,
+                    temperature: row.temperature,
+                    humidity: row.humidity,
+                    productionRate: row.productionRate,
+                    operationTime: row.operationTime,
+                    startTime: row.startTime
+                }));
+    
+                setData(formattedData);
+                setIsDataLoaded(true);
+            } catch (error) {
+                console.error("데이터를 불러오는 중 오류가 발생했습니다:", error);
+            }
         };
-
-        fetchData();
+    
+        fetchCSVData();
     }, []);
+    
 
     return (
         <div className="custom-container">
@@ -43,38 +48,30 @@ function ProductionMonitoringPage() {
                         <thead>
                             <tr>
                                 <th>NO.</th>
-                                <th>진행상태</th>
                                 <th>작업지시번호</th>
-                                <th>작업공정</th>
-                                <th>품목코드</th>
-                                <th>품목명</th>
-                                <th>지시수량</th>
-                                <th>작업수량</th>
-                                <th>양품수량</th>
-                                <th>불량수량</th>
-                                <th>진행율</th>
+                                <th>온도</th>
+                                <th>습도</th>
+                                <th>생산률</th>
+                                <th>작업 시간</th>
+                                <th>작업 시작 시간</th>
                             </tr>
                         </thead>
                         <tbody>
                             {isDataLoaded ? (
                                 data.map((row, index) => (
                                     <tr key={index}>
-                                        <td>{index + 1}</td>
-                                        <td>{row.status}</td>
-                                        <td>{row.workOrderNo}</td>
-                                        <td>{row.process}</td>
-                                        <td>{row.itemCode}</td>
-                                        <td>{row.itemName}</td>
-                                        <td>{row.orderQty}</td>
-                                        <td>{row.workQty}</td>
-                                        <td>{row.goodQty}</td>
-                                        <td>{row.defectQty}</td>
-                                        <td>{row.progressRate}</td>
+                                        <td>{row.id}</td>
+                                        <td>{row.orderId}</td>
+                                        <td>{row.temperature}</td>
+                                        <td>{row.humidity}</td>
+                                        <td>{row.productionRate}%</td>
+                                        <td>{row.operationTime} 분</td>
+                                        <td>{row.startTime}</td>
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="11">등록된 데이터가 없습니다</td>
+                                    <td colSpan="7">등록된 데이터가 없습니다</td>
                                 </tr>
                             )}
                         </tbody>

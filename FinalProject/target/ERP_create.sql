@@ -194,8 +194,8 @@ CREATE TABLE ERP.ProductionMonitoring (
     OrderID INT NOT NULL, -- 작업 지시ID
     Temperature FLOAT NULL, -- 온도
     Humidity FLOAT NULL, -- 습도
-    ProductionRate INT NULL, -- 생산률
-    OperationTime INT NULL, -- 작업 시간 (분 단위로 기록)
+    ProductionRate FLOAT NULL, -- 생산률
+    OperationTime FLOAT NULL, -- 작업 시간 (분 단위로 기록)
     StartTime DATETIME NULL, -- 작업 시작 시간
     PRIMARY KEY (MonitorID),
     FOREIGN KEY (OrderID) REFERENCES ERP.WorkOrders(OrderID)
@@ -248,16 +248,17 @@ CREATE TABLE ERP.StoreInventory (
 CREATE TABLE ERP.MBOM (
     BOMID INT NOT NULL AUTO_INCREMENT, -- BOMID
     ProductID INT NOT NULL, -- 제품ID
-    MaterialID INT  NULL, -- 자재ID
+    MaterialID INT NOT NULL, -- 자재ID
     ProductName VARCHAR(100) NOT NULL, -- 제품명 
     Quantity INT NOT NULL, -- 수량
-    Unit VARCHAR(50)  NULL, -- 단위
-    UnitPrice INT  NULL, -- 단가 (자재별 단가)
-    TotalCost INT  NULL, -- 제품원가
+    Unit VARCHAR(50) NULL, -- 단위
+    UnitPrice INT NULL, -- 단가 (자재별 단가)
+    TotalCost INT NULL, -- 제품원가
     PRIMARY KEY (BOMID, ProductID, MaterialID),
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID),
     FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
 );
+
 
 
 
