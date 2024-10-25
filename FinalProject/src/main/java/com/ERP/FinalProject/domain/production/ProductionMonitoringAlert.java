@@ -16,7 +16,7 @@ public class ProductionMonitoringAlert {
         try {
             // DB 연결 설정
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/ERP", "username", "password");
+                    "jdbc:mysql://localhost:3306/ERP", "root", "1234");
             Statement statement = connection.createStatement();
 
             // 현재 작업 중인 데이터 가져오기
