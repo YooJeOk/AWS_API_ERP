@@ -160,12 +160,13 @@ VALUES
 --     pp.OrderID = ?;  -- 특정 OrderID를 조회할 경우 ? 부분에 원하는 OrderID를 넣습니다.
 
 -- 13. 생산 모니터링 (ProductionMonitoring) 테이블 더미 데이터 (OrderID 1, 4가 진행 중인 작업)
-INSERT INTO ERP.ProductionMonitoring (OrderID, Temperature, Humidity, ProductionRate, OperationTime, StartTime)
-VALUES
+-- INSERT INTO ERP.ProductionMonitoring (OrderID, Temperature, Humidity, ProductionRate, OperationTime, StartTime)
+-- VALUES
 -- 진행 중인 작업 (OrderID 1) (온도와 습도를 적정 범위 내에서 설정)
-(1, 28.0, 65, 83, 256, '2024-04-23 08:00:00'), -- 적정 온도 28°C+-5, 적정 습도 65%+-5
+-- (1, 28.0, 65, 83, 256, '2024-04-23 08:00:00'), -- 적정 온도 28°C+-5, 적정 습도 65%+-5
 -- 진행 중인 작업 (OrderID 4) (온도와 습도를 적정 범위 내에서 설정)
-(4, 27.5, 67, 25, 93, '2024-05-10 08:30:00'); -- 적정 온도 27.5°C+-5, 적정 습도 67%+-5
+-- (4, 27.5, 67, 25, 93, '2024-05-10 08:30:00'); -- 적정 온도 27.5°C+-5, 적정 습도 67%+-5
+-- CSV로대체
 
 
 
