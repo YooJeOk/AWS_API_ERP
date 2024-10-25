@@ -1,0 +1,92 @@
+/* 캘린더 전체 컨테이너 스타일 */
+.rbc-calendar {
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+  }
+  
+  /* 달력 헤더 스타일 (월, 주, 일 보기 선택) */
+  .rbc-toolbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #F0C490;
+  }
+  .rbc-toolbar-label{
+    text-align: left;
+    align-items: left;
+  }
+  
+  .rbc-toolbar button {
+    background-color: #F0C490;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .rbc-toolbar button:hover {
+    background-color:#F0C490;
+  }
+  
+  /* 날짜 셀 스타일 (요일) */
+  .rbc-header {
+    background-color: #F0C490;
+    color:#703103;
+    font-weight: bold;
+    text-align: center;
+    padding: 8px;
+    border-bottom: 1px solid #cccccc;
+  }
+  
+  /* 각 날짜 셀 스타일 (달력 날짜) */
+  .rbc-day-bg {
+    background-color: #f9f9f9;
+    border-right: 1px solid #eeeeee;
+  }
+  
+  .rbc-date-cell {
+    text-align: center;
+    font-weight: 500;
+    color: #F0C490;
+  }
+  
+  /* 선택된 날짜 셀 스타일 */
+  .rbc-selected-cell {
+    background-color: #fce6cb !important;
+  }
+  
+  /* 이벤트 스타일 */
+  .rbc-event {
+    background-color: #F0C490;
+    color: white;
+    border-radius: 4px;
+    padding: 3px 5px;
+    font-size: 0.9rem;
+  }
+  
+  .rbc-event:hover {
+    background-color: #f0b873;
+  }
+  
+  /* 오늘 날짜 스타일 */
+  .rbc-today {
+    background-color: #fce6cb !important;
+    border: 1px solid #eeb56f;
+  }
+  
+  /* 시간 표시 스타일 (주간/일간 보기에서) */
+  .rbc-timeslot-group {
+    border-top: 1px solid #eeeeee;
+  }
+  
+  .rbc-time-slot {
+    color: #777777;
+    font-size: 0.85rem;
+  }
+  
