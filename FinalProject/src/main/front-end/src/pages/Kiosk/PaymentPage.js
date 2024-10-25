@@ -37,7 +37,7 @@ const PaymentPage = () => {
 
   const handlePaymentClick = (paymentType) => {
     const { IMP } = window;
-    IMP.init('imp71261721'); // 포트원 상점아이디로 변경
+    IMP.init('imp71261721'); 
 
     IMP.request_pay({
       pg: paymentType === '카카오페이' ? 'kakaopay' : paymentType === '네이버페이' ? 'naverpay' : 'tosspay',
@@ -48,33 +48,42 @@ const PaymentPage = () => {
       if (response.success) {
         setModalMessage(`${paymentType} 결제가 완료되었습니다.`);
         setShowModal(true);
-
-        // 결제 성공 시 백엔드로 데이터 전송
-
-        // 백엔드로 판매 기록 저장
+  
         try {
-          await axios.post('/api/sales', {
+          const saleData = {
             salesRecords: {
               paymentType,
               totalSalePrice: totalAmount,
               orderAmount: totalAmount + discountAmount,
               discountAmount,
             },
-            // cartItems: cartItems.map(item => ({
-            //   productId: item.productId || null,
-            //   coffeeId: item.coffeeId || null,
-            //   quantitySold: item.quantity,
-            //   salePrice: item.totalPrice,
-            //   options: item.options?.additionalOptions.map(option => ({
-            //     optionId: option.id,
-            //     optionQuantity: option.quantity,
-            //     optionPrice: option.price,
-            //   })) || [],
-            // })),
-            userData,   
-          });
+            cartItems: cartItems.map(item => ({
+              productId: item.type === 'bread' ? item.id : null,
+              coffeeId: item.type === 'coffee' ? item.id : null,
+              quantity: item.quantity,
+              totalPrice: item.totalPrice,
+              type: item.type,
+              options: item.type === 'coffee' ? {
+                temperature: item.temperature,
+                size: item.options.size,
+                sizeCharge: item.options.sizeCharge,
+                additionalOptions: item.options.additionalOptions.map(option => ({
+                  id: option.id,
+                  name: option.name,
+                  quantity: option.quantity,
+                  price: option.price,
+                }))
+              } : null,
+            })),
+            userData,
+          };
+  
+          console.log('Sending data to server:', JSON.stringify(saleData, null, 2));
+  
+          const response = await axios.post('/api/sales', saleData);
+          console.log('Server response:', response.data);
         } catch (error) {
-          console.error("판매 기록 저장 실패", error);
+          console.error("판매 기록 저장 실패", error.response ? error.response.data : error.message);
         }
       } else {
         setModalMessage(`결제가 실패하였습니다: ${response.error_msg}`);

@@ -5,8 +5,6 @@ import BreadModal from './BreadModal.js';
 import CoffeeModal from './CoffeeModal.js';
 
 const MenuList = ({ items, onAddToCart, additionalOptions, currentPage, totalPages, onPageChange, selectedCategory }) => {
-  console.log('Current page:', currentPage); // 추가된 로그
-
   const [selectedItem, setSelectedItem] = useState(null);
   
   const handlePrevPage = () => {
