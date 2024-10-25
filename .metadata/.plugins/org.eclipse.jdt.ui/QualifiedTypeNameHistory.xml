@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy/>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.monitoring.service.CsvService"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.monitoring.model.ProductionMonitoringData"/>
+    <fullyQualifiedTypeName name="javax.persistence.Entity"/>
+    <fullyQualifiedTypeName name="javax.persistence.Table"/>
+</qualifiedTypeNameHistroy>
