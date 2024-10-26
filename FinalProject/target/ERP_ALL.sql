@@ -203,7 +203,7 @@ CREATE TABLE ERP.ProductionPlanning (
     RequiredDate DATETIME NULL, -- 필요 시간
 	StartDate DATETIME NULL, -- 시작 시간
     EndDate DATETIME NULL, -- 종료 시간
-    PRIMARY KEY (PlanID),
+    PRIMARY KEY (PlanID), -- 
     FOREIGN KEY (OrderID) REFERENCES ERP.WorkOrders(OrderID)
     
 );
