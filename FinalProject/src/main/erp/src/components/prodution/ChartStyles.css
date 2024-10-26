@@ -29,9 +29,10 @@
 
 .status-text {
     position: absolute;
-    top: -45px;
+   
     font-size: 1.2em;
     font-weight: bold;
+    margin-top: 50px;
 }
 
 .value-text {
@@ -42,7 +43,11 @@
 
 /* 온도 및 습도 표시 스타일 */
 .metrics-container {
-    margin-top: 100px; /* 원형 그래프 아래로 100px 간격 */
+    margin-top: 50px;
+    padding: 20px; /* 적당한 패딩 추가 */
+    border: 3px solid #000; /* 두꺼운 검정 테두리 추가 */
+    border-radius: 8px;
+    text-align: center;
 }
 
 .temperature,
@@ -62,4 +67,8 @@
 .temperature.danger,
 .humidity.danger {
     color: #ff0000; /* 위험: 빨간색 */
+}
+
+.line-name {
+    margin-top: 20px;
 }
