@@ -3537,3 +3537,18 @@ Caused by: org.eclipse.core.runtime.CoreException: Cannot determine URI for '/Fi
 2024-10-25 23:35:58,784 [Worker-111: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
 2024-10-25 23:35:58,784 [Worker-111: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered properties files.
 2024-10-25 23:35:58,784 [Worker-111: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Fullstack\Project3\AWS_API_ERP\FinalProject\src\test\resources
+2024-10-26 11:11:42,766 [Worker-5: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2024-10-26 11:11:51,350 [Worker-11: Updating Maven Project] INFO  o.e.m.c.i.p.ProjectConfigurationManager - Update started
+2024-10-26 11:12:00,214 [Worker-11: Updating Maven Project] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: com.ERP:FinalProject:0.0.1-SNAPSHOT @ C:\Fullstack\Project3\AWS_API_ERP\FinalProject\pom.xml.
+2024-10-26 11:12:03,406 [Worker-11: Updating Maven Project] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /FinalProject/src/main/java
+2024-10-26 11:12:03,406 [Worker-11: Updating Maven Project] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /FinalProject/src/main/resources
+2024-10-26 11:12:03,407 [Worker-11: Updating Maven Project] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /FinalProject/src/main/resources
+2024-10-26 11:12:03,407 [Worker-11: Updating Maven Project] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /FinalProject/src/test/java
+2024-10-26 11:12:04,301 [Worker-11: Updating Maven Project] INFO  o.e.m.c.i.p.ProjectConfigurationManager - Update completed: 12 sec
+2024-10-26 11:12:07,107 [Worker-9: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2024-10-26 11:12:07,108 [Worker-9: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered properties files.
+2024-10-26 11:12:07,110 [Worker-9: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2024-10-26 11:12:07,126 [Worker-9: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 50 resources
+2024-10-26 11:12:07,269 [Worker-9: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2024-10-26 11:12:07,269 [Worker-9: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered properties files.
+2024-10-26 11:12:07,269 [Worker-9: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Fullstack\Project3\AWS_API_ERP\FinalProject\src\test\resources
