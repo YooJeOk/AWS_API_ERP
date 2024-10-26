@@ -31,7 +31,7 @@ function InputForm3() {
     return (
         <div className="custom-container">
             <div className="form-container">
-                <h1>작업 내역 입력</h1>
+                <h1>작업 내역 등록</h1>
                 <form id="input-form" onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="production-date">작업 일자:</label>

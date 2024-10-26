@@ -1,11 +1,14 @@
-/* ProductionPage.css */
+/* 컨테이너 스타일 */
 .custom-container {
     display: flex;
+    justify-content: center;
+    width: 100%;
 }
 
 .production-content {
     flex-grow: 1;
     padding: 20px;
+    width: 100%;
 }
 
 .production-mainbar {
@@ -21,6 +24,7 @@
     margin-left: 20px;
 }
 
+/* 테이블 스타일 */
 .production-table {
     width: 100%;
     border-collapse: collapse;
@@ -32,13 +36,11 @@
     text-align: left;
 }
 
+/* 데이터 없음 메시지 */
 .no-data {
     color: red;
     font-weight: bold;
 }
-.chart-container {
-    width: 1600px;  
-    height: 800px;  
-    margin: 0 auto;
-    margin-left: 250px;  
-}
+
+
+

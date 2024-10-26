@@ -281,3 +281,28 @@ body {
 .production-content p {
     line-height: 1.6;
 }
+
+.date-picker-wrapper {
+    margin-top: 10px; 
+}
+
+.date-picker {
+    width: 100%;
+    max-width: 200px;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.date-picker:focus {
+    outline: none; 
+    padding: 6px; 
+    border: 1px solid #00703c; 
+}
+
+
+
+
+
+
