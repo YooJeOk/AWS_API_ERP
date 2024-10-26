@@ -21,8 +21,13 @@ const EarnPage = () => {
   const handlePrevious = () => {
     navigate('/detail', { state: { cartItems } });
   };
-  const handleNext = () => {
-    navigate('/payment', { state: { cartItems, userData } });
+  const handleNext = async () => {
+    try {
+      await playTTS('결제 방식을 선택해 주세요'); 
+      navigate('/payment', { state: { cartItems, userData } });
+    } catch (error) {
+      console.error("Failed to play TTS message:", error);
+    }
   };
 
   useEffect(() => {
@@ -31,12 +36,29 @@ const EarnPage = () => {
     }
   }, [location.state]);
 
+  const playTTS = async (message) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/tts?text=${encodeURIComponent(message)}`);
+      if (!response.ok) {
+        throw new Error('TTS API request failed');
+      }
+      const blob = await response.blob();
+      const audioUrl = URL.createObjectURL(blob);
+      const audio = new Audio(audioUrl);
+      audio.play();
+    } catch (error) {
+      console.error("Failed to play TTS message:", error);
+    }
+  };
+
   const handlePhoneCheck = () => {
+    playTTS('번호를 입력해주세요');
     setKeypadPurpose('phoneCheck');
     setShowKeypad(true);
   };
 
   const handleJoinMember = () => {
+    playTTS('번호를 입력해주세요');
     setKeypadPurpose('joinMember');
     setShowKeypad(true);
   };
@@ -44,7 +66,6 @@ const EarnPage = () => {
   const handleKeypadClose = () => {
     setShowKeypad(false);
   };
-
 
   const handleKeypadSubmit = async (number) => {
     if (keypadPurpose === 'phoneCheck') {
@@ -54,16 +75,17 @@ const EarnPage = () => {
           throw new Error('Number not found');
         }
         const data = await response.json();
-        setUserData(data); 
+        setUserData(data);
       } catch (error) {
         console.error(error);
         alert('조회된 번호가 없습니다.');
       }
     } else if (keypadPurpose === 'joinMember') {
-      console.log("회원가입완료")
+      console.log("회원가입완료");
     }
     setShowKeypad(false);
   };
+
   return (
     <div className="detail-page container-md body-center">
       <nav className="detail-header text-bold">적립하시겠습니까?</nav>
@@ -81,27 +103,27 @@ const EarnPage = () => {
             <img src="images/join/join.png" alt="Join member" />
             <div className="mt-3 fs-4">회원가입</div>
           </div>
-        </div>  
+        </div>
         {userData && (
-        <table className="table user-data-table">
-          <thead>
-            <tr>
-              <th>전화번호</th>
-              <th>스탬프</th>
-              <th>쿠폰</th>
-            </tr>
-          </thead>          
-          <tbody>
-            <tr>
-              <td>{userData.phone}</td>
-              <td>{userData.stamp}</td>
-              <td>{userData.coupon}</td>
-            </tr>
-          </tbody>
-        </table>
-      )}
+          <table className="table user-data-table">
+            <thead>
+              <tr>
+                <th>전화번호</th>
+                <th>스탬프</th>
+                <th>쿠폰</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{userData.phone}</td>
+                <td>{userData.stamp}</td>
+                <td>{userData.coupon}</td>
+              </tr>
+            </tbody>
+          </table>
+        )}
       </div>
-      <OrderSummary 
+      <OrderSummary
         orderAmount={totalAmount}
         discountAmount={0}
         totalAmount={totalAmount}

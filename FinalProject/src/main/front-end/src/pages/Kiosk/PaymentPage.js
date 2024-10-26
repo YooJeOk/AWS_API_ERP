@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './payment.css';
 import OrderSummary from '../../components/Kiosk/OrderSummary';
 import PaymentModal from '../../components/Kiosk/PaymentModal';
+
 import axios from 'axios';
 
 const PaymentPage = () => {
@@ -15,6 +16,13 @@ const PaymentPage = () => {
   const totalAmount = cartItems.reduce((sum, item) => sum + item.totalPrice, 0);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+
+  const playClickSound = () => {
+    const audio = new Audio('/sounds/mouth-bass.mp3');
+    audio.play().catch(error => {
+      console.error("Failed to play click sound:", error);
+    });
+  };
 
   // 포트원 스크립트 로드
   useEffect(() => {
@@ -103,7 +111,7 @@ const PaymentPage = () => {
         <div className="payment-text fs-4 px-1">카드 결제</div>
 
         <div className="payment-category mt-2 fs-5 text-bold">
-          <div className="naver-payment" onClick={() => handlePaymentClick('네이버페이')}>
+          <div className="naver-payment" onClick={() =>{playClickSound(); handlePaymentClick('네이버페이')}}>
             <svg viewBox="0 0 277 105" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M224.585 0C253.528 0 277 23.51 277 52.5C277 81.49 253.528 105 224.585 105H52.4148C23.4719 105 0 81.49 0 52.5C0 23.51 23.4719 0 52.4148 0H224.585Z" fill="#00DE5A" />
               <path d="M52.5013 90.5599C31.4813 90.5599 14.4414 73.5199 14.4414 52.4999C14.4414 31.4799 31.4813 14.4399 52.5013 14.4399C73.5213 14.4399 90.5614 31.4799 90.5614 52.4999C90.5714 73.5199 73.5313 90.5599 52.5013 90.5599ZM59.8513 33.4599V54.39L45.1414 33.4599H33.4713V71.52H45.1614V50.59L59.8713 71.52H71.5414V33.4599H59.8513Z" fill="black" />
