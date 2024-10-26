@@ -59,6 +59,5 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "css-loader": "^7.1.2",
     "style-loader": "^4.0.0"
-  },
-  "proxy": "http://localhost:8080"
+  }
 }

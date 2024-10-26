@@ -4,4 +4,5 @@
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.monitoring.model.ProductionMonitoringData"/>
     <fullyQualifiedTypeName name="javax.persistence.Entity"/>
     <fullyQualifiedTypeName name="javax.persistence.Table"/>
+    <fullyQualifiedTypeName name="java.time.LocalDateTime"/>
 </qualifiedTypeNameHistroy>

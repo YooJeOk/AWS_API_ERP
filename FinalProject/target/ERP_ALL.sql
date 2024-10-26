@@ -203,13 +203,13 @@ CREATE TABLE ERP.ProductionPlanning (
     PlanID INT NOT NULL AUTO_INCREMENT, -- 계획ID
     OrderID INT NOT NULL, -- 작업 지시ID
     ProductID INT NOT NULL, -- 제품ID
-    RequiredDate DATETIME NULL, -- 필요 시간
 	StartDate DATETIME NULL, -- 시작 시간
     EndDate DATETIME NULL, -- 종료 시간
     PRIMARY KEY (PlanID), -- 
     FOREIGN KEY (OrderID) REFERENCES ERP.WorkOrders(OrderID)
     
 );
+
 -- 15. 생산 모니터링 (ProductionMonitoring)
 CREATE TABLE ERP.ProductionMonitoring (
     MonitorID INT NOT NULL AUTO_INCREMENT, -- 모니터링ID
@@ -480,13 +480,13 @@ VALUES
 
 
 -- 14. 생산 계획 (ProductionPlanning) 테이블 더미 데이터
-INSERT INTO ERP.ProductionPlanning (OrderID, ProductID, RequiredDate, StartDate, EndDate)
+INSERT INTO ERP.ProductionPlanning (OrderID, ProductID, StartDate, EndDate)
 VALUES
-(1, 1, '2024-04-23 15:30:00', '2024-04-23 08:00:00', '2024-04-23 13:30:00'), 
-(2, 2, '2024-05-01 16:00:00', '2024-05-01 09:00:00', '2024-05-01 14:00:00'), 
-(3, 3, '2024-05-06 17:30:00', '2024-05-06 10:00:00', '2024-05-06 15:30:00'), 
-(4, 4, '2024-05-10 14:30:00', '2024-05-10 08:30:00', '2024-05-10 12:30:00'), 
-(5, 5, '2024-06-01 15:45:00', '2024-06-01 07:45:00', '2024-06-01 13:45:00'); 
+(1, 1, '2024-04-23 08:00:00', '2024-04-23 13:30:00'), 
+(2, 2, '2024-05-01 09:00:00', '2024-05-01 14:00:00'), 
+(3, 3,'2024-05-06 10:00:00', '2024-05-06 15:30:00'), 
+(4, 4, '2024-05-10 08:30:00', '2024-05-10 12:30:00'), 
+(5, 5, '2024-06-01 07:45:00', '2024-06-01 13:45:00'); 
 -- 사용시 쿼리문 옮길예정
 -- SELECT 
 --     pp.OrderID,
