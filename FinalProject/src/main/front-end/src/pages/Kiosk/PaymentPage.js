@@ -119,11 +119,11 @@ const PaymentPage = () => {
             </svg>
             <div>네이버페이</div>
           </div>
-          <div className="kakao-payment" onClick={() => handlePaymentClick('카카오페이')}>
+          <div className="kakao-payment" onClick={() => {playClickSound(); handlePaymentClick('카카오페이')}}>
             <img src="images/payIcon/kakao.png" alt="Kakao Pay" />
             <div>카카오페이</div>
           </div>
-          <div className="toss-payment" onClick={() => handlePaymentClick('토스페이')}>
+          <div className="toss-payment" onClick={() => {playClickSound(); handlePaymentClick('토스페이')}}>
             <img src="images/payIcon/toss12.webp" alt="Toss Pay" />
             <div>토스페이</div>
           </div>
