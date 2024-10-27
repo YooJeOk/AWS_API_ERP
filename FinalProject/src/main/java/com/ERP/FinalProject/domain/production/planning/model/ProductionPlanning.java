@@ -14,6 +14,9 @@ public class ProductionPlanning {
     private Integer productID;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    
+    // 기타 사항 필드 추가
+    private String etc;
 
     // 계산 필드 (데이터베이스에 저장되지 않음)
     @Transient
@@ -61,6 +64,14 @@ public class ProductionPlanning {
 
     public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
+    }
+
+    public String getEtc() {
+        return etc;
+    }
+
+    public void setEtc(String etc) {
+        this.etc = etc;
     }
 
     public Integer getProductionCalculation() {

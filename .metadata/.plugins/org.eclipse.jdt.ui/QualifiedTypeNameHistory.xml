@@ -5,4 +5,5 @@
     <fullyQualifiedTypeName name="javax.persistence.Entity"/>
     <fullyQualifiedTypeName name="javax.persistence.Table"/>
     <fullyQualifiedTypeName name="java.time.LocalDateTime"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.planning.model.ProductionPlanning"/>
 </qualifiedTypeNameHistroy>

@@ -84,6 +84,7 @@ CREATE TABLE ERP.ProductionConsumption (
     MaterialID INT NOT NULL, -- 자재ID
     QuantityUsed INT NULL, -- 사용된 수량
     ProductionDate DATETIME NULL, -- 생산 날짜
+    etc VARCHAR(100) NULL, -- 기타
     PRIMARY KEY (ConsumptionID),
     FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
 );
@@ -96,6 +97,7 @@ CREATE TABLE ERP.FactoryInventory (
     DisposalID INT NOT NULL, -- 폐기ID
     QuantityInFactory INT NULL, -- 공장 내 수량
     FactoryDate DATETIME NULL, -- 공장 날짜
+        etc VARCHAR(100) NULL, -- 기타
     PRIMARY KEY (FactoryInventoryID),
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID),
     FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
@@ -194,6 +196,7 @@ CREATE TABLE ERP.WorkOrders (
     BakingComplete BOOLEAN DEFAULT FALSE, -- 굽기 완료 여부 (약 30분)
     CoolingComplete BOOLEAN DEFAULT FALSE, -- 냉각 완료 여부 (약 20분)
     PackagingComplete BOOLEAN DEFAULT FALSE, -- 포장 완료 여부 (약 10분)
+    etc VARCHAR(100) NULL, -- 기타
     PRIMARY KEY (OrderID),
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
 );
@@ -205,6 +208,7 @@ CREATE TABLE ERP.ProductionPlanning (
     ProductID INT NOT NULL, -- 제품ID
 	StartDate DATETIME NULL, -- 시작 시간
     EndDate DATETIME NULL, -- 종료 시간
+    etc VARCHAR(100) NULL, -- 기타
     PRIMARY KEY (PlanID), -- 
     FOREIGN KEY (OrderID) REFERENCES ERP.WorkOrders(OrderID)
     
@@ -229,6 +233,7 @@ CREATE TABLE ERP.ProductionEntry (
     ProductID INT NOT NULL, -- 제품ID
     Quantity INT NULL, -- 수량
     EntryDate DATETIME NULL, -- 입력 날짜
+    etc VARCHAR(100) NULL, -- 기타
     PRIMARY KEY (EntryID),
     FOREIGN KEY (OrderID) REFERENCES ERP.WorkOrders(OrderID),
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
@@ -243,6 +248,7 @@ CREATE TABLE ERP.QualityControl (
     TestResult VARCHAR(50) NULL, -- 테스트 결과
     TestDate DATETIME NULL, -- 테스트 날짜
     DefectRate INT DEFAULT 0 NULL, -- 불량률
+    etc VARCHAR(100) NULL, -- 기타
     PRIMARY KEY (QCID),
     FOREIGN KEY (EntryID) REFERENCES ERP.ProductionEntry(EntryID),
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
@@ -432,18 +438,20 @@ VALUES
 (3, 3, 400, 10000, '2024-04-10 11:00:00');
 
 -- 5. 생산 소비 (ProductionConsumption) 테이블 더미 데이터
-INSERT INTO ERP.ProductionConsumption (MaterialID, QuantityUsed, ProductionDate)
+INSERT INTO ERP.ProductionConsumption (MaterialID, QuantityUsed, ProductionDate, etc)
 VALUES
-(1, 100, '2024-04-11 10:00:00'),
-(2, 200, '2024-04-12 11:00:00'),
-(3, 150, '2024-04-13 12:00:00');
+(1, 100, '2024-04-11 10:00:00', '일반 소모'),
+(2, 200, '2024-04-12 11:00:00', '추가 소모'),
+(3, 150, '2024-04-13 12:00:00', '테스트용 소모');
+
 
 -- 6. 공장 재고 (FactoryInventory) 테이블 더미 데이터
-INSERT INTO ERP.FactoryInventory (ProductID, MaterialID, DisposalID, QuantityInFactory, FactoryDate)
+INSERT INTO ERP.FactoryInventory (ProductID, MaterialID, DisposalID, QuantityInFactory, FactoryDate, etc)
 VALUES
-(1, 1, 1, 500, '2024-04-14 09:00:00'),
-(2, 2, 2, 300, '2024-04-15 10:00:00'),
-(3, 3, 3, 400, '2024-04-16 11:00:00');
+(1, 1, 1, 500, '2024-04-14 09:00:00', '정기 입고'),
+(2, 2, 2, 300, '2024-04-15 10:00:00', '추가 보충'),
+(3, 3, 3, 400, '2024-04-16 11:00:00', '일반 재고');
+
 
 -- 7. 폐기 기록 (DisposedRecords) 테이블 더미 데이터
 INSERT INTO ERP.DisposedRecords (ProductID, QuantityDisposed, DisposalDate, DisposalReason)
@@ -467,45 +475,29 @@ SELECT MaterialID, '아이스크림', 1000 FROM ERP.MaterialsInventory WHERE Mat
 UNION ALL
 SELECT MaterialID, '우유', 500 FROM ERP.MaterialsInventory WHERE MaterialName = '우유';
 
--- 13.작업 주문 (WorkOrders) 테이블 더미 데이터 (1~2시간 전에 종료되도록 수정)
-INSERT INTO ERP.WorkOrders (ProductID, Quantity, StartDate, EndDate, Status, Priority, WeighingComplete, DoughComplete, FirstFermentationComplete, DivisionComplete, RoundingComplete, IntermediateFermentationComplete, ShapingComplete, PanningComplete, SecondFermentationComplete, BakingComplete, CoolingComplete, PackagingComplete)
+-- 13. 작업 지시 (WorkOrders) 테이블 더미 데이터 (1~2시간 전에 종료되도록 수정)
+INSERT INTO ERP.WorkOrders (ProductID, Quantity, StartDate, EndDate, Status, Priority, WeighingComplete, DoughComplete, FirstFermentationComplete, DivisionComplete, RoundingComplete, IntermediateFermentationComplete, ShapingComplete, PanningComplete, SecondFermentationComplete, BakingComplete, CoolingComplete, PackagingComplete, etc)
 VALUES
-(1, 500, '2024-04-23 08:00:00', '2024-04-23 13:30:00', '진행 중', '높음', TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE), 
-(2, 300, '2024-05-01 09:00:00', '2024-05-01 14:00:00', '대기', '중간', TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE), 
-(3, 400, '2024-05-06 10:00:00', '2024-05-06 15:30:00', '완료', '낮음', TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE), 
-(4, 200, '2024-05-10 08:30:00', '2024-05-10 12:30:00', '진행 중', '높음', TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE), 
-(5, 350, '2024-06-01 07:45:00', '2024-06-01 12:45:00', '대기', '낮음', TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE); 
+(1, 500, '2024-04-23 08:00:00', '2024-04-23 13:30:00', '진행 중', '높음', TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, NULL), 
+(2, 300, '2024-05-01 09:00:00', '2024-05-01 14:00:00', '대기', '중간', TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, NULL), 
+(3, 400, '2024-05-06 10:00:00', '2024-05-06 15:30:00', '완료', '낮음', TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, NULL), 
+(4, 200, '2024-05-10 08:30:00', '2024-05-10 12:30:00', '진행 중', '높음', TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, NULL), 
+(5, 350, '2024-06-01 07:45:00', '2024-06-01 12:45:00', '대기', '낮음', TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, NULL);
+
 
 
 
 
 -- 14. 생산 계획 (ProductionPlanning) 테이블 더미 데이터
-INSERT INTO ERP.ProductionPlanning (OrderID, ProductID, StartDate, EndDate)
+INSERT INTO ERP.ProductionPlanning (OrderID, ProductID, StartDate, EndDate, etc)
 VALUES
-(1, 1, '2024-04-23 08:00:00', '2024-04-23 13:30:00'), 
-(2, 2, '2024-05-01 09:00:00', '2024-05-01 14:00:00'), 
-(3, 3,'2024-05-06 10:00:00', '2024-05-06 15:30:00'), 
-(4, 4, '2024-05-10 08:30:00', '2024-05-10 12:30:00'), 
-(5, 5, '2024-06-01 07:45:00', '2024-06-01 13:45:00'); 
--- 사용시 쿼리문 옮길예정
--- SELECT 
---     pp.OrderID,
---     pp.ProductID,
---     pp.RequiredDate,
---     pp.StartDate,
---     pp.EndDate,
---     mbom.MaterialID,
---     mbom.ProductName,
---     mbom.Quantity AS RequiredMaterialQuantity,
---     mbom.UnitPrice,
---     (mbom.Quantity * mbom.UnitPrice) AS TotalMaterialCost
--- FROM 
---     ERP.ProductionPlanning pp
--- JOIN 
---     ERP.MBOM mbom
---     ON pp.ProductID = mbom.ProductID
--- WHERE 
---     pp.OrderID = ?;  -- 특정 OrderID를 조회할 경우 ? 부분에 원하는 OrderID를 넣습니다.
+(1, 1, '2024-04-23 08:00:00', '2024-04-23 13:30:00', '일반 생산 계획'),
+(2, 2, '2024-05-01 09:00:00', '2024-05-01 14:00:00', '특별 생산 계획'),
+(3, 3, '2024-05-06 10:00:00', '2024-05-06 15:30:00', '일반 생산 계획'),
+(4, 4, '2024-05-10 08:30:00', '2024-05-10 12:30:00', NULL),
+(5, 5, '2024-06-01 07:45:00', '2024-06-01 13:45:00', NULL);
+ 
+
 
 -- 13. 생산 모니터링 (ProductionMonitoring) 테이블 더미 데이터 (OrderID 1, 4가 진행 중인 작업)
 -- INSERT INTO ERP.ProductionMonitoring (OrderID, Temperature, Humidity, ProductionRate, OperationTime, StartTime)
@@ -520,22 +512,24 @@ VALUES
 
 
 -- 16. 생산입고 (ProductionEntry) 테이블 더미 데이터 (20분 후 입고되도록 수정)
-INSERT INTO ERP.ProductionEntry (OrderID, ProductID, Quantity, EntryDate)
+INSERT INTO ERP.ProductionEntry (OrderID, ProductID, Quantity, EntryDate, etc)
 VALUES
-(1, 1, 500, '2024-04-23 13:50:00'), 
-(2, 2, 300, '2024-05-01 14:20:00'), 
-(3, 3, 400, '2024-05-06 15:50:00'), 
-(4, 4, 200, '2024-05-10 12:50:00'), 
-(5, 5, 350, '2024-06-01 13:05:00'); 
+(1, 1, 500, '2024-04-23 13:50:00', '일반 입고'),
+(2, 2, 300, '2024-05-01 14:20:00', '정기 입고'),
+(3, 3, 400, '2024-05-06 15:50:00', '긴급 입고'),
+(4, 4, 200, '2024-05-10 12:50:00', NULL),
+(5, 5, 350, '2024-06-01 13:05:00', NULL);
+
 
 -- 17. 품질 관리 (QualityControl) 테이블 더미 데이터 (입고 후 10분 이내에 검사되도록 수정)
-INSERT INTO ERP.QualityControl (EntryID, ProductID, TestResult, TestDate, DefectRate)
+INSERT INTO ERP.QualityControl (EntryID, ProductID, TestResult, TestDate, DefectRate, etc)
 VALUES
-(1, 1, '합격', '2024-04-23 14:00:00', 2), 
-(2, 2, '불합격', '2024-05-01 14:30:00', 10), 
-(3, 3, '합격', '2024-05-06 16:00:00', 0), 
-(4, 4, '합격', '2024-05-10 13:00:00', 1), 
-(5, 5, '합격', '2024-06-01 13:15:00', 0); 
+(1, 1, '합격', '2024-04-23 14:00:00', 2, '정상 '),
+(2, 2, '불합격', '2024-05-01 14:30:00', 10, '불량 발견'),
+(3, 3, '합격', '2024-05-06 16:00:00', 0, '정상'),
+(4, 4, '합격', '2024-05-10 13:00:00', 1, '정상'),
+(5, 5, '합격', '2024-06-01 13:15:00', 0, '정상');
+
 
 -- 18. 매장 재고 (StoreInventory) 테이블 더미 데이터
 
@@ -557,7 +551,7 @@ VALUES
 (1, 'Product', NULL, 15, '갈릭꽈베기', 10, 'g', 12, 10 * 12),    -- 버터
 (1, 'Product', NULL, 19, '갈릭꽈베기', 20, 'ml', 3, 20 * 3),     -- 우유
 (1, 'Product', NULL, 11, '갈릭꽈베기', 5, 'g', 3, 5 * 3),        -- 이스트
-(1, 'Product', NULL, 25, '갈릭꽈베기', 10, 'ml', 10, 10 * 10),   -- 올리브오일
+(1, 'Product', NULL, 10, '갈릭꽈베기', 10, 'ml', 10, 10 * 10),   -- 올리브오일
 (1, 'Product', NULL, 30, '갈릭꽈베기', 1, 'ea', 10, 10),         -- 포장지
 
 -- 고구마케이크빵 730원
@@ -898,6 +892,43 @@ SELECT * FROM ERP.Users;
 
 -- 18. Untitled 테이블 조회 (커피 재료)
 SELECT * FROM ERP.coffee_materials;
+
+
+SELECT 
+    p.OrderID,
+    p.ProductID,
+    p.StartDate,
+    p.EndDate,
+    p.etc,
+    w.Quantity AS plannedQuantity,
+    m.MaterialID,
+    i.MaterialName,
+    SUM(m.Quantity * w.Quantity) AS requiredMaterialQty, 
+    SUM(m.UnitPrice * m.Quantity * w.Quantity) AS materialCost,
+    SUM(m.TotalCost * w.Quantity) AS totalMrpCost
+FROM 
+    ERP.ProductionPlanning p
+JOIN 
+    ERP.WorkOrders w ON p.OrderID = w.OrderID AND p.ProductID = w.ProductID
+JOIN 
+    ERP.MBOM m ON p.ProductID = m.ItemID AND m.ItemType = 'Product' -- ItemType 조건 추가
+JOIN 
+    ERP.MaterialsInventory i ON m.MaterialID = i.MaterialID
+WHERE 
+    p.ProductID = 1 -- 특정 ProductID 테스트용
+GROUP BY 
+    p.OrderID, 
+    p.ProductID, 
+    p.StartDate, 
+    p.EndDate, 
+    p.etc, 
+    w.Quantity, 
+    m.MaterialID, 
+    i.MaterialName;
+
+
+
+
 
 
 

@@ -11,8 +11,9 @@ function ProductionPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                
-                const response = await axios.get('/api/production-planning');
+                const response = await axios.get('http://localhost:8080/api/production-planning/data-by-product', {
+                    params: { productId: 1 } // 필요한 productId 값으로 변경
+                });
                 setData(response.data); 
                 setIsDataLoaded(true);
             } catch (error) {
@@ -24,7 +25,6 @@ function ProductionPage() {
         fetchData();
     }, []);
 
-    
     const handleCreate = () => {
         navigate('/input'); 
     };
@@ -41,13 +41,12 @@ function ProductionPage() {
                     <table className="production-table">
                         <thead>
                             <tr>
-                                
                                 <th>생산계획기간</th>
-                                <th>기준품목</th>
-                                <th>생산계획계산</th>
-                                <th>MRP계산</th>
-                                <th>생산계획/MRP현황</th>
-                                
+                                <th>상품품목</th>
+                                <th>생산계획수량</th>
+                                <th>MRP계산(생산원가)</th>
+                                <th>재료 필요량</th>
+                                <th>기타사항</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -55,23 +54,22 @@ function ProductionPage() {
                                 data.length > 0 ? (
                                     data.map((row, index) => (
                                         <tr key={index}>
-                                            
                                             <td>{`${row.startDate} ~ ${row.endDate}`}</td>
                                             <td>{row.productId}</td>
-                                            <td>{row.productionCalculation || "N/A"}</td>
-                                            <td>{row.mrpCalculation || "N/A"}</td>
-                                            <td>{row.status || "N/A"}</td>
-                                            
+                                            <td>{row.quantity || "N/A"}</td>
+                                            <td>{row.mrpCost || "N/A"}</td>
+                                            <td>{row.requiredMaterialQty || "N/A"}</td>
+                                            <td>{row.etc || "N/A"}</td>
                                         </tr>
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan="7">등록된 데이터가 없습니다</td>
+                                        <td colSpan="6">등록된 데이터가 없습니다</td>
                                     </tr>
                                 )
                             ) : (
                                 <tr>
-                                    <td colSpan="7">로딩 중...</td>
+                                    <td colSpan="6">로딩 중...</td>
                                 </tr>
                             )}
                         </tbody>

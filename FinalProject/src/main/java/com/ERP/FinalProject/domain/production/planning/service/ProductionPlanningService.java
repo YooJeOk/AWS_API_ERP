@@ -1,53 +1,46 @@
 package com.ERP.FinalProject.domain.production.planning.service;
 
-import com.ERP.FinalProject.domain.production.planning.model.ProductionPlanning;
+import com.ERP.FinalProject.domain.production.planning.model.ProductionPlanningDTO;
 import com.ERP.FinalProject.domain.production.planning.repository.ProductionPlanningRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ProductionPlanningService {
 
+    private final ProductionPlanningRepository repository;
+
+    // 생성자를 통한 의존성 주입
     @Autowired
-    private ProductionPlanningRepository repository;
-
-    public List<ProductionPlanning> getAllPlanningData() {
-        List<ProductionPlanning> plans = repository.findAll();
-        plans.forEach(this::applyCalculations);
-        return plans;
+    public ProductionPlanningService(ProductionPlanningRepository repository) {
+        this.repository = repository;
     }
 
-    public List<ProductionPlanning> getPlanningDataByOrderId(Integer orderId) {
-        List<ProductionPlanning> plans = repository.findByOrderID(orderId);
-        plans.forEach(this::applyCalculations);
-        return plans;
-    }
+    // 특정 ProductID로 가공된 생산 계획과 MRP 데이터를 DTO로 반환
+    public List<ProductionPlanningDTO> getProcessedPlanningDataByProductId(Integer productId) {
+        List<Object[]> rawData = repository.findProductionAndMrpDataByProductId(productId);
+        List<ProductionPlanningDTO> processedData = new ArrayList<>();
 
-    public List<ProductionPlanning> getPlanningDataByProductId(Integer productId) {
-        List<ProductionPlanning> plans = repository.findByProductID(productId);
-        plans.forEach(this::applyCalculations);
-        return plans;
-    }
+        for (Object[] row : rawData) {
+            int orderId = (Integer) row[0];
+            int productIdResult = (Integer) row[1];
+            String startDate = (String) row[2];
+            String endDate = (String) row[3];
+            int plannedQuantity = ((Number) row[4]).intValue();
+            int materialId = (Integer) row[5];
+            String materialName = (String) row[6];
+            double requiredMaterialQty = ((Number) row[7]).doubleValue();
+            double materialCost = ((Number) row[8]).doubleValue();
+            double totalMrpCost = ((Number) row[9]).doubleValue();
+            String etc = (String) row[10];
 
-    public List<ProductionPlanning> getPlanningDataByStartDateRange(LocalDateTime start, LocalDateTime end) {
-        List<ProductionPlanning> plans = repository.findByStartDateBetween(start, end);
-        plans.forEach(this::applyCalculations);
-        return plans;
-    }
+            processedData.add(new ProductionPlanningDTO(orderId, productIdResult, startDate, endDate, plannedQuantity,
+                    materialId, materialName, requiredMaterialQty, materialCost, totalMrpCost, etc));
+        }
 
-    private void applyCalculations(ProductionPlanning plan) {
-        plan.setProductionCalculation(calculateProduction(plan));
-        plan.setMrpCalculation(calculateMRP(plan));
-    }
-
-    private int calculateProduction(ProductionPlanning plan) {
-        return plan.getOrderID() * 2; // 예시 계산식
-    }
-
-    private int calculateMRP(ProductionPlanning plan) {
-        return plan.getOrderID() * 3; // 예시 계산식
+        return processedData;
     }
 }
