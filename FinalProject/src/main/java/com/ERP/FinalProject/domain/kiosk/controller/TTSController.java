@@ -29,10 +29,12 @@ public class TTSController {
             JSONObject voice = new JSONObject();
             voice.put("languageCode", "ko-KR");
             voice.put("ssmlGender", "FEMALE");
+            voice.put("name", "ko-KR-Wavenet-B"); 
 
             JSONObject audioConfig = new JSONObject();
             audioConfig.put("audioEncoding", "MP3");
-            audioConfig.put("pitch", 0); 
+            audioConfig.put("pitch", -2); // 음정 조절
+            audioConfig.put("speakingRate", 1.2); // 속도 조절 
 
 
             requestJson.put("input", input);
