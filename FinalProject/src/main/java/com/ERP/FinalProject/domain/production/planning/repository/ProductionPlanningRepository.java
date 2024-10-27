@@ -1,27 +1,78 @@
 package com.ERP.FinalProject.domain.production.planning.repository;
 
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 import com.ERP.FinalProject.domain.production.planning.model.ProductionPlanning;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.ERP.FinalProject.domain.production.planning.model.ProductionPlanningDTO;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Repository
-public interface ProductionPlanningRepository extends JpaRepository<ProductionPlanning, Integer> {
+public class ProductionPlanningRepository {
 
-    // 특정 ProductID로 계획된 수량, 원가, 필요 원재료량 등을 가져오는 쿼리
-	@Query(value = "SELECT p.OrderID, p.ProductID, p.StartDate, p.EndDate, w.Quantity AS plannedQuantity, " +
-            "m.MaterialID, i.MaterialName, SUM(m.Quantity * w.Quantity) AS requiredMaterialQty, " +
-            "SUM(m.UnitPrice * m.Quantity * w.Quantity) AS materialCost, SUM(m.TotalCost * w.Quantity) AS totalMrpCost, " +
-            "p.etc " +
-            "FROM ERP.ProductionPlanning p " +
-            "JOIN ERP.WorkOrders w ON p.OrderID = w.OrderID AND p.ProductID = w.ProductID " +
-            "JOIN ERP.MBOM m ON p.ProductID = m.ItemID AND m.ItemType = 'Product' " +
-            "JOIN ERP.MaterialsInventory i ON m.MaterialID = i.MaterialID " +
-            "WHERE p.ProductID = :productId " +
-            "GROUP BY p.OrderID, p.ProductID, p.StartDate, p.EndDate, w.Quantity, m.MaterialID, i.MaterialName, p.etc", 
-    nativeQuery = true)
-List<Object[]> findProductionAndMrpDataByProductId(@Param("productId") Integer productId);
+    private final JdbcTemplate jdbcTemplate;
 
+    public ProductionPlanningRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    // 기본 Production Planning DTO를 가져오는 메서드
+    public List<ProductionPlanningDTO> getBasicProductionPlanningData() {
+        String sql = "SELECT " +
+                     "pp.PlanID AS planId, " +
+                     "pp.OrderID AS orderId, " +
+                     "pp.ProductID AS productId, " +
+                     "pp.StartDate AS startDate, " +
+                     "pp.EndDate AS endDate, " +
+                     "wo.Quantity AS orderQuantity, " +
+                     "p.ProductName AS productName " +
+                     "FROM ERP.ProductionPlanning pp " +
+                     "JOIN ERP.WorkOrders wo ON pp.OrderID = wo.OrderID " +
+                     "JOIN ERP.Product p ON pp.ProductID = p.ProductID " +
+                     "ORDER BY pp.PlanID;";
+
+        return jdbcTemplate.query(sql, new ProductionPlanningRowMapper());
+    }
+
+    // RowMapper 내부 클래스 정의
+    private static class ProductionPlanningRowMapper implements RowMapper<ProductionPlanningDTO> {
+        @Override
+        public ProductionPlanningDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+            ProductionPlanningDTO dto = new ProductionPlanningDTO();
+            dto.setPlanId(rs.getInt("planId"));
+            dto.setOrderId(rs.getInt("orderId"));
+            dto.setProductId(rs.getInt("productId"));
+            dto.setStartDate(rs.getTimestamp("startDate").toLocalDateTime());
+            dto.setEndDate(rs.getTimestamp("endDate").toLocalDateTime());
+            dto.setOrderQuantity(rs.getInt("orderQuantity"));
+            dto.setProductName(rs.getString("productName"));
+            return dto;
+        }
+    }
+
+    public boolean save(ProductionPlanning productionPlanning, Connection connection) {
+        String sql = "INSERT INTO ERP.ProductionPlanning (ProductID, StartDate, EndDate, etc) VALUES (?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, productionPlanning.getProductId());
+            
+            // LocalDateTime을 Timestamp로 변환하여 setTimestamp로 저장
+            stmt.setTimestamp(2, Timestamp.valueOf(productionPlanning.getStartDate()));
+            stmt.setTimestamp(3, Timestamp.valueOf(productionPlanning.getEndDate()));
+            
+            stmt.setString(4, productionPlanning.getEtc());
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0; // 성공적으로 저장된 경우 true 반환
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

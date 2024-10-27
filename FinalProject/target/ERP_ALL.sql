@@ -204,13 +204,12 @@ CREATE TABLE ERP.WorkOrders (
 -- 14. 생산 계획 (ProductionPlanning)
 CREATE TABLE ERP.ProductionPlanning (
     PlanID INT NOT NULL AUTO_INCREMENT, -- 계획ID
-    OrderID INT NOT NULL, -- 작업 지시ID
     ProductID INT NOT NULL, -- 제품ID
 	StartDate DATETIME NULL, -- 시작 시간
     EndDate DATETIME NULL, -- 종료 시간
     etc VARCHAR(100) NULL, -- 기타
-    PRIMARY KEY (PlanID), -- 
-    FOREIGN KEY (OrderID) REFERENCES ERP.WorkOrders(OrderID)
+    PRIMARY KEY (PlanID)
+    
     
 );
 
@@ -489,13 +488,13 @@ VALUES
 
 
 -- 14. 생산 계획 (ProductionPlanning) 테이블 더미 데이터
-INSERT INTO ERP.ProductionPlanning (OrderID, ProductID, StartDate, EndDate, etc)
+INSERT INTO ERP.ProductionPlanning (ProductID, StartDate, EndDate, etc)
 VALUES
-(1, 1, '2024-04-23 08:00:00', '2024-04-23 13:30:00', '일반 생산 계획'),
-(2, 2, '2024-05-01 09:00:00', '2024-05-01 14:00:00', '특별 생산 계획'),
-(3, 3, '2024-05-06 10:00:00', '2024-05-06 15:30:00', '일반 생산 계획'),
-(4, 4, '2024-05-10 08:30:00', '2024-05-10 12:30:00', NULL),
-(5, 5, '2024-06-01 07:45:00', '2024-06-01 13:45:00', NULL);
+(1, '2024-04-23 08:00:00', '2024-04-23 13:30:00', '일반 생산 계획'),
+(2, '2024-05-01 09:00:00', '2024-05-01 14:00:00', '특별 생산 계획'),
+(3, '2024-05-06 10:00:00', '2024-05-06 15:30:00', '일반 생산 계획'),
+(4, '2024-05-10 08:30:00', '2024-05-10 12:30:00', NULL),
+(5, '2024-06-01 07:45:00', '2024-06-01 13:45:00', NULL);
  
 
 
@@ -894,43 +893,48 @@ SELECT * FROM ERP.Users;
 SELECT * FROM ERP.coffee_materials;
 
 
+
+
+-- 간단
 SELECT 
-    p.OrderID,
-    p.ProductID,
-    p.StartDate,
-    p.EndDate,
-    p.etc,
-    w.Quantity AS plannedQuantity,
-    m.MaterialID,
-    i.MaterialName,
-    SUM(m.Quantity * w.Quantity) AS requiredMaterialQty, 
-    SUM(m.UnitPrice * m.Quantity * w.Quantity) AS materialCost,
-    SUM(m.TotalCost * w.Quantity) AS totalMrpCost
+    pp.PlanID AS planId, 
+    pp.OrderID AS orderId, 
+    pp.ProductID AS productId, 
+    pp.StartDate AS startDate, 
+    pp.EndDate AS endDate, 
+    wo.Quantity AS orderQuantity, 
+    p.ProductName AS productName 
 FROM 
-    ERP.ProductionPlanning p
+    ERP.ProductionPlanning pp 
 JOIN 
-    ERP.WorkOrders w ON p.OrderID = w.OrderID AND p.ProductID = w.ProductID
+    ERP.WorkOrders wo ON pp.OrderID = wo.OrderID 
 JOIN 
-    ERP.MBOM m ON p.ProductID = m.ItemID AND m.ItemType = 'Product' -- ItemType 조건 추가
+    ERP.Product p ON pp.ProductID = p.ProductID 
+ORDER BY 
+    pp.PlanID;
+
+
+
+-- 상세
+
+SELECT 
+    pp.PlanID AS planId, 
+    wo.Quantity AS orderQuantity,            -- 제품 수량
+   
+    mb.MaterialID AS materialId, 
+    mb.Quantity AS materialQuantity, 
+    mb.Unit AS unit, 
+    mb.UnitPrice AS materialUnitPrice, 
+    mb.TotalCost AS materialTotalCost, 
+    (wo.Quantity * mb.Quantity) AS TotalMaterialQuantity, 
+    (wo.Quantity * mb.Quantity * mb.UnitPrice) AS TotalCostBasedOnOrder 
+FROM 
+    ERP.ProductionPlanning pp 
 JOIN 
-    ERP.MaterialsInventory i ON m.MaterialID = i.MaterialID
+    ERP.WorkOrders wo ON pp.OrderID = wo.OrderID 
+JOIN 
+    ERP.Product p ON pp.ProductID = p.ProductID 
+JOIN 
+    ERP.MBOM mb ON pp.ProductID = mb.ItemID 
 WHERE 
-    p.ProductID = 1 -- 특정 ProductID 테스트용
-GROUP BY 
-    p.OrderID, 
-    p.ProductID, 
-    p.StartDate, 
-    p.EndDate, 
-    p.etc, 
-    w.Quantity, 
-    m.MaterialID, 
-    i.MaterialName;
-
-
-
-
-
-
-
-
-
+    pp.PlanID = 1; -- 특정 PlanID를 입력

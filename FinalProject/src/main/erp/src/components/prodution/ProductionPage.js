@@ -11,10 +11,12 @@ function ProductionPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/production-planning/data-by-product', {
-                    params: { productId: 1 } // 필요한 productId 값으로 변경
-                });
-                setData(response.data); 
+                // 변경된 경로로 요청
+                const response = await axios.get('http://localhost:8080/api/production-planning/basic');
+
+                const fetchedData = response.data;
+                
+                setData(fetchedData);
                 setIsDataLoaded(true);
             } catch (error) {
                 console.error("데이터를 불러오는데 실패했습니다:", error);
@@ -35,18 +37,19 @@ function ProductionPage() {
             <main className="production-content">
                 <div className="production-mainbar">
                     <div className="productionbar">
-                        <h1>생산관리/MRP 리스트</h1>
+                        <h1>생산관리</h1>
                         <button className="create-button" onClick={handleCreate}>생성</button>
                     </div>
                     <table className="production-table">
                         <thead>
                             <tr>
+                                <th>생산 계획 ID</th>
+                                <th>작업 지시 ID</th>
+                                <th>제품 ID</th>
                                 <th>생산계획기간</th>
-                                <th>상품품목</th>
-                                <th>생산계획수량</th>
-                                <th>MRP계산(생산원가)</th>
-                                <th>재료 필요량</th>
-                                <th>기타사항</th>
+                                <th>작업수량</th>
+                                <th>제품이름</th>
+                                <th>상세보기</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -54,12 +57,12 @@ function ProductionPage() {
                                 data.length > 0 ? (
                                     data.map((row, index) => (
                                         <tr key={index}>
+                                            <td>{row.planId || "N/A"}</td>
+                                            <td>{row.orderId || "N/A"}</td>
+                                            <td>{row.productId || "N/A"}</td>
                                             <td>{`${row.startDate} ~ ${row.endDate}`}</td>
-                                            <td>{row.productId}</td>
-                                            <td>{row.quantity || "N/A"}</td>
-                                            <td>{row.mrpCost || "N/A"}</td>
-                                            <td>{row.requiredMaterialQty || "N/A"}</td>
-                                            <td>{row.etc || "N/A"}</td>
+                                            <td>{row.orderQuantity || "N/A"}</td>
+                                            <td>{row.productName || "N/A"}</td>
                                         </tr>
                                     ))
                                 ) : (

@@ -1,46 +1,38 @@
 package com.ERP.FinalProject.domain.production.planning.service;
 
+import com.ERP.FinalProject.domain.production.planning.model.ProductionPlanning;
 import com.ERP.FinalProject.domain.production.planning.model.ProductionPlanningDTO;
 import com.ERP.FinalProject.domain.production.planning.repository.ProductionPlanningRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
 public class ProductionPlanningService {
 
-    private final ProductionPlanningRepository repository;
+    private final ProductionPlanningRepository productionPlanningRepository;
+    private final DataSource dataSource; // DataSource 추가
 
-    // 생성자를 통한 의존성 주입
-    @Autowired
-    public ProductionPlanningService(ProductionPlanningRepository repository) {
-        this.repository = repository;
+    public ProductionPlanningService(ProductionPlanningRepository productionPlanningRepository, DataSource dataSource) {
+        this.productionPlanningRepository = productionPlanningRepository;
+        this.dataSource = dataSource; // DataSource 초기화
     }
 
-    // 특정 ProductID로 가공된 생산 계획과 MRP 데이터를 DTO로 반환
-    public List<ProductionPlanningDTO> getProcessedPlanningDataByProductId(Integer productId) {
-        List<Object[]> rawData = repository.findProductionAndMrpDataByProductId(productId);
-        List<ProductionPlanningDTO> processedData = new ArrayList<>();
+    // 기본 Production Planning DTO를 조회
+    public List<ProductionPlanningDTO> getBasicProductionPlanning() {
+        return productionPlanningRepository.getBasicProductionPlanningData();
+    }
 
-        for (Object[] row : rawData) {
-            int orderId = (Integer) row[0];
-            int productIdResult = (Integer) row[1];
-            String startDate = (String) row[2];
-            String endDate = (String) row[3];
-            int plannedQuantity = ((Number) row[4]).intValue();
-            int materialId = (Integer) row[5];
-            String materialName = (String) row[6];
-            double requiredMaterialQty = ((Number) row[7]).doubleValue();
-            double materialCost = ((Number) row[8]).doubleValue();
-            double totalMrpCost = ((Number) row[9]).doubleValue();
-            String etc = (String) row[10];
-
-            processedData.add(new ProductionPlanningDTO(orderId, productIdResult, startDate, endDate, plannedQuantity,
-                    materialId, materialName, requiredMaterialQty, materialCost, totalMrpCost, etc));
+    // Production Planning 데이터 저장
+    public boolean saveProductionPlanning(ProductionPlanning productionPlanning) {
+        try (Connection connection = dataSource.getConnection()) { // 데이터베이스 연결
+            return productionPlanningRepository.save(productionPlanning, connection);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // 예외 발생 시 false 반환
         }
-
-        return processedData;
     }
 }
