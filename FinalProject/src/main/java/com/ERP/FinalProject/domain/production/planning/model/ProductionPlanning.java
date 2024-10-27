@@ -1,81 +1,34 @@
 package com.ERP.FinalProject.domain.production.planning.model;
 
-import javax.persistence.*;
+import lombok.Data;
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Data
 @Entity
 @Table(name = "ProductionPlanning", schema = "ERP")
 public class ProductionPlanning {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer planID;
+    @Column(name = "PlanID")
+    private int planId;
 
-    private Integer orderID;
-    private Integer productID;
+    @Column(name = "ProductID")
+    private int productId;
+
+    @Column(name = "StartDate")
     private LocalDateTime startDate;
+
+    @Column(name = "EndDate")
     private LocalDateTime endDate;
 
-    // 계산 필드 (데이터베이스에 저장되지 않음)
-    @Transient
-    private Integer productionCalculation;
-
-    @Transient
-    private Integer mrpCalculation;
-
-    // Getters and Setters
-    public Integer getPlanID() {
-        return planID;
-    }
-
-    public void setPlanID(Integer planID) {
-        this.planID = planID;
-    }
-
-    public Integer getOrderID() {
-        return orderID;
-    }
-
-    public void setOrderID(Integer orderID) {
-        this.orderID = orderID;
-    }
-
-    public Integer getProductID() {
-        return productID;
-    }
-
-    public void setProductID(Integer productID) {
-        this.productID = productID;
-    }
-
-    public LocalDateTime getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDateTime startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDateTime getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDateTime endDate) {
-        this.endDate = endDate;
-    }
-
-    public Integer getProductionCalculation() {
-        return productionCalculation;
-    }
-
-    public void setProductionCalculation(Integer productionCalculation) {
-        this.productionCalculation = productionCalculation;
-    }
-
-    public Integer getMrpCalculation() {
-        return mrpCalculation;
-    }
-
-    public void setMrpCalculation(Integer mrpCalculation) {
-        this.mrpCalculation = mrpCalculation;
-    }
+    @Column(name = "etc")
+    private String etc;
 }

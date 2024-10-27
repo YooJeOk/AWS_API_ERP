@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './production.css';
+import axios from 'axios';
 
 function InputForm() {
     const [formData, setFormData] = useState({
         productionPeriodStart: null,
         productionPeriodEnd: null,
-        baseItem: '',
-        productionCalculation: '',
-        mrpCalculation: '',
-        status: '',
-        others: ''
+        productId: '',  // 제품 ID 입력 필드
+        others: ''      // 기타 입력 필드 추가
     });
 
     const handlePeriodStartChange = (date) => {
@@ -35,9 +33,15 @@ function InputForm() {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('폼 제출됨:', formData);
+        try {
+            const response = await axios.post('/api/production-planning/create', formData);
+            alert(response.data);
+        } catch (error) {
+            console.error('데이터 저장 실패:', error);
+            alert('데이터 저장 중 오류가 발생했습니다.');
+        }
     };
 
     return (
@@ -45,10 +49,22 @@ function InputForm() {
             <div className="form-container">
                 <h1>생산계획 등록</h1>
                 <form id="input-form" onSubmit={handleSubmit}>
-
-                    {/* 생산계획 레이블 및 기간 선택 */}
+                    {/* 제품 ID 입력 필드 */}
                     <div className="form-group">
-                        <label>생산계획:</label>
+                        <label htmlFor="productId">제품 ID:</label>
+                        <input
+                            type="text"
+                            id="productId"
+                            name="productId"
+                            value={formData.productId}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    {/* 생산계획 기간 선택 (날짜 및 시간 포함) */}
+                    <div className="form-group">
+                        <label>생산계획기간:</label>
                         <div className="date-picker-wrapper">
                             <DatePicker
                                 selected={formData.productionPeriodStart}
@@ -56,7 +72,10 @@ function InputForm() {
                                 selectsStart
                                 startDate={formData.productionPeriodStart}
                                 endDate={formData.productionPeriodEnd}
-                                dateFormat="yyyy/MM/dd"
+                                showTimeSelect
+                                timeFormat="HH:mm"
+                                timeIntervals={30}  // 15분 간격으로 시간 선택
+                                dateFormat="yyyy/MM/dd HH:mm"
                                 placeholderText="시작 시간 선택"
                                 className="date-picker"
                             />
@@ -69,61 +88,17 @@ function InputForm() {
                                 startDate={formData.productionPeriodStart}
                                 endDate={formData.productionPeriodEnd}
                                 minDate={formData.productionPeriodStart}
-                                dateFormat="yyyy/MM/dd"
+                                showTimeSelect
+                                timeFormat="HH:mm"
+                                timeIntervals={30}  // 15분 간격으로 시간 선택
+                                dateFormat="yyyy/MM/dd HH:mm"
                                 placeholderText="종료 시간 선택"
                                 className="date-picker"
                             />
                         </div>
                     </div>
 
-                    <div className="form-group">
-                        <label htmlFor="base-item">기준품목:</label>
-                        <input
-                            type="text"
-                            id="base-item"
-                            name="baseItem"
-                            value={formData.baseItem}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="production-calculation">생산계획계산:</label>
-                        <input
-                            type="text"
-                            id="production-calculation"
-                            name="productionCalculation"
-                            value={formData.productionCalculation}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="mrp-calculation">MRP계산:</label>
-                        <input
-                            type="text"
-                            id="mrp-calculation"
-                            name="mrpCalculation"
-                            value={formData.mrpCalculation}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="status">생산계획/MRP현황:</label>
-                        <input
-                            type="text"
-                            id="status"
-                            name="status"
-                            value={formData.status}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
+                    {/* 기타 입력 필드 */}
                     <div className="form-group">
                         <label htmlFor="others">기타:</label>
                         <input

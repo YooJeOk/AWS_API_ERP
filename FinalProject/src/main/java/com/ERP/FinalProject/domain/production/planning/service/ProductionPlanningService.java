@@ -1,53 +1,38 @@
 package com.ERP.FinalProject.domain.production.planning.service;
 
 import com.ERP.FinalProject.domain.production.planning.model.ProductionPlanning;
+import com.ERP.FinalProject.domain.production.planning.model.ProductionPlanningDTO;
 import com.ERP.FinalProject.domain.production.planning.repository.ProductionPlanningRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
 public class ProductionPlanningService {
 
-    @Autowired
-    private ProductionPlanningRepository repository;
+    private final ProductionPlanningRepository productionPlanningRepository;
+    private final DataSource dataSource; // DataSource 추가
 
-    public List<ProductionPlanning> getAllPlanningData() {
-        List<ProductionPlanning> plans = repository.findAll();
-        plans.forEach(this::applyCalculations);
-        return plans;
+    public ProductionPlanningService(ProductionPlanningRepository productionPlanningRepository, DataSource dataSource) {
+        this.productionPlanningRepository = productionPlanningRepository;
+        this.dataSource = dataSource; // DataSource 초기화
     }
 
-    public List<ProductionPlanning> getPlanningDataByOrderId(Integer orderId) {
-        List<ProductionPlanning> plans = repository.findByOrderID(orderId);
-        plans.forEach(this::applyCalculations);
-        return plans;
+    // 기본 Production Planning DTO를 조회
+    public List<ProductionPlanningDTO> getBasicProductionPlanning() {
+        return productionPlanningRepository.getBasicProductionPlanningData();
     }
 
-    public List<ProductionPlanning> getPlanningDataByProductId(Integer productId) {
-        List<ProductionPlanning> plans = repository.findByProductID(productId);
-        plans.forEach(this::applyCalculations);
-        return plans;
-    }
-
-    public List<ProductionPlanning> getPlanningDataByStartDateRange(LocalDateTime start, LocalDateTime end) {
-        List<ProductionPlanning> plans = repository.findByStartDateBetween(start, end);
-        plans.forEach(this::applyCalculations);
-        return plans;
-    }
-
-    private void applyCalculations(ProductionPlanning plan) {
-        plan.setProductionCalculation(calculateProduction(plan));
-        plan.setMrpCalculation(calculateMRP(plan));
-    }
-
-    private int calculateProduction(ProductionPlanning plan) {
-        return plan.getOrderID() * 2; // 예시 계산식
-    }
-
-    private int calculateMRP(ProductionPlanning plan) {
-        return plan.getOrderID() * 3; // 예시 계산식
+    // Production Planning 데이터 저장
+    public boolean saveProductionPlanning(ProductionPlanning productionPlanning) {
+        try (Connection connection = dataSource.getConnection()) { // 데이터베이스 연결
+            return productionPlanningRepository.save(productionPlanning, connection);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // 예외 발생 시 false 반환
+        }
     }
 }
