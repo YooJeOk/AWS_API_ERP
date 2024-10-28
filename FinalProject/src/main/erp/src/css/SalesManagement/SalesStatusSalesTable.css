@@ -1,53 +1,53 @@
+/* SalesStatusSalesTable 컨테이너 */
 .SalesStatusSalesTable-box {
-  border: 4px solid #F0C490; /* Border 색상 */
-  padding: 10px;
+  border: 4px solid #F0C490;
+  padding: 2%;
   border-radius: 5px;
   text-align: center;
   width: 100%;
-  height: 130px;
-
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
 }
 .col{
   background-color: white;
-  width: 100px;
-  border: 9px solid #F6F6F6;
-  border-radius: 5px; /* 선택 사항: 테두리를 둥글게 할 수 있음 */
+}
+/* 개별 컬럼 스타일 */
+.col-md-3, .col-6 {
+  background-color: white;
+  border: 1px solid #F6F6F6;
+  border-radius: 5px;
+  padding: 2%;
+  box-sizing: border-box;
+  margin: auto;
 }
 
-.SalesStatusSalesTable-box .amount {
-  font-size: 24px;
+/* 금액 스타일 */
+.amount {
+  font-size: 1.5vw;
   font-weight: bold;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
-.SalesStatusSalesTable-box .label {
-  font-size: 14px;
+/* 레이블 스타일 */
+.label {
+  font-size: 1vw;
   color: gray;
- 
 }
 
-.today {
-  color: #00a3ff;
+/* today, this-week, this-month, this-year의 기본 스타일 */
+.today, .this-week, .this-month, .this-year {
+  color: inherit;
   text-align: left;
 }
+
+/* 오늘, 주간, 월간, 연간 하위 정보 스타일 */
 .todaysub {
   display: flex;
-  justify-content: space-between; /* 요소 간의 간격을 조정할 수 있음 */
-  padding-bottom: 10px;
-  
-}
-
-.this-week {
-  color: #ff6f6f;
-  text-align: left;
-}
-
-.this-month {
-  color: #00a3ff;
-  text-align: left;
-}
-
-.this-year {
-  color: #9370db;
-  text-align: left;
+  justify-content: space-between;
+  padding-bottom: 2%;
+  width: 100%;
+  box-sizing: border-box;
 }

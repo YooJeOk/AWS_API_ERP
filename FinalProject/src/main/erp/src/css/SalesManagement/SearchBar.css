@@ -1,4 +1,9 @@
 
+/* 기본 테이블 스타일 */
+.table {
+  width: 100%; /* 테이블 너비를 100%로 설정 */
+  table-layout: fixed; /* 열 너비 고정 */
+}
 .custom-padding {
     padding-top: 18px;
     color: #703103;
