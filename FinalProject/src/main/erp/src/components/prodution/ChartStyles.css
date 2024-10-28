@@ -72,3 +72,18 @@
 .line-name {
     margin-top: 20px;
 }
+
+
+
+
+
+
+
+.chart-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.chart-box {
+    margin: 10px;
+}
