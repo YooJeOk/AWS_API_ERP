@@ -31,10 +31,6 @@ import SalesDwtdAnalysis from '../../erp/src/pages/SalesManagement/SalesDwtdAnal
 import SalesProductAnalysis from '../../erp/src/pages/SalesManagement/SalesProductAnalysis';
 import SalesStatus from '../../erp/src/pages/SalesManagement/SalesStatus';
 
-//키오스크 관리
-import KioskSelect from './pages/KioskManagement/KioskSelect';
-import KioskSidebar from './components/KioskManagement/KioskSidebar';
-
 function App() {
     return (
         <Router>
@@ -72,11 +68,6 @@ function App() {
                     <Route path="/SalesDwtdAnalysis" element={<SalesSidebarWrapper><SalesDwtdAnalysis /></SalesSidebarWrapper>} />
                     <Route path="/SalesProductAnalysis" element={<SalesSidebarWrapper><SalesProductAnalysis /></SalesSidebarWrapper>} />
                     <Route path="/SalesStatus" element={<SalesSidebarWrapper><SalesStatus /></SalesSidebarWrapper>} />
-
-                    {/* 키오스크 관리  */}
-                    <Route path="/KioskSelect" element={<KioskSidebarWrapper><KioskSelect/></KioskSidebarWrapper>} />
-
-
                 </Routes>
             </div>
         </Router>
@@ -95,14 +86,6 @@ const ProductionSidebarWrapper = ({ children }) => (
 const SalesSidebarWrapper = ({ children }) => (
     <div className="main-content" style={{ padding: '0%' }}>
         <SalesSidebar />
-        {children}
-    </div>
-);
-
-// Wrapper 컴포넌트: KioskSidebar를 키오스크 관리 페이지에 적용
-const KioskSidebarWrapper = ({ children }) => (
-    <div className="main-content" style={{ padding: '0%' }}>
-        <KioskSidebar />
         {children}
     </div>
 );
