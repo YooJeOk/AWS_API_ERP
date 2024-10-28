@@ -19,7 +19,7 @@ const EarnPage = () => {
   };
 
   const handlePrevious = () => {
-    navigate('/detail', { state: { cartItems } });
+    navigate('/detail', { state: { cartItems ,userData} });
   };
   const handleNext = async () => {
     try {
