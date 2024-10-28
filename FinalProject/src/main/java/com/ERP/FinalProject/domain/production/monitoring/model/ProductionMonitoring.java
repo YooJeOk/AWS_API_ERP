@@ -6,11 +6,11 @@ import javax.persistence.Id;
 import javax.persistence.Column;
 
 @Entity
-@Table(name = "ProductionMonitoring")  // 테이블 이름을 정확하게 지정
+@Table(name = "ProductionMonitoring")  
 public class ProductionMonitoring {
 
     @Id
-    @Column(name = "MonitorID")  // Primary Key
+    @Column(name = "MonitorID")  
     private Long monitorId;
 
     @Column(name = "OrderID")
