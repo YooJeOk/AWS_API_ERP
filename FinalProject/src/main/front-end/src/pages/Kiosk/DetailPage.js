@@ -10,20 +10,20 @@ const DetailPage = () => {
   const totalAmount = cartItems.reduce((sum, item) => sum + item.totalPrice, 0);
 
 
-  const playTTS = async (message) => {
-    try {
-      const response = await fetch(`http://localhost:8080/api/tts?text=${encodeURIComponent(message)}`);
-      if (!response.ok) {
-        throw new Error('TTS API request failed');
-      }
-      const blob = await response.blob();
-      const audioUrl = URL.createObjectURL(blob);
-      const audio = new Audio(audioUrl);
-      audio.play();
-    } catch (error) {
-      console.error("Failed to play TTS message:", error);
-    }
-  };
+  // const playTTS = async (message) => {
+  //   try {
+  //     const response = await fetch(`http://localhost:8080/api/tts?text=${encodeURIComponent(message)}`);
+  //     if (!response.ok) {
+  //       throw new Error('TTS API request failed');
+  //     }
+  //     const blob = await response.blob();
+  //     const audioUrl = URL.createObjectURL(blob);
+  //     const audio = new Audio(audioUrl);
+  //     audio.play();
+  //   } catch (error) {
+  //     console.error("Failed to play TTS message:", error);
+  //   }
+  // };
 
   const handleCancel = () => {
     navigate('/');
@@ -35,7 +35,7 @@ const DetailPage = () => {
 
   const handleNext = async () => {
     try {
-      await playTTS('적립을 선택해 주세요'); 
+      // await playTTS('적립을 선택해 주세요'); 
       navigate('/earn', { state: { cartItems} });
     } catch (error) {
       console.error("Failed to play TTS message:", error);
