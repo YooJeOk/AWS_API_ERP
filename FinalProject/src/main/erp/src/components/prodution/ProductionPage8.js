@@ -1,25 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 import axios from 'axios';
-import './ProductionPage.css';
+
 import './ChartStyles.css';
 
 function ProductionMonitoringPage() {
     const [data, setData] = useState([
-        { orderId: 1, productionRate: 0, temperature: 0, humidity: 0 }, // 초기 데이터 설정
-        { orderId: 2, productionRate: 0, temperature: 0, humidity: 0 },
-        { orderId: 3, productionRate: 0, temperature: 0, humidity: 0 },
-        { orderId: 4, productionRate: 0, temperature: 0, humidity: 0 }
+        { orderId: 1, productionRate: 0, temperature: 25, humidity: 50 }, 
+        { orderId: 2, productionRate: 0, temperature: 25, humidity: 50 },
+        { orderId: 3, productionRate: 0, temperature: 25, humidity: 50 },
+        { orderId: 4, productionRate: 0, temperature: 25, humidity: 50 }
     ]);
-    const [isComplete, setIsComplete] = useState(false);
 
     useEffect(() => {
         const fetchData = async (orderId, index) => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/production-monitoring/data?orderId=${orderId}`);
+                const response = await axios.get(`http://localhost:8080/monitoring/data/${orderId}`);
+                const newData = response.data;
+
+                const sanitizedData = {
+                    orderId: orderId,
+                    productionRate: newData && newData.productionRate ? parseFloat(newData.productionRate) : 0,
+                    temperature: newData && newData.temperature ? parseFloat(newData.temperature) : 0,
+                    humidity: newData && newData.humidity ? parseFloat(newData.humidity) : 0,
+                };
+
                 setData((prevData) => {
                     const updatedData = [...prevData];
-                    updatedData[index] = response.data; // 데이터 업데이트
+                    updatedData[index] = sanitizedData;
+                    console.log("Updated data:", updatedData); // 데이터 갱신 로그 확인
                     return updatedData;
                 });
             } catch (error) {
@@ -28,24 +37,11 @@ function ProductionMonitoringPage() {
         };
 
         const intervals = [1, 2, 3, 4].map((orderId, index) => 
-            setInterval(() => {
-                if (!isComplete) fetchData(orderId, index);
-            }, 5000)
+            setInterval(() => fetchData(orderId, index), 5000)
         );
 
-        const checkCompletion = setInterval(() => {
-            if (data.every(item => item.productionRate !== 0)) {
-                setIsComplete(true);
-                intervals.forEach(clearInterval); // 모든 요청이 완료되면 모든 타이머 종료
-                clearInterval(checkCompletion);
-            }
-        }, 1000);
-
-        return () => {
-            intervals.forEach(clearInterval);
-            clearInterval(checkCompletion);
-        };
-    }, [isComplete, data]);
+        return () => intervals.forEach(clearInterval);
+    }, []);
 
     const COLORS = ['#FF0000', '#00FF00'];
     const lineNames = ['1라인', '2라인', '3라인', '4라인'];
@@ -78,39 +74,37 @@ function ProductionMonitoringPage() {
                                 <h3 className="line-name" style={{ fontSize: '1.5em', fontWeight: 'bold', textAlign: 'center' }}>
                                     {lineNames[index]}
                                 </h3>
-                                <ResponsiveContainer width={350} height={300}>
-                                    <PieChart>
-                                        <Pie
-                                            data={[
-                                                { name: '생산률', value: item.productionRate },
-                                                { name: '남은 비율', value: 100 - item.productionRate }
-                                            ]}
-                                            dataKey="value"
-                                            cx="50%"
-                                            cy="50%"
-                                            innerRadius={80}
-                                            outerRadius={140}
-                                            startAngle={90}
-                                            endAngle={-270}
-                                            paddingAngle={0}
-                                        >
-                                            {[COLORS[1], COLORS[0]].map((color, idx) => (
-                                                <Cell key={`cell-${idx}`} fill={color} />
-                                            ))}
-                                        </Pie>
-                                        <Tooltip />
-                                        <text
-                                            x="50%"
-                                            y="50%"
-                                            textAnchor="middle"
-                                            dominantBaseline="middle"
-                                            fontSize={24}
-                                            fontWeight="bold"
-                                        >
-                                            {item.productionRate}%
-                                        </text>
-                                    </PieChart>
-                                </ResponsiveContainer>
+                                <PieChart width={350} height={300}>
+                                    <Pie
+                                        data={[
+                                            { name: '생산률', value: item.productionRate },
+                                            { name: '남은 비율', value: 100 - item.productionRate }
+                                        ]}
+                                        dataKey="value"
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius={80}
+                                        outerRadius={140}
+                                        startAngle={90}
+                                        endAngle={-270}
+                                        paddingAngle={0}
+                                    >
+                                        {[COLORS[1], COLORS[0]].map((color, idx) => (
+                                            <Cell key={`cell-${idx}`} fill={color} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip />
+                                    <text
+                                        x="50%"
+                                        y="50%"
+                                        textAnchor="middle"
+                                        dominantBaseline="middle"
+                                        fontSize={24}
+                                        fontWeight="bold"
+                                    >
+                                        {item.productionRate}%
+                                    </text>
+                                </PieChart>
                             </div>
                             <div className="metrics-container">
                                 <div className={`temperature ${getTemperatureClass(item.temperature)}`}>
@@ -125,7 +119,6 @@ function ProductionMonitoringPage() {
                             </div>
                         </div>
                     ))}
-                    {isComplete && <p style={{ textAlign: 'center', fontSize: '1.5em', color: 'red' }}>모든 데이터가 전송되었습니다.</p>}
                 </div>
             </main>
         </div>
