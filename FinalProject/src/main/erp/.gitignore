@@ -46,10 +46,5 @@ node_modules/
 .cache/
 
 # .eslintcache 파일 제외
-.eslintcache
-# Ignore node_modules folder
-node_modules/
 
-# Ignore cache files
-.cache/
-*.pack
+.eslintcache
