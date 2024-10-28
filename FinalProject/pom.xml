@@ -67,7 +67,7 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!-- CSV파일 읽는거 -->
+		<!-- CSV 파일 읽기 -->
 		<dependency>
 			<groupId>com.opencsv</groupId>
 			<artifactId>opencsv</artifactId>
@@ -80,7 +80,29 @@
 			<version>1.9.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>io.awspring.cloud</groupId>
+			<artifactId>spring-cloud-aws-messaging</artifactId>
+			<version>2.3.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-sns</artifactId>
+			<version>1.12.526</version> <!-- 최신 버전 사용 -->
+		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-aws-messaging</artifactId>
+			<version>2.2.6.RELEASE</version>
+		</dependency>
+
+		<!-- AWS SDK for SNS -->
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>sns</artifactId>
+			<version>2.20.21</version>
+		</dependency>
 
 		<!-- Testing Dependencies -->
 		<dependency>
