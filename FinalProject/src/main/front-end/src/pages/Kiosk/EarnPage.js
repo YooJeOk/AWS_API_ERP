@@ -23,7 +23,7 @@ const EarnPage = () => {
   };
   const handleNext = async () => {
     try {
-      await playTTS('결제 방식을 선택해 주세요'); 
+      // await playTTS('결제 방식을 선택해 주세요'); 
       navigate('/payment', { state: { cartItems, userData } });
     } catch (error) {
       console.error("Failed to play TTS message:", error);
