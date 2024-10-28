@@ -37,7 +37,7 @@ function ProductionPage() {
             <main className="production-content">
                 <div className="production-mainbar">
                     <div className="productionbar">
-                        <h1>생산관리</h1>
+                        <h1>생산 계획 조회</h1>
                         <button className="create-button" onClick={handleCreate}>생성</button>
                     </div>
                     <table className="production-table">

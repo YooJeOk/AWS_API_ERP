@@ -45,7 +45,7 @@ function InputArrivalForm() {
             <main className="production-content">
                 <div className="production-mainbar">
                     <div className="productionbar">
-                        <h1>입고 등록</h1>
+                        <h1>입고 등록 조회</h1>
                         <button className="create-button">생성</button>
                     </div>
                     <table className="production-table">

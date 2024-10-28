@@ -28,7 +28,7 @@ function InputForm4() {
     return (
         <div className="custom-container">
             <div className="form-container">
-                <h1>작업 주문</h1>
+                <h1>작업 주문 등록</h1>
                 <form id="input-form" onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="production-date">주문 날짜:</label>

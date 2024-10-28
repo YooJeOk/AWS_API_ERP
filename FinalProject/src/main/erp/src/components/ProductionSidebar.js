@@ -33,6 +33,8 @@ function ProductionSidebar() {
                 <div className="dropdown">
                 <button className="menu-item" style={{backgroundColor: '#F0C490', color:'white'}}>생산 계획 관리</button>
                     <ul className="dropdown-menu">
+                        <li><Link to="/input4">● 작업 주문 등록</Link></li>
+                        <li><Link to="/production4">● 작업 주문 조회</Link></li>
                         <li><Link to="/input">● 생산 계획 등록</Link></li>
                         <li><Link to="/production">● 생산 계획 조회</Link></li>
                     </ul>
@@ -46,16 +48,14 @@ function ProductionSidebar() {
                         <li><Link to="/production8">● 생산 현황 모니터링</Link></li>
                         <li><Link to="/input3">● 작업 내역 등록</Link></li>
                         <li><Link to="/production3">● 작업 내역 조회</Link></li>
-                        <li><Link to="/input4">● 작업 주문</Link></li>
-                        <li><Link to="/production4">● 작업 조회</Link></li>
+                        
                     </ul>
                 </div>
 
                 <div className="dropdown">
                 <button className="menu-item" style={{backgroundColor: '#F0C490', color:'white'}}>소요량 관리</button>
                     <ul className="dropdown-menu">
-                        <li><Link to="/input8">● 소요량 계산</Link></li>
-                        <li><Link to="/input5">● 소요량 현황</Link></li>
+                        <li><Link to="/input8">● 소요량 등록</Link></li>
                         <li><Link to="/production5">● 소요량 조회</Link></li>
                     </ul>
                 </div>
@@ -74,7 +74,7 @@ function ProductionSidebar() {
                 <button className="menu-item" style={{backgroundColor: '#F0C490', color:'white'}}>생산실적 관리</button>
                     <ul className="dropdown-menu">
                         <li><Link to="/input9">● 생산실적 등록</Link></li>
-                        <li><Link to="/production9">● 날짜별 가동율 실적</Link></li>
+                        <li><Link to="/production9">● 날짜별 가동율 실적 조회</Link></li>
                     </ul>
                 </div>
             </div>
