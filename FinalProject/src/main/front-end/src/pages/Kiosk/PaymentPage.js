@@ -5,6 +5,7 @@ import OrderSummary from '../../components/Kiosk/OrderSummary';
 import PaymentModal from '../../components/Kiosk/PaymentModal';
 
 import axios from 'axios';
+import CouponModal from '../../components/Kiosk/CouponModal';
 
 const PaymentPage = () => {
   const navigate = useNavigate();
@@ -12,10 +13,11 @@ const PaymentPage = () => {
   const cartItems = location.state?.cartItems || [];
   const userData = location.state?.userData || null;
 
-  const [discountAmount] = useState(1500);
+  const [discountAmount, setDiscountAmount] = useState(0);
   const totalAmount = cartItems.reduce((sum, item) => sum + item.totalPrice, 0);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const [showCouponModal, setShowCouponModal] = useState(false);
 
   const playClickSound = () => {
     const audio = new Audio('/sounds/mouth-bass.mp3');
@@ -24,15 +26,42 @@ const PaymentPage = () => {
     });
   };
 
-  // 포트원 스크립트 로드
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = "https://cdn.iamport.kr/v1/iamport.js";
-    document.body.appendChild(script);
+    // 포트원 스크립트 로드
+    const portOneScript = document.createElement('script');
+    portOneScript.src = "https://cdn.iamport.kr/v1/iamport.js";
+    document.body.appendChild(portOneScript);
+
+    // 네이버페이 스크립트 로드
+    const naverPayScript = document.createElement('script');
+    naverPayScript.src = "https://nsp.pay.naver.com/sdk/js/naverpay.min.js";
+    document.body.appendChild(naverPayScript);
+
     return () => {
-      document.body.removeChild(script);
+      document.body.removeChild(portOneScript);
+      document.body.removeChild(naverPayScript);
     };
   }, []);
+
+  // const handleNaverPayment = () => {
+  //   if (window.Naver) {
+  //     const oPay = window.Naver.Pay.create({
+  //       "mode": "development", // development or production
+  //       "clientId": "HN3GGCMDdTgGUfl0kFCo", // clientId
+  //        "chainId": "M3ZnVnhIK3hzWkd" ,// chainId
+  //     });
+
+  //     oPay.open({
+  //       "merchantUserKey": "np_jeihb592280",
+  //       "merchantPayKey": "20241028cQ1px5",
+  //       "productName": "Kiosk Order Payment",
+  //       "totalPayAmount": totalAmount - discountAmount,
+  //       "taxScopeAmount": totalAmount - discountAmount,
+  //       "taxExScopeAmount": "0",
+  //       "returnUrl": "https://developers.pay.naver.com/user/sand-box/payment"
+  //     });
+  //   }
+  // };
 
   const handleCancel = () => {
     navigate('/');
@@ -43,61 +72,115 @@ const PaymentPage = () => {
   };
 
 
-  const handlePaymentClick = (paymentType) => {
-    const { IMP } = window;
-    IMP.init('imp71261721'); 
+const handlePaymentClick = (paymentType) => {
+  if (paymentType === '네이버페이') {
+    if (window.Naver) {
+      const oPay = window.Naver.Pay.create({
+        "mode": "development",
+        "clientId": "HN3GGCMDdTgGUfl0kFCo",
+        "chainId": "M3ZnVnhIK3hzWkd",
+      });
 
+      oPay.open({
+        "merchantUserKey": "np_jeihb592280",
+        "merchantPayKey": "20241028cQ1px5",
+        "productName": "Kiosk Order Payment",
+        "totalPayAmount": totalAmount - discountAmount,
+        "taxScopeAmount": totalAmount - discountAmount,
+        "taxExScopeAmount": "0",
+        "returnUrl": "http://localhost:3000/payment"
+      });
+
+      window.addEventListener('message', async function(e) {
+        if (e.data.resultCode === "Success") {
+          console("네이버페이 결제 성공")
+          handlePaymentSuccess(paymentType);
+        } else if (e.data.resultCode === "Fail") {
+          handlePaymentFailure(e.data.resultMessage);
+        }
+      });
+    }
+  } else {
+    const { IMP } = window;
+    IMP.init('imp71261721');
     IMP.request_pay({
-      pg: paymentType === '카카오페이' ? 'kakaopay' : paymentType === '네이버페이' ? 'naverpay' : 'tosspay',
+      pg: paymentType === '카카오페이' ? 'kakaopay' : 'tosspay',
       pay_method: 'card',
-      amount: totalAmount,
+      amount: totalAmount - discountAmount,
       name: 'Kiosk Order Payment',
     }, async (response) => {
       if (response.success) {
-        setModalMessage(`${paymentType} 결제가 완료되었습니다.`);
-        setShowModal(true);
-  
-        try {
-          const saleData = {
-            salesRecords: {
-              paymentType,
-              totalSalePrice: totalAmount,
-              orderAmount: totalAmount + discountAmount,
-              discountAmount,
-            },
-            cartItems: cartItems.map(item => ({
-              productId: item.type === 'bread' ? item.id : null,
-              coffeeId: item.type === 'coffee' ? item.id : null,
-              quantity: item.quantity,
-              totalPrice: item.totalPrice,
-              type: item.type,
-              options: item.type === 'coffee' ? {
-                temperature: item.temperature,
-                size: item.options.size,
-                sizeCharge: item.options.sizeCharge,
-                additionalOptions: item.options.additionalOptions.map(option => ({
-                  id: option.id,
-                  name: option.name,
-                  quantity: option.quantity,
-                  price: option.price,
-                }))
-              } : null,
-            })),
-            userData,
-          };
-  
-          console.log('Sending data to server:', JSON.stringify(saleData, null, 2));
-  
-          const response = await axios.post('/api/sales', saleData);
-          console.log('Server response:', response.data);
-        } catch (error) {
-          console.error("판매 기록 저장 실패", error.response ? error.response.data : error.message);
-        }
+        handlePaymentSuccess(paymentType);
       } else {
-        setModalMessage(`결제가 실패하였습니다: ${response.error_msg}`);
-        setShowModal(true);
+        handlePaymentFailure(response.error_msg);
       }
     });
+  }
+};
+
+const handlePaymentSuccess = async (paymentType) => {
+  setModalMessage(`${paymentType} 결제가 완료되었습니다.`);
+  setShowModal(true);
+  try {
+    const saleData = {
+      salesRecords: {
+        paymentType,
+        totalSalePrice: totalAmount - discountAmount,
+        orderAmount: totalAmount,
+        discountAmount,
+      },
+      cartItems: cartItems.map(item => ({
+        productId: item.type === 'bread' ? item.id : null,
+        coffeeId: item.type === 'coffee' ? item.id : null,
+        quantity: item.quantity,
+        totalPrice: item.totalPrice,
+        type: item.type,
+        options: item.type === 'coffee' ? {
+          temperature: item.temperature,
+          size: item.options.size,
+          sizeCharge: item.options.sizeCharge,
+          additionalOptions: item.options.additionalOptions.map(option => ({
+            id: option.id,
+            name: option.name,
+            quantity: option.quantity,
+            price: option.price,
+          }))
+        } : null,
+      })),
+      userData,
+    };
+
+    console.log('Sending data to server:', JSON.stringify(saleData, null, 2));
+
+    const response = await axios.post('/api/sales', saleData);
+    console.log('Server response:', response.data);
+  } catch (error) {
+    console.error("판매 기록 저장 실패", error.response ? error.response.data : error.message);
+  }
+};
+
+const handlePaymentFailure = (errorMessage) => {
+  setModalMessage(`결제가 실패하였습니다: ${errorMessage}`);
+  setShowModal(true);
+};
+
+  const handleStampCouponClick = () => {
+    if (!userData || userData.coupon === 0) {
+      setModalMessage('사용할 쿠폰의 개수가 없습니다.');
+      setShowModal(true);
+    } else {
+      setModalMessage(`쿠폰을 사용하시겠습니까?\n보유한 쿠폰 개수: ${userData.coupon}`);
+      setShowCouponModal(true);
+    }
+  };
+
+  const handleCouponUse = (useIt) => {
+    if (useIt) {
+      setDiscountAmount(1500);
+    } else {
+      setDiscountAmount(0);
+    }
+    setShowCouponModal(false);
   };
 
   const closeModal = () => {
@@ -111,7 +194,7 @@ const PaymentPage = () => {
         <div className="payment-text fs-4 px-1">카드 결제</div>
 
         <div className="payment-category mt-2 fs-5 text-bold">
-          <div className="naver-payment" onClick={() =>{playClickSound(); handlePaymentClick('네이버페이')}}>
+          <div className="naver-payment" onClick={() => { playClickSound(); handlePaymentClick('네이버페이') }}>
             <svg viewBox="0 0 277 105" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M224.585 0C253.528 0 277 23.51 277 52.5C277 81.49 253.528 105 224.585 105H52.4148C23.4719 105 0 81.49 0 52.5C0 23.51 23.4719 0 52.4148 0H224.585Z" fill="#00DE5A" />
               <path d="M52.5013 90.5599C31.4813 90.5599 14.4414 73.5199 14.4414 52.4999C14.4414 31.4799 31.4813 14.4399 52.5013 14.4399C73.5213 14.4399 90.5614 31.4799 90.5614 52.4999C90.5714 73.5199 73.5313 90.5599 52.5013 90.5599ZM59.8513 33.4599V54.39L45.1414 33.4599H33.4713V71.52H45.1614V50.59L59.8713 71.52H71.5414V33.4599H59.8513Z" fill="black" />
@@ -119,18 +202,18 @@ const PaymentPage = () => {
             </svg>
             <div>네이버페이</div>
           </div>
-          <div className="kakao-payment" onClick={() => {playClickSound(); handlePaymentClick('카카오페이')}}>
+          <div className="kakao-payment" onClick={() => { playClickSound(); handlePaymentClick('카카오페이') }}>
             <img src="images/payIcon/kakao.png" alt="Kakao Pay" />
             <div>카카오페이</div>
           </div>
-          <div className="toss-payment" onClick={() => {playClickSound(); handlePaymentClick('토스페이')}}>
+          <div className="toss-payment" onClick={() => { playClickSound(); handlePaymentClick('토스페이') }}>
             <img src="images/payIcon/toss12.webp" alt="Toss Pay" />
             <div>토스페이</div>
           </div>
         </div>
         <div className="stamp-container">
           <div className="stamp-text fs-4 px-1 mt-3">스탬프 사용</div>
-          <div className="stamp-button mt-2 fs-5 text-bold">
+          <div className="stamp-button mt-2 fs-5 text-bold" onClick={handleStampCouponClick}>
             <img src="images/payIcon/stamp.png" alt="Stamp" />
             <div>스탬프</div>
             <div>쿠폰 결제</div>
@@ -138,6 +221,15 @@ const PaymentPage = () => {
         </div>
       </div>
       {showModal && <PaymentModal message={modalMessage} onClose={closeModal} />}
+      {showCouponModal && (
+        <CouponModal
+          message={modalMessage}
+          onClose={() => setShowCouponModal(false)}
+          onConfirm={() => handleCouponUse(true)}
+          onCancel={() => handleCouponUse(false)}
+        />
+      )}
+
       <OrderSummary
         orderAmount={totalAmount}
         discountAmount={discountAmount}
@@ -153,3 +245,7 @@ const PaymentPage = () => {
 };
 
 export default PaymentPage;
+
+//네이버나 토스는 결제끝나면 내가만든 결제완료 모달이뜨거든(데이터도 들어옴)?
+//근데 네이버는 네이버샌드박스로 연결되면서 결제승인 눌러도 db에 
+//모달도 안뜨고 데이터가 안들어와
