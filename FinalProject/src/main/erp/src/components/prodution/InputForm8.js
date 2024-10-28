@@ -30,7 +30,7 @@ function InputForm8() {
     return (
         <div className="custom-container">
             <div className="form-container">
-                <h1>소요량 계산</h1>
+                <h1>소요량 등록</h1>
                 <form id="input-form" onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="production-date">일자:</label>

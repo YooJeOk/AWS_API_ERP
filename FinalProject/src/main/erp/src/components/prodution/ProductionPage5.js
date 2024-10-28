@@ -30,7 +30,7 @@ function Production5() {
             <main className="production-content">
                 <div className="production-mainbar">
                     <div className="productionbar">
-                        <h1>소요량 현황</h1>
+                        <h1>소요량 조회</h1>
                         <button className="create-button">생성</button>
                     </div>
                     <table className="production-table">

@@ -28,7 +28,7 @@ function InputForm5() {
     return (
         <div className="custom-container">
             <div className="form-container">
-                <h1>소요량 현황</h1>
+                <h1>소요량 조회</h1>
                 <form id="input-form" onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="production-period">생산품목:</label>

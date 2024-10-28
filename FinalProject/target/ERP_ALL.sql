@@ -174,29 +174,15 @@ CREATE TABLE ERP.CoffeeOptionSalesDetails (
 );
 
 -- 13. 작업 지시 (WorkOrders)
--- 각 공정 단계에 대해 완료 여부를 기록할 수 있도록 BOOLEAN 컬럼을 추가했습니다. 각 단계가 완료될 때마다 해당 컬럼을 TRUE로 업데이트하여 
--- 각 제품의 공정 진행 상태를 추적할 수 있습니다. 이 방식으로 세부적인 생산 공정을 관리하고, 전체 생산 상태를 확인할 수 있습니다.
+
 CREATE TABLE ERP.WorkOrders (
     OrderID INT NOT NULL AUTO_INCREMENT, -- 작업 지시ID
     ProductID INT NOT NULL, -- 제품ID
     Quantity INT NULL, -- 수량
     StartDate DATETIME NULL, -- 시작 날짜
     EndDate DATETIME NULL, -- 종료 날짜
-    Status VARCHAR(50) NULL, -- 상태
-    Priority VARCHAR(50) NULL, -- 우선순위
-    WeighingComplete BOOLEAN DEFAULT FALSE, -- 재료 계량 완료 여부 (약 10분)
-    DoughComplete BOOLEAN DEFAULT FALSE, -- 반죽 완료 여부 (약 20분)
-    FirstFermentationComplete BOOLEAN DEFAULT FALSE, -- 1차 발효 완료 여부 (약 1시간)
-    DivisionComplete BOOLEAN DEFAULT FALSE, -- 분할 완료 여부 (약 10분)
-    RoundingComplete BOOLEAN DEFAULT FALSE, -- 둥글리기 완료 여부 (약 10분)
-    IntermediateFermentationComplete BOOLEAN DEFAULT FALSE, -- 중간 발효 완료 여부 (약 30분)
-    ShapingComplete BOOLEAN DEFAULT FALSE, -- 정형 완료 여부 (약 10분)
-    PanningComplete BOOLEAN DEFAULT FALSE, -- 팬닝 완료 여부 (약 10분)
-    SecondFermentationComplete BOOLEAN DEFAULT FALSE, -- 2차 발효 완료 여부 (약 1시간)
-    BakingComplete BOOLEAN DEFAULT FALSE, -- 굽기 완료 여부 (약 30분)
-    CoolingComplete BOOLEAN DEFAULT FALSE, -- 냉각 완료 여부 (약 20분)
-    PackagingComplete BOOLEAN DEFAULT FALSE, -- 포장 완료 여부 (약 10분)
-    etc VARCHAR(100) NULL, -- 기타
+	Priority VARCHAR(50) NULL, -- 우선순위
+	etc VARCHAR(100) NULL, -- 기타
     PRIMARY KEY (OrderID),
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
 );
@@ -213,6 +199,8 @@ CREATE TABLE ERP.ProductionPlanning (
     
 );
 
+
+
 -- 15. 생산 모니터링 (ProductionMonitoring)
 CREATE TABLE ERP.ProductionMonitoring (
     MonitorID INT NOT NULL AUTO_INCREMENT, -- 모니터링ID
@@ -224,6 +212,28 @@ CREATE TABLE ERP.ProductionMonitoring (
     StartTime DATETIME NULL, -- 작업 시작 시간
     PRIMARY KEY (MonitorID),
     FOREIGN KEY (OrderID) REFERENCES ERP.WorkOrders(OrderID)
+);
+
+-- 15-_1. ProductionProcessStatus 테이블 생성 -- 
+-- 각 공정 단계에 대해 완료 여부를 기록할 수 있도록 BOOLEAN 컬럼을 추가했습니다. 각 단계가 완료될 때마다 해당 컬럼을 TRUE로 업데이트하여 
+-- 각 제품의 공정 진행 상태를 추적할 수 있습니다. 이 방식으로 세부적인 생산 공정을 관리하고, 전체 생산 상태를 확인할 수 있습니다
+CREATE TABLE ProductionProcessStatus (
+    MonitorID INT NOT NULL,                        -- ProductionMonitoring 테이블과 연계
+	Status            VARCHAR(50) NULL,            -- 상태(대기,작업중,완료,위험,경고)
+    WeighingComplete BOOLEAN DEFAULT FALSE,        -- 재료 계량 완료 여부 (약 10분)
+    DoughComplete BOOLEAN DEFAULT FALSE,           -- 반죽 완료 여부 (약 20분)
+    FirstFermentationComplete BOOLEAN DEFAULT FALSE, -- 1차 발효 완료 여부 (약 1시간)
+    DivisionComplete BOOLEAN DEFAULT FALSE,        -- 분할 완료 여부 (약 10분)
+    RoundingComplete BOOLEAN DEFAULT FALSE,        -- 둥글리기 완료 여부 (약 10분)
+    IntermediateFermentationComplete BOOLEAN DEFAULT FALSE, -- 중간 발효 완료 여부 (약 30분)
+    ShapingComplete BOOLEAN DEFAULT FALSE,         -- 정형 완료 여부 (약 10분)
+    PanningComplete BOOLEAN DEFAULT FALSE,         -- 팬닝 완료 여부 (약 10분)
+    SecondFermentationComplete BOOLEAN DEFAULT FALSE, -- 2차 발효 완료 여부 (약 1시간)
+    BakingComplete BOOLEAN DEFAULT FALSE,          -- 굽기 완료 여부 (약 30분)
+    CoolingComplete BOOLEAN DEFAULT FALSE,         -- 냉각 완료 여부 (약 20분)
+    PackagingComplete BOOLEAN DEFAULT FALSE,       -- 포장 완료 여부 (약 10분)
+    PRIMARY KEY (MonitorID),
+    FOREIGN KEY (MonitorID) REFERENCES ProductionMonitoring(MonitorID)
 );
 -- 16. 생산 입고 (ProductionEntry)
 CREATE TABLE ERP.ProductionEntry (
@@ -474,15 +484,12 @@ SELECT MaterialID, '아이스크림', 1000 FROM ERP.MaterialsInventory WHERE Mat
 UNION ALL
 SELECT MaterialID, '우유', 500 FROM ERP.MaterialsInventory WHERE MaterialName = '우유';
 
--- 13. 작업 지시 (WorkOrders) 테이블 더미 데이터 (1~2시간 전에 종료되도록 수정)
-INSERT INTO ERP.WorkOrders (ProductID, Quantity, StartDate, EndDate, Status, Priority, WeighingComplete, DoughComplete, FirstFermentationComplete, DivisionComplete, RoundingComplete, IntermediateFermentationComplete, ShapingComplete, PanningComplete, SecondFermentationComplete, BakingComplete, CoolingComplete, PackagingComplete, etc)
-VALUES
-(1, 500, '2024-04-23 08:00:00', '2024-04-23 13:30:00', '진행 중', '높음', TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, NULL), 
-(2, 300, '2024-05-01 09:00:00', '2024-05-01 14:00:00', '대기', '중간', TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, NULL), 
-(3, 400, '2024-05-06 10:00:00', '2024-05-06 15:30:00', '완료', '낮음', TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, NULL), 
-(4, 200, '2024-05-10 08:30:00', '2024-05-10 12:30:00', '진행 중', '높음', TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, NULL), 
-(5, 350, '2024-06-01 07:45:00', '2024-06-01 12:45:00', '대기', '낮음', TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, NULL);
-
+-- 13. WorkOrders 테이블에 더미 데이터 삽입
+INSERT INTO ERP.WorkOrders (ProductID, Quantity, StartDate, EndDate, Priority, etc) VALUES
+(1, 100, '2024-10-28 08:00:00', '2024-10-28 16:00:00', 'High', '긴급 작업 요청'),
+(2, 200, '2024-10-29 09:00:00', '2024-10-29 17:00:00', 'Medium', '일반 작업 요청'),
+(3, 150, '2024-10-30 10:00:00', '2024-10-30 18:00:00', 'Low', '특별 공정 필요'),
+(4, 250, '2024-10-31 07:30:00', '2024-10-31 15:30:00', 'High', '정시 납기 요구');
 
 
 
@@ -490,22 +497,50 @@ VALUES
 -- 14. 생산 계획 (ProductionPlanning) 테이블 더미 데이터
 INSERT INTO ERP.ProductionPlanning (ProductID, StartDate, EndDate, etc)
 VALUES
-(1, '2024-04-23 08:00:00', '2024-04-23 13:30:00', '일반 생산 계획'),
-(2, '2024-05-01 09:00:00', '2024-05-01 14:00:00', '특별 생산 계획'),
-(3, '2024-05-06 10:00:00', '2024-05-06 15:30:00', '일반 생산 계획'),
-(4, '2024-05-10 08:30:00', '2024-05-10 12:30:00', NULL),
-(5, '2024-06-01 07:45:00', '2024-06-01 13:45:00', NULL);
+(1, '2024-04-23 08:00:00', '2024-04-23 13:30:00', '긴급 생산 계획'),
+(2, '2024-05-01 09:00:00', '2024-05-01 14:00:00', '일반 생산 계획'),
+(3, '2024-05-06 10:00:00', '2024-05-06 15:30:00', '특별 생산 계획'),
+(4, '2024-05-10 08:30:00', '2024-05-10 12:30:00', '정시 납기 계획');
+
  
 
 
--- 13. 생산 모니터링 (ProductionMonitoring) 테이블 더미 데이터 (OrderID 1, 4가 진행 중인 작업)
+-- 15. 생산 모니터링 (ProductionMonitoring) 테이블 더미 데이터 (OrderID 1, 4가 진행 중인 작업)
 -- INSERT INTO ERP.ProductionMonitoring (OrderID, Temperature, Humidity, ProductionRate, OperationTime, StartTime)
 -- VALUES
--- 진행 중인 작업 (OrderID 1) (온도와 습도를 적정 범위 내에서 설정)
+ -- 진행 중인 작업 (OrderID 1) (온도와 습도를 적정 범위 내에서 설정)
 -- (1, 28.0, 65, 83, 256, '2024-04-23 08:00:00'), -- 적정 온도 28°C+-5, 적정 습도 65%+-5
--- 진행 중인 작업 (OrderID 4) (온도와 습도를 적정 범위 내에서 설정)
+
+--  진행 중인 작업 (OrderID 4) (온도와 습도를 적정 범위 내에서 설정)
 -- (4, 27.5, 67, 25, 93, '2024-05-10 08:30:00'); -- 적정 온도 27.5°C+-5, 적정 습도 67%+-5
--- CSV로대체
+
+
+-- 상태(대기,작업중,완료,위험,경고)
+--     WeighingComplete BOOLEAN DEFAULT FALSE,        -- 재료 계량 완료 여부 (약 10분)
+--     DoughComplete BOOLEAN DEFAULT FALSE,           -- 반죽 완료 여부 (약 20분)
+--     FirstFermentationComplete BOOLEAN DEFAULT FALSE, -- 1차 발효 완료 여부 (약 1시간)
+--     DivisionComplete BOOLEAN DEFAULT FALSE,        -- 분할 완료 여부 (약 10분)
+--     RoundingComplete BOOLEAN DEFAULT FALSE,        -- 둥글리기 완료 여부 (약 10분)
+--     IntermediateFermentationComplete BOOLEAN DEFAULT FALSE, -- 중간 발효 완료 여부 (약 30분)
+--     ShapingComplete BOOLEAN DEFAULT FALSE,         -- 정형 완료 여부 (약 10분)
+--     PanningComplete BOOLEAN DEFAULT FALSE,         -- 팬닝 완료 여부 (약 10분)
+--     SecondFermentationComplete BOOLEAN DEFAULT FALSE, -- 2차 발효 완료 여부 (약 1시간)
+--     BakingComplete BOOLEAN DEFAULT FALSE,          -- 굽기 완료 여부 (약 30분)
+--     CoolingComplete BOOLEAN DEFAULT FALSE,         -- 냉각 완료 여부 (약 20분)
+--     PackagingComplete BOOLEAN DEFAULT FALSE,       -- 포장 완료 여부 (약 10분)
+ 
+ 
+ 
+ -- ProductionProcessStatus 테이블에 더미 데이터 삽입
+INSERT INTO ProductionProcessStatus (MonitorID, Status, WeighingComplete, DoughComplete, FirstFermentationComplete, 
+                                     DivisionComplete, RoundingComplete, IntermediateFermentationComplete, 
+                                     ShapingComplete, PanningComplete, SecondFermentationComplete, 
+                                     BakingComplete, CoolingComplete, PackagingComplete) 
+VALUES 
+(1, '작업중', TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE),   -- 1차 발효 단계 대기
+(2, '완료', FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE),  -- 모든 공정 대기 상태
+(3, '경고', TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE),           -- 냉각 및 포장 대기
+(4, '작업중', TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE);             -- 모든 공정 완료
 
 
 
@@ -516,8 +551,8 @@ VALUES
 (1, 1, 500, '2024-04-23 13:50:00', '일반 입고'),
 (2, 2, 300, '2024-05-01 14:20:00', '정기 입고'),
 (3, 3, 400, '2024-05-06 15:50:00', '긴급 입고'),
-(4, 4, 200, '2024-05-10 12:50:00', NULL),
-(5, 5, 350, '2024-06-01 13:05:00', NULL);
+(4, 4, 200, '2024-05-10 12:50:00','일반 입고');
+
 
 
 -- 17. 품질 관리 (QualityControl) 테이블 더미 데이터 (입고 후 10분 이내에 검사되도록 수정)
@@ -526,8 +561,8 @@ VALUES
 (1, 1, '합격', '2024-04-23 14:00:00', 2, '정상 '),
 (2, 2, '불합격', '2024-05-01 14:30:00', 10, '불량 발견'),
 (3, 3, '합격', '2024-05-06 16:00:00', 0, '정상'),
-(4, 4, '합격', '2024-05-10 13:00:00', 1, '정상'),
-(5, 5, '합격', '2024-06-01 13:15:00', 0, '정상');
+(4, 4, '합격', '2024-05-10 13:00:00', 1, '정상');
+
 
 
 -- 18. 매장 재고 (StoreInventory) 테이블 더미 데이터

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
+import axios from 'axios';
 import './ProductionPage.css';
 import './ChartStyles.css';
 
@@ -8,13 +9,12 @@ function ProductionMonitoringPage() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const result = [
-                { id: 1, productionRate: 100, temperature: 23, humidity: 58 },
-                { id: 2, productionRate: 65, temperature: 27, humidity: 63 },
-                { id: 3, productionRate: 0, temperature: 35, humidity: 75 },
-                { id: 4, productionRate: 20, temperature: 21, humidity: 52 }
-            ];
-            setData(result);
+            try {
+                const response = await axios.get('/api/production-monitoring/data');
+                setData(response.data);
+            } catch (error) {
+                console.error("Error fetching production monitoring data:", error);
+            }
         };
         fetchData();
     }, []);
@@ -35,9 +35,9 @@ function ProductionMonitoringPage() {
     };
 
     const getStatusText = (rate) => {
-        if (rate === 100) return { text: '완료', color: '#28a745' }; // 초록색
-        if (rate > 0) return { text: '작업 중', color: '#ffa500' }; // 주황색
-        return { text: '대기 중', color: '#ff0000' }; // 빨간색
+        if (rate === 100) return { text: '완료', color: '#28a745' };
+        if (rate > 0) return { text: '작업 중', color: '#ffa500' };
+        return { text: '대기 중', color: '#ff0000' };
     };
 
     return (
@@ -49,7 +49,7 @@ function ProductionMonitoringPage() {
                         return (
                             <div key={item.id} className="chart-box">
                                 <div className="pie-chart-container">
-                                    <h3 className="line-name" style={{ fontSize: '2em', fontWeight: 'bold', textAlign: 'center' }}>
+                                    <h3 className="line-name" style={{ fontSize: '1.5em', fontWeight: 'bold', textAlign: 'center' }}>
                                         {lineNames[index]}
                                     </h3>
                                     <ResponsiveContainer width={350} height={300}>
@@ -93,11 +93,10 @@ function ProductionMonitoringPage() {
                                     <div className={`humidity ${getHumidityClass(item.humidity)}`}>
                                         습도: {item.humidity}%
                                     </div>
-                                    </div>
-                                    <div className="status-indicator" style={{ color: status.color, fontSize: '5em', fontWeight: 'bold', textAlign: 'center', marginTop: '20px' }}>
+                                    <div className="status-indicator" style={{ color: status.color, fontSize: '1.8em', fontWeight: 'bold', textAlign: 'center', marginTop: '20px' }}>
                                         {status.text}
                                     </div>
-                                
+                                </div>
                             </div>
                         );
                     })}

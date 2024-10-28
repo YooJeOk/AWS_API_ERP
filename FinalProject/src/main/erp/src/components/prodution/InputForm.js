@@ -47,7 +47,7 @@ function InputForm() {
     return (
         <div className="custom-container">
             <div className="form-container">
-                <h1>생산계획 등록</h1>
+                <h1>생산 계획 등록</h1>
                 <form id="input-form" onSubmit={handleSubmit}>
                     {/* 제품 ID 입력 필드 */}
                     <div className="form-group">
