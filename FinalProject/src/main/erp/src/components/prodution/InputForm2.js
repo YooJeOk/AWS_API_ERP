@@ -4,13 +4,12 @@ import './production.css';
 function MBOMForm() {
     const [formData, setFormData] = useState([
         {
-            arrivalDate: '',
-            productCode: '',
-            productName: '',
-            specification: '',
+            entryDate: '',
+            orderID: '',
+            productID: '',
+            productName: '', // 제품명 추가
             quantity: '',
-            others: '',
-            workOrder: ''
+            etc: ''
         }
     ]);
 
@@ -41,12 +40,11 @@ function MBOMForm() {
                             <thead>
                                 <tr>
                                     <th style={{ width: '15%' }}>입고 일자</th>
-                                    <th style={{ width: '10%' }}>생산품목 코드</th>
-                                    <th style={{ width: '15%' }}>생산품목명</th>
-                                    <th style={{ width: '10%' }}>규격</th>
+                                    <th style={{ width: '10%' }}>작업 지시ID</th>
+                                    <th style={{ width: '10%' }}>제품ID</th>
+                                    <th style={{ width: '15%' }}>제품명</th>
                                     <th style={{ width: '10%' }}>수량</th>
-                                    <th style={{ width: '20%' }}>기타</th>
-                                    <th style={{ width: '20%' }}>작업지시서</th>
+                                    <th style={{ width: '40%' }}>기타</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -55,20 +53,62 @@ function MBOMForm() {
                                         <td>
                                             <input
                                                 type="datetime-local"
-                                                name="arrivalDate"
-                                                value={row.arrivalDate}
+                                                name="entryDate"
+                                                value={row.entryDate}
                                                 onChange={(e) => handleChange(index, e)}
                                                 required
-                                                step="1800" // 30분 단위 설정
                                                 style={{ width: '100%' }}
                                             />
                                         </td>
-                                        <td><input type="text" name="productCode" value={row.productCode} onChange={(e) => handleChange(index, e)} required style={{ width: '100%' }} /></td>
-                                        <td><input type="text" name="productName" value={row.productName} onChange={(e) => handleChange(index, e)} required style={{ width: '100%' }} /></td>
-                                        <td><input type="text" name="specification" value={row.specification} onChange={(e) => handleChange(index, e)} required style={{ width: '100%' }} /></td>
-                                        <td><input type="text" name="quantity" value={row.quantity} onChange={(e) => handleChange(index, e)} required style={{ width: '100%' }} /></td>
-                                        <td><input type="text" name="others" value={row.others} onChange={(e) => handleChange(index, e)} style={{ width: '100%' }} /></td>
-                                        <td><input type="text" name="workOrder" value={row.workOrder} onChange={(e) => handleChange(index, e)} style={{ width: '100%' }} /></td>
+                                        <td>
+                                            <input
+                                                type="text"
+                                                name="orderID"
+                                                value={row.orderID}
+                                                onChange={(e) => handleChange(index, e)}
+                                                required
+                                                style={{ width: '100%' }}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="text"
+                                                name="productID"
+                                                value={row.productID}
+                                                onChange={(e) => handleChange(index, e)}
+                                                required
+                                                style={{ width: '100%' }}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="text"
+                                                name="productName"
+                                                value={row.productName}
+                                                onChange={(e) => handleChange(index, e)}
+                                                required
+                                                style={{ width: '100%' }}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                name="quantity"
+                                                value={row.quantity}
+                                                onChange={(e) => handleChange(index, e)}
+                                                required
+                                                style={{ width: '100%' }}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="text"
+                                                name="etc"
+                                                value={row.etc}
+                                                onChange={(e) => handleChange(index, e)}
+                                                style={{ width: '100%' }}
+                                            />
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
