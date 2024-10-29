@@ -1,125 +1,124 @@
 import React, { useState } from 'react';
 import './production.css';
 
-function InputArrivalForm() {
-    // 폼 데이터를 관리할 상태를 생성
-    const [formData, setFormData] = useState({
-        arrivalDate: '',
-        productCode: '',
-        productName: '',
-        specification: '',
-        quantity: '',
-        others: '',
-        workOrder: ''
-    });
+function MBOMForm() {
+    const [formData, setFormData] = useState([
+        {
+            entryDate: '',
+            orderID: '',
+            productID: '',
+            productName: '', // 제품명 추가
+            quantity: '',
+            etc: ''
+        }
+    ]);
 
-    // 폼 데이터가 변경될 때 상태를 업데이트
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
+    const handleChange = (index, e) => {
+        const newFormData = [...formData];
+        newFormData[index] = {
+            ...newFormData[index],
             [e.target.name]: e.target.value
-        });
+        };
+        setFormData(newFormData);
     };
 
-    // 폼 제출 처리
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('입고 등록 데이터:', formData);
-        // 여기서 formData를 서버로 전송하는 비동기 처리 등을 추가 가능
     };
 
     return (
         <div className="custom-container">
-            <div className="form-container">
-                <h1>입고 등록</h1>
-                <form id="input-form" onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="arrival-date">입고 일자:</label>
-                        <input
-                            type="date"
-                            id="arrival-date"
-                            name="arrivalDate"
-                            value={formData.arrivalDate}
-                            onChange={handleChange}
-                            required
-                        />
+            <aside id="sidebar"></aside>
+            <main className="production-content">
+                <div className="production-mainbar">
+                    <div className="productionbar">
+                        <h1>생산 입고 등록</h1>
                     </div>
-
-                    <div className="form-group">
-                        <label htmlFor="product-code">생산품목 코드:</label>
-                        <input
-                            type="text"
-                            id="product-code"
-                            name="productCode"
-                            value={formData.productCode}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="product-name">생산품목명:</label>
-                        <input
-                            type="text"
-                            id="product-name"
-                            name="productName"
-                            value={formData.productName}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="specification">규격:</label>
-                        <input
-                            type="text"
-                            id="specification"
-                            name="specification"
-                            value={formData.specification}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="quantity">수량:</label>
-                        <input
-                            type="text"
-                            id="quantity"
-                            name="quantity"
-                            value={formData.quantity}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="others">기타:</label>
-                        <input
-                            type="text"
-                            id="others"
-                            name="others"
-                            value={formData.others}
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="work-order">작업지시서:</label>
-                        <input
-                            type="text"
-                            id="work-order"
-                            name="workOrder"
-                            value={formData.workOrder}
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <button type="submit" className="submit-button">등록</button>
-                </form>
-            </div>
+                    <form id="mbom-form" onSubmit={handleSubmit}>
+                        <table className="production-table">
+                            <thead>
+                                <tr>
+                                    <th style={{ width: '15%' }}>입고 일자</th>
+                                    <th style={{ width: '10%' }}>작업 지시ID</th>
+                                    <th style={{ width: '10%' }}>제품ID</th>
+                                    <th style={{ width: '15%' }}>제품명</th>
+                                    <th style={{ width: '10%' }}>수량</th>
+                                    <th style={{ width: '40%' }}>기타</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {formData.map((row, index) => (
+                                    <tr key={index}>
+                                        <td>
+                                            <input
+                                                type="datetime-local"
+                                                name="entryDate"
+                                                value={row.entryDate}
+                                                onChange={(e) => handleChange(index, e)}
+                                                required
+                                                style={{ width: '100%' }}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="text"
+                                                name="orderID"
+                                                value={row.orderID}
+                                                onChange={(e) => handleChange(index, e)}
+                                                required
+                                                style={{ width: '100%' }}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="text"
+                                                name="productID"
+                                                value={row.productID}
+                                                onChange={(e) => handleChange(index, e)}
+                                                required
+                                                style={{ width: '100%' }}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="text"
+                                                name="productName"
+                                                value={row.productName}
+                                                onChange={(e) => handleChange(index, e)}
+                                                required
+                                                style={{ width: '100%' }}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                name="quantity"
+                                                value={row.quantity}
+                                                onChange={(e) => handleChange(index, e)}
+                                                required
+                                                style={{ width: '100%' }}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="text"
+                                                name="etc"
+                                                value={row.etc}
+                                                onChange={(e) => handleChange(index, e)}
+                                                style={{ width: '100%' }}
+                                            />
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                        <button type="submit" className="submit-button">등록</button>
+                    </form>
+                </div>
+            </main>
         </div>
     );
 }
 
-export default InputArrivalForm;
+export default MBOMForm;

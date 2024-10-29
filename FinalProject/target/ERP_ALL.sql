@@ -33,8 +33,7 @@ CREATE TABLE ERP.Product (
     ProductCategory VARCHAR(50) NULL, -- 제품 카테고리
     UnitPrice INT NULL, -- 단가
     SalePrice INT NULL, -- 판매가
-    ProductionDate DATETIME NULL, -- 생산 날짜
-    ProductImage VARCHAR(200) NULL, -- 제품 이미지
+	ProductImage VARCHAR(200) NULL, -- 제품 이미지
     Recommend varchar(30) check (Recommend in ('Y','N')), -- 제품 추천여부(키오스크용)
     DetailDescription varchar(300) NULL, -- 제품 설명(키오스크용)
     PRIMARY KEY (ProductID)
@@ -65,7 +64,7 @@ CREATE TABLE ERP.MaterialsInventory (
     FOREIGN KEY (SupplierID) REFERENCES ERP.Suppliers(SupplierID)
 );
 
--- 4. 원자재 재입고 이력 (RawMaterialRestockHistory)
+-- 4. 원자재 입고 이력 (RawMaterialRestockHistory)
 CREATE TABLE ERP.RawMaterialRestockHistory (
     RestockID INT NOT NULL AUTO_INCREMENT, -- 재입고ID
     MaterialID INT NOT NULL, -- 자재ID
@@ -78,7 +77,7 @@ CREATE TABLE ERP.RawMaterialRestockHistory (
     FOREIGN KEY (SupplierID) REFERENCES ERP.Suppliers(SupplierID)
 );
 
--- 5. 생산 소비 (ProductionConsumption)
+-- 5. 원자재 소비 내역 (ProductionConsumption)
 CREATE TABLE ERP.ProductionConsumption (
     ConsumptionID INT NOT NULL AUTO_INCREMENT, -- 소비ID
     MaterialID INT NOT NULL, -- 자재ID
@@ -159,7 +158,7 @@ CREATE TABLE ERP.SalesDetails (
     FOREIGN KEY (CoffeeID) REFERENCES ERP.Coffee(CoffeeID) 
 );
 
--- 12. 커파 판매 세부 기록 
+-- 12. 커피 판매 세부 기록 
 CREATE TABLE ERP.CoffeeOptionSalesDetails (
     CoffeeOptionDetailID INT NOT NULL AUTO_INCREMENT, -- 커피 추가 옵션 세부 ID
     SaleDetailID INT NOT NULL, -- 판매 세부 ID (SalesDetails와 연결)
@@ -187,21 +186,11 @@ CREATE TABLE ERP.WorkOrders (
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
 );
 
--- 14. 생산 계획 (ProductionPlanning)
-CREATE TABLE ERP.ProductionPlanning (
-    PlanID INT NOT NULL AUTO_INCREMENT, -- 계획ID
-    ProductID INT NOT NULL, -- 제품ID
-	StartDate DATETIME NULL, -- 시작 시간
-    EndDate DATETIME NULL, -- 종료 시간
-    etc VARCHAR(100) NULL, -- 기타
-    PRIMARY KEY (PlanID)
-    
-    
-);
 
 
 
--- 15. 생산 모니터링 (ProductionMonitoring)
+
+-- 14. 생산 모니터링 (ProductionMonitoring)
 CREATE TABLE ERP.ProductionMonitoring (
     MonitorID INT NOT NULL AUTO_INCREMENT, -- 모니터링ID
     OrderID INT NOT NULL, -- 작업 지시ID
@@ -214,7 +203,10 @@ CREATE TABLE ERP.ProductionMonitoring (
     FOREIGN KEY (OrderID) REFERENCES ERP.WorkOrders(OrderID)
 );
 
--- 15-_1. ProductionProcessStatus 테이블 생성 -- 
+
+
+
+-- 15. ProductionProcessStatus 테이블 생성 -- 
 -- 각 공정 단계에 대해 완료 여부를 기록할 수 있도록 BOOLEAN 컬럼을 추가했습니다. 각 단계가 완료될 때마다 해당 컬럼을 TRUE로 업데이트하여 
 -- 각 제품의 공정 진행 상태를 추적할 수 있습니다. 이 방식으로 세부적인 생산 공정을 관리하고, 전체 생산 상태를 확인할 수 있습니다
 CREATE TABLE ProductionProcessStatus (
@@ -235,7 +227,7 @@ CREATE TABLE ProductionProcessStatus (
     PRIMARY KEY (MonitorID),
     FOREIGN KEY (MonitorID) REFERENCES ProductionMonitoring(MonitorID)
 );
--- 16. 생산 입고 (ProductionEntry)
+-- 16. 생산제품 공장입고 (ProductionEntry)
 CREATE TABLE ERP.ProductionEntry (
     EntryID INT NOT NULL AUTO_INCREMENT, -- 입력ID
     OrderID INT NOT NULL, -- 작업 지시ID
@@ -342,10 +334,9 @@ BEGIN
 END; //
 
 DELIMITER ;
-
--- 상품 insert문
 INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, Recommend, DetailDescription)
 VALUES 
+-- 상품 insert문
 ('갈릭꽈베기', 'bread', 2000, 3500, '2024-01-01', '/images/bread/갈릭꽈배기.jpg', 'Y', '결결이 바삭한 식감의 패스트리에 알싸한 남해 마늘의 진한 맛과 향이 더해진 간식형 제품'),
 ('단팥도넛', 'bread', 2500, 3700, '2024-01-01', '/images/bread/단팥도넛.jpg', 'N', '달콤한 팥 앙금이 가득한 부드러운 도넛으로 전통과 현대의 맛이 조화로운 디저트'),
 ('고구마케이크빵', 'bread', 1800, 3000, '2024-01-01', '/images/bread/고구마케이크빵.jpg', 'Y', '부드러운 빵 속에 달콤한 고구마 필링이 가득한 케이크 스타일의 빵'),
@@ -521,7 +512,7 @@ VALUES
  
  
  
- -- 15_1 ProductionProcessStatus 테이블에 더미 데이터 삽입
+ -- ProductionProcessStatus 테이블에 더미 데이터 삽입
 INSERT INTO ProductionProcessStatus (MonitorID, Status, WeighingComplete, DoughComplete, FirstFermentationComplete, 
                                      DivisionComplete, RoundingComplete, IntermediateFermentationComplete, 
                                      ShapingComplete, PanningComplete, SecondFermentationComplete, 
@@ -578,14 +569,13 @@ VALUES
 (1, 'Product', NULL, 10, '갈릭꽈베기', 10, 'ml', 10, 10 * 10),   -- 올리브오일
 (1, 'Product', NULL, 30, '갈릭꽈베기', 1, 'ea', 10, 10),         -- 포장지
 
-
 -- 단팥도넛 502.5원
 (2, 'Product', NULL, 5, '단팥도넛', 60, 'g', 1.5, 60 * 1.5),    -- 밀가루
-(2, 'Product', NULL, 17, '단팥도넛', 15, 'g', 0.5, 15 * 0.5),   -- 설탕
-(2, 'Product', NULL, 15, '단팥도넛', 15, 'g', 12, 15 * 12),     -- 버터
-(2, 'Product', NULL, 19, '단팥도넛', 20, 'ml', 3, 20 * 3),      -- 우유
 (2, 'Product', NULL, 11, '단팥도넛', 5, 'g', 3, 5 * 3),         -- 이스트
+(2, 'Product', NULL, 15, '단팥도넛', 15, 'g', 12, 15 * 12),     -- 버터
+(2, 'Product', NULL, 17, '단팥도넛', 15, 'g', 0.5, 15 * 0.5),   -- 설탕
 (2, 'Product', NULL, 18, '단팥도넛', 20, 'g', 7, 20 * 7),       -- 팥앙금
+(2, 'Product', NULL, 19, '단팥도넛', 20, 'ml', 3, 20 * 3),      -- 우유
 (2, 'Product', NULL, 30, '단팥도넛', 1, 'ea', 10, 10),          -- 포장지
 
 
@@ -619,6 +609,7 @@ VALUES
 (5, 'Product', NULL, 19, '라우겐', 50, 'ml', 8, 50 * 8),         -- 우유
 (5, 'Product', NULL, 30, '라우겐', 1, 'ea', 10, 10),             -- 포장지
 
+
 -- 베이글빵 315원
 (6, 'Product', NULL, 5, '베이글빵', 50, 'g', 1.5, 50 * 1.5),     -- 밀가루
 (6, 'Product', NULL, 8, '베이글빵', 5, 'g', 2, 5 * 2),           -- 소금
@@ -627,6 +618,8 @@ VALUES
 (6, 'Product', NULL, 17, '베이글빵', 30, 'g', 0.5, 30 * 0.5),    -- 설탕
 (6, 'Product', NULL, 19, '베이글빵', 20, 'ml', 8, 20 * 8),       -- 우유
 (6, 'Product', NULL, 30, '베이글빵', 1, 'ea', 10, 10),           -- 포장지
+
+
 
 -- 생크림소보로 1225원
 (7, 'Product', NULL, 5, '생크림소보로', 40, 'g', 1.5, 40 * 1.5),    -- 밀가루
@@ -660,7 +653,6 @@ VALUES
 (9, 'Product', NULL, 19, '애플파이', 20, 'ml', 8, 20 * 8),             -- 우유
 (9, 'Product', NULL, 30, '애플파이', 1, 'ea', 10, 10),                 -- 포장지
 
-
 -- 우유도넛 451.5원
 (10, 'Product', NULL, 5, '우유도넛', 50, 'g', 1.5, 50 * 1.5),    -- 밀가루
 (10, 'Product', NULL, 7, '우유도넛', 10, 'g', 2, 10 * 2),        -- 베이킹파우더
@@ -693,6 +685,7 @@ VALUES
 (12, 'Product', NULL, 19, '카라멜러스크', 20, 'ml', 8, 20 * 8),         -- 우유
 (12, 'Product', NULL, 30, '카라멜러스크', 1, 'ea', 10, 10),             -- 포장지
 
+
 -- 캐찰빵 315원
 (13, 'Product', NULL, 5, '캐찰빵', 50, 'g', 1.5, 50 * 1.5),             -- 밀가루
 (13, 'Product', NULL, 8, '캐찰빵', 10, 'g', 2, 10 * 2),                 -- 소금
@@ -704,7 +697,6 @@ VALUES
 
 
 
--- 커피
 
 
 -- 아메리카노 790원
@@ -751,26 +743,17 @@ VALUES
 
 -- 헤이즐넛 아메리카노 970원
 (7, 'Coffee', 'Regular', 1, '헤이즐넛 아메리카노', 20, 'g', 20, 20 * 20),       -- 원두(에스프레소)
-(7, 'Coffee', 'Regular', 2, '헤이즐넛 아메리카노', 100, 'ml', 0.2, 100 * 0.2),  -- 물
 (7, 'Coffee', 'Regular', 5, '헤이즐넛 아메리카노', 15, 'ml', 10, 15 * 10),      -- 헤이즐넛 시럽
+(7, 'Coffee', 'Regular', 2, '헤이즐넛 아메리카노', 100, 'ml', 0.2, 100 * 0.2),  -- 물
 (7, 'Coffee', 'Regular', 6, '헤이즐넛 아메리카노', 150, 'ml', 2, 150 * 2),      -- 얼음
 (7, 'Coffee', 'Regular', 7, '헤이즐넛 아메리카노', 1, 'ea', 70, 70),            -- 컵(regular size)
 
 -- 바닐라 아메리카노 1220원
 (8, 'Coffee', 'Regular', 1, '바닐라 아메리카노', 20, 'g', 20, 20 * 20),         -- 원두(에스프레소)
-(8, 'Coffee', 'Regular', 2, '바닐라 아메리카노', 100, 'ml', 0.2, 100 * 0.2),    -- 물
 (8, 'Coffee', 'Regular', 5, '바닐라 아메리카노', 15, 'ml', 10, 15 * 10),        -- 바닐라 시럽
+(8, 'Coffee', 'Regular', 2, '바닐라 아메리카노', 100, 'ml', 0.2, 100 * 0.2),    -- 물
 (8, 'Coffee', 'Regular', 6, '바닐라 아메리카노', 150, 'ml', 2, 150 * 2),        -- 얼음
 (8, 'Coffee', 'Regular', 7, '바닐라 아메리카노', 1, 'ea', 70, 70),              -- 컵(regular size)
-
-
--- 카페모카 865원 
-(9, 'Coffee', 'Regular', 1, '카페모카', 15, 'g', 20, 15 * 20),       -- 원두(에스프레소)
-(9, 'Coffee', 'Regular', 3, '카페모카', 20, 'ml', 6, 20 * 6),        -- 초콜릿 시럽
-(9, 'Coffee', 'Regular', 4, '카페모카', 100, 'ml', 3, 100 * 3),      -- 우유
-(9, 'Coffee', 'Regular', 5, '카페모카', 5, 'ml', 15, 5 * 15),        -- 바닐라 시럽
-(9, 'Coffee', 'Regular', 7, '카페모카', 1, '개', 70, 70),            -- 컵(regular size)
-
 
 -- 콜드브루라떼 1630원
 (10, 'Coffee', 'Regular', 1, '콜드브루라떼', 20, 'g', 20, 20 * 20),             -- 원두(에스프레소)
@@ -780,23 +763,22 @@ VALUES
 
 -- 헤이즐넛라떼(핫) 1370원
 (11, 'Coffee', 'Regular', 1, '헤이즐넛라떼', 20, 'g', 20, 20 * 20),             -- 원두(에스프레소)
-(11, 'Coffee', 'Regular', 4, '헤이즐넛라떼', 100, 'ml', 3, 100 * 3),            -- 우유
 (11, 'Coffee', 'Regular', 5, '헤이즐넛라떼', 15, 'ml', 10, 15 * 10),            -- 헤이즐넛 시럽
+(11, 'Coffee', 'Regular', 4, '헤이즐넛라떼', 100, 'ml', 3, 100 * 3),            -- 우유
 (11, 'Coffee', 'Regular', 7, '헤이즐넛라떼', 1, 'ea', 70, 70),                  -- 컵(regular size)
 
 -- 헤이즐넛아메리카노(핫) 970원
 (12, 'Coffee', 'Regular', 1, '헤이즐넛아메리카노', 20, 'g', 20, 20 * 20),       -- 원두(에스프레소)
-(12, 'Coffee', 'Regular', 2, '헤이즐넛아메리카노', 100, 'ml', 0.2, 100 * 0.2),  -- 물
 (12, 'Coffee', 'Regular', 5, '헤이즐넛아메리카노', 15, 'ml', 10, 15 * 10),      -- 헤이즐넛 시럽
+(12, 'Coffee', 'Regular', 2, '헤이즐넛아메리카노', 100, 'ml', 0.2, 100 * 0.2),  -- 물
 (12, 'Coffee', 'Regular', 7, '헤이즐넛아메리카노', 1, 'ea', 70, 70),            -- 컵(regular size)
 
 -- 연유라떼 1470원
 (13, 'Coffee', 'Regular', 1, '연유라떼', 20, 'g', 20, 20 * 20),                -- 원두(에스프레소)
+(13, 'Coffee', 'Regular', 6, '연유라떼', 150, 'ml', 2, 150 * 2),               -- 얼음
 (13, 'Coffee', 'Regular', 4, '연유라떼', 100, 'ml', 3, 100 * 3),               -- 우유
 (13, 'Coffee', 'Regular', 5, '연유라떼', 20, 'g', 2, 20 * 2),                  -- 연유
-(13, 'Coffee', 'Regular', 6, '연유라떼', 150, 'ml', 2, 150 * 2),               -- 얼음
 (13, 'Coffee', 'Regular', 7, '연유라떼', 1, 'ea', 70, 70),                     -- 컵(regular size)
-
 
 -- 에스프레소(레귤러) 470원
 (14, 'Coffee', 'Regular', 1, '에스프레소(레귤러)', 20, 'g', 20, 20 * 20),      -- 원두(에스프레소)
@@ -848,26 +830,17 @@ VALUES
 
 -- 헤이즐넛 아메리카노 1410원
 (7, 'Coffee', 'Extra', 1, '헤이즐넛 아메리카노(엑스트라)', 30, 'g', 20, 30 * 20),       -- 원두(에스프레소)
-(7, 'Coffee', 'Extra', 2, '헤이즐넛 아메리카노(엑스트라)', 150, 'ml', 0.2, 150 * 0.2), -- 물
 (7, 'Coffee', 'Extra', 5, '헤이즐넛 아메리카노(엑스트라)', 20, 'ml', 10, 20 * 10),     -- 헤이즐넛 시럽
+(7, 'Coffee', 'Extra', 2, '헤이즐넛 아메리카노(엑스트라)', 150, 'ml', 0.2, 150 * 0.2), -- 물
 (7, 'Coffee', 'Extra', 6, '헤이즐넛 아메리카노(엑스트라)', 250, 'ml', 2, 250 * 2),     -- 얼음
 (7, 'Coffee', 'Extra', 8, '헤이즐넛 아메리카노(엑스트라)', 1, 'ea', 80, 80),           -- 컵(extra size)
 
 -- 바닐라 아메리카노 1410원
 (8, 'Coffee', 'Extra', 1, '바닐라 아메리카노(엑스트라)', 30, 'g', 20, 30 * 20),         -- 원두(에스프레소)
-(8, 'Coffee', 'Extra', 2, '바닐라 아메리카노(엑스트라)', 150, 'ml', 0.2, 150 * 0.2),   -- 물
 (8, 'Coffee', 'Extra', 5, '바닐라 아메리카노(엑스트라)', 20, 'ml', 10, 20 * 10),       -- 바닐라 시럽
+(8, 'Coffee', 'Extra', 2, '바닐라 아메리카노(엑스트라)', 150, 'ml', 0.2, 150 * 0.2),   -- 물
 (8, 'Coffee', 'Extra', 6, '바닐라 아메리카노(엑스트라)', 250, 'ml', 2, 250 * 2),       -- 얼음
 (8, 'Coffee', 'Extra', 8, '바닐라 아메리카노(엑스트라)', 1, 'ea', 80, 80),             -- 컵(extra size)
-
-
--- 카페모카 엑스트라 1850원
-(9, 'Coffee', 'Extra', 1, '카페모카 엑스트라', 22, 'g', 20, 22 * 20),    -- 원두(에스프레소) 440원
-(9, 'Coffee', 'Extra', 3, '카페모카 엑스트라', 30, 'ml', 6, 30 * 6),     -- 초콜릿 시럽 180원
-(9, 'Coffee', 'Extra', 4, '카페모카 엑스트라', 150, 'ml', 3, 150 * 3),   -- 우유 450원
-(9, 'Coffee', 'Extra', 8, '카페모카 엑스트라', 7, 'ml', 6, 7 * 6),       -- 바닐라 시럽 42원
-(9, 'Coffee', 'Extra', 8, '카페모카 엑스트라', 1, 'ea', 80, 80),         -- 컵(extra size) 80원
-
 
 -- 콜드브루라떼(엑스트라) 1630원
 (10, 'Coffee', 'Extra', 1, '콜드브루라떼(엑스트라)', 30, 'g', 20, 30 * 20),             -- 원두(에스프레소)
@@ -877,23 +850,22 @@ VALUES
 
 -- 헤이즐넛라떼(핫, 엑스트라) 1330원
 (11, 'Coffee', 'Extra', 1, '헤이즐넛라떼(엑스트라)', 30, 'g', 20, 30 * 20),            -- 원두(에스프레소)
-(11, 'Coffee', 'Extra', 4, '헤이즐넛라떼(엑스트라)', 150, 'ml', 3, 150 * 3),           -- 우유
 (11, 'Coffee', 'Extra', 5, '헤이즐넛라떼(엑스트라)', 20, 'ml', 10, 20 * 10),           -- 헤이즐넛 시럽
+(11, 'Coffee', 'Extra', 4, '헤이즐넛라떼(엑스트라)', 150, 'ml', 3, 150 * 3),           -- 우유
 (11, 'Coffee', 'Extra', 8, '헤이즐넛라떼(엑스트라)', 1, 'ea', 80, 80),                 -- 컵(extra size)
 
 -- 헤이즐넛아메리카노(핫, 엑스트라) 910원
 (12, 'Coffee', 'Extra', 1, '헤이즐넛아메리카노(엑스트라)', 30, 'g', 20, 30 * 20),       -- 원두(에스프레소)
-(12, 'Coffee', 'Extra', 2, '헤이즐넛아메리카노(엑스트라)', 150, 'ml', 0.2, 150 * 0.2), -- 물
 (12, 'Coffee', 'Extra', 5, '헤이즐넛아메리카노(엑스트라)', 20, 'ml', 10, 20 * 10),     -- 헤이즐넛 시럽
+(12, 'Coffee', 'Extra', 2, '헤이즐넛아메리카노(엑스트라)', 150, 'ml', 0.2, 150 * 0.2), -- 물
 (12, 'Coffee', 'Extra', 8, '헤이즐넛아메리카노(엑스트라)', 1, 'ea', 80, 80),           -- 컵(extra size)
 
 -- 연유라떼(엑스트라) 1690원
 (13, 'Coffee', 'Extra', 1, '연유라떼(엑스트라)', 30, 'g', 20, 30 * 20),               -- 원두(에스프레소)
+(13, 'Coffee', 'Extra', 6, '연유라떼(엑스트라)', 250, 'ml', 2, 250 * 2),              -- 얼음
 (13, 'Coffee', 'Extra', 4, '연유라떼(엑스트라)', 150, 'ml', 3, 150 * 3),              -- 우유
 (13, 'Coffee', 'Extra', 5, '연유라떼(엑스트라)', 30, 'g', 2, 30 * 2),                 -- 연유
-(13, 'Coffee', 'Extra', 6, '연유라떼(엑스트라)', 250, 'ml', 2, 250 * 2),              -- 얼음
-(13, 'Coffee', 'Extra', 8, '연유라떼(엑스트라)', 1, 'ea', 80, 80);                    -- 컵(extra size)
-
+(13, 'Coffee', 'Extra', 8, '연유라떼(엑스트라)', 1, 'ea', 80, 80);                   -- 컵(extra size)
 
 
 
