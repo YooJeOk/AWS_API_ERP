@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import ProductInventoryTable from '../../components/KioskManagement/ProductInventoryTable';
-import MaterialsInventoryTable from '../../components/KioskManagement/MaterialsInventoryTable';
-import Pagination from '../../components/KioskManagement/Pagination';
+import ProductInventoryTable from '../../components/InventoryManage/ProductInventoryTable';
+import MaterialsInventoryTable from '../../components/InventoryManage/MaterialsInventoryTable';
+import Pagination from '../../components/InventoryManage/Pagination';
 import './StoreInventory.css';  
 
 const StoreInventory = () => {

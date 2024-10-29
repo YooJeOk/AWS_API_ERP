@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './styles.css';
 
-function KioskSidebar() {
+function InvenSidebar() {
     const location = useLocation();  // 현재 경로를 가져옴
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);  // 사이드바 상태 관리
 
@@ -31,29 +31,31 @@ function KioskSidebar() {
         >
             <div className="sidebar-menu" >
             <div className="dropdown">
-                    <button className="menu-item" style={{ backgroundColor: '#F0C490', color: 'white' }}>상품 관리</button>
+                    <button className="menu-item" style={{ backgroundColor: '#F0C490', color: 'white' }}>재고 관리</button>
                     <ul className="dropdown-menu">
-                        <li><Link to="/KioskInventory">상품 조회</Link></li>
-                        <li><Link to="/KioskInventory">상품 가격 조정</Link></li>
-                        <li><Link to="/KioskInventory">상품 추천여부 설정</Link></li>
-                        <li><Link to="/KioskInventory">상품 삭제</Link></li>
+                        <li><Link to="/FactoryInventory">공장 재고 조회</Link></li>
+                        <li><Link to="/StoreInventory">매장 재고 조회</Link></li>
                     </ul>
                 </div>
 
                 <div className="dropdown">
-                    <Link to="/KioskInventory">
+                    <Link to="/KioskSelect">
                         <button className="menu-item" style={{ backgroundColor: '#F0C490', color: 'white' }}>
-                            상품 등록
+                            입고 관리
                         </button>
                     </Link>
                 </div>
 
-
-
-
+                <div className="dropdown">
+                    <Link to="/KioskSelect">
+                        <button className="menu-item" style={{ backgroundColor: '#F0C490', color: 'white' }}>
+                            출고 관리
+                        </button>
+                    </Link>
+                </div>
             </div>
         </div>
     );
 }
 
-export default KioskSidebar;
+export default InvenSidebar;

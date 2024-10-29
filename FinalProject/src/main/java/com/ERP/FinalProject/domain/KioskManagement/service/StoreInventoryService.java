@@ -28,7 +28,7 @@ public class StoreInventoryService {
 	private StoreInventoryRepository storeInventoryRepository;
 
 	public Page<ProductDTO> getProductInventory(Pageable pageable) {
-		return productRepository.findByOnKiosk(pageable,"Y").map(this::convertToProductInventoryDTO);
+		return productRepository.findAll(pageable).map(this::convertToProductInventoryDTO);
 	}
 
 	private ProductDTO convertToProductInventoryDTO(Product product) {
@@ -36,6 +36,7 @@ public class StoreInventoryService {
 		dto.setProductId(product.getProductId());
 		dto.setProductName(product.getProductName());
 		dto.setProductCategory(product.getProductCategory());
+		dto.setUnitPrice(product.getUnitPrice());
 		dto.setSalePrice(product.getSalePrice());
 		dto.setProductionDate(product.getProductionDate());
 		dto.setRecommend(product.getRecommend());
