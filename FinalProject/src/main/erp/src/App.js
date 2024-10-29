@@ -4,12 +4,10 @@ import Header from './components/Header';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ProductionSidebar from './components/ProductionSidebar';
 import SalesSidebar from './components/SalesSidebar';  // SalesSidebar 추가
-import InputForm from './components/prodution/InputForm';  
 import InputForm2 from './components/prodution/InputForm2';
 import InputForm3 from './components/prodution/InputForm3';
 import InputForm4 from './components/prodution/InputForm4';
 import InputForm5 from './components/prodution/InputForm5';
-import ProductionPage from './components/prodution/ProductionPage';
 import ProductionPage2 from './components/prodution/ProductionPage2';  
 import ProductionPage3 from './components/prodution/ProductionPage3';
 import ProductionPage4 from './components/prodution/ProductionPage4';
@@ -47,8 +45,7 @@ function App() {
 
 
                     {/* 생산 관리 페이지들 */}
-                    <Route path="/input" element={<ProductionSidebarWrapper><InputForm /></ProductionSidebarWrapper>} />
-                    <Route path="/production" element={<ProductionSidebarWrapper><ProductionPage /></ProductionSidebarWrapper>} />
+                    
                     <Route path="/input2" element={<ProductionSidebarWrapper><InputForm2 /></ProductionSidebarWrapper>} />
                     <Route path="/production2" element={<ProductionSidebarWrapper><ProductionPage2 /></ProductionSidebarWrapper>} />
                     <Route path="/input3" element={<ProductionSidebarWrapper><InputForm3 /></ProductionSidebarWrapper>} />

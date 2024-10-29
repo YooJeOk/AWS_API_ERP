@@ -32,19 +32,18 @@ function ProductionPage3() {
             <main className="production-content">
                 <div className="production-mainbar">
                     <div className="productionbar">
-                        <h1>작업 내역 조회</h1>
+                        <h1>생산 내역 조회</h1>
                         <button className="create-button">생성</button>
                     </div>
                     <table className="table production-table">
                         <thead>
                             <tr>
-                                <th>작업 일자</th>
-                                <th>생산품목 코드</th>
-                                <th>생산품목명</th>
-                                <th>규격</th>
-                                <th>수량</th>
-                                <th>작업 품목명</th>
-                                <th>투입자원&작업시간</th>
+                                <th>생산 일자</th>
+                                <th>생산 품목 코드</th>
+                                <th>생산 품목명</th>
+                                <th>생산 수량</th>
+                                <th>사용 원재료</th>
+                                <th>기타사항</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -57,12 +56,12 @@ function ProductionPage3() {
                                         <td>{row.spec}</td>
                                         <td>{row.quantity}</td>
                                         <td>{row.workItemName}</td>
-                                        <td>{row.resources}</td>
+                                        
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="7">등록된 데이터가 없습니다</td>
+                                    <td colSpan="6">등록된 데이터가 없습니다</td>
                                 </tr>
                             )}
                         </tbody>

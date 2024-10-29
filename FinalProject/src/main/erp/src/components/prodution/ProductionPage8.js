@@ -6,10 +6,10 @@ import './ChartStyles.css';
 
 function ProductionMonitoringPage() {
     const [data, setData] = useState([
-        { orderId: 1, productionRate: 0, temperature: 25, humidity: 50 }, 
-        { orderId: 2, productionRate: 0, temperature: 25, humidity: 50 },
-        { orderId: 3, productionRate: 0, temperature: 25, humidity: 50 },
-        { orderId: 4, productionRate: 0, temperature: 25, humidity: 50 }
+        { orderId: 1, productionRate: 0, temperature: 25, humidity: 50, productName: '갈릭꽈베기'}, 
+        { orderId: 2, productionRate: 0, temperature: 25, humidity: 50, productName: '단팥도넛' },
+        { orderId: 3, productionRate: 0, temperature: 25, humidity: 50, productName: '고구마케이크빵' },
+        { orderId: 4, productionRate: 0, temperature: 25, humidity: 50, productName: '꽈베기' }
     ]);
 
     useEffect(() => {
@@ -46,22 +46,16 @@ function ProductionMonitoringPage() {
     const COLORS = ['#FF0000', '#00FF00'];
     const lineNames = ['1라인', '2라인', '3라인', '4라인'];
 
-    const getTemperatureClass = (temp) => {
-        if (temp < 20 || temp > 30) return 'danger';
-        if (temp < 23 || temp > 27) return 'warning';
-        return '';
+    const getNeedleRotation = (temp) => {
+        if (temp < 20) return 180;
+        if (temp > 30) return 0;
+        return 180 - ((temp - 20) * 9);
     };
 
-    const getHumidityClass = (hum) => {
-        if (hum < 45 || hum > 75) return 'danger';
-        if (hum < 50 || hum > 70) return 'warning';
-        return '';
-    };
-
-    const getStatusText = (rate) => {
-        if (rate === 100) return { text: '완료', color: '#28a745' };
-        if (rate > 0) return { text: '작업 중', color: '#ffa500' };
-        return { text: '대기 중', color: '#ff0000' };
+    const getTemperatureColor = (temp) => {
+        if (temp < 20 || temp > 30) return "#FF8042"; 
+        if (temp < 23 || temp > 27) return "#FFBB28"; 
+        return "#00C49F"; 
     };
 
     return (
@@ -74,6 +68,7 @@ function ProductionMonitoringPage() {
                                 <h3 className="line-name" style={{ fontSize: '1.5em', fontWeight: 'bold', textAlign: 'center' }}>
                                     {lineNames[index]}
                                 </h3>
+                                {/* 생산률 원형 차트 */}
                                 <PieChart width={350} height={300}>
                                     <Pie
                                         data={[
@@ -107,15 +102,43 @@ function ProductionMonitoringPage() {
                                 </PieChart>
                             </div>
                             <div className="metrics-container">
-                                <div className={`temperature ${getTemperatureClass(item.temperature)}`}>
-                                    온도: {item.temperature}°C
+                                {/* 온도 상태 나침반 반원 차트 */}
+                                <div className="temperature" style={{ marginTop: '20px', marginLeft: '15px' }}>
+                                    <h4>온도 상태</h4>
+                                    <PieChart width={120} height={80}>
+                                        <Pie
+                                            data={[
+                                                { name: '정상', value: 33.33 },
+                                                { name: '경고', value: 33.33 },
+                                                { name: '위험', value: 33.34 }
+                                            ]}
+                                            dataKey="value"
+                                            cx="50%"
+                                            cy="100%"
+                                            innerRadius={30}
+                                            outerRadius={50}
+                                            startAngle={180}
+                                            endAngle={0}
+                                        >
+                                            <Cell fill="#00C49F" />
+                                            <Cell fill="#FFBB28" />
+                                            <Cell fill="#FF8042" />
+                                        </Pie>
+                                        <path
+                                            d={`M75,80 L${75 + 40 * Math.cos((getNeedleRotation(item.temperature) * Math.PI) / 180)},${80 - 40 * Math.sin((getNeedleRotation(item.temperature) * Math.PI) / 180)}`}
+                                            stroke={getTemperatureColor(item.temperature)}
+                                            strokeWidth="2"
+                                        />
+                                    </PieChart>
+                                    <div style={{ textAlign: 'center', marginTop: '5px', color: getTemperatureColor(item.temperature) }}>
+                                        {item.temperature}°C
+                                    </div>
                                 </div>
-                                <div className={`humidity ${getHumidityClass(item.humidity)}`}>
-                                    습도: {item.humidity}%
-                                </div>
-                                <div className="status-indicator" style={{ color: getStatusText(item.productionRate).color, fontSize: '1.8em', fontWeight: 'bold', textAlign: 'center', marginTop: '20px' }}>
-                                    {getStatusText(item.productionRate).text}
-                                </div>
+                            </div>
+                            <div className="humidity" style={{ fontSize: '0.9em', color: 'black', textAlign: 'center', marginTop: '10px' }}>
+                                <span>습도: {item.humidity}%</span>
+                                <br />
+                                <span>제품명: {item.productName}</span>
                             </div>
                         </div>
                     ))}
