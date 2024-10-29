@@ -335,34 +335,23 @@ BEGIN
 END; //
 
 DELIMITER ;
-
+INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, Recommend, DetailDescription)
+VALUES 
 -- 상품 insert문
-INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, Recommend, DetailDescription)
-VALUES ('갈릭꽈베기', 'bread', 2000, 3500, '2024-01-01', '/images/bread/갈릭꽈배기.jpg', 'Y', '결결이 바삭한 식감의 패스트리에 알싸한 남해 마늘의 진한 맛과 향이 더해진 간식형 제품');
-INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, Recommend, DetailDescription)
-VALUES ('단팥도넛', 'bread', 2500, 3700, '2024-01-01', '/images/bread/단팥도넛.jpg', 'N', '달콤한 팥 앙금이 가득한 부드러운 도넛으로 전통과 현대의 맛이 조화로운 디저트');
-INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, Recommend, DetailDescription)
-VALUES ('고구마케이크빵', 'bread', 1800, 3000, '2024-01-01', '/images/bread/고구마케이크빵.jpg', 'Y', '부드러운 빵 속에 달콤한 고구마 필링이 가득한 케이크 스타일의 빵');
-INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, Recommend, DetailDescription)
-VALUES ('꽈베기', 'bread', 2000, 2500, '2024-01-01', '/images/bread/꽈베기.jpg', 'N', '쫄깃한 식감과 달콤한 맛이 일품인 전통적인 꽈배기');
-INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, Recommend, DetailDescription)
-VALUES ('라우겐', 'bread', 2400, 4000, '2024-01-01', '/images/bread/라우겐.jpg', 'N', '독일식 프레첼 빵으로, 짭짤하고 쫄깃한 식감이 특징인 빵');
-INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, Recommend, DetailDescription)
-VALUES ('베이글빵', 'bread', 2000, 3800, '2024-01-01', '/images/bread/베이글빵.jpg', 'N', '쫄깃한 식감과 부드러운 맛이 일품인 클래식한 베이글');
-INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, Recommend, DetailDescription)
-VALUES ('생크림소보로', 'bread', 2000, 3800, '2024-01-01', '/images/bread/생크림소보로.jpg', 'N', '부드러운 생크림과 바삭한 소보로의 조화가 매력적인 달콤한 빵');
-INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, Recommend, DetailDescription)
-VALUES ('꿀버터바게트', 'bread', 2000, 3800, '2024-01-01', '/images/bread/꿀버터바게트.jpg', 'N', '바삭한 바게트에 꿀과 버터가 스며들어 고소하고 달콤한 맛이 돋보이는 빵');
-INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, Recommend, DetailDescription)
-VALUES ('애플파이', 'bread', 3000, 4500, '2024-01-01', '/images/bread/애플파이.jpg', 'N', '바삭한 페이스트리 속에 달콤하고 상큼한 사과 필링이 가득한 클래식한 디저트');
-INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, Recommend, DetailDescription)
-VALUES ('우유도넛', 'bread', 2200, 3300, '2024-01-01', '/images/bread/우유도넛.jpg', 'N', '부드러운 우유 크림이 가득 들어간 폭신폭신한 도넛으로 은은한 우유 향이 일품');
-INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, Recommend, DetailDescription)
-VALUES ('찹쌀브레드', 'bread', 2800, 4200, '2024-01-01', '/images/bread/찹쌀브레드.jpg', 'N', '쫄깃한 찹쌀의 식감과 부드러운 빵의 조화가 일품인 건강한 맛의 브레드');
-INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, Recommend, DetailDescription)
-VALUES ('카라멜 러스크', 'bread', 3500, 5000, '2024-01-01', '/images/bread/카라멜러스크.jpg', 'N', '바삭하게 구운 빵에 달콤한 카라멜을 입힌 고급스러운 간식');
-INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, Recommend, DetailDescription)
-VALUES ('캐찰빵', 'bread', 2600, 3800, '2024-01-01', '/images/bread/캐찰빵.jpg', 'N', '치즈의 고소함과 달콤한 빵의 조화가 일품인 멕시코 스타일의 특색있는 빵');
+('갈릭꽈베기', 'bread', 2000, 3500, '2024-01-01', '/images/bread/갈릭꽈배기.jpg', 'Y', '결결이 바삭한 식감의 패스트리에 알싸한 남해 마늘의 진한 맛과 향이 더해진 간식형 제품'),
+('단팥도넛', 'bread', 2500, 3700, '2024-01-01', '/images/bread/단팥도넛.jpg', 'N', '달콤한 팥 앙금이 가득한 부드러운 도넛으로 전통과 현대의 맛이 조화로운 디저트'),
+('고구마케이크빵', 'bread', 1800, 3000, '2024-01-01', '/images/bread/고구마케이크빵.jpg', 'Y', '부드러운 빵 속에 달콤한 고구마 필링이 가득한 케이크 스타일의 빵'),
+('꽈베기', 'bread', 2000, 2500, '2024-01-01', '/images/bread/꽈베기.jpg', 'N', '쫄깃한 식감과 달콤한 맛이 일품인 전통적인 꽈배기'),
+('라우겐', 'bread', 2400, 4000, '2024-01-01', '/images/bread/라우겐.jpg', 'N', '독일식 프레첼 빵으로, 짭짤하고 쫄깃한 식감이 특징인 빵'),
+('베이글빵', 'bread', 2000, 3800, '2024-01-01', '/images/bread/베이글빵.jpg', 'N', '쫄깃한 식감과 부드러운 맛이 일품인 클래식한 베이글'),
+('생크림소보로', 'bread', 2000, 3800, '2024-01-01', '/images/bread/생크림소보로.jpg', 'N', '부드러운 생크림과 바삭한 소보로의 조화가 매력적인 달콤한 빵'),
+('꿀버터바게트', 'bread', 2000, 3800, '2024-01-01', '/images/bread/꿀버터바게트.jpg', 'N', '바삭한 바게트에 꿀과 버터가 스며들어 고소하고 달콤한 맛이 돋보이는 빵'),
+('애플파이', 'bread', 3000, 4500, '2024-01-01', '/images/bread/애플파이.jpg', 'N', '바삭한 페이스트리 속에 달콤하고 상큼한 사과 필링이 가득한 클래식한 디저트'),
+('우유도넛', 'bread', 2200, 3300, '2024-01-01', '/images/bread/우유도넛.jpg', 'N', '부드러운 우유 크림이 가득 들어간 폭신폭신한 도넛으로 은은한 우유 향이 일품'),
+('찹쌀브레드', 'bread', 2800, 4200, '2024-01-01', '/images/bread/찹쌀브레드.jpg', 'N', '쫄깃한 찹쌀의 식감과 부드러운 빵의 조화가 일품인 건강한 맛의 브레드'),
+('카라멜 러스크', 'bread', 3500, 5000, '2024-01-01', '/images/bread/카라멜러스크.jpg', 'N', '바삭하게 구운 빵에 달콤한 카라멜을 입힌 고급스러운 간식'),
+('캐찰빵', 'bread', 2600, 3800, '2024-01-01', '/images/bread/캐찰빵.jpg', 'N', '치즈의 고소함과 달콤한 빵의 조화가 일품인 멕시코 스타일의 특색있는 빵');
+
 -- 커피 insert문
 INSERT INTO ERP.Coffee (CoffeeID, CoffeeName, SalePrice, CoffeeImage, Recommend, Temperature, DetailDescription)
 VALUES 
@@ -581,104 +570,131 @@ VALUES
 (1, 'Product', NULL, 10, '갈릭꽈베기', 10, 'ml', 10, 10 * 10),   -- 올리브오일
 (1, 'Product', NULL, 30, '갈릭꽈베기', 1, 'ea', 10, 10),         -- 포장지
 
--- 고구마케이크빵 730원
-(3, 'Product', NULL, 5, '고구마케이크빵', 50, 'g', 1.5, 50 * 1.5),  -- 밀가루
-(3, 'Product', NULL, 2, '고구마케이크빵', 30, 'g', 12, 30 * 12),    -- 고구마필링
-(3, 'Product', NULL, 17, '고구마케이크빵', 20, 'g', 0.5, 20 * 0.5), -- 설탕
-(3, 'Product', NULL, 19, '고구마케이크빵', 10, 'ml', 8, 10 * 8),    -- 우유
-(3, 'Product', NULL, 15, '고구마케이크빵', 10, 'g', 12, 10 * 12),   -- 버터
-(3, 'Product', NULL, 9, '고구마케이크빵', 10, 'g', 6, 10 * 6),      -- 시나몬 가루
-(3, 'Product', NULL, 11, '고구마케이크빵', 5, 'g', 3, 5 * 3),       -- 이스트
-(3, 'Product', NULL, 30, '고구마케이크빵', 1, 'ea', 10, 10),        -- 포장지
+-- 단팥도넛 502.5원
+(2, 'Product', NULL, 5, '단팥도넛', 60, 'g', 1.5, 60 * 1.5),    -- 밀가루
+(2, 'Product', NULL, 11, '단팥도넛', 5, 'g', 3, 5 * 3),         -- 이스트
+(2, 'Product', NULL, 15, '단팥도넛', 15, 'g', 12, 15 * 12),     -- 버터
+(2, 'Product', NULL, 17, '단팥도넛', 15, 'g', 0.5, 15 * 0.5),   -- 설탕
+(2, 'Product', NULL, 18, '단팥도넛', 20, 'g', 7, 20 * 7),       -- 팥앙금
+(2, 'Product', NULL, 19, '단팥도넛', 20, 'ml', 3, 20 * 3),      -- 우유
+(2, 'Product', NULL, 30, '단팥도넛', 1, 'ea', 10, 10),          -- 포장지
 
--- 꽈베기  475원
-(4, 'Product', NULL, 5, '꽈베기', 30, 'g', 1.5, 30 * 1.5),    -- 밀가루
-(4, 'Product', NULL, 17, '꽈베기', 10, 'g', 0.5, 10 * 0.5),   -- 설탕
-(4, 'Product', NULL, 11, '꽈베기', 5, 'g', 3, 5 * 3),         -- 이스트
-(4, 'Product', NULL, 8, '꽈베기', 5, 'g', 2, 5 * 2),          -- 소금
-(4, 'Product', NULL, 25, '꽈베기', 20, 'ml', 18, 20 * 18),    -- 식용유
-(4, 'Product', NULL, 9, '꽈베기', 5, 'g', 6, 5 * 6),          -- 시나몬 가루
-(4, 'Product', NULL, 30, '꽈베기', 1, 'ea', 10, 10),          -- 포장지
+
+-- 고구마케이크빵 730원
+(3, 'Product', NULL, 2, '고구마케이크빵', 30, 'g', 8, 30 * 8),       -- 고구마필링
+(3, 'Product', NULL, 5, '고구마케이크빵', 50, 'g', 1.5, 50 * 1.5),   -- 밀가루
+(3, 'Product', NULL, 9, '고구마케이크빵', 10, 'g', 6, 10 * 6),       -- 시나몬 가루
+(3, 'Product', NULL, 11, '고구마케이크빵', 5, 'g', 3, 5 * 3),        -- 이스트
+(3, 'Product', NULL, 15, '고구마케이크빵', 10, 'g', 12, 10 * 12),    -- 버터
+(3, 'Product', NULL, 17, '고구마케이크빵', 20, 'g', 0.5, 20 * 0.5),  -- 설탕
+(3, 'Product', NULL, 19, '고구마케이크빵', 10, 'ml', 8, 10 * 8),     -- 우유
+(3, 'Product', NULL, 30, '고구마케이크빵', 1, 'ea', 10, 10),         -- 포장지
+
+-- 꽈베기 475원
+(4, 'Product', NULL, 5, '꽈베기', 30, 'g', 1.5, 30 * 1.5),          -- 밀가루
+(4, 'Product', NULL, 8, '꽈베기', 5, 'g', 2, 5 * 2),               -- 소금
+(4, 'Product', NULL, 9, '꽈베기', 5, 'g', 6, 5 * 6),               -- 시나몬 가루
+(4, 'Product', NULL, 11, '꽈베기', 5, 'g', 3, 5 * 3),              -- 이스트
+(4, 'Product', NULL, 17, '꽈베기', 10, 'g', 0.5, 10 * 0.5),        -- 설탕
+(4, 'Product', NULL, 25, '꽈베기', 20, 'ml', 18, 20 * 18),         -- 식용유
+(4, 'Product', NULL, 30, '꽈베기', 1, 'ea', 10, 10),               -- 포장지
+
 
 -- 라우겐 775원
-(5, 'Product', NULL, 5, '라우겐', 100, 'g', 1.5, 100 * 1.5),  -- 밀가루
-(5, 'Product', NULL, 17, '라우겐', 20, 'g', 0.5, 20 * 0.5),   -- 설탕
-(5, 'Product', NULL, 19, '라우겐', 50, 'ml', 8, 50 * 8),      -- 우유
-(5, 'Product', NULL, 11, '라우겐', 5, 'g', 3, 5 * 3),         -- 이스트
-(5, 'Product', NULL, 8, '라우겐', 5, 'g', 2, 5 * 2),          -- 소금
-(5, 'Product', NULL, 9, '라우겐', 10, 'g', 6, 10 * 6),        -- 시나몬 가루
-(5, 'Product', NULL, 15, '라우겐', 10, 'g', 12, 10 * 12),     -- 버터
-(5, 'Product', NULL, 30, '라우겐', 1, 'ea', 10, 10),          -- 포장지
+(5, 'Product', NULL, 5, '라우겐', 100, 'g', 1.5, 100 * 1.5),     -- 밀가루
+(5, 'Product', NULL, 8, '라우겐', 5, 'g', 2, 5 * 2),             -- 소금
+(5, 'Product', NULL, 9, '라우겐', 10, 'g', 6, 10 * 6),           -- 시나몬 가루
+(5, 'Product', NULL, 11, '라우겐', 5, 'g', 3, 5 * 3),            -- 이스트
+(5, 'Product', NULL, 15, '라우겐', 10, 'g', 12, 10 * 12),        -- 버터
+(5, 'Product', NULL, 17, '라우겐', 20, 'g', 0.5, 20 * 0.5),      -- 설탕
+(5, 'Product', NULL, 19, '라우겐', 50, 'ml', 8, 50 * 8),         -- 우유
+(5, 'Product', NULL, 30, '라우겐', 1, 'ea', 10, 10),             -- 포장지
+
 
 -- 베이글빵 315원
-(6, 'Product', NULL, 5, '베이글빵', 50, 'g', 1.5, 50 * 1.5),  -- 밀가루
-(6, 'Product', NULL, 17, '베이글빵', 30, 'g', 0.5, 30 * 0.5), -- 설탕
-(6, 'Product', NULL, 19, '베이글빵', 20, 'ml', 8, 20 * 8),    -- 우유
-(6, 'Product', NULL, 11, '베이글빵', 5, 'g', 3, 5 * 3),       -- 이스트
-(6, 'Product', NULL, 8, '베이글빵', 5, 'g', 2, 5 * 2),        -- 소금
-(6, 'Product', NULL, 9, '베이글빵', 5, 'g', 6, 5 * 6),        -- 시나몬 가루
-(6, 'Product', NULL, 30, '베이글빵', 1, 'ea', 10, 10),        -- 포장지
+(6, 'Product', NULL, 5, '베이글빵', 50, 'g', 1.5, 50 * 1.5),     -- 밀가루
+(6, 'Product', NULL, 8, '베이글빵', 5, 'g', 2, 5 * 2),           -- 소금
+(6, 'Product', NULL, 9, '베이글빵', 5, 'g', 6, 5 * 6),           -- 시나몬 가루
+(6, 'Product', NULL, 11, '베이글빵', 5, 'g', 3, 5 * 3),          -- 이스트
+(6, 'Product', NULL, 17, '베이글빵', 30, 'g', 0.5, 30 * 0.5),    -- 설탕
+(6, 'Product', NULL, 19, '베이글빵', 20, 'ml', 8, 20 * 8),       -- 우유
+(6, 'Product', NULL, 30, '베이글빵', 1, 'ea', 10, 10),           -- 포장지
+
 
 
 -- 생크림소보로 1225원
-(7, 'Product', NULL, 5, '생크림소보로', 40, 'g', 1.5, 40 * 1.5),       -- 밀가루
-(7, 'Product', NULL, 17, '생크림소보로', 20, 'g', 0.5, 20 * 0.5),      -- 설탕
-(7, 'Product', NULL, 19, '생크림소보로', 20, 'ml', 8, 20 * 8),         -- 우유
-(7, 'Product', NULL, 15, '생크림소보로', 10, 'g', 12, 10 * 12),        -- 버터
-(7, 'Product', NULL, 18, '생크림소보로', 40, 'g', 20, 40 * 20),        -- 생크림
-(7, 'Product', NULL, 9, '생크림소보로', 5, 'g', 6, 5 * 6),             -- 시나몬 가루
-(7, 'Product', NULL, 8, '생크림소보로', 10, 'g', 2, 10 * 2),           -- 소금
-(7, 'Product', NULL, 11, '생크림소보로', 5, 'g', 3, 5 * 3),            -- 이스트
-(7, 'Product', NULL, 30, '생크림소보로', 1, 'ea', 10, 10),             -- 포장지
+(7, 'Product', NULL, 5, '생크림소보로', 40, 'g', 1.5, 40 * 1.5),    -- 밀가루
+(7, 'Product', NULL, 8, '생크림소보로', 10, 'g', 2, 10 * 2),        -- 소금
+(7, 'Product', NULL, 9, '생크림소보로', 5, 'g', 6, 5 * 6),          -- 시나몬 가루
+(7, 'Product', NULL, 11, '생크림소보로', 5, 'g', 3, 5 * 3),         -- 이스트
+(7, 'Product', NULL, 15, '생크림소보로', 10, 'g', 12, 10 * 12),     -- 버터
+(7, 'Product', NULL, 17, '생크림소보로', 20, 'g', 0.5, 20 * 0.5),   -- 설탕
+(7, 'Product', NULL, 18, '생크림소보로', 40, 'g', 20, 40 * 20),     -- 생크림
+(7, 'Product', NULL, 19, '생크림소보로', 20, 'ml', 8, 20 * 8),      -- 우유
+(7, 'Product', NULL, 30, '생크림소보로', 1, 'ea', 10, 10),          -- 포장지
+
 
 -- 꿀버터바게트 1085원
-(7, 'Product', NULL, 5, '꿀버터바게트', 60, 'g', 1.5, 60 * 1.5),       -- 밀가루
-(7, 'Product', NULL, 17, '꿀버터바게트', 20, 'g', 0.5, 20 * 0.5),      -- 설탕
-(7, 'Product', NULL, 19, '꿀버터바게트', 20, 'ml', 8, 20 * 8),         -- 우유
-(7, 'Product', NULL, 11, '꿀버터바게트', 5, 'g', 3, 5 * 3),            -- 이스트
-(7, 'Product', NULL, 8, '꿀버터바게트', 10, 'g', 2, 10 * 2),           -- 소금
-(7, 'Product', NULL, 25, '꿀버터바게트', 30, 'ml', 25, 30 * 25),       -- 꿀
-(7, 'Product', NULL, 9, '꿀버터바게트', 5, 'g', 6, 5 * 6),             -- 시나몬 가루
-(7, 'Product', NULL, 30, '꿀버터바게트', 1, 'ea', 10, 10),             -- 포장지
+(8, 'Product', NULL, 5, '꿀버터바게트', 60, 'g', 1.5, 60 * 1.5),       -- 밀가루
+(8, 'Product', NULL, 8, '꿀버터바게트', 10, 'g', 2, 10 * 2),           -- 소금
+(8, 'Product', NULL, 9, '꿀버터바게트', 5, 'g', 6, 5 * 6),             -- 시나몬 가루
+(8, 'Product', NULL, 11, '꿀버터바게트', 5, 'g', 3, 5 * 3),            -- 이스트
+(8, 'Product', NULL, 17, '꿀버터바게트', 20, 'g', 0.5, 20 * 0.5),      -- 설탕
+(8, 'Product', NULL, 19, '꿀버터바게트', 20, 'ml', 8, 20 * 8),         -- 우유
+(8, 'Product', NULL, 25, '꿀버터바게트', 30, 'ml', 25, 30 * 25),       -- 꿀
+(8, 'Product', NULL, 30, '꿀버터바게트', 1, 'ea', 10, 10),             -- 포장지
 
 -- 애플파이 425원
 (9, 'Product', NULL, 5, '애플파이', 40, 'g', 1.5, 40 * 1.5),           -- 밀가루
+(9, 'Product', NULL, 8, '애플파이', 10, 'g', 2, 10 * 2),               -- 소금
+(9, 'Product', NULL, 9, '애플파이', 5, 'g', 6, 5 * 6),                 -- 시나몬 가루
+(9, 'Product', NULL, 11, '애플파이', 5, 'g', 3, 5 * 3),                -- 이스트
+(9, 'Product', NULL, 15, '애플파이', 10, 'g', 12, 10 * 12),            -- 버터
 (9, 'Product', NULL, 17, '애플파이', 20, 'g', 0.5, 20 * 0.5),          -- 설탕
 (9, 'Product', NULL, 19, '애플파이', 20, 'ml', 8, 20 * 8),             -- 우유
-(9, 'Product', NULL, 11, '애플파이', 5, 'g', 3, 5 * 3),                -- 이스트
-(9, 'Product', NULL, 8, '애플파이', 10, 'g', 2, 10 * 2),               -- 소금
-(9, 'Product', NULL, 15, '애플파이', 10, 'g', 12, 10 * 12),            -- 버터
-(9, 'Product', NULL, 9, '애플파이', 5, 'g', 6, 5 * 6),                 -- 시나몬 가루
 (9, 'Product', NULL, 30, '애플파이', 1, 'ea', 10, 10),                 -- 포장지
 
+-- 우유도넛 451.5원
+(10, 'Product', NULL, 5, '우유도넛', 50, 'g', 1.5, 50 * 1.5),    -- 밀가루
+(10, 'Product', NULL, 7, '우유도넛', 10, 'g', 2, 10 * 2),        -- 베이킹파우더
+(10, 'Product', NULL, 8, '우유도넛', 2, 'g', 1, 2 * 1),          -- 소금
+(10, 'Product', NULL, 10, '우유도넛', 5, 'ml', 10, 5 * 10),      -- 올리브오일
+(10, 'Product', NULL, 11, '우유도넛', 5, 'g', 3, 5 * 3),         -- 이스트
+(10, 'Product', NULL, 12, '우유도넛', 3, 'g', 4, 3 * 4),         -- 파슬리
+(10, 'Product', NULL, 15, '우유도넛', 10, 'g', 12, 10 * 12),     -- 버터
+(10, 'Product', NULL, 17, '우유도넛', 15, 'g', 0.5, 15 * 0.5),   -- 설탕
+(10, 'Product', NULL, 19, '우유도넛', 30, 'ml', 3, 30 * 3),      -- 우유
+(10, 'Product', NULL, 30, '우유도넛', 1, 'ea', 10, 10),          -- 포장지
+
 -- 찹쌀브레드 1395원
-(11, 'Product', NULL, 5, '찹쌀브레드', 100, 'g', 1.5, 100 * 1.5),      -- 밀가루
-(11, 'Product', NULL, 26, '찹쌀브레드', 50, 'g', 20, 50 * 20),         -- 찹쌀
-(11, 'Product', NULL, 17, '찹쌀브레드', 20, 'g', 0.5, 20 * 0.5),       -- 설탕
-(11, 'Product', NULL, 19, '찹쌀브레드', 20, 'ml', 8, 20 * 8),          -- 우유
-(11, 'Product', NULL, 11, '찹쌀브레드', 5, 'g', 3, 5 * 3),             -- 이스트
-(11, 'Product', NULL, 8, '찹쌀브레드', 10, 'g', 2, 10 * 2),            -- 소금
-(11, 'Product', NULL, 9, '찹쌀브레드', 5, 'g', 6, 5 * 6),              -- 시나몬 가루
-(11, 'Product', NULL, 30, '찹쌀브레드', 1, 'ea', 10, 10),              -- 포장지
+(11, 'Product', NULL, 5, '찹쌀브레드', 100, 'g', 1.5, 100 * 1.5),       -- 밀가루
+(11, 'Product', NULL, 8, '찹쌀브레드', 10, 'g', 2, 10 * 2),             -- 소금
+(11, 'Product', NULL, 9, '찹쌀브레드', 5, 'g', 6, 5 * 6),               -- 시나몬 가루
+(11, 'Product', NULL, 11, '찹쌀브레드', 5, 'g', 3, 5 * 3),              -- 이스트
+(11, 'Product', NULL, 17, '찹쌀브레드', 20, 'g', 0.5, 20 * 0.5),        -- 설탕
+(11, 'Product', NULL, 19, '찹쌀브레드', 20, 'ml', 8, 20 * 8),           -- 우유
+(11, 'Product', NULL, 26, '찹쌀브레드', 50, 'g', 20, 50 * 20),          -- 찹쌀
+(11, 'Product', NULL, 30, '찹쌀브레드', 1, 'ea', 10, 10),               -- 포장지
 
 -- 카라멜러스크 540원
-(12, 'Product', NULL, 5, '카라멜러스크', 40, 'g', 1.5, 40 * 1.5),      -- 밀가루
-(12, 'Product', NULL, 17, '카라멜러스크', 10, 'g', 0.5, 10 * 0.5),     -- 설탕
-(12, 'Product', NULL, 4, '카라멜러스크', 10, 'ml', 15, 10 * 15),       -- 카라멜 시럽
-(12, 'Product', NULL, 19, '카라멜러스크', 20, 'ml', 8, 20 * 8),        -- 우유
-(12, 'Product', NULL, 11, '카라멜러스크', 5, 'g', 3, 5 * 3),           -- 이스트
-(12, 'Product', NULL, 8, '카라멜러스크', 10, 'g', 2, 10 * 2),          -- 소금
-(12, 'Product', NULL, 15, '카라멜러스크', 10, 'g', 12, 10 * 12),       -- 버터
-(12, 'Product', NULL, 30, '카라멜러스크', 1, 'ea', 10, 10),            -- 포장지
+(12, 'Product', NULL, 4, '카라멜러스크', 10, 'ml', 15, 10 * 15),        -- 카라멜 시럽
+(12, 'Product', NULL, 5, '카라멜러스크', 40, 'g', 1.5, 40 * 1.5),       -- 밀가루
+(12, 'Product', NULL, 8, '카라멜러스크', 10, 'g', 2, 10 * 2),           -- 소금
+(12, 'Product', NULL, 11, '카라멜러스크', 5, 'g', 3, 5 * 3),            -- 이스트
+(12, 'Product', NULL, 15, '카라멜러스크', 10, 'g', 12, 10 * 12),        -- 버터
+(12, 'Product', NULL, 17, '카라멜러스크', 10, 'g', 0.5, 10 * 0.5),      -- 설탕
+(12, 'Product', NULL, 19, '카라멜러스크', 20, 'ml', 8, 20 * 8),         -- 우유
+(12, 'Product', NULL, 30, '카라멜러스크', 1, 'ea', 10, 10),             -- 포장지
+
 
 -- 캐찰빵 315원
-(13, 'Product', NULL, 5, '캐찰빵', 50, 'g', 1.5, 50 * 1.5),            -- 밀가루
-(13, 'Product', NULL, 17, '캐찰빵', 10, 'g', 0.5, 10 * 0.5),           -- 설탕
-(13, 'Product', NULL, 19, '캐찰빵', 20, 'ml', 8, 20 * 8),              -- 우유
-(13, 'Product', NULL, 11, '캐찰빵', 5, 'g', 3, 5 * 3),                 -- 이스트
-(13, 'Product', NULL, 8, '캐찰빵', 10, 'g', 2, 10 * 2),                -- 소금
-(13, 'Product', NULL, 9, '캐찰빵', 5, 'g', 6, 5 * 6),                  -- 시나몬 가루
-(13, 'Product', NULL, 30, '캐찰빵', 1, 'ea', 10, 10),                  -- 포장지
+(13, 'Product', NULL, 5, '캐찰빵', 50, 'g', 1.5, 50 * 1.5),             -- 밀가루
+(13, 'Product', NULL, 8, '캐찰빵', 10, 'g', 2, 10 * 2),                 -- 소금
+(13, 'Product', NULL, 9, '캐찰빵', 5, 'g', 6, 5 * 6),                   -- 시나몬 가루
+(13, 'Product', NULL, 11, '캐찰빵', 5, 'g', 3, 5 * 3),                  -- 이스트
+(13, 'Product', NULL, 17, '캐찰빵', 10, 'g', 0.5, 10 * 0.5),            -- 설탕
+(13, 'Product', NULL, 19, '캐찰빵', 20, 'ml', 8, 20 * 8),               -- 우유
+(13, 'Product', NULL, 30, '캐찰빵', 1, 'ea', 10, 10),                   -- 포장지
 
 
 
