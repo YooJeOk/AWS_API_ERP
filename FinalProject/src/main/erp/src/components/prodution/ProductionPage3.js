@@ -35,7 +35,7 @@ function ProductionPage3() {
                         <h1>생산 내역 조회</h1>
                         <button className="create-button">생성</button>
                     </div>
-                    <table className="production-table">
+                    <table className="table production-table">
                         <thead>
                             <tr>
                                 <th>생산 일자</th>

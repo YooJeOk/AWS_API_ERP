@@ -1,0 +1,25 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+
+}
+.store-inven-container{
+    margin-left: 250px;
+    position: relative;
+}
+.material-container{
+    margin-top: 0px;
+}
+.product-page{
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+.materials-page{
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+
+}
