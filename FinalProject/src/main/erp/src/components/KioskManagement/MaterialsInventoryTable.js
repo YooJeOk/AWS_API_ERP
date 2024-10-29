@@ -11,9 +11,9 @@ const MaterialsInventoryTable = ({ materials }) => {
                         <th>자재명</th>
                         <th>카테고리</th>
                         {/* <th>단가</th> */}
-                        <th>매장 수량</th>
-                        <th>단위</th>
-                        <th>최종 업데이트</th>
+                        <th>매장 수량 / 단위</th>
+                        {/* <th>단위</th> */}
+                        {/* <th>최종 업데이트</th> */}
                     </tr>
                 </thead>
                 <tbody>
@@ -22,10 +22,10 @@ const MaterialsInventoryTable = ({ materials }) => {
                             <td>{material.materialId}</td>
                             <td>{material.materialName}</td>
                             <td>{material.category}</td>
-                            <td>{material.quantityInStore || 'N/A'}</td>
+                            <td>{material.quantityInStore || 'N/A'} / {material.unit}</td>
                             {/* <td>{material.unitPrice}</td> */}
-                            <td>{material.unit}</td>
-                            <td>{new Date(material.lastUpdated).toLocaleDateString()}</td>
+                            {/* <td>{material.unit}</td> */}
+                            {/* <td>{new Date(material.lastUpdated).toLocaleDateString()}</td> */}
                         </tr>
                     ))}
                 </tbody>

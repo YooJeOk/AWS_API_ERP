@@ -74,6 +74,7 @@ const EarnPage = () => {
         if (!response.ok) {
           throw new Error('Number not found');
         }
+        
         const data = await response.json();
         setUserData(data);
       } catch (error) {
