@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import './production.css';
 
 function MBOMForm() {
     const [formData, setFormData] = useState([
         {
-            productionItem: '',
-            productionQuantity: '',
-            productionDateTime: '',
-            deliveryDateTime: '',
-            priority: '',
-            notes: ''
+            productId: '',       // ProductID와 매칭
+            quantity: '',         // Quantity와 매칭
+            startDate: '',        // StartDate와 매칭
+            endDate: '',          // EndDate와 매칭
+            priority: '',         // Priority와 매칭
+            etc: ''               // 기타사항과 매칭
         }
     ]);
 
@@ -24,9 +25,32 @@ function MBOMForm() {
     };
 
     // 폼 제출 처리
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('생산 주문 등록 데이터:', formData);
+        
+        try {
+            // formData 배열의 첫 번째 객체만 전송
+            const response = await axios.post('http://localhost:8080/api/workorders', formData[0]);
+            
+            if (response.status === 200) {
+                console.log('생산 주문이 성공적으로 등록되었습니다:', response.data);
+                // 필요한 경우 폼 초기화
+                setFormData([
+                    {
+                        productId: '',
+                        quantity: '',
+                        startDate: '',
+                        endDate: '',
+                        priority: '',
+                        etc: ''
+                    }
+                ]);
+            } else {
+                console.error('생산 주문 등록 실패:', response.status);
+            }
+        } catch (error) {
+            console.error('서버로 데이터 전송 중 오류 발생:', error);
+        }
     };
 
     return (
@@ -41,23 +65,23 @@ function MBOMForm() {
                         <table className="production-table" style={{ marginBottom: '20px' }}>
                             <thead>
                                 <tr>
-                                    <th>생산 품목</th>
+                                    <th>생산 품목 ID</th>
                                     <th>생산 수량</th>
-                                    <th>생산 날짜 및 시간</th>
+                                    <th>생산 시작 날짜 및 시간</th>
                                     <th>납기 날짜 및 시간</th>
                                     <th>우선순위</th>
-                                    <th>기타사항</th>
+                                    <th>기타 사항</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {formData.map((row, index) => (
                                     <tr key={index}>
-                                        <td><input type="text" name="productionItem" value={row.productionItem} onChange={(e) => handleChange(index, e)} required /></td>
-                                        <td><input type="text" name="productionQuantity" value={row.productionQuantity} onChange={(e) => handleChange(index, e)} required /></td>
-                                        <td><input type="datetime-local" name="productionDateTime" value={row.productionDateTime} onChange={(e) => handleChange(index, e)} required /></td>
-                                        <td><input type="datetime-local" name="deliveryDateTime" value={row.deliveryDateTime} onChange={(e) => handleChange(index, e)} required /></td>
+                                        <td><input type="text" name="productId" value={row.productId} onChange={(e) => handleChange(index, e)} required /></td>
+                                        <td><input type="text" name="quantity" value={row.quantity} onChange={(e) => handleChange(index, e)} required /></td>
+                                        <td><input type="datetime-local" name="startDate" value={row.startDate} onChange={(e) => handleChange(index, e)} required /></td>
+                                        <td><input type="datetime-local" name="endDate" value={row.endDate} onChange={(e) => handleChange(index, e)} required /></td>
                                         <td><input type="text" name="priority" value={row.priority} onChange={(e) => handleChange(index, e)} required /></td>
-                                        <td><input type="text" name="notes" value={row.notes} onChange={(e) => handleChange(index, e)} /></td>
+                                        <td><input type="text" name="etc" value={row.etc} onChange={(e) => handleChange(index, e)} /></td>
                                     </tr>
                                 ))}
                             </tbody>

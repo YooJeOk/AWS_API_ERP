@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import './production.css';
+import { useNavigate, Routes, Route } from 'react-router-dom';
+
+import InputForm8 from './InputForm8';
 
 function ProductionTable() {
     const [data, setData] = useState([]);
+    const navigate = useNavigate(); // navigate 변수 선언
 
     useEffect(() => {
-        // 8개의 열에 맞는 더미 데이터를 설정합니다
         const dummyData = [
             { productionItem: '갈릭꽈배기', consumedItem: '밀가루', itemCode: 'A123', itemSpec: 'g', quantity: 50, unitPrice: 1.5, totalCost: 75 },
             { productionItem: '갈릭꽈배기', consumedItem: '마늘', itemCode: 'A124', itemSpec: 'g', quantity: 50, unitPrice: 10, totalCost: 500 },
@@ -26,6 +28,9 @@ function ProductionTable() {
                 <div className="production-mainbar">
                     <div className="productionbar">
                         <h1>소요량 조회</h1>
+                        <button className="create-button" onClick={() => navigate('/input8')}>
+                            생성
+                        </button>
                     </div>
                     <table className="production-table">
                         <thead>
@@ -60,6 +65,9 @@ function ProductionTable() {
                         </tbody>
                     </table>
                 </div>
+                <Routes>
+                    <Route path="/input8" element={<InputForm8 />} />
+                </Routes>
             </main>
         </div>
     );

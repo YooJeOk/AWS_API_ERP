@@ -1,50 +1,61 @@
-import React, { useState, useEffect } from 'react';
-import { ComposedChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import React, { useState } from 'react';
+import { useNavigate, Routes, Route } from 'react-router-dom';
 import './ProductionPage.css';
+import InputForm9 from './InputForm9';
 
-function ProductionPage9() {
-    const [chartData, setChartData] = useState([]);
-    const [isDataLoaded, setIsDataLoaded] = useState(false);
-
-    useEffect(() => {
-        const fetchData = () => {
-            const daysInMonth = Array.from({ length: 31 }, (_, i) => `2024-10-${i + 1}`);
-            const data = daysInMonth.map((day) => ({
-                date: day,
-                scheduledProduction: Math.floor(Math.random() * 150) + 50,
-                actualProduction: Math.floor(Math.random() * 150) + 50,
-                defects: Math.floor(Math.random() * 20) + 5
-            }));
-            setChartData(data);
-            setIsDataLoaded(true);
-        };
-
-        fetchData();
-    }, []);
+function MBOMView() {
+    const [data] = useState([]);  // 초기 데이터가 비어있음
+    const navigate = useNavigate();
 
     return (
-        <div className="chart-container" style={{ width: '80%', height: '700px', margin: '0 auto' }}> {/* 너비와 높이 조절 */}
-            {isDataLoaded ? (
-                <ResponsiveContainer width="100%" height="100%">
-                    <ComposedChart
-                        data={chartData}
-                        margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="date" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey="scheduledProduction" barSize={20} fill="#A6CEE3" name="생산지시된 양" />  {/* 파스텔 블루 */}
-                        <Bar dataKey="actualProduction" barSize={20} fill="#B2DF8A" name="생산된 양" />  {/* 파스텔 그린 */}
-                        <Line type="monotone" dataKey="defects" stroke="#FB9A99" name="불량 갯수" />  {/* 파스텔 핑크 */}
-                    </ComposedChart>
-                </ResponsiveContainer>
-            ) : (
-                <p>Loading...</p>
-            )}
+        <div className="custom-container">
+            <aside id="sidebar"></aside>
+            <main className="production-content">
+                <div className="production-mainbar">
+                    <div className="productionbar">
+                        <h1>생산 실적 조회</h1>
+                        <button className="create-button" onClick={() => navigate('/input9')}>
+                            생성
+                        </button>
+                    </div>
+                    <table className="production-table">
+                        <thead>
+                            <tr>
+                                <th>작업 일자</th>
+                                <th>작업지시번호</th>
+                                <th>품목 코드</th>
+                                <th>품목명</th>
+                                <th>수량</th>
+                                <th>불량률</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data.length > 0 ? (
+                                data.map((row, index) => (
+                                    <tr key={index}>
+                                        <td>{row.productionDate}</td>
+                                        <td>{row.productionCalculation}</td>
+                                        <td>{row.productionPeriod}</td>
+                                        <td>{row.baseItem}</td>
+                                        <td>{row.status}</td>
+                                        <td>{row.mrpCalculation}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="6">등록된 데이터가 없습니다</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+
+                <Routes>
+                    <Route path="/input9" element={<InputForm9 />} />
+                </Routes>
+            </main>
         </div>
     );
 }
 
-export default ProductionPage9;
+export default MBOMView;

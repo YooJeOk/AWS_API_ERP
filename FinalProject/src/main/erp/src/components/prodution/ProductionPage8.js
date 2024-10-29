@@ -6,7 +6,7 @@ import './ChartStyles.css';
 
 function ProductionMonitoringPage() {
     const [data, setData] = useState([
-        { orderId: 1, productionRate: 0, temperature: 25, humidity: 50, productName: '갈릭꽈베기'}, 
+        { orderId: 1, productionRate: 0, temperature: 25, humidity: 50, productName: '갈릭꽈베기' }, 
         { orderId: 2, productionRate: 0, temperature: 25, humidity: 50, productName: '단팥도넛' },
         { orderId: 3, productionRate: 0, temperature: 25, humidity: 50, productName: '고구마케이크빵' },
         { orderId: 4, productionRate: 0, temperature: 25, humidity: 50, productName: '꽈베기' }
@@ -23,12 +23,13 @@ function ProductionMonitoringPage() {
                     productionRate: newData && newData.productionRate ? parseFloat(newData.productionRate) : 0,
                     temperature: newData && newData.temperature ? parseFloat(newData.temperature) : 0,
                     humidity: newData && newData.humidity ? parseFloat(newData.humidity) : 0,
+                    productName: data[index].productName // 기존 productName 유지
                 };
 
                 setData((prevData) => {
                     const updatedData = [...prevData];
                     updatedData[index] = sanitizedData;
-                    console.log("Updated data:", updatedData); // 데이터 갱신 로그 확인
+                    console.log("Updated data:", updatedData);
                     return updatedData;
                 });
             } catch (error) {
@@ -65,10 +66,9 @@ function ProductionMonitoringPage() {
                     {data.map((item, index) => (
                         <div key={index} className="chart-box">
                             <div className="pie-chart-container">
-                                <h3 className="line-name" style={{ fontSize: '1.5em', fontWeight: 'bold', textAlign: 'center' }}>
+                                <h3 className="line-name" style={{ fontSize: '20px', fontWeight: 'bold', textAlign: 'center' }}>
                                     {lineNames[index]}
                                 </h3>
-                                {/* 생산률 원형 차트 */}
                                 <PieChart width={350} height={300}>
                                     <Pie
                                         data={[
@@ -102,43 +102,43 @@ function ProductionMonitoringPage() {
                                 </PieChart>
                             </div>
                             <div className="metrics-container">
-                                {/* 온도 상태 나침반 반원 차트 */}
-                                <div className="temperature" style={{ marginTop: '20px', marginLeft: '15px' }}>
-                                    <h4>온도 상태</h4>
-                                    <PieChart width={120} height={80}>
+                                <div className="temperature" style={{ marginTop: '10px', transform: 'scale(1)', transformOrigin: 'top' }}>
+                                    <h4 style={{ textAlign: 'center', fontSize: '20px' }}>온도 상태</h4>
+                                    <PieChart width={100} height={60}>
                                         <Pie
                                             data={[
-                                                { name: '정상', value: 33.33 },
-                                                { name: '경고', value: 33.33 },
-                                                { name: '위험', value: 33.34 }
+                                                { name: '왼쪽 파란색', value: 33.33 },
+                                                { name: '중앙 초록색', value: 33.33 },
+                                                { name: '오른쪽 빨간색', value: 33.34 }
                                             ]}
                                             dataKey="value"
                                             cx="50%"
                                             cy="100%"
-                                            innerRadius={30}
-                                            outerRadius={50}
+                                            innerRadius={20}
+                                            outerRadius={40}
                                             startAngle={180}
                                             endAngle={0}
                                         >
-                                            <Cell fill="#00C49F" />
-                                            <Cell fill="#FFBB28" />
-                                            <Cell fill="#FF8042" />
+                                            <Cell fill="#0000FF" />  {/* 왼쪽 파란색 */}
+                                            <Cell fill="#00FF00" />  {/* 중앙 초록색 */}
+                                            <Cell fill="#FF0000" />  {/* 오른쪽 빨간색 */}
                                         </Pie>
                                         <path
-                                            d={`M75,80 L${75 + 40 * Math.cos((getNeedleRotation(item.temperature) * Math.PI) / 180)},${80 - 40 * Math.sin((getNeedleRotation(item.temperature) * Math.PI) / 180)}`}
+                                            d={`M50,60 L${50 + 30 * Math.cos((getNeedleRotation(item.temperature) * Math.PI) / 180)},${60 - 30 * Math.sin((getNeedleRotation(item.temperature) * Math.PI) / 180)}`}
                                             stroke={getTemperatureColor(item.temperature)}
                                             strokeWidth="2"
                                         />
                                     </PieChart>
-                                    <div style={{ textAlign: 'center', marginTop: '5px', color: getTemperatureColor(item.temperature) }}>
+                                    <div style={{ textAlign: 'center', marginTop: '5px', color: getTemperatureColor(item.temperature), fontSize: '20px' }}>
                                         {item.temperature}°C
                                     </div>
                                 </div>
                             </div>
-                            <div className="humidity" style={{ fontSize: '0.9em', color: 'black', textAlign: 'center', marginTop: '10px' }}>
+                            <div className="humidity" style={{ fontSize: '20px', color: 'black', textAlign: 'center', marginTop: '10px' }}>
                                 <span>습도: {item.humidity}%</span>
-                                <br />
-                                <span>제품명: {item.productName}</span>
+                            </div>
+                            <div className="product-name" style={{ fontSize: '24px', color: 'black', textAlign: 'center', marginTop: '10px' }}>
+                                <span>{item.productName}</span>
                             </div>
                         </div>
                     ))}

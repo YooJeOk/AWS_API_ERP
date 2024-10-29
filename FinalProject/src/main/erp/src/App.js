@@ -56,7 +56,7 @@ function App() {
                     <Route path="/input3" element={<ProductionSidebarWrapper><InputForm3 /></ProductionSidebarWrapper>} />
                     <Route path="/production3" element={<ProductionSidebarWrapper><ProductionPage3 /></ProductionSidebarWrapper>} />
                     <Route path="/input4" element={<ProductionSidebarWrapper><InputForm4 /></ProductionSidebarWrapper>} />
-                    <Route path="/production4" element={<ProductionSidebarWrapper><ProductionPage4 /></ProductionSidebarWrapper>} />
+                    <Route path="/production4/*" element={<ProductionSidebarWrapper><ProductionPage4 /></ProductionSidebarWrapper>} />
                     <Route path="/production8" element={<ProductionSidebarWrapper><ProductionPage8 /></ProductionSidebarWrapper>} />
                     <Route path="/input8" element={<ProductionSidebarWrapper><InputForm8 /></ProductionSidebarWrapper>} />
                     <Route path="/input5" element={<ProductionSidebarWrapper><InputForm5 /></ProductionSidebarWrapper>} />

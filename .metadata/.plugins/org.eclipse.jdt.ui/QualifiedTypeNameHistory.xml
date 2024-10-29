@@ -21,4 +21,5 @@
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.monitoring.repository.ProductionMonitoringRepository"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.monitoring.service.ProductionMonitoringService"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.monitoring.model.ProductionMonitoring"/>
+    <fullyQualifiedTypeName name="software.amazon.awssdk.services.sns.endpoints.internal.Value.Int"/>
 </qualifiedTypeNameHistroy>
