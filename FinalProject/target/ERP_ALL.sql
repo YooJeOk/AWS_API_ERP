@@ -33,8 +33,7 @@ CREATE TABLE ERP.Product (
     ProductCategory VARCHAR(50) NULL, -- 제품 카테고리
     UnitPrice INT NULL, -- 단가
     SalePrice INT NULL, -- 판매가
-    ProductionDate DATETIME NULL, -- 생산 날짜
-    ProductImage VARCHAR(200) NULL, -- 제품 이미지
+	ProductImage VARCHAR(200) NULL, -- 제품 이미지
     Recommend varchar(30) check (Recommend in ('Y','N')), -- 제품 추천여부(키오스크용)
     DetailDescription varchar(300) NULL, -- 제품 설명(키오스크용)
     PRIMARY KEY (ProductID)
@@ -65,7 +64,7 @@ CREATE TABLE ERP.MaterialsInventory (
     FOREIGN KEY (SupplierID) REFERENCES ERP.Suppliers(SupplierID)
 );
 
--- 4. 원자재 재입고 이력 (RawMaterialRestockHistory)
+-- 4. 원자재 입고 이력 (RawMaterialRestockHistory)
 CREATE TABLE ERP.RawMaterialRestockHistory (
     RestockID INT NOT NULL AUTO_INCREMENT, -- 재입고ID
     MaterialID INT NOT NULL, -- 자재ID
@@ -78,7 +77,7 @@ CREATE TABLE ERP.RawMaterialRestockHistory (
     FOREIGN KEY (SupplierID) REFERENCES ERP.Suppliers(SupplierID)
 );
 
--- 5. 생산 소비 (ProductionConsumption)
+-- 5. 원자재 소비 내역 (ProductionConsumption)
 CREATE TABLE ERP.ProductionConsumption (
     ConsumptionID INT NOT NULL AUTO_INCREMENT, -- 소비ID
     MaterialID INT NOT NULL, -- 자재ID
@@ -159,7 +158,7 @@ CREATE TABLE ERP.SalesDetails (
     FOREIGN KEY (CoffeeID) REFERENCES ERP.Coffee(CoffeeID) 
 );
 
--- 12. 커파 판매 세부 기록 
+-- 12. 커피 판매 세부 기록 
 CREATE TABLE ERP.CoffeeOptionSalesDetails (
     CoffeeOptionDetailID INT NOT NULL AUTO_INCREMENT, -- 커피 추가 옵션 세부 ID
     SaleDetailID INT NOT NULL, -- 판매 세부 ID (SalesDetails와 연결)
@@ -228,7 +227,7 @@ CREATE TABLE ProductionProcessStatus (
     PRIMARY KEY (MonitorID),
     FOREIGN KEY (MonitorID) REFERENCES ProductionMonitoring(MonitorID)
 );
--- 16. 생산 입고 (ProductionEntry)
+-- 16. 생산제품 공장입고 (ProductionEntry)
 CREATE TABLE ERP.ProductionEntry (
     EntryID INT NOT NULL AUTO_INCREMENT, -- 입력ID
     OrderID INT NOT NULL, -- 작업 지시ID

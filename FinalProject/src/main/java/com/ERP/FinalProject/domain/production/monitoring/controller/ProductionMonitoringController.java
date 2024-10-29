@@ -24,7 +24,7 @@ public class ProductionMonitoringController {
         ProductionMonitoring data = service.getNextData(orderId, lastMonitorId);
         
         if (data != null) {
-            lastMonitorIdMap.put(orderId, data.getMonitorId()); // 새로운 MonitorID로 업데이트
+            lastMonitorIdMap.put(orderId, data.getMonitorId()); 
         }
         return data;
     }
