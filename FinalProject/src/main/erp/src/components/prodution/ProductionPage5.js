@@ -1,27 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import './ProductionPage.css';
+import './production.css';
 
-function Production5() {
-    const [data, setData] = useState([]);  // 데이터를 관리할 상태
-    const [isDataLoaded, setIsDataLoaded] = useState(false);
+function ProductionTable() {
+    const [data, setData] = useState([]);
 
     useEffect(() => {
-        // 데이터를 불러오는 부분 (추후에 비동기 통신으로 대체 가능)
-        const fetchData = () => {
-            const dummyData = [
-                {
-                    productionItem: 'Item A',
-                    consumedItem: 'Consumed A',
-                    productionProcess: 'Process 1',
-                    itemCode: 'A123',
-                    itemNameSpec: 'Item Name (Spec)',
-                }
-            ];
-            setData(dummyData);
-            setIsDataLoaded(true);
-        };
-
-        fetchData();
+        // 8개의 열에 맞는 더미 데이터를 설정합니다
+        const dummyData = [
+            { productionItem: '갈릭꽈배기', consumedItem: '밀가루', itemCode: 'A123', itemSpec: 'g', quantity: 50, unitPrice: 1.5, totalCost: 75 },
+            { productionItem: '갈릭꽈배기', consumedItem: '마늘', itemCode: 'A124', itemSpec: 'g', quantity: 50, unitPrice: 10, totalCost: 500 },
+            { productionItem: '갈릭꽈배기', consumedItem: '설탕', itemCode: 'A125', itemSpec: 'g', quantity: 10, unitPrice: 0.5, totalCost: 5 },
+            { productionItem: '갈릭꽈배기', consumedItem: '버터', itemCode: 'A126', itemSpec: 'g', quantity: 10, unitPrice: 12, totalCost: 120 },
+            { productionItem: '갈릭꽈배기', consumedItem: '우유', itemCode: 'A127', itemSpec: 'ml', quantity: 20, unitPrice: 3, totalCost: 60 },
+            { productionItem: '갈릭꽈배기', consumedItem: '이스트', itemCode: 'A128', itemSpec: 'g', quantity: 5, unitPrice: 3, totalCost: 15 },
+            { productionItem: '갈릭꽈배기', consumedItem: '올리브오일', itemCode: 'A129', itemSpec: 'ml', quantity: 10, unitPrice: 10, totalCost: 100 },
+            { productionItem: '갈릭꽈배기', consumedItem: '포장지', itemCode: 'A130', itemSpec: 'ea', quantity: 1, unitPrice: 10, totalCost: 10 },
+        ];
+        setData(dummyData);
     }, []);
 
     return (
@@ -31,32 +26,35 @@ function Production5() {
                 <div className="production-mainbar">
                     <div className="productionbar">
                         <h1>소요량 조회</h1>
-                        <button className="create-button">생성</button>
                     </div>
                     <table className="production-table">
                         <thead>
                             <tr>
-                                <th>생산품목</th>
-                                <th>소모품목</th>
-                                <th>생산공정</th>
-                                <th>품목코드</th>
+                                <th>생산 품목</th>
+                                <th>소모 품목</th>
+                                <th>품목 코드</th>
                                 <th>품목명(규격)</th>
+                                <th>수량</th>
+                                <th>단가</th>
+                                <th>총 원가</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {isDataLoaded ? (
+                            {data.length > 0 ? (
                                 data.map((row, index) => (
                                     <tr key={index}>
                                         <td>{row.productionItem}</td>
                                         <td>{row.consumedItem}</td>
-                                        <td>{row.productionProcess}</td>
                                         <td>{row.itemCode}</td>
-                                        <td>{row.itemNameSpec}</td>
+                                        <td>{row.itemSpec}</td>
+                                        <td>{row.quantity}</td>
+                                        <td>{row.unitPrice}</td>
+                                        <td>{row.totalCost}</td>
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="5">등록된 데이터가 없습니다</td>
+                                    <td colSpan="7">등록된 데이터가 없습니다.</td>
                                 </tr>
                             )}
                         </tbody>
@@ -67,4 +65,4 @@ function Production5() {
     );
 }
 
-export default Production5;
+export default ProductionTable;
