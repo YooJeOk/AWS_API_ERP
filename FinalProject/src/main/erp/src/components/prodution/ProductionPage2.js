@@ -1,43 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate, Routes, Route } from 'react-router-dom';
 import './ProductionPage.css';
+import InputForm2 from './InputForm2';
 
 function InputArrivalForm() {
-    // 폼 데이터를 관리할 상태
-    const [formData, setFormData] = useState({
-        arrivalDate: '',
-        productCode: '',
-        productName: '',
-        specification: '',
-        quantity: '',
-        others: '',
-        workOrder: ''
-    });
-
-    // 테이블에 보여줄 데이터를 관리할 상태
-    const [tableData, setTableData] = useState([]);
-
-    // 폼 데이터가 변경될 때 상태를 업데이트
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
-    };
-
-    // 폼 제출 처리
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setTableData([...tableData, formData]);  // 테이블에 데이터 추가
-        setFormData({  // 폼 초기화
-            arrivalDate: '',
-            productCode: '',
-            productName: '',
-            specification: '',
-            quantity: '',
-            others: '',
-            workOrder: ''
-        });
-    };
+    const [tableData] = useState([]); 
+    const navigate = useNavigate();
 
     return (
         <div className="custom-container">
@@ -45,8 +13,10 @@ function InputArrivalForm() {
             <main className="production-content">
                 <div className="production-mainbar">
                     <div className="productionbar">
-                        <h1>입고 등록 조회</h1>
-                        <button className="create-button">생성</button>
+                        <h1>생산 입고 등록 조회</h1>
+                        <button className="create-button" onClick={() => navigate('/input2')}>
+                            생성
+                        </button>
                     </div>
                     <table className="production-table">
                         <thead>
@@ -57,7 +27,6 @@ function InputArrivalForm() {
                                 <th>규격</th>
                                 <th>수량</th>
                                 <th>기타</th>
-                                <th>작업지시서</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -70,17 +39,20 @@ function InputArrivalForm() {
                                         <td>{row.specification}</td>
                                         <td>{row.quantity}</td>
                                         <td>{row.others}</td>
-                                        <td>{row.workOrder}</td>
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="7">등록된 데이터가 없습니다</td>
+                                    <td colSpan="6">등록된 데이터가 없습니다</td>
                                 </tr>
                             )}
                         </tbody>
                     </table>
                 </div>
+
+                <Routes>
+                    <Route path="/input2" element={<InputForm2 />} />
+                </Routes>
             </main>
         </div>
     );

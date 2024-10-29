@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, Routes, Route } from 'react-router-dom'; // useNavigate, Routes, Route import 추가
 import './ProductionPage.css';
-
+import InputForm3 from './InputForm3';
 function ProductionPage3() {
     const [data, setData] = useState([]);
     const [isDataLoaded, setIsDataLoaded] = useState(false);
+    const navigate = useNavigate(); 
 
     useEffect(() => {
-        // 데이터를 불러오는 비동기 처리 (임시 데이터 사용)
-        const fetchData = () => {
-            const dummyData = [
-                {
-                    workDate: "2024-10-17",
-                    itemCode: "A123",
-                    itemName: "Item A",
-                    spec: "Spec A",
-                    quantity: "100",
-                    workItemName: "Work Item A",
-                    resources: "Resource X, 2 hours"
+        const fetchData = async () => {
+            try {
+                const response = await fetch('/api/production-orders'); // 실제 API 엔드포인트로 변경 필요
+                if (response.ok) {
+                    const result = await response.json();
+                    setData(result);
+                    setIsDataLoaded(true);
+                } else {
+                    console.error('데이터 불러오기 실패:', response.status);
                 }
-            ];
-            setData(dummyData);
-            setIsDataLoaded(true);
+            } catch (error) {
+                console.error('에러 발생:', error);
+            }
         };
 
         fetchData();
@@ -33,7 +33,9 @@ function ProductionPage3() {
                 <div className="production-mainbar">
                     <div className="productionbar">
                         <h1>생산 내역 조회</h1>
-                        <button className="create-button">생성</button>
+                        <button className="create-button" onClick={() => navigate('/input3')}>
+                            생성
+                        </button>
                     </div>
                     <table className="table production-table">
                         <thead>
@@ -56,7 +58,6 @@ function ProductionPage3() {
                                         <td>{row.spec}</td>
                                         <td>{row.quantity}</td>
                                         <td>{row.workItemName}</td>
-                                        
                                     </tr>
                                 ))
                             ) : (
@@ -67,6 +68,10 @@ function ProductionPage3() {
                         </tbody>
                     </table>
                 </div>
+
+                <Routes>
+                <Route path="/input3" element={<InputForm3 />} />
+                </Routes>
             </main>
         </div>
     );

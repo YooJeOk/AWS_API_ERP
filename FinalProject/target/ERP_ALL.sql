@@ -471,20 +471,7 @@ INSERT INTO ERP.WorkOrders (ProductID, Quantity, StartDate, EndDate, Priority, e
 (4, 250, '2024-10-31 07:30:00', '2024-10-31 15:30:00', 'High', '정시 납기 요구');
 
 
-
-
--- 14. 생산 계획 (ProductionPlanning) 테이블 더미 데이터
-INSERT INTO ERP.ProductionPlanning (ProductID, StartDate, EndDate, etc)
-VALUES
-(1, '2024-04-23 08:00:00', '2024-04-23 13:30:00', '긴급 생산 계획'),
-(2, '2024-05-01 09:00:00', '2024-05-01 14:00:00', '일반 생산 계획'),
-(3, '2024-05-06 10:00:00', '2024-05-06 15:30:00', '특별 생산 계획'),
-(4, '2024-05-10 08:30:00', '2024-05-10 12:30:00', '정시 납기 계획');
-
- 
-
-
--- 15. 생산 모니터링 (ProductionMonitoring) 테이블 더미 데이터 (OrderID 1, 4가 진행 중인 작업)
+-- 15. 생산 모니터링 (ProductionMonitoring) 테이블 더미 데이터 (OrderID 1, 4가 진행 중인 작업) CSV파일형태로 넣어야됨
 -- INSERT INTO ERP.ProductionMonitoring (OrderID, Temperature, Humidity, ProductionRate, OperationTime, StartTime)
 -- VALUES
  -- 진행 중인 작업 (OrderID 1) (온도와 습도를 적정 범위 내에서 설정)
@@ -963,7 +950,7 @@ SELECT * FROM ERP.Users;
 SELECT * FROM ERP.coffee_materials;
 
 
-
+-- --------------------------------------------------------------------------------------------------------------------------------------------------- --
 
 -- 간단
 SELECT 

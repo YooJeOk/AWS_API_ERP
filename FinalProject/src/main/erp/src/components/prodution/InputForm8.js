@@ -80,9 +80,9 @@ function MBOMForm() {
                         <table className="production-table">
                             <thead>
                                 <tr>
-                                    <th style={{ width: '5%' }}>ItemID(빵&커피)</th>
+                                    <th style={{ width: '8%' }}>ItemID(빵&커피)</th>
                                     <th style={{ width: '10%' }}>ItemType</th>
-                                    <th style={{ width: '10%' }}>Size</th>
+                                    <th style={{ width: '7%' }}>Size</th>
                                     <th style={{ width: '5%' }}>MaterialID</th>
                                     <th style={{ width: '15%' }}>ProductName</th>
                                     <th style={{ width: '10%' }}>Quantity</th>
