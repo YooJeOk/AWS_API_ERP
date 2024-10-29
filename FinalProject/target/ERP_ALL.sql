@@ -33,12 +33,13 @@ CREATE TABLE ERP.Product (
     ProductCategory VARCHAR(50) NULL, -- 제품 카테고리
     UnitPrice INT NULL, -- 단가
     SalePrice INT NULL, -- 판매가
-	ProductImage VARCHAR(200) NULL, -- 제품 이미지
+    ProductionDate DATETIME NULL, -- 생산 날짜
+    ProductImage VARCHAR(200) NULL, -- 제품 이미지
+    OnKiosk varchar(30) check (OnKiosk in ('Y','N')), -- 제품이 키오스크에 있는지 확인용
     Recommend varchar(30) check (Recommend in ('Y','N')), -- 제품 추천여부(키오스크용)
     DetailDescription varchar(300) NULL, -- 제품 설명(키오스크용)
     PRIMARY KEY (ProductID)
 );
-
 
 -- 2. 공급업체 (Suppliers)
 CREATE TABLE ERP.Suppliers (
@@ -63,6 +64,7 @@ CREATE TABLE ERP.MaterialsInventory (
     PRIMARY KEY (MaterialID),
     FOREIGN KEY (SupplierID) REFERENCES ERP.Suppliers(SupplierID)
 );
+
 
 -- 4. 원자재 입고 이력 (RawMaterialRestockHistory)
 CREATE TABLE ERP.RawMaterialRestockHistory (
@@ -258,17 +260,13 @@ CREATE TABLE ERP.QualityControl (
 -- 18. 매장 재고 (StoreInventory)
 CREATE TABLE ERP.StoreInventory (
     StoreInventoryID INT NOT NULL AUTO_INCREMENT, -- 매장 재고ID
-    ProductID INT NOT NULL, -- 제품ID
-    MaterialID INT NOT NULL, -- 자재ID
-    SaleID INT NOT NULL, -- 판매ID
-    DisposalID INT NOT NULL, -- 폐기ID
+    ProductID INT, -- 제품ID
+    MaterialID INT, -- 자재ID
     QuantityInStore INT NOT NULL, -- 매장 내 수량
     StoreDate DATETIME NOT NULL, -- 매장 날짜
-    PRIMARY KEY (StoreInventoryID, ProductID, MaterialID, SaleID, DisposalID),
+    PRIMARY KEY (StoreInventoryID),
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID),
-    FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID),
-    FOREIGN KEY (SaleID) REFERENCES ERP.SalesRecords(SaleID),
-    FOREIGN KEY (DisposalID) REFERENCES ERP.DisposedRecords(DisposalID)
+    FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
 );
 
 -- 19 MBOM 
@@ -547,14 +545,43 @@ VALUES
 
 
 -- 18. 매장 재고 (StoreInventory) 테이블 더미 데이터
+select * from StoreInventory;
+INSERT INTO ERP.StoreInventory (ProductID, MaterialID, QuantityInStore, StoreDate)
+VALUES
+-- 빵 아이템 재고
+(1, NULL, 50, '2024-10-29 00:00:00'),  -- 갈릭꽈베기
+(2, NULL, 40, '2024-10-29 00:00:00'),  -- 단팥도넛
+(3, NULL, 45, '2024-10-29 00:00:00'),  -- 고구마케이크빵
+(4, NULL, 55, '2024-10-29 00:00:00'),  -- 꽈베기
+(5, NULL, 30, '2024-10-29 00:00:00'),  -- 라우겐
+(6, NULL, 35, '2024-10-29 00:00:00'),  -- 베이글빵
+(7, NULL, 40, '2024-10-29 00:00:00'),  -- 생크림소보로
+(8, NULL, 25, '2024-10-29 00:00:00'),  -- 꿀버터바게트
+(9, NULL, 20, '2024-10-29 00:00:00'),  -- 애플파이
+(10, NULL, 30, '2024-10-29 00:00:00'), -- 우유도넛
+(11, NULL, 35, '2024-10-29 00:00:00'), -- 찹쌀브레드
+(12, NULL, 15, '2024-10-29 00:00:00'), -- 카라멜 러스크
+(13, NULL, 25, '2024-10-29 00:00:00'), -- 캐찰빵
 
--- INSERT INTO ERP.StoreInventory (ProductID, MaterialID, SaleID, DisposalID, QuantityInStore, StoreDate)
--- VALUES
--- (1, 1, 1, 1, 500, '2024-05-14 10:00:00'),
--- (2, 2, 2, 2, 300, '2024-05-15 11:00:00'),
--- (3, 3, 3, 3, 400, '2024-05-16 12:00:00');
+-- 커피 재료 재고 (SupplierID = 2)
+(NULL, 20, 5000, '2024-10-29 00:00:00'),  -- 원두(에스프레소)
+(NULL, 21, 2000, '2024-10-29 00:00:00'),  -- 카라멜시럽
+(NULL, 22, 1500, '2024-10-29 00:00:00'),  -- 초콜릿 시럽
+(NULL, 23, 3000, '2024-10-29 00:00:00'),  -- 콜드브루 원액
+(NULL, 24, 1000, '2024-10-29 00:00:00'),  -- 연유
+(NULL, 25, 10000, '2024-10-29 00:00:00'), -- 얼음
+(NULL, 26, 1800, '2024-10-29 00:00:00'),  -- 헤이즐넛 시럽
+(NULL, 27, 1800, '2024-10-29 00:00:00'),  -- 바닐라 시럽
+(NULL, 28, 1500, '2024-10-29 00:00:00'),  -- 메이플 시럽
+(NULL, 29, 2000, '2024-10-29 00:00:00'),  -- 아이스크림
 
-select * from product;
+-- 부자재 재고 (SupplierID = 3)
+(NULL, 30, 100, '2024-10-29 00:00:00'), -- 포장지
+(NULL, 31, 100, '2024-10-29 00:00:00'),  -- 컵(regular size)
+(NULL, 32, 232, '2024-10-29 00:00:00'),  -- 컵(extra size)
+(NULL, 33, 250, '2024-10-29 00:00:00'), -- 빨대
+(NULL, 34, 300, '2024-10-29 00:00:00')   -- 캐리어
+;
 
 -- 19. MBOM 테이블 더미 데이터
 INSERT INTO ERP.MBOM (ItemID, ItemType, Size, MaterialID, ProductName, Quantity, Unit, UnitPrice, TotalCost)
