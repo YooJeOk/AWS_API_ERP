@@ -13,7 +13,6 @@ function ProductionPage() {
             try {
                 // 변경된 경로로 요청
                 const response = await axios.get('http://localhost:8080/api/production-planning/basic');
-
                 const fetchedData = response.data;
                 
                 setData(fetchedData);

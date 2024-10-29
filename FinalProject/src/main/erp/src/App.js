@@ -33,7 +33,7 @@ import SalesStatus from '../../erp/src/pages/SalesManagement/SalesStatus';
 
 //키오스크 관리
 import KioskSidebar from './components/KioskManagement/KioskSidebar';
-import KioskSelect from './pages/KioskManagement/KioskSelect';
+import StoreInventory from './pages/KioskManagement/StoreInventory';
 
 function App() {
     return (
@@ -74,7 +74,7 @@ function App() {
                     <Route path="/SalesStatus" element={<SalesSidebarWrapper><SalesStatus /></SalesSidebarWrapper>} />
 
                     {/* 키오스크 관리 사이드바 */}
-                    <Route path="/KioskSelect" element={<KioskSidebarWrapper><KioskSelect /></KioskSidebarWrapper>} />
+                    <Route path="/StoreInventory" element={<KioskSidebarWrapper><StoreInventory /></KioskSidebarWrapper>} />
 
                 </Routes>
             </div>
