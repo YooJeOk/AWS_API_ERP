@@ -42,27 +42,6 @@ const PaymentPage = () => {
       document.body.removeChild(naverPayScript);
     };
   }, []);
-
-  // const handleNaverPayment = () => {
-  //   if (window.Naver) {
-  //     const oPay = window.Naver.Pay.create({
-  //       "mode": "development", // development or production
-  //       "clientId": "HN3GGCMDdTgGUfl0kFCo", // clientId
-  //        "chainId": "M3ZnVnhIK3hzWkd" ,// chainId
-  //     });
-
-  //     oPay.open({
-  //       "merchantUserKey": "np_jeihb592280",
-  //       "merchantPayKey": "20241028cQ1px5",
-  //       "productName": "Kiosk Order Payment",
-  //       "totalPayAmount": totalAmount - discountAmount,
-  //       "taxScopeAmount": totalAmount - discountAmount,
-  //       "taxExScopeAmount": "0",
-  //       "returnUrl": "https://developers.pay.naver.com/user/sand-box/payment"
-  //     });
-  //   }
-  // };
-
   const handleCancel = () => {
     navigate('/');
   };
@@ -90,7 +69,6 @@ const handlePaymentClick = (paymentType) => {
         "taxExScopeAmount": "0",
         "returnUrl": "http://localhost:3000/payment"
       });
-
       window.addEventListener('message', async function(e) {
         if (e.data.resultCode === "Success") {
           console("네이버페이 결제 성공")
