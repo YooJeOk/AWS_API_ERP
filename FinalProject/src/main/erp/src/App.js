@@ -29,9 +29,14 @@ import SalesDwtdAnalysis from '../../erp/src/pages/SalesManagement/SalesDwtdAnal
 import SalesProductAnalysis from '../../erp/src/pages/SalesManagement/SalesProductAnalysis';
 import SalesStatus from '../../erp/src/pages/SalesManagement/SalesStatus';
 
+//상품 관리
+import InvenSidebar from './components/InventoryManage/InvenSidebar';
+import StoreInventory from './pages/InventoryManage/StoreInventory';
+import FactoryInventory from './pages/InventoryManage/FactoryInventory';
+
 //키오스크 관리
 import KioskSidebar from './components/KioskManagement/KioskSidebar';
-import StoreInventory from './pages/KioskManagement/StoreInventory';
+import KioskInventory from './pages/KioskManagement/KioskInventory';
 
 function App() {
     return (
@@ -70,8 +75,13 @@ function App() {
                     <Route path="/SalesProductAnalysis" element={<SalesSidebarWrapper><SalesProductAnalysis /></SalesSidebarWrapper>} />
                     <Route path="/SalesStatus" element={<SalesSidebarWrapper><SalesStatus /></SalesSidebarWrapper>} />
 
+                    {/* 상품 관리 탭 */}
+                    <Route path="/FactoryInventory" element={<InvenSidebarWrapper><FactoryInventory /></InvenSidebarWrapper>} />
+                    <Route path="/StoreInventory" element={<InvenSidebarWrapper><StoreInventory /></InvenSidebarWrapper>} />
+
+
                     {/* 키오스크 관리 사이드바 */}
-                    <Route path="/StoreInventory" element={<KioskSidebarWrapper><StoreInventory /></KioskSidebarWrapper>} />
+                    <Route path="/KioskInventory" element={<KioskSidebarWrapper><KioskInventory /></KioskSidebarWrapper>} />
 
                 </Routes>
             </div>
@@ -91,6 +101,14 @@ const ProductionSidebarWrapper = ({ children }) => (
 const SalesSidebarWrapper = ({ children }) => (
     <div className="main-content" style={{ padding: '0%' }}>
         <SalesSidebar />
+        {children}
+    </div>
+);
+
+// Wrapper 컴포넌트: InvenSidebar를 키오스크 관리 페이지에 적용
+const InvenSidebarWrapper = ({ children }) => (
+    <div className="main-content" style={{ padding: '0%' }}>
+        <InvenSidebar />
         {children}
     </div>
 );

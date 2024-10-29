@@ -37,10 +37,9 @@ function Header() {
                         상품 관리
                         <div className="nav-button-dropdown">
                             <div className="dropdown-content">
+                                <a href="/FactoryInventory">재고 관리</a>
                                 <a href="#!">입고 관리</a>
                                 <a href="#!">출고 관리</a>
-                                <a href="#!">창고 이동 관리</a>
-                                <a href="#!">재고 관리</a>
                             </div>
                         </div>
                     </div>
@@ -48,7 +47,7 @@ function Header() {
                         키오스크 관리
                         <div className="nav-button-dropdown">
                             <div className="dropdown-content">
-                                <a href='/StoreInventory'>상품 관리</a>
+                                <a href='/KioskInventory'>상품 관리</a>
                                 <a href="#!">상품 등록 및 수정</a>
                             </div>
                         </div>
