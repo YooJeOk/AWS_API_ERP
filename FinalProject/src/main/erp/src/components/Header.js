@@ -48,7 +48,7 @@ function Header() {
                         키오스크 관리
                         <div className="nav-button-dropdown">
                             <div className="dropdown-content">
-                                <a href='/KioskSelect'>상품 관리</a>
+                                <a href='/StoreInventory'>상품 관리</a>
                                 <a href="#!">상품 등록 및 수정</a>
                             </div>
                         </div>
