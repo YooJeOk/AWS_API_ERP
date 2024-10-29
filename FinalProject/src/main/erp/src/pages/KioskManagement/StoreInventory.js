@@ -43,7 +43,7 @@ const StoreInventory = () => {
                 </div>
             </div>
             <div className='material-container'>
-                <div className='materials-table mt-5'>
+                <div className='materials-table'>
                     <MaterialsInventoryTable materials={materialInventory.content} />
                 </div>
                 <div className='materials-page'>
