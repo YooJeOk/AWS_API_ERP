@@ -1,46 +1,53 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import '../../css/SalesManagement/SalesTable.css';
 
 function SalesTable() {
+  const [salesRecords, setSalesRecords] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:8080/api/sales/records")
+      .then(response => response.json())
+      .then(data => {
+        const sortedData = data.sort((a, b) => new Date(b.saleDate) - new Date(a.saleDate));
+        setSalesRecords(sortedData);
+      })
+      .catch(error => console.error("Error fetching sales records:", error));
+  }, []);
+
   return (
-    <Table Table className="custom-table" bordered hover>
+    <Table className="custom-table" bordered hover>
       <thead>
         <tr>
-          <th>
-            <input type="checkbox" />
-          </th>
-          <th>NO.</th>
+          <th className="no-column">NO.</th>
+          <th>판매일시</th>
           <th>상품명</th>
-          <th>수량</th>
-          <th>가격</th>
-          <th>시간</th>
-          <th>결제수단</th>
+          <th className="num-column">수량</th>
+          <th className="unitprice-column">단가</th>
+          <th className="promotion-column">할인</th>
+          <th className="totalprice-column">총액</th>
+          <th className="payment-column">결제수단</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>
-            <input type="checkbox" />
-          </td>
-          <td>1</td>
-          <td>상품 A</td>
-          <td>10</td>
-          <td>1000</td>
-          <td>2024-10-18 12:00</td>
-          <td>신용카드</td>
-        </tr>
-        <tr>
-          <td>
-            <input type="checkbox" />
-          </td>
-          <td>2</td>
-          <td>상품 A</td>
-          <td>10</td>
-          <td>1000</td>
-          <td>2024-10-18 12:00</td>
-          <td>신용카드</td>
-        </tr>
+        {salesRecords.map((record, index) => {
+          return (
+            <tr key={record.saleID}>
+              <td>{index + 1}</td>
+              <td>{new Date(record.saleDate).toLocaleString()}</td>
+              <td>
+                {(record.salesDetails || []).map(detail =>
+                  detail.product ? detail.product.productName : detail.coffee ? detail.coffee.coffeeName : "N/A"
+                ).join(", ")}
+              </td>
+              <td>{(record.salesDetails || []).map(detail => detail.quantitySold || "N/A").join(", ")}</td>
+              <td>{(record.salesDetails || []).map(detail => detail.salePrice || "N/A").join(", ")}</td>
+              <td>{record.discountAmount}</td>
+              <td>{record.totalSalePrice}</td>
+              <td>{record.paymentType}</td>
+            </tr>
+          );
+        })}
       </tbody>
     </Table>
   );

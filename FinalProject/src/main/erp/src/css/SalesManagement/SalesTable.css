@@ -41,3 +41,23 @@
   max-height: 100%; /* 부모 높이에 맞추기 */
   overflow-y: auto; /* 수직 스크롤 필요 시 표시 */
 }
+.no-column {
+  width: 50px; /* Adjust this width as needed */
+}
+.num-column {
+  width: 70px; /* Adjust this width as needed */
+}
+.unitprice-column{
+  width: 70px;
+}
+.promotion-column{
+  width: 70px;
+
+}
+.totalprice-column{
+  width: 90px;
+
+}
+.payment-column{
+  width: 100px;
+}

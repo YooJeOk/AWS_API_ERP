@@ -31,4 +31,10 @@ public class SalesRecordsService {
 	    public SalesRecord saveSalesRecord(SalesRecord salesRecord) {
 	        return salesRecordsRepository.save(salesRecord);
 	   }
+	 
+	 
+	 
+	 
+	 
+	 
 }
