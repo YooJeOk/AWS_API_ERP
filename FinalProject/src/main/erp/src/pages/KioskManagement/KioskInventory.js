@@ -73,10 +73,12 @@ const KioskInventory = () => {
     }));
   };
  
-const checkForChanges = (original, edited) => {
+  const checkForChanges = (original, edited) => {
     return original.map((originalItem, index) => {
       const editedItem = edited[index];
       const changes = {};
+      const itemId = originalItem.product ? originalItem.product.productId : originalItem.coffeeId;
+      
       for (const key in originalItem) {
         if (key === 'product') {
           for (const productKey in originalItem.product) {
@@ -88,7 +90,7 @@ const checkForChanges = (original, edited) => {
           changes[key] = { from: originalItem[key], to: editedItem[key] };
         }
       }
-      return Object.keys(changes).length > 0 ? { id: originalItem.productId || originalItem.coffeeId, changes } : null;
+      return Object.keys(changes).length > 0 ? { id: itemId, changes } : null;
     }).filter(Boolean);
   };
 
@@ -109,16 +111,16 @@ const checkForChanges = (original, edited) => {
 
   const handleConfirmSave = async () => {
     const allEditedProducts = Object.values(editedProducts).flat().map(item => ({
-      productId: item.productId,
-      productName: item.productName,
-      productCategory: item.productCategory,
-      unitPrice: item.unitPrice,
-      salePrice: item.salePrice,
-      productionDate: item.productionDate,
-      productImage: item.productImage,
-      onKiosk: item.onKiosk,
-      recommend: item.recommend,
-      detailDescription: item.detailDescription
+      productId: item.product.productId,
+      productName: item.product.productName,
+      productCategory: item.product.productCategory,
+      unitPrice: item.product.unitPrice,
+      salePrice: item.product.salePrice,
+      productionDate: item.product.productionDate,
+      productImage: item.product.productImage,
+      onKiosk: item.product.onKiosk,
+      recommend: item.product.recommend,
+      detailDescription: item.product.detailDescription
     }));
     const allEditedCoffees = Object.values(editedCoffees).flat();
     console.log("보내는 제품 데이터:"+JSON.stringify(allEditedProducts));

@@ -89,11 +89,21 @@ public class KioskService {
     }
 
     public Page<Coffee> getIceCoffeeItems(Pageable pageable) {
-        return coffeeRepository.findByRecommendAndTemperatureAndOnKiosk("N", "ICE","Y", pageable);
+        long totalIceCoffee = coffeeRepository.countByRecommendAndTemperatureAndOnKiosk("N", "ICE", "Y");
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        Page<Coffee> iceCoffees = coffeeRepository.findByRecommendAndTemperatureAndOnKiosk("N", "ICE", "Y", PageRequest.of(currentPage, pageSize));
+        
+        return new PageImpl<>(iceCoffees.getContent(), pageable, totalIceCoffee);
     }
 
     public Page<Coffee> getHotCoffeeItems(Pageable pageable) {
-        return coffeeRepository.findByRecommendAndTemperatureAndOnKiosk("N", "HOT","Y", pageable);
+        long totalHotCoffee = coffeeRepository.countByRecommendAndTemperatureAndOnKiosk("N", "HOT", "Y");
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        Page<Coffee> hotCoffees = coffeeRepository.findByRecommendAndTemperatureAndOnKiosk("N", "HOT", "Y", PageRequest.of(currentPage, pageSize));
+        
+        return new PageImpl<>(hotCoffees.getContent(), pageable, totalHotCoffee);
     }
     
     //커피옵션
