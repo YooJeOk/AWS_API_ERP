@@ -34,7 +34,9 @@ html {
     z-index: 9999;
 
 }
-
+.text-bold{
+    font-weight: bold;
+}
 .sidebar-open {
     left: 0;
 }

@@ -12,14 +12,18 @@
 .material-container{
     margin-top: 0px;
 }
-.product-page{
+.product-page,.materials-page,.coffee-page{
     display: flex;
     justify-content: center;
     margin-top: 1rem;
 }
-.materials-page{
-    display: flex;
-    justify-content: center;
-    margin-top: 1rem;
+.pagebtn-container button{
+    padding: 3px;
+    border-radius: 5px;
+    margin-left: 8px;
+    margin-right: 8px;
+    background-color: white;
+    border: 1px solid black;
+    /* box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;} */
 
 }
