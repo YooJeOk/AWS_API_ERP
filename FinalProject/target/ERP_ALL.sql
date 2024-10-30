@@ -191,6 +191,20 @@ CREATE TABLE ERP.WorkOrders (
 
 
 
+-- 13. 생산 계획 (ProductionPlanning)
+CREATE TABLE ERP.ProductionPlanning (
+    PlanID INT NOT NULL AUTO_INCREMENT, -- 계획ID
+    OrderID INT NOT NULL, -- 작업 지시ID
+    ProductID INT NOT NULL, -- 제품ID
+    StartDate DATETIME NULL, -- 시작 시간
+    EndDate DATETIME NULL, -- 시작 시간
+    etc VARCHAR(100) NULL, -- 기타
+    PRIMARY KEY (PlanID),
+    FOREIGN KEY (OrderID) REFERENCES ERP.WorkOrders(OrderID)
+    
+);
+
+
 
 
 -- 14. 생산 모니터링 (ProductionMonitoring)
@@ -285,8 +299,14 @@ CREATE TABLE ERP.MBOM (
     PRIMARY KEY (BOMID, ItemID, MaterialID),
     FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
 );
-
-
+-- 19_1 보조테이블
+CREATE TABLE ProductMaterials (
+    ProductID INT NOT NULL,
+    MaterialID INT NOT NULL,
+    Quantity FLOAT NOT NULL,
+    PRIMARY KEY (ProductID, MaterialID),
+    FOREIGN KEY (MaterialID) REFERENCES MaterialsInventory(MaterialID)
+);
 
 
 -- 20. 사용자 (Users)
@@ -495,7 +515,15 @@ INSERT INTO ERP.WorkOrders (ProductID, Quantity, StartDate, EndDate, Priority, e
 --     BakingComplete BOOLEAN DEFAULT FALSE,          -- 굽기 완료 여부 (약 30분)
 --     CoolingComplete BOOLEAN DEFAULT FALSE,         -- 냉각 완료 여부 (약 20분)
 --     PackagingComplete BOOLEAN DEFAULT FALSE,       -- 포장 완료 여부 (약 10분)
- 
+
+ -- . 생산 계획 (ProductionPlanning) 테이블 더미 데이터
+INSERT INTO ERP.ProductionPlanning (OrderID, ProductID, StartDate, EndDate, etc)
+VALUES
+(1, 1,  '2024-04-23 08:00:00', '2024-04-23 13:30:00' , '긴급가동'), 
+(2, 2,  '2024-05-01 09:00:00', '2024-05-01 14:00:00' , '5월첫가동'), 
+(3, 3,  '2024-05-06 10:00:00', '2024-05-06 15:30:00' , '예약주문'), 
+(4, 4,  '2024-05-10 08:30:00', '2024-05-10 12:30:00' , '예비재고');
+
  
  
  -- ProductionProcessStatus 테이블에 더미 데이터 삽입

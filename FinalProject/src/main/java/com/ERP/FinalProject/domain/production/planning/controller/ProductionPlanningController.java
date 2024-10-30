@@ -18,15 +18,20 @@ public class ProductionPlanningController {
         this.productionPlanningService = productionPlanningService;
     }
 
+    
+  
+    
     // 기본 Production Planning DTO를 조회
     @GetMapping("/basic")
     public List<ProductionPlanningDTO> getBasicProductionPlanning() {
         return productionPlanningService.getBasicProductionPlanning();
     }
 
-    // Production Planning 데이터를 생성하여 저장
     @PostMapping("/create")
-    public boolean createProductionPlanning(@RequestBody ProductionPlanning productionPlanning) {
-        return productionPlanningService.saveProductionPlanning(productionPlanning);
+    public boolean createProductionPlanning(@RequestBody List<ProductionPlanning> productionPlanningList) {
+        return productionPlanningService.saveAllProductionPlanning(productionPlanningList);
     }
+
+
+
 }

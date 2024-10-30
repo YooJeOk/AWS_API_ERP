@@ -22,4 +22,7 @@
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.monitoring.service.ProductionMonitoringService"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.monitoring.model.ProductionMonitoring"/>
     <fullyQualifiedTypeName name="software.amazon.awssdk.services.sns.endpoints.internal.Value.Int"/>
+    <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.config.JpaRepositoryNameSpaceHandler"/>
+    <fullyQualifiedTypeName name="org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration"/>
+    <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.cdi.JpaRepositoryExtension"/>
 </qualifiedTypeNameHistroy>
