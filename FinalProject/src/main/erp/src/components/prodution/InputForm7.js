@@ -9,7 +9,7 @@ function MBOMForm() {
             productionPeriod: '',
             baseItem: '',
             mrpCalculation: '',
-            status: '',
+            status: '합격', // 기본값 설정
             others: ''
         }
     ]);
@@ -66,8 +66,18 @@ function MBOMForm() {
                                         <td><input type="text" name="productionPeriod" value={row.productionPeriod} onChange={(e) => handleChange(index, e)} required /></td>
                                         <td><input type="text" name="baseItem" value={row.baseItem} onChange={(e) => handleChange(index, e)} required /></td>
                                         <td><input type="text" name="mrpCalculation" value={row.mrpCalculation} onChange={(e) => handleChange(index, e)} required /></td>
-                                        <td><input type="text" name="status" value={row.status} onChange={(e) => handleChange(index, e)} required /></td>
                                         <td><input type="text" name="others" value={row.others} onChange={(e) => handleChange(index, e)} /></td>
+                                        <td>
+                                            <select
+                                                name="status"
+                                                value={row.status}
+                                                onChange={(e) => handleChange(index, e)}
+                                                required
+                                            >
+                                                <option value="합격">합격</option>
+                                                <option value="불합격">불합격</option>
+                                            </select>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>

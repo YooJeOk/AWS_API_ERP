@@ -52,7 +52,7 @@ function App() {
                     {/* 생산 관리 페이지들 */}
                     
                     <Route path="/input2" element={<ProductionSidebarWrapper><InputForm2 /></ProductionSidebarWrapper>} />
-                    <Route path="/production2" element={<ProductionSidebarWrapper><ProductionPage2 /></ProductionSidebarWrapper>} />
+                    <Route path="/production2/*" element={<ProductionSidebarWrapper><ProductionPage2 /></ProductionSidebarWrapper>} />
                     <Route path="/input3" element={<ProductionSidebarWrapper><InputForm3 /></ProductionSidebarWrapper>} />
                     <Route path="/production3" element={<ProductionSidebarWrapper><ProductionPage3 /></ProductionSidebarWrapper>} />
                     <Route path="/input4" element={<ProductionSidebarWrapper><InputForm4 /></ProductionSidebarWrapper>} />
@@ -60,7 +60,7 @@ function App() {
                     <Route path="/production8" element={<ProductionSidebarWrapper><ProductionPage8 /></ProductionSidebarWrapper>} />
                     <Route path="/input8" element={<ProductionSidebarWrapper><InputForm8 /></ProductionSidebarWrapper>} />
                     <Route path="/input5" element={<ProductionSidebarWrapper><InputForm5 /></ProductionSidebarWrapper>} />
-                    <Route path="/production5" element={<ProductionSidebarWrapper><ProductionPage5 /></ProductionSidebarWrapper>} />
+                    <Route path="/production5/*" element={<ProductionSidebarWrapper><ProductionPage5 /></ProductionSidebarWrapper>} />
                     <Route path="/input6" element={<ProductionSidebarWrapper><InputForm6 /></ProductionSidebarWrapper>} />
                     <Route path="/production6" element={<ProductionSidebarWrapper><ProductionPage6 /></ProductionSidebarWrapper>} />
                     <Route path="/input7" element={<ProductionSidebarWrapper><InputForm7 /></ProductionSidebarWrapper>} />

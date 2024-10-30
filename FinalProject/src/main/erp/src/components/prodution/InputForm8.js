@@ -1,44 +1,45 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import './production.css';
 
 function MBOMForm() {
     const [formData, setFormData] = useState([
         {
             ItemID: '',
-            ItemType: 'Product',  // 기본값을 Product로 설정
+            ItemType: 'Product',
             Size: '',
             MaterialID: '',
             ProductName: '',
             Quantity: '',
-            Unit: 'EA',  // 기본값을 EA로 설정
+            Unit: 'EA',
             UnitPrice: '',
             TotalCost: ''
         }
     ]);
 
-    // 필드 상태 업데이트
+    // 필드 상태 업데이트 및 총 원가 자동 계산
     const handleChange = (index, e) => {
+        const { name, value } = e.target;
         const newFormData = [...formData];
         newFormData[index] = {
             ...newFormData[index],
-            [e.target.name]: e.target.value
+            [name]: name === 'Quantity' || name === 'UnitPrice' ? parseFloat(value) || '' : value
         };
+        
+        if (name === 'Quantity' || name === 'UnitPrice') {
+            const quantity = parseFloat(newFormData[index].Quantity) || 0;
+            const unitPrice = parseFloat(newFormData[index].UnitPrice) || 0;
+            newFormData[index].TotalCost = (quantity * unitPrice).toFixed(2);
+        }
+        
         setFormData(newFormData);
     };
 
-    // 수량과 단가가 변경될 때 총 원가를 자동으로 계산
-    const calculateTotalCost = (index) => {
-        const quantity = parseFloat(formData[index].Quantity) || 0;
-        const unitPrice = parseFloat(formData[index].UnitPrice) || 0;
-        const newFormData = [...formData];
-        newFormData[index].TotalCost = (quantity * unitPrice).toFixed(2);
-        setFormData(newFormData);
-    };
-
-    // 수량 및 단가가 변경될 때 총 원가 계산
-    const handleQuantityOrPriceChange = (index, e) => {
-        handleChange(index, e);
-        calculateTotalCost(index);
+    // 숫자와 소수점만 입력되도록 제한하는 함수
+    const restrictNumericInput = (e) => {
+        const value = e.target.value;
+        // 숫자와 소수점 외의 문자 제거
+        e.target.value = value.replace(/[^0-9.]/g, '');
     };
 
     // 입력 행 추가 기능
@@ -62,9 +63,33 @@ function MBOMForm() {
     };
 
     // 폼 제출 처리
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('MBOM 데이터 제출:', formData);
+        
+        try {
+            const response = await axios.post('http://localhost:8080/api/MBOM', formData[0]);
+            
+            if (response.status === 200) {
+                console.log('생산 주문이 성공적으로 등록되었습니다:', response.data);
+                setFormData([
+                    {
+                        ItemID: '',
+                        ItemType: 'Product',
+                        Size: '',
+                        MaterialID: '',
+                        ProductName: '',
+                        Quantity: '',
+                        Unit: 'EA',
+                        UnitPrice: '',
+                        TotalCost: ''
+                    }
+                ]);
+            } else {
+                console.error('생산 주문 등록 실패:', response.status);
+            }
+        } catch (error) {
+            console.error('서버로 데이터 전송 중 오류 발생:', error);
+        }
     };
 
     return (
@@ -110,9 +135,14 @@ function MBOMForm() {
                                         </td>
                                         <td><input type="text" name="MaterialID" value={row.MaterialID} onChange={(e) => handleChange(index, e)} required style={{ width: '100%' }} /></td>
                                         <td><input type="text" name="ProductName" value={row.ProductName} onChange={(e) => handleChange(index, e)} required style={{ width: '100%' }} /></td>
-                                        <td><input type="text" name="Quantity" value={row.Quantity} onChange={(e) => handleQuantityOrPriceChange(index, e)} required style={{ width: '100%' }} /></td>
-                                        <td><input type="text" name="Unit" value={row.Unit} onChange={(e) => handleChange(index, e)} placeholder="EA" style={{ width: '100%' }} /></td>
-                                        <td><input type="text" name="UnitPrice" value={row.UnitPrice} onChange={(e) => handleQuantityOrPriceChange(index, e)} required style={{ width: '100%' }} /></td>
+                                        <td><input type="number" name="Quantity" value={row.Quantity} onInput={restrictNumericInput} onChange={(e) => handleChange(index, e)} required style={{ width: '100%' }} min="0" step="0.1" /></td>
+                                        <td>
+                                            <select name="Unit" value={row.Unit} onChange={(e) => handleChange(index, e)} style={{ width: '100%' }}>
+                                                <option value="ml">ml</option>
+                                                <option value="g">g</option>
+                                            </select>
+                                        </td>
+                                        <td><input type="number" name="UnitPrice" value={row.UnitPrice} onInput={restrictNumericInput} onChange={(e) => handleChange(index, e)} required style={{ width: '100%' }} min="0" step="0.1" /></td>
                                         <td><input type="text" name="TotalCost" value={row.TotalCost} readOnly style={{ width: '100%' }} /></td>
                                     </tr>
                                 ))}

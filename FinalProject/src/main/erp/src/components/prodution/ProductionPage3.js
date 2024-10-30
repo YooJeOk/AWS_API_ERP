@@ -1,25 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Routes, Route } from 'react-router-dom'; // useNavigate, Routes, Route import 추가
-import './ProductionPage.css';
+import { useNavigate, Routes, Route } from 'react-router-dom';
 import InputForm3 from './InputForm3';
+import axios from 'axios';
+import './ProductionPage.css';
+
 function ProductionPage3() {
-    const [data, setData] = useState([]);
+    const [data, setData] = useState([]);  // 데이터를 관리할 상태
     const [isDataLoaded, setIsDataLoaded] = useState(false);
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('/api/production-orders'); // 실제 API 엔드포인트로 변경 필요
-                if (response.ok) {
-                    const result = await response.json();
-                    setData(result);
+                const response = await axios.get('http://localhost:8080/api/production-orders');
+                if (response.status === 200) {
+                    console.log("Received data:", response.data); // 데이터 확인
+                    setData(response.data);
                     setIsDataLoaded(true);
                 } else {
-                    console.error('데이터 불러오기 실패:', response.status);
+                    console.error("Failed to fetch data:", response.status);
                 }
             } catch (error) {
-                console.error('에러 발생:', error);
+                console.error("Error fetching data:", error);
             }
         };
 
@@ -28,7 +30,6 @@ function ProductionPage3() {
 
     return (
         <div className="custom-container">
-            <aside id="sidebar"></aside>
             <main className="production-content">
                 <div className="production-mainbar">
                     <div className="productionbar">
@@ -37,40 +38,41 @@ function ProductionPage3() {
                             생성
                         </button>
                     </div>
-                    <table className="table production-table">
+                    <table className="production-table" style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
                         <thead>
                             <tr>
-                                <th>생산 일자</th>
-                                <th>생산 품목 코드</th>
-                                <th>생산 품목명</th>
-                                <th>생산 수량</th>
-                                <th>사용 원재료</th>
-                                <th>기타사항</th>
+                                <th style={{ padding: '10px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>생산 일자</th>
+                                <th style={{ padding: '10px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>생산 품목 코드</th>
+                                <th style={{ padding: '10px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>생산 품목명</th>
+                                <th style={{ padding: '10px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>생산 수량</th>
+                                <th style={{ padding: '10px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>사용 원재료</th>
+                                <th style={{ padding: '10px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>기타사항</th>
                             </tr>
                         </thead>
                         <tbody>
                             {isDataLoaded ? (
                                 data.map((row, index) => (
                                     <tr key={index}>
-                                        <td>{row.workDate}</td>
-                                        <td>{row.itemCode}</td>
-                                        <td>{row.itemName}</td>
-                                        <td>{row.spec}</td>
-                                        <td>{row.quantity}</td>
-                                        <td>{row.workItemName}</td>
+                                        <td style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'center' }}>{row.workDate}</td>
+                                        <td style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'center' }}>{row.itemCode}</td>
+                                        <td style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'center' }}>{row.itemName}</td>
+                                        <td style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'center' }}>{row.spec}</td>
+                                        <td style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'center' }}>{row.quantity}</td>
+                                        <td style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'center' }}>{row.workItemName}</td>
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="6">등록된 데이터가 없습니다</td>
+                                    <td colSpan="6" style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'center' }}>등록된 데이터가 없습니다</td>
                                 </tr>
                             )}
                         </tbody>
                     </table>
                 </div>
 
+                {/* <InputForm3>만 라우트로 설정 */}
                 <Routes>
-                <Route path="/input3" element={<InputForm3 />} />
+                    <Route path="/input3" element={<InputForm3 />} />
                 </Routes>
             </main>
         </div>

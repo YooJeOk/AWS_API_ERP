@@ -79,7 +79,7 @@ CREATE TABLE ERP.RawMaterialRestockHistory (
     FOREIGN KEY (SupplierID) REFERENCES ERP.Suppliers(SupplierID)
 );
 
--- 5. 원자재 소비 내역 (ProductionConsumption)
+-- 5. 원자재 소비 내역 (ProductionConsumption) 작업 내역 입력-input3.html 작업 내역 조회-production3.html
 CREATE TABLE ERP.ProductionConsumption (
     ConsumptionID INT NOT NULL AUTO_INCREMENT, -- 소비ID
     MaterialID INT NOT NULL, -- 자재ID
