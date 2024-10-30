@@ -31,7 +31,7 @@
     "react-router-dom": "^6.27.0",
     "react-scripts": "^5.0.1",
     "rechart": "^0.0.1",
-    "recharts": "^2.13.0",
+    "recharts": "^2.13.1",
     "redux": "^5.0.1",
     "rsuite": "^5.73.1",
     "three": "^0.169.0",

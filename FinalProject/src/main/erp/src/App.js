@@ -7,7 +7,6 @@ import SalesSidebar from './components/SalesSidebar';  // SalesSidebar 추가
 import InputForm2 from './components/prodution/InputForm2';
 import InputForm3 from './components/prodution/InputForm3';
 import InputForm4 from './components/prodution/InputForm4';
-import InputForm5 from './components/prodution/InputForm5';
 import ProductionPage2 from './components/prodution/ProductionPage2';  
 import ProductionPage3 from './components/prodution/ProductionPage3';
 import ProductionPage4 from './components/prodution/ProductionPage4';
@@ -54,12 +53,11 @@ function App() {
                     <Route path="/input2" element={<ProductionSidebarWrapper><InputForm2 /></ProductionSidebarWrapper>} />
                     <Route path="/production2" element={<ProductionSidebarWrapper><ProductionPage2 /></ProductionSidebarWrapper>} />
                     <Route path="/input3" element={<ProductionSidebarWrapper><InputForm3 /></ProductionSidebarWrapper>} />
-                    <Route path="/production3" element={<ProductionSidebarWrapper><ProductionPage3 /></ProductionSidebarWrapper>} />
+                    <Route path="/production3/*" element={<ProductionSidebarWrapper><ProductionPage3 /></ProductionSidebarWrapper>} />
                     <Route path="/input4" element={<ProductionSidebarWrapper><InputForm4 /></ProductionSidebarWrapper>} />
                     <Route path="/production4/*" element={<ProductionSidebarWrapper><ProductionPage4 /></ProductionSidebarWrapper>} />
                     <Route path="/production8" element={<ProductionSidebarWrapper><ProductionPage8 /></ProductionSidebarWrapper>} />
                     <Route path="/input8" element={<ProductionSidebarWrapper><InputForm8 /></ProductionSidebarWrapper>} />
-                    <Route path="/input5" element={<ProductionSidebarWrapper><InputForm5 /></ProductionSidebarWrapper>} />
                     <Route path="/production5" element={<ProductionSidebarWrapper><ProductionPage5 /></ProductionSidebarWrapper>} />
                     <Route path="/input6" element={<ProductionSidebarWrapper><InputForm6 /></ProductionSidebarWrapper>} />
                     <Route path="/production6" element={<ProductionSidebarWrapper><ProductionPage6 /></ProductionSidebarWrapper>} />

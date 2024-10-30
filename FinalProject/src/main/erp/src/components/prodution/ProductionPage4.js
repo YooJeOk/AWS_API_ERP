@@ -18,10 +18,10 @@ function ProductionOrderPage() {
                     setData(response.data);
                     setIsDataLoaded(true);
                 } else {
-                    console.error("Failed to fetch data:", response.status);
+                    console.error("데이터 불러오기 실패:", response.status);
                 }
             } catch (error) {
-                console.error("Error fetching data:", error);
+                console.error("에러 발생:", error);
             }
         };
 

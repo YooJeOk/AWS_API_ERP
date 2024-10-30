@@ -30,6 +30,7 @@ public class ProductionPlanningRepository {
                      "pp.ProductID AS productId, " +
                      "pp.StartDate AS startDate, " +
                      "pp.EndDate AS endDate, " +
+                     "pp.etc  AS etc," +
                      "wo.Quantity AS orderQuantity, " +
                      "p.ProductName AS productName " +
                      "FROM ERP.ProductionPlanning pp " +
@@ -52,21 +53,23 @@ public class ProductionPlanningRepository {
             dto.setEndDate(rs.getTimestamp("endDate").toLocalDateTime());
             dto.setOrderQuantity(rs.getInt("orderQuantity"));
             dto.setProductName(rs.getString("productName"));
+            dto.setEtc(rs.getString("etc"));
             return dto;
         }
     }
 
     public boolean save(ProductionPlanning productionPlanning, Connection connection) {
-        String sql = "INSERT INTO ERP.ProductionPlanning (ProductID, StartDate, EndDate, etc) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO ERP.ProductionPlanning (OrderID, ProductID, StartDate, EndDate, etc) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, productionPlanning.getProductId());
+            stmt.setInt(1, productionPlanning.getOrderId()); // OrderID 설정
+            stmt.setInt(2, productionPlanning.getProductId()); // ProductID 설정
             
             // LocalDateTime을 Timestamp로 변환하여 setTimestamp로 저장
-            stmt.setTimestamp(2, Timestamp.valueOf(productionPlanning.getStartDate()));
-            stmt.setTimestamp(3, Timestamp.valueOf(productionPlanning.getEndDate()));
+            stmt.setTimestamp(3, Timestamp.valueOf(productionPlanning.getStartDate())); // StartDate 설정
+            stmt.setTimestamp(4, Timestamp.valueOf(productionPlanning.getEndDate())); // EndDate 설정
             
-            stmt.setString(4, productionPlanning.getEtc());
+            stmt.setString(5, productionPlanning.getEtc()); // 기타 사항 설정
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0; // 성공적으로 저장된 경우 true 반환
@@ -75,4 +78,6 @@ public class ProductionPlanningRepository {
             return false;
         }
     }
+
+
 }

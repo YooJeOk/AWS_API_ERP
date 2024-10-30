@@ -20,6 +20,9 @@ public class ProductionPlanning {
     @Column(name = "PlanID")
     private int planId;
 
+    @Column(name = "OrderID")
+    private int orderId; // OrderID 필드 추가
+
     @Column(name = "ProductID")
     private int productId;
 

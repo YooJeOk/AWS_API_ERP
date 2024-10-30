@@ -2,24 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Routes, Route } from 'react-router-dom'; // useNavigate, Routes, Route import 추가
 import './ProductionPage.css';
 import InputForm3 from './InputForm3';
+import axios from 'axios';
+
 function ProductionPage3() {
     const [data, setData] = useState([]);
     const [isDataLoaded, setIsDataLoaded] = useState(false);
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('/api/production-orders'); // 실제 API 엔드포인트로 변경 필요
-                if (response.ok) {
-                    const result = await response.json();
-                    setData(result);
+                const response = await axios.get('http://localhost:8080/api/production-planning/basic');
+                if (response.status === 200) {
+                    console.log("Received data:", response.data);
+                    setData(response.data);
                     setIsDataLoaded(true);
                 } else {
-                    console.error('데이터 불러오기 실패:', response.status);
+                    console.error("데이터 불러오기 실패:", response.status);
                 }
             } catch (error) {
-                console.error('에러 발생:', error);
+                console.error("에러 발생:", error);
             }
         };
 
@@ -40,11 +42,11 @@ function ProductionPage3() {
                     <table className="table production-table">
                         <thead>
                             <tr>
-                                <th>생산 일자</th>
-                                <th>생산 품목 코드</th>
-                                <th>생산 품목명</th>
+                                <th>작업 지시ID</th>
+                                <th>생산 품목</th>
                                 <th>생산 수량</th>
-                                <th>사용 원재료</th>
+                                <th>생산 시작 시간</th>
+                                <th>생산 시작 시간</th>
                                 <th>기타사항</th>
                             </tr>
                         </thead>
@@ -52,12 +54,12 @@ function ProductionPage3() {
                             {isDataLoaded ? (
                                 data.map((row, index) => (
                                     <tr key={index}>
-                                        <td>{row.workDate}</td>
-                                        <td>{row.itemCode}</td>
-                                        <td>{row.itemName}</td>
-                                        <td>{row.spec}</td>
-                                        <td>{row.quantity}</td>
-                                        <td>{row.workItemName}</td>
+                                        <td>{row.orderId}</td>
+                                        <td>{row.productId}</td>
+                                        <td>{row.orderQuantity}</td>
+                                        <td>{row.startDate}</td>
+                                        <td>{row.endDate}</td>
+                                        <td>{row.etc}</td>
                                     </tr>
                                 ))
                             ) : (
@@ -66,11 +68,12 @@ function ProductionPage3() {
                                 </tr>
                             )}
                         </tbody>
+
                     </table>
                 </div>
 
                 <Routes>
-                <Route path="/input3" element={<InputForm3 />} />
+                    <Route path="/input3" element={<InputForm3 />} />
                 </Routes>
             </main>
         </div>
