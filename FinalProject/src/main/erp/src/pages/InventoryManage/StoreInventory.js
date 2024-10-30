@@ -14,6 +14,7 @@ const StoreInventory = () => {
         const response = await fetch(`http://localhost:8080/api/store/inventory/products?page=${productPage}&size=5`);
         const data = await response.json();
         setProductInventory(data);
+        
     }, [productPage]);
 
     const fetchMaterialInventory = useCallback(async () => {

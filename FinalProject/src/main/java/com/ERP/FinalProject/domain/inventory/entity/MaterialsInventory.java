@@ -28,7 +28,7 @@ public class MaterialsInventory {
 	private String materialName;
 	private String category;
 	private String unit;
-	private Integer unitPrice;
+	private Double unitPrice;
 	private LocalDateTime lastUpdated;
 
 }

@@ -33,10 +33,10 @@ function KioskSidebar() {
             <div className="dropdown">
                     <button className="menu-item" style={{ backgroundColor: '#F0C490', color: 'white' }}>상품 관리</button>
                     <ul className="dropdown-menu">
-                        <li><Link to="/KioskInventory">상품 조회</Link></li>
+                        {/* <li><Link to="/KioskInventory">상품 조회</Link></li>
                         <li><Link to="/KioskInventory">상품 가격 조정</Link></li>
                         <li><Link to="/KioskInventory">상품 추천여부 설정</Link></li>
-                        <li><Link to="/KioskInventory">상품 삭제</Link></li>
+                        <li><Link to="/KioskInventory">상품 삭제</Link></li> */}
                     </ul>
                 </div>
 

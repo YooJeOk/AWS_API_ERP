@@ -15,7 +15,7 @@ public class MaterialsInventoryDTO {
 	private String materialName;
 	private String category;
 	private String unit;
-	private Integer unitPrice;
+	private Double unitPrice;
 	private Integer quantityInStore;
 	private LocalDateTime lastUpdated;
 }

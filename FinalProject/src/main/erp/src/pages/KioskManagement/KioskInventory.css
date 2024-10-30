@@ -1,0 +1,22 @@
+.edit-container{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0px;
+}
+.change-mode-btn,.change-save-btn{
+    font-size: 16px;
+    padding: 4px;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+    border: 1px solid black;
+}
+.change-mode-btn{
+    margin-right: 10px;
+}
+.change-save-btn{
+    background-color: #F0C490;
+    color: white;
+    border: none;
+    border: 1px solid #bd7319;
+}
