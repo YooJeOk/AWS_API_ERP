@@ -61,10 +61,10 @@ function ProductionSidebar() {
                <div className="dropdown">
                 <button className="menu-item" style={{backgroundColor: '#F0C490', color:'white'}}>품질 관리</button>
                     <ul className="dropdown-menu">
-                        <li><Link to="/input6">● 불량 등록</Link></li>
-                        <li><Link to="/production6">● 불량 조회</Link></li>
                         <li><Link to="/input7">● 품질검사 등록</Link></li>
                         <li><Link to="/production7">● 품질검사 조회</Link></li>
+                        <li><Link to="/input6">● 불량 등록</Link></li>
+                        <li><Link to="/production6">● 불량 조회</Link></li>
                     </ul>
                 </div>
 

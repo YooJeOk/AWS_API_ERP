@@ -22,6 +22,9 @@ public class WorkOrder {
     @Column(name = "ProductID")
     private Integer productId;
 
+    @Column(name = "ProductName")
+    private String productName;
+
     @Column(name = "Quantity")
     private Integer quantity;
 

@@ -3,7 +3,6 @@ import { useNavigate, Routes, Route } from 'react-router-dom';
 import InputForm4 from './InputForm4';
 import axios from 'axios';
 
-
 function ProductionOrderPage() {
     const [data, setData] = useState([]);  // 데이터를 관리할 상태
     const [isDataLoaded, setIsDataLoaded] = useState(false);
@@ -41,12 +40,13 @@ function ProductionOrderPage() {
                     <table className="production-table" style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
                         <thead>
                             <tr>
-                                <th style={{ width: '10%', padding: '10px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>생산 품목</th>
+                                <th style={{ width: '10%', padding: '10px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>생산 품목 ID</th>
+                                <th style={{ width: '15%', padding: '10px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>제품명</th>
                                 <th style={{ width: '10%', padding: '10px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>생산 수량</th>
                                 <th style={{ width: '20%', padding: '10px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>생산 날짜 및 시간</th>
                                 <th style={{ width: '20%', padding: '10px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>납기 날짜 및 시간</th>
                                 <th style={{ width: '10%', padding: '10px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>우선 순위</th>
-                                <th style={{ width: '30%', padding: '10px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>기타 사항</th>
+                                <th style={{ width: '15%', padding: '10px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>기타 사항</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -54,6 +54,7 @@ function ProductionOrderPage() {
                                 data.map((row, index) => (
                                     <tr key={index}>
                                         <td style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'center' }}>{row.productId}</td>
+                                        <td style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'center' }}>{row.productName}</td>
                                         <td style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'center' }}>{row.quantity}</td>
                                         <td style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'center' }}>{row.startDate}</td>
                                         <td style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'center' }}>{row.endDate}</td>
@@ -63,11 +64,10 @@ function ProductionOrderPage() {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="6" style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'center' }}>등록된 데이터가 없습니다</td>
+                                    <td colSpan="7" style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'center' }}>등록된 데이터가 없습니다</td>
                                 </tr>
                             )}
                         </tbody>
-
                     </table>
                 </div>
 
