@@ -42,7 +42,7 @@
   overflow-y: auto; /* 수직 스크롤 필요 시 표시 */
 }
 .no-column {
-  width: 50px; /* Adjust this width as needed */
+  width: 70px; /* Adjust this width as needed */
 }
 .num-column {
   width: 70px; /* Adjust this width as needed */

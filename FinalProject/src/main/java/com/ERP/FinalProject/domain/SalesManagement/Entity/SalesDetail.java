@@ -1,39 +1,26 @@
 package com.ERP.FinalProject.domain.SalesManagement.Entity;
 
-import java.util.List;
 import javax.persistence.*;
 
-import com.ERP.FinalProject.domain.inventory.entity.Product;
-import com.ERP.FinalProject.domain.kiosk.entity.Coffee;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 @Entity(name = "SalesManagementSalesDetail")
-@Table(name = "SalesDetails", schema = "ERP")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Table(name = "salesdetails")
 public class SalesDetail {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long saleDetailID;
+    private Long saleDetailId;
 
-    @ManyToOne(fetch = FetchType.LAZY) // 지연 로딩
-    @JoinColumn(name = "saleID", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "saleId", nullable = false)
     private SalesRecord salesRecord;
 
-    @ManyToOne(fetch = FetchType.EAGER) // 즉시 로딩
-    @JoinColumn(name = "productID", referencedColumnName = "productID")
+    @ManyToOne
+    @JoinColumn(name = "productId", insertable = false, updatable = false)
     private Product product;
 
-    @ManyToOne(fetch = FetchType.EAGER) // 즉시 로딩
-    @JoinColumn(name = "coffeeID", referencedColumnName = "coffeeID")
+    @ManyToOne
+    @JoinColumn(name = "coffeeId", insertable = false, updatable = false)
     private Coffee coffee;
 
-    private Integer quantitySold;
-    private Integer salePrice;
+    private int quantitySold;
+    private int salePrice;
 }
-

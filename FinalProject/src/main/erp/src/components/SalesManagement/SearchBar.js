@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, FormControl, Button } from 'react-bootstrap';
 import '../../css/SalesManagement/SearchBar.css';
 
-function SearchBar() {
+function SearchBar({ onSearch }) {
+  const [input, setInput] = useState('');
+
+  const handleSearchClick = () => {
+    onSearch(input);
+  };
+
   return (
-    <Form inline className="d-flex align-items-center justify-content-between">
+    <Form inline="true" className="d-flex align-items-center justify-content-between">
       {/* 왼쪽 영역 */}
-      <div inline className="d-flex align-items-center justify-content-between">
+      <div className="d-flex align-items-center justify-content-between">
         <p className="custom-padding">상품 판매 기록 조회</p>
         <FormControl
           type="text"
@@ -27,11 +33,13 @@ function SearchBar() {
       <div className="d-flex">
         <FormControl
           type="text"
-          placeholder="입력"
+          placeholder="상품명을 입력하세요"
           className="ml-sm-2 custom-form-control"
           style={{ width: '300px' }}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
         />
-        <Button variant="outline-success" className="ml-sm-2 custom-search-button">Search</Button>
+        <Button variant="outline-success" className="ml-sm-2 custom-search-button" onClick={handleSearchClick}>Search</Button>
       </div>
     </Form>
   );
