@@ -6,11 +6,12 @@ function MBOMForm() {
     const [formData, setFormData] = useState([
         {
             productId: '',       // ProductID와 매칭
-            quantity: '',         // Quantity와 매칭
-            startDate: '',        // StartDate와 매칭
-            endDate: '',          // EndDate와 매칭
-            priority: '',         // Priority와 매칭
-            etc: ''               // 기타사항과 매칭
+            productName: '',     // ProductName과 매칭
+            quantity: '',        // Quantity와 매칭
+            startDate: '',       // StartDate와 매칭
+            endDate: '',         // EndDate와 매칭
+            priority: '',        // Priority와 매칭
+            etc: ''              // 기타사항과 매칭
         }
     ]);
 
@@ -38,6 +39,7 @@ function MBOMForm() {
                 setFormData([
                     {
                         productId: '',
+                        productName: '',
                         quantity: '',
                         startDate: '',
                         endDate: '',
@@ -66,8 +68,9 @@ function MBOMForm() {
                             <thead>
                                 <tr>
                                     <th>생산 품목 ID</th>
+                                    <th>제품명</th>
                                     <th>생산 수량</th>
-                                    <th>생산 시작 날짜 및 시간</th>
+                                    <th>생산 날짜 및 시간</th>
                                     <th>납기 날짜 및 시간</th>
                                     <th>우선순위</th>
                                     <th>기타 사항</th>
@@ -77,6 +80,7 @@ function MBOMForm() {
                                 {formData.map((row, index) => (
                                     <tr key={index}>
                                         <td><input type="text" name="productId" value={row.productId} onChange={(e) => handleChange(index, e)} required /></td>
+                                        <td><input type="text" name="productName" value={row.productName} onChange={(e) => handleChange(index, e)} required /></td>
                                         <td><input type="text" name="quantity" value={row.quantity} onChange={(e) => handleChange(index, e)} required /></td>
                                         <td><input type="datetime-local" name="startDate" value={row.startDate} onChange={(e) => handleChange(index, e)} required /></td>
                                         <td><input type="datetime-local" name="endDate" value={row.endDate} onChange={(e) => handleChange(index, e)} required /></td>
