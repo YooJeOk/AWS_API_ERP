@@ -1,11 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Routes, Route } from 'react-router-dom';
+import axios from 'axios';
 import './ProductionPage.css';
 import InputForm7 from './InputForm7';
 
 function Production7() {
-    const [data] = useState([]);
+    const [data, setData] = useState([]);
     const navigate = useNavigate();
+
+    // 데이터 불러오기
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/api/quality-control'); // 품질 관리 데이터 엔드포인트
+                if (response.status === 200) {
+                    setData(response.data);
+                }
+            } catch (error) {
+                console.error("데이터를 불러오는 중 에러 발생:", error);
+            }
+        };
+        fetchData();
+    }, []);
 
     return (
         <div className="custom-container">
@@ -21,24 +37,24 @@ function Production7() {
                     <table className="production-table">
                         <thead>
                             <tr>
-                                    <th>주문ID</th>
-                                    <th>상품명</th>
-                                    <th>검사 수량</th>
-                                    <th>검사 날짜</th>
-                                    <th>검사 결과</th>
-                                    <th>기타 사항</th>
+                                <th>주문ID</th>
+                                <th>상품명</th>
+                                <th>검사 수량</th>
+                                <th>검사 날짜</th>
+                                <th>검사 결과</th>
+                                <th>기타 사항</th>
                             </tr>
                         </thead>
                         <tbody>
                             {data.length > 0 ? (
-                                data.map((row, index) => (
-                                    <tr key={index}>
-                                        <td>{row.date}</td>
-                                        <td>{row.productCode}</td>
-                                        <td>{row.productName}</td>
-                                        <td>{row.quantity}</td>
-                                        <td>{row.defectType}</td>
-                                        <td>{row.handlingMethod}</td>
+                                data.map((row) => (
+                                    <tr key={row.QCID}>
+                                        <td>{row.OrderID}</td>
+                                        <td>{row.ProductName}</td>
+                                        <td>{row.Quantity}</td>
+                                        <td>{new Date(row.TestDate).toLocaleDateString()}</td>
+                                        <td>{row.TestResult}</td>
+                                        <td>{row.etc}</td>
                                     </tr>
                                 ))
                             ) : (

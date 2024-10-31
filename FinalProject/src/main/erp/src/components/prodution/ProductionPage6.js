@@ -21,12 +21,16 @@ function Production6() {
                     <table className="production-table">
                         <thead>
                             <tr>
-                                <th>입력일자</th>
-                                <th>생산품목코드</th>
-                                <th>생산품목명</th>
-                                <th>수량</th>
-                                <th>불량유형</th>
-                                <th>처리방법</th>
+                                    <th>품질 관리ID</th>
+                                    <th>상품명</th>
+                                    <th>상품 수량</th>
+                                    <th>불량 수량</th>
+                                    <th>불량 유형</th>
+                                    <th>불량 발견 시간</th>
+                                    <th>불량 원인 </th>
+                                    <th>불량 처리 상태</th>
+                                    <th>불량률</th>
+                                    <th>기타</th>
                             </tr>
                         </thead>
                         <tbody>

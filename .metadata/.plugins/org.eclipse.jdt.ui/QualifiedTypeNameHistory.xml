@@ -25,4 +25,5 @@
     <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.config.JpaRepositoryNameSpaceHandler"/>
     <fullyQualifiedTypeName name="org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration"/>
     <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.cdi.JpaRepositoryExtension"/>
+    <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.Query"/>
 </qualifiedTypeNameHistroy>
