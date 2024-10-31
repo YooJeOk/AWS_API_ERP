@@ -49,7 +49,7 @@ function Header() {
                         <div className="nav-button-dropdown">
                             <div className="dropdown-content">
                                 <a href='/KioskInventory'>상품 관리</a>
-                                <a href="#!">상품 등록 및 수정</a>
+                                <a href="/KioskRegister">상품 등록</a>
                             </div>
                         </div>
                     </div>

@@ -1,0 +1,19 @@
+.kiosk-register-container{
+    margin-top: 40px;
+    margin-left: 250px;
+}
+.kiosk-register-item-container{
+    margin-top: 40px;
+}
+.kiosk-register-item{
+    padding: 20px;
+    font-size: 18px;
+    cursor: pointer;
+    margin-right:40px;
+    border-radius: 5px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    background-color: rgb(236, 234, 234);
+}
+.kiosk-register-item:hover{
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}

@@ -27,7 +27,7 @@ public class KioskInventoryController {
 
 	@Autowired
 	private KioskInventoryService kioskInventoryService;
-
+	
 	@GetMapping("/products")
 	public ResponseEntity<Map<String, Object>> getProducts(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "5") int size) {
@@ -61,6 +61,44 @@ public class KioskInventoryController {
 
 		return ResponseEntity.ok(response);
 	}
+	
+	//키오스크에 없는 빵들
+	@GetMapping("/register/product")
+	public ResponseEntity<Map<String, Object>> getNoKioskProducts(@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "5") int size) {
+		Page<Product> productPage = kioskInventoryService.getNoKioskProducts(page, size);
+		List<Map<String, Object>> products = productPage.getContent().stream().map(product -> {
+			Map<String, Object> productMap = new HashMap<>();
+			productMap.put("product", product);
+			productMap.put("inventory", kioskInventoryService.getProductInventory(product));
+			return productMap;
+		}).collect(Collectors.toList());
+
+		Map<String, Object> response = new HashMap<>();
+		response.put("products", products);
+		response.put("currentPage", productPage.getNumber());
+		response.put("totalItems", productPage.getTotalElements());
+		response.put("totalPages", productPage.getTotalPages());
+
+		return ResponseEntity.ok(response);
+	}
+	@GetMapping("/register/coffee")
+	public ResponseEntity<Map<String, Object>> getNoKioskCoffees(@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "5") int size){
+		
+		Page<Coffee> coffeePage = kioskInventoryService.getNoKioskCoffees(page, size);
+		
+		Map<String, Object> response = new HashMap<>();
+		response.put("coffees", coffeePage.getContent());
+		response.put("currentPage", coffeePage.getNumber());
+		response.put("totalItems", coffeePage.getTotalElements());
+		response.put("totalPages", coffeePage.getTotalPages());
+
+		return ResponseEntity.ok(response);
+	}
+	
+	
+	
     @PutMapping("/update/products")
     public ResponseEntity<?> updateProducts(@RequestBody List<Product> products) {
         kioskInventoryService.updateProducts(products);
@@ -73,15 +111,29 @@ public class KioskInventoryController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/products/{productId}/update/downkiosk")
+    public ResponseEntity<?> updateProductDownKiosk(@PathVariable Long productId, @RequestBody Map<String, String> body) {
+        kioskInventoryService.updateProductDownKiosk(productId, body.get("OnKiosk"));
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/coffees/{coffeeId}/update/downkiosk")
+    public ResponseEntity<?> updateCoffeeDownKiosk(@PathVariable Long coffeeId, @RequestBody Map<String, String> body) {
+        kioskInventoryService.updateCoffeeDownKiosk(coffeeId, body.get("OnKiosk"));
+        return ResponseEntity.ok().build();
+    }   
+    
+    
+    
     @PutMapping("/products/{productId}/update/onkiosk")
     public ResponseEntity<?> updateProductOnKiosk(@PathVariable Long productId, @RequestBody Map<String, String> body) {
-        kioskInventoryService.updateProductOnKiosk(productId, body.get("OnKiosk"));
+    	kioskInventoryService.updateProductOnKiosk(productId, body.get("OnKiosk"));
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/coffees/{coffeeId}/update/onkiosk")
     public ResponseEntity<?> updateCoffeeOnKiosk(@PathVariable Long coffeeId, @RequestBody Map<String, String> body) {
-        kioskInventoryService.updateCoffeeOnKiosk(coffeeId, body.get("OnKiosk"));
+    	kioskInventoryService.updateCoffeeOnKiosk(coffeeId, body.get("OnKiosk"));
         return ResponseEntity.ok().build();
     }
 }
