@@ -2,7 +2,6 @@ package com.ERP.FinalProject.domain.production.planning.model;
 
 import lombok.Data;
 import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,10 +20,16 @@ public class ProductionPlanning {
     private int planId;
 
     @Column(name = "OrderID")
-    private int orderId; // OrderID 필드 추가
+    private int orderId;
 
     @Column(name = "ProductID")
     private int productId;
+
+    @Column(name = "ProductName")
+    private String productName;
+
+    @Column(name = "Quantity")
+    private int quantity;
 
     @Column(name = "StartDate")
     private LocalDateTime startDate;

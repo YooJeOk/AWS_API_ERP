@@ -21,12 +21,12 @@ function Production7() {
                     <table className="production-table">
                         <thead>
                             <tr>
-                                <th>입력일자</th>
-                                <th>생산품목코드</th>
-                                <th>생산품목명</th>
-                                <th>수량</th>
-                                <th>불량유형</th>
-                                <th>처리방법</th>
+                                    <th>주문ID</th>
+                                    <th>상품명</th>
+                                    <th>검사 수량</th>
+                                    <th>검사 날짜</th>
+                                    <th>검사 결과</th>
+                                    <th>기타 사항</th>
                             </tr>
                         </thead>
                         <tbody>
