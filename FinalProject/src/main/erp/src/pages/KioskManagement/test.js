@@ -3,6 +3,7 @@
 // import KioskCoffee from '../../components/KioskManagement/KioskCoffee';
 // import Pagination from '../../components/InventoryManage/Pagination';
 // import './KioskInventory.css';
+// import { Button, Modal } from 'react-bootstrap';
 
 // const KioskInventory = () => {
 //   const [products, setProducts] = useState({ products: [], totalPages: 0 });
@@ -14,38 +15,40 @@
 //   const [editedCoffees, setEditedCoffees] = useState({});
 //   const [deletedProducts, setDeletedProducts] = useState([]);
 //   const [deletedCoffees, setDeletedCoffees] = useState([]);
+//   const [showConfirmModal, setShowConfirmModal] = useState(false);
+//   const [changedItems, setChangedItems] = useState({ products: [], coffees: [] });
 
 //   const fetchProducts = useCallback(async () => {
 //     try {
 //       const response = await fetch(`http://localhost:8080/api/kiosk/inventory/products?page=${productPage}&size=5`);
 //       const data = await response.json();
 //       setProducts(data);
-//       if (!editedProducts[productPage]) {
+//       if (editMode) {
 //         setEditedProducts(prev => ({
 //           ...prev,
-//           [productPage]: data.products.map(item => ({ ...item }))
+//           [productPage]: prev[productPage] || data.products.map(item => ({ ...item }))
 //         }));
 //       }
 //     } catch (error) {
 //       console.error("상품 데이터 fetch 오류:", error);
 //     }
-//   }, [productPage, editedProducts]);
-
+//   }, [productPage, editMode]);
+  
 //   const fetchCoffees = useCallback(async () => {
 //     try {
 //       const response = await fetch(`http://localhost:8080/api/kiosk/inventory/coffees?page=${coffeePage}&size=5`);
 //       const data = await response.json();
 //       setCoffees(data);
-//       if (!editedCoffees[coffeePage]) {
+//       if (editMode) {
 //         setEditedCoffees(prev => ({
 //           ...prev,
-//           [coffeePage]: data.coffees.map(item => ({ ...item }))
+//           [coffeePage]: prev[coffeePage] || data.coffees.map(item => ({ ...item }))
 //         }));
 //       }
 //     } catch (error) {
 //       console.error("커피 데이터 fetch 오류:", error);
 //     }
-//   }, [coffeePage, editedCoffees]);
+//   }, [coffeePage, editMode]);
 
 //   useEffect(() => {
 //     fetchProducts();
@@ -65,15 +68,51 @@
 //     setEditedCoffees(prev => ({
 //       ...prev,
 //       [pageIndex]: prev[pageIndex].map((coffee, index) =>
-//         index === coffeeIndex ? { ...coffee, [field]: value } : coffee
+//         index === coffeeIndex ? { ...coffee, [field]: value, coffeeId: coffee.coffeeId } : coffee
 //       )
 //     }));
 //   };
-//   useEffect(() => {
-//     console.log('Edited products:', editedProducts);
-//   }, [editedProducts]);
+//   const checkForChanges = (original, edited) => {
+//     return original.map((originalItem, index) => {
+//       const editedItem = edited[index];
+//       if (!editedItem) return null;
+  
+//       const changes = {};
+//       for (const key in originalItem) {
+//         if (key === 'product') {
+//           for (const productKey in originalItem.product) {
+//             if (JSON.stringify(originalItem.product[productKey]) !== JSON.stringify(editedItem.product[productKey])) {
+//               changes[productKey] = { from: originalItem.product[productKey], to: editedItem.product[productKey] };
+//             }
+//           }
+//         } else if (JSON.stringify(originalItem[key]) !== JSON.stringify(editedItem[key])) {
+//           changes[key] = { from: originalItem[key], to: editedItem[key] };
+//         }
+//       }
+//       return Object.keys(changes).length > 0 ? { 
+//         id: originalItem.product ? originalItem.product.productId : originalItem.coffeeId,
+//         name: originalItem.product ? originalItem.product.productName : originalItem.coffeeName,
+//         changes 
+//       } : null;
+//     }).filter(Boolean);
+//   };
 
-//   const handleSaveChanges = async () => {
+
+//   const handleSaveChanges = () => {
+//     const currentProductPage = editedProducts[productPage] || [];
+//     const currentCoffeePage = editedCoffees[coffeePage] || [];
+    
+//     const productChanges = checkForChanges(products.products, currentProductPage);
+//     const coffeeChanges = checkForChanges(coffees.coffees, currentCoffeePage);
+  
+//     if (productChanges.length > 0 || coffeeChanges.length > 0 || deletedProducts.length > 0 || deletedCoffees.length > 0) {
+//       setChangedItems({ products: productChanges, coffees: coffeeChanges });
+//       setShowConfirmModal(true);
+//     } else {
+//       alert("변경사항이 없습니다.");
+//     }
+//   };
+//   const handleConfirmSave = async () => {
 //     const allEditedProducts = Object.values(editedProducts).flat().map(item => ({
 //       productId: item.product.productId,
 //       productName: item.product.productName,
@@ -86,18 +125,15 @@
 //       recommend: item.product.recommend,
 //       detailDescription: item.product.detailDescription
 //     }));
-//     console.log("보내는 제품 데이터:" + JSON.stringify(allEditedProducts));
-
 //     const allEditedCoffees = Object.values(editedCoffees).flat();
-//     console.log("보내는 커피 데이터:" + JSON.stringify(allEditedCoffees));
 
 //     try {
-//       // 수정된 상품 업데이트
 //       const productResponse = await fetch('http://localhost:8080/api/kiosk/inventory/update/products', {
 //         method: 'PUT',
 //         headers: { 'Content-Type': 'application/json' },
 //         body: JSON.stringify(allEditedProducts),
 //       });
+
 //       const coffeeResponse = await fetch('http://localhost:8080/api/kiosk/inventory/update/coffees', {
 //         method: 'PUT',
 //         headers: { 'Content-Type': 'application/json' },
@@ -120,7 +156,6 @@
 //         });
 //       }
 
-
 //       if (productResponse.ok && coffeeResponse.ok) {
 //         fetchProducts();
 //         fetchCoffees();
@@ -129,6 +164,7 @@
 //         setEditedCoffees({});
 //         setDeletedProducts([]);
 //         setDeletedCoffees([]);
+//         setShowConfirmModal(false);
 //       } else {
 //         console.error('Failed to update products or coffees');
 //       }
@@ -136,7 +172,6 @@
 //       console.error('Error updating data:', error);
 //     }
 //   };
-
 //   const handleDeleteProduct = (productId) => {
 //     setDeletedProducts(prev => [...prev, productId]);
 //   };
@@ -152,7 +187,79 @@
 //   const handleCancelDeleteCoffee = (coffeeId) => {
 //     setDeletedCoffees(prev => prev.filter(id => id !== coffeeId));
 //   };
+//   const ConfirmChangesModal = ({ show, onHide, changedItems, onConfirm }) => (
+//     <Modal show={show} onHide={onHide} size="lg">
+//       <Modal.Header closeButton>
+//         <Modal.Title>변경사항 확인</Modal.Title>
+//       </Modal.Header>
+//       <Modal.Body>
+//         <p>다음과 같은 변경사항이 있습니다. 저장하시겠습니까?</p>
+//         {changedItems.products.length > 0 && (
+//           <div>
+//             <h5>제품 변경사항:</h5>
+//             <ul>
+//               {changedItems.products.map(item => (
+//                 <li key={item.id}>
+//                 {item.name} (ID: {item.id}):
+//                 <ul>
+//                   {Object.entries(item.changes).map(([key, value]) => (
+//                     <li key={key}>
+//                       {key}: {JSON.stringify(value.from)} → {JSON.stringify(value.to)}
+//                     </li>
+//                   ))}
+//                 </ul>
+//                 </li>
+//               ))}
+//             </ul>
+//           </div>
+//         )}
+//         {changedItems.coffees.length > 0 && (
+//           <div>
+//             <h5>커피 변경사항:</h5>
+//             <ul>
+//               {changedItems.coffees.map(item => (
+//                 <li key={item.id}>
+//                 {item.name} (ID: {item.id}):
+//                 <ul>
+//                   {Object.entries(item.changes).map(([key, value]) => (
+//                     <li key={key}>
+//                       {key}: {JSON.stringify(value.from)} → {JSON.stringify(value.to)}
+//                     </li>
+//                   ))}
+//                 </ul>
+//                 </li>
+//               ))}
+//             </ul>
+//           </div>
+//         )}
+//         {deletedProducts.length > 0 && (
+//           <div>
+//             <h5>키오스크에서 내릴 제품:</h5>
+//             <ul>
+//               {deletedProducts.map(id => (
+//                 <li key={id}>제품 ID: {id}</li>
+//               ))}
+//             </ul>
+//           </div>
+//         )}
+//         {deletedCoffees.length > 0 && (
+//           <div>
+//             <h5>키오스크에서 내릴 커피:</h5>
+//             <ul>
+//               {deletedCoffees.map(id => (
+//                 <li key={id}>커피 ID: {id}</li>
+//               ))}
+//             </ul>
+//           </div>
+//         )}
+//       </Modal.Body>
+//       <Modal.Footer>
+//         <button  className="edit-detail-cancel-btn" onClick={onHide}>취소</button>
+//         <button  className="edit-detail-certain-btn" onClick={onConfirm}>저장</button>
+//       </Modal.Footer>
+//     </Modal>
 
+//   );
 //   return (
 //     <div className='product-coffee-container container-md mt-4'>
 //       <div className='edit-container'>
@@ -202,8 +309,15 @@
 //           />
 //         </div>
 //       </div>
+//       <ConfirmChangesModal
+//         show={showConfirmModal}
+//         onHide={() => setShowConfirmModal(false)}
+//         changedItems={changedItems}
+//         onConfirm={handleConfirmSave}
+//       />
 //     </div>
 //   );
 // };
 
 // export default KioskInventory;
+
