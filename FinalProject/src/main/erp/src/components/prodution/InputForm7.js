@@ -40,7 +40,7 @@ function MBOMForm() {
                         <table className="production-table" style={{ marginBottom: '20px' }}>
                             <thead>
                                 <tr>
-                                    <th>주문ID</th>
+                                    <th>주문ID선택</th>
                                     <th>상품명</th>
                                     <th>검사 수량</th>
                                     <th>검사 날짜</th>
