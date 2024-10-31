@@ -527,7 +527,7 @@ VALUES
  
  
  -- ProductionProcessStatus 테이블에 더미 데이터 삽입
-INSERT INTO ProductionProcessStatus (MonitorID, Status, WeighingComplete, DoughComplete, FirstFermentationComplete, 
+INSERT INTO ERP.ProductionProcessStatus (MonitorID, Status, WeighingComplete, DoughComplete, FirstFermentationComplete, 
                                      DivisionComplete, RoundingComplete, IntermediateFermentationComplete, 
                                      ShapingComplete, PanningComplete, SecondFermentationComplete, 
                                      BakingComplete, CoolingComplete, PackagingComplete) 
@@ -1024,3 +1024,5 @@ JOIN
     ERP.MBOM mb ON pp.ProductID = mb.ItemID 
 WHERE 
     pp.PlanID = 1; -- 특정 PlanID를 입력
+
+
