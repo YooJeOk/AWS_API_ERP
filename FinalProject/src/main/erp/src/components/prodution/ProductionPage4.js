@@ -7,7 +7,7 @@ import axios from 'axios';
 function ProductionOrderPage() {
     const [data, setData] = useState([]);  // 데이터를 관리할 상태
     const [isDataLoaded, setIsDataLoaded] = useState(false);
-    const navigate = useNavigate(); // navigate 변수 선언
+    const navigate = useNavigate(); 
 
     useEffect(() => {
         const fetchData = async () => {

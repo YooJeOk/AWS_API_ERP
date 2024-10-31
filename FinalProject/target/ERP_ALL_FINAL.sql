@@ -18,9 +18,7 @@ DROP TABLE IF EXISTS ERP.coffeeoptions;
 DROP TABLE IF EXISTS ERP.MaterialsInventory;
 DROP TABLE IF EXISTS ERP.DisposedRecords;
 DROP TABLE IF EXISTS ERP.Coffee;
-
 DROP TABLE IF EXISTS ERP.Product;
-
 DROP TABLE IF EXISTS ERP.Suppliers;
 
 CREATE SCHEMA ERP;
@@ -176,43 +174,44 @@ CREATE TABLE ERP.CoffeeOptionSalesDetails (
 );
 
 -- 13. 작업 지시 (WorkOrders)
-
 CREATE TABLE ERP.WorkOrders (
     OrderID INT NOT NULL AUTO_INCREMENT, -- 작업 지시ID
     ProductID INT NOT NULL, -- 제품ID
-    Quantity INT NULL, -- 수량
+    Quantity INT NOT NULL, -- 수량
     StartDate DATETIME NULL, -- 시작 날짜
-    EndDate DATETIME NULL, -- 종료 날짜
-	Priority VARCHAR(50) NULL, -- 우선순위
+    EndDate DATETIME NOT NULL, -- 종료 날짜
+	Priority VARCHAR(50) NOT NULL, -- 우선순위
 	etc VARCHAR(100) NULL, -- 기타
     PRIMARY KEY (OrderID),
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
 );
+-- WorkOrders 테이블에 필요한 인덱스 추가
+ALTER TABLE WorkOrders 
+ADD COLUMN ProductName VARCHAR(100) NOT NULL, -- ProductName 컬럼 추가
+ADD INDEX idx_quantity (Quantity),
+ADD INDEX idx_product_name (ProductName);
 
-
-
--- 13. 생산 계획 (ProductionPlanning)
+-- 14. 생산 계획 (ProductionPlanning)
 CREATE TABLE ERP.ProductionPlanning (
     PlanID INT NOT NULL AUTO_INCREMENT, -- 계획ID
     OrderID INT NOT NULL, -- 작업 지시ID
     ProductID INT NOT NULL, -- 제품ID
-    StartDate DATETIME NULL, -- 시작 시간
-    EndDate DATETIME NULL, -- 시작 시간
+    ProductName   VARCHAR(100)  NOT NULL,      -- 상품명
+	Quantity       INT           NOT NULL,      -- 수량
+    StartDate DATETIME NOT NULL, -- 시작 시간
+    EndDate DATETIME NOT NULL, -- 시작 시간
     etc VARCHAR(100) NULL, -- 기타
     PRIMARY KEY (PlanID),
     FOREIGN KEY (OrderID) REFERENCES ERP.WorkOrders(OrderID)
     
 );
 
-
-
-
--- 14. 생산 모니터링 (ProductionMonitoring)
+-- 15. 생산 모니터링 (ProductionMonitoring)
 CREATE TABLE ERP.ProductionMonitoring (
     MonitorID INT NOT NULL AUTO_INCREMENT, -- 모니터링ID
     OrderID INT NOT NULL, -- 작업 지시ID
-    Temperature FLOAT NULL, -- 온도
-    Humidity FLOAT NULL, -- 습도
+    Temperature FLOAT  NOT NULL, -- 온도
+    Humidity FLOAT NOT NULL, -- 습도
     ProductionRate FLOAT NULL, -- 생산률
     OperationTime FLOAT NULL, -- 작업 시간 (분 단위로 기록)
     StartTime DATETIME NULL, -- 작업 시작 시간
@@ -221,9 +220,7 @@ CREATE TABLE ERP.ProductionMonitoring (
 );
 
 
-
-
--- 15. ProductionProcessStatus 테이블 생성 -- 
+-- 16. ProductionProcessStatus 테이블 생성 -- 
 -- 각 공정 단계에 대해 완료 여부를 기록할 수 있도록 BOOLEAN 컬럼을 추가했습니다. 각 단계가 완료될 때마다 해당 컬럼을 TRUE로 업데이트하여 
 -- 각 제품의 공정 진행 상태를 추적할 수 있습니다. 이 방식으로 세부적인 생산 공정을 관리하고, 전체 생산 상태를 확인할 수 있습니다
 CREATE TABLE ProductionProcessStatus (
@@ -245,9 +242,7 @@ CREATE TABLE ProductionProcessStatus (
     FOREIGN KEY (MonitorID) REFERENCES ProductionMonitoring(MonitorID)
 );
 
-
-
--- 16 품질 관리 테이블 (QualityControl)
+-- 17 품질 관리 테이블 (QualityControl)
 CREATE TABLE QualityControl (
     QCID         INT           NOT NULL  AUTO_INCREMENT, -- 품질관리ID
     OrderID        INT           NOT NULL,  -- 주문ID
@@ -257,7 +252,7 @@ CREATE TABLE QualityControl (
     TestResult     VARCHAR(50)   NOT NULL,      -- 검사결과
     TestDate       DATETIME      NOT NULL,      -- 검사날짜
     Defectrate     INT           DEFAULT 0 NULL, -- 불량률
-    etc VARCHAR(100) NULL, -- 기타
+    etc           VARCHAR(100)   NULL, -- 기타
     PRIMARY KEY (`QCID`, `OrderID`, `Quantity`, `ProductID`, `ProductName`),
 	FOREIGN KEY (`OrderID`) REFERENCES `WorkOrders` (`OrderID`),
 	FOREIGN KEY (`Quantity`) REFERENCES `WorkOrders` (`Quantity`),
@@ -265,56 +260,25 @@ CREATE TABLE QualityControl (
     FOREIGN KEY (`ProductName`) REFERENCES `WorkOrders` (`ProductName`)
 );
 
--- 17생산 입고 테이블 (ProductionEntry)
+-- 18 생산 입고 테이블 (ProductionEntry)
 CREATE TABLE ProductionEntry (
-    `EntryID`        INT           NOT NULL,  -- 입고ID
-    `QCID`           INT           NOT NULL,  -- 품질관리ID
-    `OrderID`        INT           NOT NULL,  -- 주문ID
-    `Quantity`       INT           NULL,      -- 수량
-    `ProductID`      INT           NOT NULL COMMENT 'PK', -- 상품ID
-    `ProductName`    VARCHAR(100)  NULL,      -- 상품명
-    `EntryDate`      DATE          NULL,      -- 입고날짜
-    etc VARCHAR(100) NULL, -- 기타
+    EntryID       INT           NOT NULL AUTO_INCREMENT,  -- 입고ID
+    QCID          INT           NOT NULL,  -- 품질관리ID
+    OrderID       INT           NOT NULL,  -- 주문ID
+    Quantity      INT           NOT NULL,      -- 수량
+    ProductID     INT           NOT NULL COMMENT 'PK', -- 상품ID
+    ProductName   VARCHAR(100)  NOT NULL,      -- 상품명
+    EntryDate     DATE          NOT NULL,      -- 입고날짜
+    etc              VARCHAR(100)      NULL, -- 기타
     PRIMARY KEY (`EntryID`, `QCID`, `OrderID`, `Quantity`, `ProductID`, `ProductName`),
-    CONSTRAINT `FK_QualityControl_TO_ProductionEntry_QCID` FOREIGN KEY (`QCID`) REFERENCES `QualityControl` (`QCID`),
-    CONSTRAINT `FK_QualityControl_TO_ProductionEntry_OrderID` FOREIGN KEY (`OrderID`) REFERENCES `QualityControl` (`OrderID`),
-    CONSTRAINT `FK_QualityControl_TO_ProductionEntry_Quantity` FOREIGN KEY (`Quantity`) REFERENCES `QualityControl` (`Quantity`),
-    CONSTRAINT `FK_QualityControl_TO_ProductionEntry_ProductID` FOREIGN KEY (`ProductID`) REFERENCES `QualityControl` (`ProductID`),
-    CONSTRAINT `FK_QualityControl_TO_ProductionEntry_ProductName` FOREIGN KEY (`ProductName`) REFERENCES `QualityControl` (`ProductName`)
+    FOREIGN KEY (`QCID`) REFERENCES `QualityControl` (`QCID`),
+    FOREIGN KEY (`OrderID`) REFERENCES `QualityControl` (`OrderID`),
+	FOREIGN KEY (`Quantity`) REFERENCES `QualityControl` (`Quantity`),
+    FOREIGN KEY (`ProductID`) REFERENCES `QualityControl` (`ProductID`),
+    FOREIGN KEY (`ProductName`) REFERENCES `QualityControl` (`ProductName`)
 );
 
-
-
--- 16. 품질 관리 (QualityControl)
-CREATE TABLE ERP.QualityControl (
-    QCID INT NOT NULL AUTO_INCREMENT, -- 품질관리ID
-    EntryID INT NOT NULL, -- 입력ID
-    ProductID INT NOT NULL, -- 제품ID
-    TestResult VARCHAR(50) NULL, -- 테스트 결과
-    TestDate DATETIME NULL, -- 테스트 날짜
-    DefectRate INT DEFAULT 0 NULL, -- 불량률
-    etc VARCHAR(100) NULL, -- 기타
-    PRIMARY KEY (QCID),
-    FOREIGN KEY (EntryID) REFERENCES ERP.ProductionEntry(EntryID),
-    FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
-);
-
-
--- 17. 생산제품 공장입고 (ProductionEntry)
-CREATE TABLE ERP.ProductionEntry (
-    EntryID INT NOT NULL AUTO_INCREMENT, -- 입력ID
-    OrderID INT NOT NULL, -- 작업 지시ID
-    ProductID INT NOT NULL, -- 제품ID
-    Quantity INT NULL, -- 수량
-    EntryDate DATETIME NULL, -- 입고 날짜
-    etc VARCHAR(100) NULL, -- 기타
-    PRIMARY KEY (EntryID),
-    FOREIGN KEY (OrderID) REFERENCES ERP.WorkOrders(OrderID),
-    FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
-);
-
-
--- 18. 매장 재고 (StoreInventory)
+-- 19. 매장 재고 (StoreInventory)
 CREATE TABLE ERP.StoreInventory (
     StoreInventoryID INT NOT NULL AUTO_INCREMENT, -- 매장 재고ID
     ProductID INT, -- 제품ID
@@ -326,7 +290,7 @@ CREATE TABLE ERP.StoreInventory (
     FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
 );
 
--- 19 MBOM 
+-- 20 MBOM 
 CREATE TABLE ERP.MBOM (
     BOMID INT NOT NULL AUTO_INCREMENT, -- BOMID
     ItemID INT NOT NULL,               -- 제품ID OR 커피ID
@@ -341,7 +305,7 @@ CREATE TABLE ERP.MBOM (
     PRIMARY KEY (BOMID, ItemID, MaterialID),
     FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
 );
--- 19_1 보조테이블
+-- 21 MBOM 보조테이블
 CREATE TABLE ProductMaterials (
     ProductID INT NOT NULL,
     MaterialID INT NOT NULL,
@@ -351,7 +315,7 @@ CREATE TABLE ProductMaterials (
 );
 
 
--- 20. 사용자 (Users)
+-- 22. 사용자 (Users)
 CREATE TABLE ERP.Users (
 
     UserID INT NOT NULL AUTO_INCREMENT,-- 사용자ID
@@ -364,7 +328,7 @@ CREATE TABLE ERP.Users (
     PRIMARY KEY (UserID)
 );
 
--- 21. ERP.coffee_materials (커피 재료)
+-- 23. ERP.coffee_materials (커피 재료)
 CREATE TABLE ERP.coffee_materials (
     CoffeeMaterialID INT NOT NULL AUTO_INCREMENT,-- 커피 재료ID
     CoffeeID INT NOT NULL, -- 커피ID
@@ -374,7 +338,7 @@ CREATE TABLE ERP.coffee_materials (
     FOREIGN KEY (CoffeeID) REFERENCES ERP.Coffee(CoffeeID),
     FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
 );
--- 22. 유저 스탬프 데이터
+-- 24. 유저 스탬프 데이터
 CREATE TABLE UserStamp (
     id INT AUTO_INCREMENT PRIMARY KEY,
     phone VARCHAR(20) NOT NULL,
@@ -526,15 +490,29 @@ SELECT MaterialID, '아이스크림', 1000 FROM ERP.MaterialsInventory WHERE Mat
 UNION ALL
 SELECT MaterialID, '우유', 500 FROM ERP.MaterialsInventory WHERE MaterialName = '우유';
 
+
+ALTER TABLE ERP.WorkOrders 
+MODIFY COLUMN ProductName VARCHAR(100) NULL;
 -- 13. WorkOrders 테이블에 더미 데이터 삽입
-INSERT INTO ERP.WorkOrders (ProductID, Quantity, StartDate, EndDate, Priority, etc) VALUES
-(1, 100, '2024-10-28 08:00:00', '2024-10-28 16:00:00', 'High', '긴급 작업 요청'),
-(2, 200, '2024-10-29 09:00:00', '2024-10-29 17:00:00', 'Medium', '일반 작업 요청'),
-(3, 150, '2024-10-30 10:00:00', '2024-10-30 18:00:00', 'Low', '특별 공정 필요'),
-(4, 250, '2024-10-31 07:30:00', '2024-10-31 15:30:00', 'High', '정시 납기 요구');
+INSERT INTO ERP.WorkOrders (ProductID, Quantity, ProductName, StartDate, EndDate, Priority, etc) VALUES
+ (1, 100, '갈릭꽈베기', '2024-10-28 08:00:00', '2024-10-28 16:00:00', 'High', '긴급 작업 요청'),
+ (2, 200, '단팥도넛', '2024-10-29 09:00:00', '2024-10-29 17:00:00', 'Medium', '일반 작업 요청'),
+ (3, 150, '고구마케이크빵', '2024-10-30 10:00:00', '2024-10-30 18:00:00', 'Low', '특별 공정 필요'),
+ (4, 250, '꽈베기', '2024-10-31 07:30:00', '2024-10-31 15:30:00', 'High', '정시 납기 요구');
 
 
--- 15. 생산 모니터링 (ProductionMonitoring) 테이블 더미 데이터 (OrderID 1, 4가 진행 중인 작업) CSV파일형태로 넣어야됨
+ -- 14. 생산 계획 (ProductionPlanning) 테이블 더미 데이터
+INSERT INTO ERP.ProductionPlanning (OrderID, ProductID, StartDate, EndDate, etc)
+VALUES
+(1, 1,  '2024-04-23 08:00:00', '2024-04-23 13:30:00' , '긴급가동'), 
+(2, 2,  '2024-05-01 09:00:00', '2024-05-01 14:00:00' , '5월첫가동'), 
+(3, 3,  '2024-05-06 10:00:00', '2024-05-06 15:30:00' , '예약주문'), 
+(4, 4,  '2024-05-10 08:30:00', '2024-05-10 12:30:00' , '예비재고');
+
+-- 15. 생산 모니터링 (ProductionMonitoring) 테이블 더미 데이터 (OrderID 1, 4가 진행 중인 작업) CSV파일형태로 넣어야됨!!!!!!!!!!!!
+
+
+
 -- INSERT INTO ERP.ProductionMonitoring (OrderID, Temperature, Humidity, ProductionRate, OperationTime, StartTime)
 -- VALUES
  -- 진행 중인 작업 (OrderID 1) (온도와 습도를 적정 범위 내에서 설정)
@@ -543,8 +521,7 @@ INSERT INTO ERP.WorkOrders (ProductID, Quantity, StartDate, EndDate, Priority, e
 --  진행 중인 작업 (OrderID 4) (온도와 습도를 적정 범위 내에서 설정)
 -- (4, 27.5, 67, 25, 93, '2024-05-10 08:30:00'); -- 적정 온도 27.5°C+-5, 적정 습도 67%+-5
 
-
--- 상태(대기,작업중,완료,위험,경고)
+--                                                      상태(대기,작업중,완료,위험,경고)
 --     WeighingComplete BOOLEAN DEFAULT FALSE,        -- 재료 계량 완료 여부 (약 10분)
 --     DoughComplete BOOLEAN DEFAULT FALSE,           -- 반죽 완료 여부 (약 20분)
 --     FirstFermentationComplete BOOLEAN DEFAULT FALSE, -- 1차 발효 완료 여부 (약 1시간)
@@ -558,39 +535,17 @@ INSERT INTO ERP.WorkOrders (ProductID, Quantity, StartDate, EndDate, Priority, e
 --     CoolingComplete BOOLEAN DEFAULT FALSE,         -- 냉각 완료 여부 (약 20분)
 --     PackagingComplete BOOLEAN DEFAULT FALSE,       -- 포장 완료 여부 (약 10분)
 
- -- . 생산 계획 (ProductionPlanning) 테이블 더미 데이터
-INSERT INTO ERP.ProductionPlanning (OrderID, ProductID, StartDate, EndDate, etc)
-VALUES
-(1, 1,  '2024-04-23 08:00:00', '2024-04-23 13:30:00' , '긴급가동'), 
-(2, 2,  '2024-05-01 09:00:00', '2024-05-01 14:00:00' , '5월첫가동'), 
-(3, 3,  '2024-05-06 10:00:00', '2024-05-06 15:30:00' , '예약주문'), 
-(4, 4,  '2024-05-10 08:30:00', '2024-05-10 12:30:00' , '예비재고');
-
  
- 
- -- ProductionProcessStatus 테이블에 더미 데이터 삽입
+ -- 16. 생성 공정 상태 ProductionProcessStatus 테이블에 더미 데이터 삽입
 INSERT INTO ERP.ProductionProcessStatus (MonitorID, Status, WeighingComplete, DoughComplete, FirstFermentationComplete, 
-                                     DivisionComplete, RoundingComplete, IntermediateFermentationComplete, 
-                                     ShapingComplete, PanningComplete, SecondFermentationComplete, 
-                                     BakingComplete, CoolingComplete, PackagingComplete) 
+                                                            DivisionComplete, RoundingComplete, IntermediateFermentationComplete, 
+                                                            ShapingComplete, PanningComplete, SecondFermentationComplete, 
+                                                            BakingComplete, CoolingComplete, PackagingComplete) 
 VALUES 
 (1, '작업중', TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE),   -- 1차 발효 단계 대기
 (2, '완료', FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE),  -- 모든 공정 대기 상태
 (3, '경고', TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE),           -- 냉각 및 포장 대기
 (4, '작업중', TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE);             -- 모든 공정 완료
-
-
-
-
--- 16. 생산입고 (ProductionEntry) 테이블 더미 데이터 (20분 후 입고되도록 수정)
-INSERT INTO ERP.ProductionEntry (OrderID, ProductID, Quantity, EntryDate, etc)
-VALUES
-(1, 1, 500, '2024-04-23 13:50:00', '일반 입고'),
-(2, 2, 300, '2024-05-01 14:20:00', '정기 입고'),
-(3, 3, 400, '2024-05-06 15:50:00', '긴급 입고'),
-(4, 4, 200, '2024-05-10 12:50:00','일반 입고');
-
-
 
 -- 17. 품질 관리 (QualityControl) 테이블 더미 데이터 (입고 후 10분 이내에 검사되도록 수정)
 INSERT INTO ERP.QualityControl (EntryID, ProductID, TestResult, TestDate, DefectRate, etc)
@@ -600,9 +555,15 @@ VALUES
 (3, 3, '합격', '2024-05-06 16:00:00', 0, '정상'),
 (4, 4, '합격', '2024-05-10 13:00:00', 1, '정상');
 
+-- 18. 생산입고 (ProductionEntry) 테이블 더미 데이터 (20분 후 입고되도록 수정)
+INSERT INTO ERP.ProductionEntry (OrderID, ProductID, Quantity, EntryDate, etc)
+VALUES
+(1, 1, 500, '2024-04-23 13:50:00', '일반 입고'),
+(2, 2, 300, '2024-05-01 14:20:00', '정기 입고'),
+(3, 3, 400, '2024-05-06 15:50:00', '긴급 입고'),
+(4, 4, 200, '2024-05-10 12:50:00','일반 입고');
 
-
--- 18. 매장 재고 (StoreInventory) 테이블 더미 데이터
+-- 19. 매장 재고 (StoreInventory) 테이블 더미 데이터
 select * from StoreInventory;
 INSERT INTO ERP.StoreInventory (ProductID, MaterialID, QuantityInStore, StoreDate)
 VALUES
@@ -638,10 +599,9 @@ VALUES
 (NULL, 31, 100, '2024-10-29 00:00:00'),  -- 컵(regular size)
 (NULL, 32, 232, '2024-10-29 00:00:00'),  -- 컵(extra size)
 (NULL, 33, 250, '2024-10-29 00:00:00'), -- 빨대
-(NULL, 34, 300, '2024-10-29 00:00:00')   -- 캐리어
-;
+(NULL, 34, 300, '2024-10-29 00:00:00');   -- 캐리어
 
--- 19. MBOM 테이블 더미 데이터
+-- 20. MBOM 테이블 더미 데이터
 INSERT INTO ERP.MBOM (ItemID, ItemType, Size, MaterialID, ProductName, Quantity, Unit, UnitPrice, TotalCost)
 VALUES
 -- 갈릭꽈베기 885원
@@ -952,119 +912,93 @@ VALUES
 (13, 'Coffee', 'Extra', 5, '연유라떼(엑스트라)', 30, 'g', 2, 30 * 2),                 -- 연유
 (13, 'Coffee', 'Extra', 8, '연유라떼(엑스트라)', 1, 'ea', 80, 80);                   -- 컵(extra size)
 
+-- 21. ProductMaterials 테이블에 더미 데이터 삽입
+INSERT INTO ProductMaterials (ProductID, MaterialID, Quantity) VALUES
+(1, 101, 500),  -- 갈릭꽈베기에 필요한 자재
+(2, 102, 300),  -- 단팥도넛에 필요한 자재
+(3, 103, 200),  -- 고구마케이크빵에 필요한 자재
+(4, 104, 100);  -- 꽈베기에 필요한 자재
 
-
--- 20. 사용자 (Users) 테이블 더미 데이터
+-- 22. 사용자 (Users) 테이블 더미 데이터
 INSERT INTO ERP.Users (Name, PhoneNumber, Email, Username, Password)
 VALUES
 ('박민수', '010-5555-6666', 'minsoo@example.com', 'minsoo', 'pass9101');
 
--- 21. 커피 재료 테이블 더미 데이터
+-- 23. 커피 재료 테이블 더미 데이터
 INSERT INTO ERP.coffee_materials (CoffeeID, MaterialID, RawMaterialQuantity)
 VALUES
 (1, 1, 50),  -- 아메리카노에 자재 1번 사용, 50 단위
 (2, 2, 30),  -- 카라멜 마끼야또에 자재 2번 사용, 30 단위
 (3, 3, 20);  -- 카페라떼에 자재 3번 사용, 20 단위
 
--- 1. Product 테이블 조회 (완료)
+-- 1. 제품 조회
 SELECT * FROM ERP.Product;
 
--- 2. Coffee 테이블 조회 (완료)
-SELECT * FROM ERP.Coffee;
-
--- 3. Suppliers 테이블 조회 (완료)
+-- 2. 공급업체 조회
 SELECT * FROM ERP.Suppliers;
 
--- 4. MaterialsInventory 테이블 조회 (완료)
+-- 3. 원자재 재고 조회
 SELECT * FROM ERP.MaterialsInventory;
 
--- 5. RawMaterialRestockHistory 테이블 조회 (완료)
+-- 4. 원자재 입고 이력 조회
 SELECT * FROM ERP.RawMaterialRestockHistory;
 
--- 6. ProductionConsumption 테이블 조회 (완료)
+-- 5. 원자재 소비 내역 조회
 SELECT * FROM ERP.ProductionConsumption;
 
--- 7. FactoryInventory 테이블 조회 (완료)
+-- 6. 공장 재고 조회
 SELECT * FROM ERP.FactoryInventory;
 
--- 8. DisposedRecords 테이블 조회 (완료)
+-- 7. 폐기 기록 조회
 SELECT * FROM ERP.DisposedRecords;
 
--- 9. SalesRecords 테이블 조회 (완료)
+-- 8. 매장 커피 종류 조회
+SELECT * FROM ERP.Coffee;
+
+-- 9. 커피부가옵션 조회
+SELECT * FROM ERP.CoffeeOptions;
+
+-- 10. 판매 기록 조회
 SELECT * FROM ERP.SalesRecords;
 
--- 10. WorkOrders 테이블 조회 (완료)
+-- 11. 판매 세부 기록 조회
+SELECT * FROM ERP.SalesDetails;
+
+-- 12. 커피 판매 세부 기록 조회
+SELECT * FROM ERP.CoffeeOptionSalesDetails;
+
+-- 13. 작업 지시 조회
 SELECT * FROM ERP.WorkOrders;
 
--- 11. ProductionPlanning 테이블 조회 (완료)
+-- 14. 생산 계획 조회
 SELECT * FROM ERP.ProductionPlanning;
 
--- 12. ProductionMonitoring 테이블 조회 (완료)
+-- 15. 생산 모니터링 조회
 SELECT * FROM ERP.ProductionMonitoring;
 
--- 13. ProductionEntry 테이블 조회 (완료)
-SELECT * FROM ERP.ProductionEntry;
+-- 16. 생산 공정 상태 조회
+SELECT * FROM ProductionProcessStatus;
 
--- 14. QualityControl 테이블 조회 (완료)
-SELECT * FROM ERP.QualityControl;
+-- 17. 품질 관리 조회
+SELECT * FROM QualityControl;
 
--- 15. StoreInventory 테이블 조회
+-- 18. 생산 입고 조회
+SELECT * FROM ProductionEntry;
+
+-- 19. 매장 재고 조회
 SELECT * FROM ERP.StoreInventory;
 
--- 16. MBOM 테이블 조회 (완료)
+-- 20. MBOM 조회
 SELECT * FROM ERP.MBOM;
 
--- 17. Users 테이블 조회 (완료)
+-- 21. 제품-원자재 관계 조회
+SELECT * FROM ProductMaterials;
+
+-- 22. 사용자 조회
 SELECT * FROM ERP.Users;
 
--- 18. Untitled 테이블 조회 (커피 재료)
+-- 23. 커피 재료 조회
 SELECT * FROM ERP.coffee_materials;
 
-
--- --------------------------------------------------------------------------------------------------------------------------------------------------- --
-
--- 간단
-SELECT 
-    pp.PlanID AS planId, 
-    pp.OrderID AS orderId, 
-    pp.ProductID AS productId, 
-    pp.StartDate AS startDate, 
-    pp.EndDate AS endDate, 
-    wo.Quantity AS orderQuantity, 
-    p.ProductName AS productName 
-FROM 
-    ERP.ProductionPlanning pp 
-JOIN 
-    ERP.WorkOrders wo ON pp.OrderID = wo.OrderID 
-JOIN 
-    ERP.Product p ON pp.ProductID = p.ProductID 
-ORDER BY 
-    pp.PlanID;
-
-
-
--- 상세
-
-SELECT 
-    pp.PlanID AS planId, 
-    wo.Quantity AS orderQuantity,            -- 제품 수량
-   
-    mb.MaterialID AS materialId, 
-    mb.Quantity AS materialQuantity, 
-    mb.Unit AS unit, 
-    mb.UnitPrice AS materialUnitPrice, 
-    mb.TotalCost AS materialTotalCost, 
-    (wo.Quantity * mb.Quantity) AS TotalMaterialQuantity, 
-    (wo.Quantity * mb.Quantity * mb.UnitPrice) AS TotalCostBasedOnOrder 
-FROM 
-    ERP.ProductionPlanning pp 
-JOIN 
-    ERP.WorkOrders wo ON pp.OrderID = wo.OrderID 
-JOIN 
-    ERP.Product p ON pp.ProductID = p.ProductID 
-JOIN 
-    ERP.MBOM mb ON pp.ProductID = mb.ItemID 
-WHERE 
-    pp.PlanID = 1; -- 특정 PlanID를 입력
-
-
+-- 24. 유저 스탬프 데이터 조회
+SELECT * FROM UserStamp;
