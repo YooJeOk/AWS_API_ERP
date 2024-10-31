@@ -54,7 +54,7 @@ public class KioskInventoryService {
     }
 
     @Transactional
-    public void updateProductOnKiosk(Long productId, String onKiosk) {
+    public void updateProductDownKiosk(Long productId, String onKiosk) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         product.setOnKiosk(onKiosk);
@@ -62,10 +62,38 @@ public class KioskInventoryService {
     }
 
     @Transactional
+    public void updateCoffeeDownKiosk(Long coffeeId, String onKiosk) {
+        Coffee coffee = coffeeRepository.findById(coffeeId)
+                .orElseThrow(() -> new RuntimeException("Coffee not found"));
+        coffee.setOnKiosk(onKiosk);
+        coffeeRepository.save(coffee);
+    }
+
+    //키오스크에 없는 아이템(빵)들 가져올거임
+	public Page<Product> getNoKioskProducts(int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findByProductCategoryAndOnKiosk("bread", "N", pageable);
+	}
+	
+	//키오스크에 없는 커피들 가져올거임
+	public Page<Coffee> getNoKioskCoffees(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return coffeeRepository.findByOnKiosk("N",pageable);
+	}
+
+	public void updateProductOnKiosk(Long productId, String onKiosk) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        product.setOnKiosk(onKiosk);
+        productRepository.save(product);
+    }
+
     public void updateCoffeeOnKiosk(Long coffeeId, String onKiosk) {
         Coffee coffee = coffeeRepository.findById(coffeeId)
                 .orElseThrow(() -> new RuntimeException("Coffee not found"));
         coffee.setOnKiosk(onKiosk);
         coffeeRepository.save(coffee);
     }
+
+	
 }

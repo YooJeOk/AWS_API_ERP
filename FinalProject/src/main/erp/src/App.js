@@ -36,6 +36,7 @@ import FactoryInventory from './pages/InventoryManage/FactoryInventory';
 //키오스크 관리
 import KioskSidebar from './components/KioskManagement/KioskSidebar';
 import KioskInventory from './pages/KioskManagement/KioskInventory';
+import KioskRegister from './pages/KioskManagement/KioskRegister';
 
 function App() {
     return (
@@ -80,7 +81,9 @@ function App() {
 
                     {/* 키오스크 관리 사이드바 */}
                     <Route path="/KioskInventory" element={<KioskSidebarWrapper><KioskInventory /></KioskSidebarWrapper>} />
+                    <Route path="/KioskRegister" element={<KioskSidebarWrapper><KioskRegister /></KioskSidebarWrapper>} />
 
+                    
                 </Routes>
             </div>
         </Router>

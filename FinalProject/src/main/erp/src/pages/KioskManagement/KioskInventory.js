@@ -3,7 +3,7 @@ import KioskProduct from '../../components/KioskManagement/KioskProduct';
 import KioskCoffee from '../../components/KioskManagement/KioskCoffee';
 import Pagination from '../../components/InventoryManage/Pagination';
 import './KioskInventory.css';
-import { Button, Modal } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 
 const KioskInventory = () => {
   const [products, setProducts] = useState({ products: [], totalPages: 0 });
@@ -23,32 +23,32 @@ const KioskInventory = () => {
       const response = await fetch(`http://localhost:8080/api/kiosk/inventory/products?page=${productPage}&size=5`);
       const data = await response.json();
       setProducts(data);
-      if (!editedProducts[productPage]) {
+      if (editMode) {
         setEditedProducts(prev => ({
           ...prev,
-          [productPage]: data.products.map(item => ({ ...item }))
+          [productPage]: prev[productPage] || data.products.map(item => ({ ...item }))
         }));
       }
     } catch (error) {
       console.error("상품 데이터 fetch 오류:", error);
     }
-  }, [productPage, editedProducts]);
-
+  }, [productPage, editMode]);
+  
   const fetchCoffees = useCallback(async () => {
-    try {
-      const response = await fetch(`http://localhost:8080/api/kiosk/inventory/coffees?page=${coffeePage}&size=5`);
-      const data = await response.json();
-      setCoffees(data);
-      if (!editedCoffees[coffeePage]) {
-        setEditedCoffees(prev => ({
-          ...prev,
-          [coffeePage]: data.coffees.map(item => ({ ...item }))
-        }));
-      }
-    } catch (error) {
-      console.error("커피 데이터 fetch 오류:", error);
+  try {
+    const response = await fetch(`http://localhost:8080/api/kiosk/inventory/coffees?page=${coffeePage}&size=5`);
+    const data = await response.json();
+    setCoffees(data);
+    if (editMode) {
+      setEditedCoffees(prev => ({
+        ...prev,
+        [coffeePage]: prev[coffeePage] || data.coffees.map(item => ({ ...item }))
+      }));
     }
-  }, [coffeePage, editedCoffees]);
+  } catch (error) {
+    console.error("커피 데이터 fetch 오류:", error);
+  }
+}, [coffeePage, editMode]);
 
   useEffect(() => {
     fetchProducts();
@@ -68,17 +68,16 @@ const KioskInventory = () => {
     setEditedCoffees(prev => ({
       ...prev,
       [pageIndex]: prev[pageIndex].map((coffee, index) =>
-        index === coffeeIndex ? { ...coffee, [field]: value } : coffee
+        index === coffeeIndex ? { ...coffee, [field]: value, coffeeId: coffee.coffeeId } : coffee
       )
     }));
   };
- 
   const checkForChanges = (original, edited) => {
     return original.map((originalItem, index) => {
       const editedItem = edited[index];
+      if (!editedItem) return null;
+  
       const changes = {};
-      const itemId = originalItem.product ? originalItem.product.productId : originalItem.coffeeId;
-      
       for (const key in originalItem) {
         if (key === 'product') {
           for (const productKey in originalItem.product) {
@@ -90,17 +89,22 @@ const KioskInventory = () => {
           changes[key] = { from: originalItem[key], to: editedItem[key] };
         }
       }
-      return Object.keys(changes).length > 0 ? { id: itemId, changes } : null;
+      return Object.keys(changes).length > 0 ? { 
+        id: originalItem.product ? originalItem.product.productId : originalItem.coffeeId,
+        name: originalItem.product ? originalItem.product.productName : originalItem.coffeeName,
+        changes 
+      } : null;
     }).filter(Boolean);
   };
 
 
   const handleSaveChanges = () => {
-    const allEditedProducts = Object.values(editedProducts).flat();
-    const allEditedCoffees = Object.values(editedCoffees).flat();
-    const productChanges = checkForChanges(products.products, allEditedProducts);
-    const coffeeChanges = checkForChanges(coffees.coffees, allEditedCoffees);
-
+    const currentProductPage = editedProducts[productPage] || [];
+    const currentCoffeePage = editedCoffees[coffeePage] || [];
+    
+    const productChanges = checkForChanges(products.products, currentProductPage);
+    const coffeeChanges = checkForChanges(coffees.coffees, currentCoffeePage);
+  
     if (productChanges.length > 0 || coffeeChanges.length > 0 || deletedProducts.length > 0 || deletedCoffees.length > 0) {
       setChangedItems({ products: productChanges, coffees: coffeeChanges });
       setShowConfirmModal(true);
@@ -108,7 +112,6 @@ const KioskInventory = () => {
       alert("변경사항이 없습니다.");
     }
   };
-
   const handleConfirmSave = async () => {
     const allEditedProducts = Object.values(editedProducts).flat().map(item => ({
       productId: item.product.productId,
@@ -123,8 +126,7 @@ const KioskInventory = () => {
       detailDescription: item.product.detailDescription
     }));
     const allEditedCoffees = Object.values(editedCoffees).flat();
-    console.log("보내는 제품 데이터:"+JSON.stringify(allEditedProducts));
-    console.log("보내는 커피 데이터:"+JSON.stringify(allEditedCoffees));
+
     try {
       const productResponse = await fetch('http://localhost:8080/api/kiosk/inventory/update/products', {
         method: 'PUT',
@@ -139,7 +141,7 @@ const KioskInventory = () => {
       });
 
       for (let productId of deletedProducts) {
-        await fetch(`http://localhost:8080/api/kiosk/inventory/products/${productId}/update/onkiosk`, {
+        await fetch(`http://localhost:8080/api/kiosk/inventory/products/${productId}/update/downkiosk`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ OnKiosk: 'N' }),
@@ -147,7 +149,7 @@ const KioskInventory = () => {
       }
 
       for (let coffeeId of deletedCoffees) {
-        await fetch(`http://localhost:8080/api/kiosk/inventory/coffees/${coffeeId}/update/onkiosk`, {
+        await fetch(`http://localhost:8080/api/kiosk/inventory/coffees/${coffeeId}/update/downkiosk`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ OnKiosk: 'N' }),
@@ -186,7 +188,7 @@ const KioskInventory = () => {
     setDeletedCoffees(prev => prev.filter(id => id !== coffeeId));
   };
   const ConfirmChangesModal = ({ show, onHide, changedItems, onConfirm }) => (
-    <Modal show={show} onHide={onHide} size="lg">
+    <Modal show={show} onHide={onHide} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
         <Modal.Title>변경사항 확인</Modal.Title>
       </Modal.Header>
@@ -198,14 +200,14 @@ const KioskInventory = () => {
             <ul>
               {changedItems.products.map(item => (
                 <li key={item.id}>
-                  제품 ID {item.id}:
-                  <ul>
-                    {Object.entries(item.changes).map(([key, value]) => (
-                      <li key={key}>
-                        {key}: {JSON.stringify(value.from)} → {JSON.stringify(value.to)}
-                      </li>
-                    ))}
-                  </ul>
+                {item.name} (ID: {item.id}):
+                <ul>
+                  {Object.entries(item.changes).map(([key, value]) => (
+                    <li key={key}>
+                      {key}: {JSON.stringify(value.from)} → {JSON.stringify(value.to)}
+                    </li>
+                  ))}
+                </ul>
                 </li>
               ))}
             </ul>
@@ -217,14 +219,14 @@ const KioskInventory = () => {
             <ul>
               {changedItems.coffees.map(item => (
                 <li key={item.id}>
-                  커피 ID {item.id}:
-                  <ul>
-                    {Object.entries(item.changes).map(([key, value]) => (
-                      <li key={key}>
-                        {key}: {JSON.stringify(value.from)} → {JSON.stringify(value.to)}
-                      </li>
-                    ))}
-                  </ul>
+                {item.name} (ID: {item.id}):
+                <ul>
+                  {Object.entries(item.changes).map(([key, value]) => (
+                    <li key={key}>
+                      {key}: {JSON.stringify(value.from)} → {JSON.stringify(value.to)}
+                    </li>
+                  ))}
+                </ul>
                 </li>
               ))}
             </ul>
@@ -252,8 +254,8 @@ const KioskInventory = () => {
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onHide}>취소</Button>
-        <Button variant="primary" onClick={onConfirm}>저장</Button>
+        <button  className="edit-detail-cancel-btn" onClick={onHide}>취소</button>
+        <button  className="edit-detail-certain-btn" onClick={onConfirm}>저장</button>
       </Modal.Footer>
     </Modal>
 
