@@ -173,23 +173,21 @@ CREATE TABLE ERP.CoffeeOptionSalesDetails (
     FOREIGN KEY (OptionID) REFERENCES ERP.CoffeeOptions(OptionID)
 );
 
--- 13. 작업 지시 (WorkOrders)
+-- 13. 작업 지시 (WorkOrders) 
 CREATE TABLE ERP.WorkOrders (
-    OrderID INT NOT NULL AUTO_INCREMENT, -- 작업 지시ID
-    ProductID INT NOT NULL, -- 제품ID
-    Quantity INT NOT NULL, -- 수량
-    StartDate DATETIME NULL, -- 시작 날짜
-    EndDate DATETIME NOT NULL, -- 종료 날짜
-	Priority VARCHAR(50) NOT NULL, -- 우선순위
-	etc VARCHAR(100) NULL, -- 기타
+    OrderID INT NOT NULL AUTO_INCREMENT,         -- 작업 지시 ID
+    ProductID INT NOT NULL,                      -- 제품 ID
+    ProductName VARCHAR(100) NOT NULL,           -- 제품명
+    Quantity INT NOT NULL,                       -- 수량
+    StartDate DATETIME NULL,                     -- 시작 날짜
+    EndDate DATETIME NOT NULL,                   -- 종료 날짜
+    Priority VARCHAR(50) NOT NULL,               -- 우선순위
+    etc VARCHAR(100) NULL,                       -- 기타
     PRIMARY KEY (OrderID),
-    FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID)
+    FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID),  -- 제품 외래 키 연결
+    INDEX idx_quantity (Quantity),               -- 수량 인덱스
+    INDEX idx_product_name (ProductName)         -- 제품명 인덱스
 );
--- WorkOrders 테이블에 필요한 인덱스 추가
-ALTER TABLE WorkOrders 
-ADD COLUMN ProductName VARCHAR(100) NOT NULL, -- ProductName 컬럼 추가
-ADD INDEX idx_quantity (Quantity),
-ADD INDEX idx_product_name (ProductName);
 
 -- 14. 생산 계획 (ProductionPlanning)
 CREATE TABLE ERP.ProductionPlanning (
@@ -244,23 +242,41 @@ CREATE TABLE ProductionProcessStatus (
 
 -- 17 품질 관리 테이블 (QualityControl)
 CREATE TABLE QualityControl (
-    QCID         INT           NOT NULL  AUTO_INCREMENT, -- 품질관리ID
-    OrderID        INT           NOT NULL,  -- 주문ID
-    Quantity       INT           NOT NULL,      -- 수량
-    ProductID      INT           NOT NULL COMMENT 'PK', -- 상품ID
-    ProductName    VARCHAR(100)  NOT NULL,      -- 상품명
-    TestResult     VARCHAR(50)   NOT NULL,      -- 검사결과
-    TestDate       DATETIME      NOT NULL,      -- 검사날짜
-    Defectrate     INT           DEFAULT 0 NULL, -- 불량률
-    etc           VARCHAR(100)   NULL, -- 기타
-    PRIMARY KEY (`QCID`, `OrderID`, `Quantity`, `ProductID`, `ProductName`),
-	FOREIGN KEY (`OrderID`) REFERENCES `WorkOrders` (`OrderID`),
-	FOREIGN KEY (`Quantity`) REFERENCES `WorkOrders` (`Quantity`),
-    FOREIGN KEY (`ProductID`) REFERENCES `WorkOrders` (`ProductID`),
-    FOREIGN KEY (`ProductName`) REFERENCES `WorkOrders` (`ProductName`)
+    QCID              INT           NOT NULL  AUTO_INCREMENT, -- 품질관리ID
+    OrderID           INT           NOT NULL,  -- 주문ID
+    Quantity          INT           NOT NULL,  -- 수량
+    ProductID         INT           NOT NULL COMMENT 'PK', -- 상품ID
+    ProductName       VARCHAR(100)  NOT NULL,  -- 상품명
+    TestResult        VARCHAR(50)   NOT NULL,  -- 검사결과
+    TestDate          DATETIME      NOT NULL,  -- 검사날짜
+     etc               VARCHAR(100)  NULL,                      -- 기타
+    PRIMARY KEY (QCID),                       -- QCID를 단일 기본 키로 설정
+    FOREIGN KEY (OrderID) REFERENCES WorkOrders (OrderID),
+    FOREIGN KEY (Quantity) REFERENCES WorkOrders (Quantity),
+    FOREIGN KEY (ProductID) REFERENCES WorkOrders (ProductID),
+    FOREIGN KEY (ProductName) REFERENCES WorkOrders (ProductName)
 );
 
--- 18 생산 입고 테이블 (ProductionEntry)
+-- 18. 불량 관리 테이블 (DefectManagement)
+CREATE TABLE DefectManagement (
+    DefectID          INT           NOT NULL  AUTO_INCREMENT,  -- 불량 ID (자동 증가)
+    QCID              INT           NOT NULL,                  -- 품질 관리 ID
+    OrderID           INT           NOT NULL,                  -- 주문 ID
+    Quantity          INT           NOT NULL,                  -- 수량
+    ProductID         INT           NOT NULL,                  -- 상품 ID
+    ProductName       VARCHAR(100)  NOT NULL,                  -- 상품명
+    DefectType        VARCHAR(50)   NOT NULL,                  -- 불량 유형
+    DefectQuantity    INT           NOT NULL,                  -- 불량 수량
+    DefectTimestamp   DATETIME      NOT NULL,                  -- 불량 발견 시간
+    CauseDescription  VARCHAR(255)  NULL,                      -- 불량 원인 설명
+    Status            ENUM('미처리', '완료') DEFAULT '미처리', -- 불량 처리 상태
+    Defectrate        INT           DEFAULT 0 NULL,            -- 불량률
+    etc               VARCHAR(100)  NULL,                      -- 기타
+    PRIMARY KEY (DefectID),
+    FOREIGN KEY (QCID) REFERENCES QualityControl (QCID)       -- QCID 단일 외래 키 참조
+);
+
+-- 19 생산 입고 테이블 (ProductionEntry)
 CREATE TABLE ProductionEntry (
     EntryID       INT           NOT NULL AUTO_INCREMENT,  -- 입고ID
     QCID          INT           NOT NULL,  -- 품질관리ID
@@ -278,7 +294,7 @@ CREATE TABLE ProductionEntry (
     FOREIGN KEY (`ProductName`) REFERENCES `QualityControl` (`ProductName`)
 );
 
--- 19. 매장 재고 (StoreInventory)
+-- 20. 매장 재고 (StoreInventory)
 CREATE TABLE ERP.StoreInventory (
     StoreInventoryID INT NOT NULL AUTO_INCREMENT, -- 매장 재고ID
     ProductID INT, -- 제품ID
@@ -290,7 +306,7 @@ CREATE TABLE ERP.StoreInventory (
     FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
 );
 
--- 20 MBOM 
+-- 21 MBOM 
 CREATE TABLE ERP.MBOM (
     BOMID INT NOT NULL AUTO_INCREMENT, -- BOMID
     ItemID INT NOT NULL,               -- 제품ID OR 커피ID
@@ -305,7 +321,7 @@ CREATE TABLE ERP.MBOM (
     PRIMARY KEY (BOMID, ItemID, MaterialID),
     FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
 );
--- 21 MBOM 보조테이블
+-- 22 MBOM 보조테이블
 CREATE TABLE ProductMaterials (
     ProductID INT NOT NULL,
     MaterialID INT NOT NULL,
@@ -315,7 +331,7 @@ CREATE TABLE ProductMaterials (
 );
 
 
--- 22. 사용자 (Users)
+-- 23. 사용자 (Users)
 CREATE TABLE ERP.Users (
 
     UserID INT NOT NULL AUTO_INCREMENT,-- 사용자ID
@@ -328,7 +344,7 @@ CREATE TABLE ERP.Users (
     PRIMARY KEY (UserID)
 );
 
--- 23. ERP.coffee_materials (커피 재료)
+-- 24. ERP.coffee_materials (커피 재료)
 CREATE TABLE ERP.coffee_materials (
     CoffeeMaterialID INT NOT NULL AUTO_INCREMENT,-- 커피 재료ID
     CoffeeID INT NOT NULL, -- 커피ID
@@ -338,7 +354,7 @@ CREATE TABLE ERP.coffee_materials (
     FOREIGN KEY (CoffeeID) REFERENCES ERP.Coffee(CoffeeID),
     FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
 );
--- 24. 유저 스탬프 데이터
+-- 25. 유저 스탬프 데이터
 CREATE TABLE UserStamp (
     id INT AUTO_INCREMENT PRIMARY KEY,
     phone VARCHAR(20) NOT NULL,
@@ -490,24 +506,23 @@ SELECT MaterialID, '아이스크림', 1000 FROM ERP.MaterialsInventory WHERE Mat
 UNION ALL
 SELECT MaterialID, '우유', 500 FROM ERP.MaterialsInventory WHERE MaterialName = '우유';
 
-
-ALTER TABLE ERP.WorkOrders 
-MODIFY COLUMN ProductName VARCHAR(100) NULL;
--- 13. WorkOrders 테이블에 더미 데이터 삽입
-INSERT INTO ERP.WorkOrders (ProductID, Quantity, ProductName, StartDate, EndDate, Priority, etc) VALUES
- (1, 100, '갈릭꽈베기', '2024-10-28 08:00:00', '2024-10-28 16:00:00', 'High', '긴급 작업 요청'),
- (2, 200, '단팥도넛', '2024-10-29 09:00:00', '2024-10-29 17:00:00', 'Medium', '일반 작업 요청'),
- (3, 150, '고구마케이크빵', '2024-10-30 10:00:00', '2024-10-30 18:00:00', 'Low', '특별 공정 필요'),
- (4, 250, '꽈베기', '2024-10-31 07:30:00', '2024-10-31 15:30:00', 'High', '정시 납기 요구');
-
-
- -- 14. 생산 계획 (ProductionPlanning) 테이블 더미 데이터
-INSERT INTO ERP.ProductionPlanning (OrderID, ProductID, StartDate, EndDate, etc)
+-- 13. 작업 주문 (WorkOrders)
+INSERT INTO ERP.WorkOrders (ProductID, ProductName, Quantity, StartDate, EndDate, Priority, etc)
 VALUES
-(1, 1,  '2024-04-23 08:00:00', '2024-04-23 13:30:00' , '긴급가동'), 
-(2, 2,  '2024-05-01 09:00:00', '2024-05-01 14:00:00' , '5월첫가동'), 
-(3, 3,  '2024-05-06 10:00:00', '2024-05-06 15:30:00' , '예약주문'), 
-(4, 4,  '2024-05-10 08:30:00', '2024-05-10 12:30:00' , '예비재고');
+    (1, '갈릭꽈베기', 100, '2024-10-28 08:00:00', '2024-10-28 16:00:00', 'High', '긴급 작업 요청'),
+    (2, '단팥도넛', 150, '2024-10-29 09:00:00', '2024-10-29 17:00:00', 'Medium', '일반 작업 요청'),
+    (3, '고구마케이크빵', 120, '2024-10-30 10:00:00', '2024-10-30 18:00:00', 'Low', '특별 공정 필요'),
+    (4, '꽈베기', 180, '2024-10-31 07:30:00', '2024-10-31 15:30:00', 'High', '정시 납기 요구');
+
+-- 14. 생산 계획 (ProductionPlanning)
+INSERT INTO ERP.ProductionPlanning (OrderID, ProductID, ProductName, Quantity, StartDate, EndDate, etc)
+VALUES
+    (1, 1, '갈릭꽈베기', 100, '2024-10-28 08:00:00', '2024-10-28 16:00:00', '긴급 생산 필요'),
+    (2, 2, '단팥도넛', 150, '2024-10-29 09:00:00', '2024-10-29 17:00:00', '표준 생산 절차'),
+    (3, 3, '고구마케이크빵', 120, '2024-10-30 10:00:00', '2024-10-30 18:00:00', '특별 생산 주의 사항'),
+    (4, 4, '꽈베기', 180, '2024-10-31 07:30:00', '2024-10-31 15:30:00', '정시 생산 완료 필요');
+
+
 
 -- 15. 생산 모니터링 (ProductionMonitoring) 테이블 더미 데이터 (OrderID 1, 4가 진행 중인 작업) CSV파일형태로 넣어야됨!!!!!!!!!!!!
 
@@ -521,6 +536,13 @@ VALUES
 --  진행 중인 작업 (OrderID 4) (온도와 습도를 적정 범위 내에서 설정)
 -- (4, 27.5, 67, 25, 93, '2024-05-10 08:30:00'); -- 적정 온도 27.5°C+-5, 적정 습도 67%+-5
 
+-- 임시임 삭제예정
+INSERT INTO ERP.ProductionMonitoring (OrderID, Temperature, Humidity, ProductionRate, OperationTime, StartTime)
+VALUES
+    (1, 25.0, 60.0, 90.0, 480, '2024-10-28 08:00:00'),  -- 갈릭꽈베기
+    (2, 24.0, 55.0, 85.0, 480, '2024-10-29 09:00:00'),  -- 단팥도넛
+    (3, 26.0, 58.0, 88.0, 480, '2024-10-30 10:00:00'),  -- 고구마케이크빵
+    (4, 25.0, 60.0, 90.0, 480, '2024-10-31 07:30:00'); -- 꽈베기
 --                                                      상태(대기,작업중,완료,위험,경고)
 --     WeighingComplete BOOLEAN DEFAULT FALSE,        -- 재료 계량 완료 여부 (약 10분)
 --     DoughComplete BOOLEAN DEFAULT FALSE,           -- 반죽 완료 여부 (약 20분)
@@ -547,23 +569,29 @@ VALUES
 (3, '경고', TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE),           -- 냉각 및 포장 대기
 (4, '작업중', TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE);             -- 모든 공정 완료
 
--- 17. 품질 관리 (QualityControl) 테이블 더미 데이터 (입고 후 10분 이내에 검사되도록 수정)
-INSERT INTO ERP.QualityControl (EntryID, ProductID, TestResult, TestDate, DefectRate, etc)
-VALUES
-(1, 1, '합격', '2024-04-23 14:00:00', 2, '정상 '),
-(2, 2, '불합격', '2024-05-01 14:30:00', 10, '불량 발견'),
-(3, 3, '합격', '2024-05-06 16:00:00', 0, '정상'),
-(4, 4, '합격', '2024-05-10 13:00:00', 1, '정상');
+-- 17. 품질 관리 (QualityControl)
+INSERT INTO QualityControl (OrderID, Quantity, ProductID, ProductName, TestResult, TestDate, etc)
+VALUES 
+    (1, 100, 1, '갈릭꽈베기', '합격', '2024-10-28 17:00:00', '테스트 통과'),
+    (2, 150, 2, '단팥도넛', '불합격', '2024-10-29 18:00:00', '색상 불량'),
+    (3, 120, 3, '고구마케이크빵', '합격', '2024-10-30 19:00:00', '정상'),
+    (4, 180, 4, '꽈베기', '불합격', '2024-10-31 16:00:00', '크기 불일치');
 
--- 18. 생산입고 (ProductionEntry) 테이블 더미 데이터 (20분 후 입고되도록 수정)
-INSERT INTO ERP.ProductionEntry (OrderID, ProductID, Quantity, EntryDate, etc)
+-- 18. 불량 관리 (DefectManagement)
+INSERT INTO DefectManagement (QCID, OrderID, Quantity, ProductID, ProductName, DefectType, DefectQuantity, DefectTimestamp, CauseDescription, Status, Defectrate, etc)
 VALUES
-(1, 1, 500, '2024-04-23 13:50:00', '일반 입고'),
-(2, 2, 300, '2024-05-01 14:20:00', '정기 입고'),
-(3, 3, 400, '2024-05-06 15:50:00', '긴급 입고'),
-(4, 4, 200, '2024-05-10 12:50:00','일반 입고');
+    (2, 2, 150, 2, '단팥도넛', '색상 불량', 20, '2024-10-29 18:30:00', '원료 문제', '미처리', 13, NULL),
+    (4, 4, 180, 4, '꽈베기', '크기 불일치', 30, '2024-10-31 16:30:00', '기계 오작동', '미처리', 16, NULL),
+    (2, 2, 150, 2, '단팥도넛', '형태 불량', 10, '2024-10-29 19:00:00', '성형 문제', '완료', 6, NULL),
+    (4, 4, 180, 4, '꽈베기', '표면 오염', 5, '2024-10-31 17:00:00', '작업 환경 불량', '완료', 3, NULL);
 
--- 19. 매장 재고 (StoreInventory) 테이블 더미 데이터
+-- 19. 생산 입고 (ProductionEntry)
+INSERT INTO ProductionEntry (QCID, OrderID, Quantity, ProductID, ProductName, EntryDate, etc)
+VALUES 
+    (1, 1, 100, 1, '갈릭꽈베기', '2024-10-28', '입고 완료'),
+    (3, 3, 120, 3, '고구마케이크빵', '2024-10-30', '입고 완료');
+
+-- 20. 매장 재고 (StoreInventory) 테이블 더미 데이터
 select * from StoreInventory;
 INSERT INTO ERP.StoreInventory (ProductID, MaterialID, QuantityInStore, StoreDate)
 VALUES
@@ -601,7 +629,7 @@ VALUES
 (NULL, 33, 250, '2024-10-29 00:00:00'), -- 빨대
 (NULL, 34, 300, '2024-10-29 00:00:00');   -- 캐리어
 
--- 20. MBOM 테이블 더미 데이터
+-- 21. MBOM 테이블 더미 데이터
 INSERT INTO ERP.MBOM (ItemID, ItemType, Size, MaterialID, ProductName, Quantity, Unit, UnitPrice, TotalCost)
 VALUES
 -- 갈릭꽈베기 885원
@@ -912,19 +940,20 @@ VALUES
 (13, 'Coffee', 'Extra', 5, '연유라떼(엑스트라)', 30, 'g', 2, 30 * 2),                 -- 연유
 (13, 'Coffee', 'Extra', 8, '연유라떼(엑스트라)', 1, 'ea', 80, 80);                   -- 컵(extra size)
 
--- 21. ProductMaterials 테이블에 더미 데이터 삽입
-INSERT INTO ProductMaterials (ProductID, MaterialID, Quantity) VALUES
-(1, 101, 500),  -- 갈릭꽈베기에 필요한 자재
-(2, 102, 300),  -- 단팥도넛에 필요한 자재
-(3, 103, 200),  -- 고구마케이크빵에 필요한 자재
-(4, 104, 100);  -- 꽈베기에 필요한 자재
+-- 22. ProductMaterials
+INSERT INTO ProductMaterials (ProductID, MaterialID, Quantity)
+VALUES 
+    (1, 5, 50),  -- 갈릭꽈베기 - 밀가루
+    (2, 5, 60),  -- 단팥도넛 - 밀가루
+    (3, 2, 30),  -- 고구마케이크빵 - 고구마필링
+    (4, 5, 30);  -- 꽈베기 - 밀가루
 
--- 22. 사용자 (Users) 테이블 더미 데이터
+-- 23. 사용자 (Users) 테이블 더미 데이터
 INSERT INTO ERP.Users (Name, PhoneNumber, Email, Username, Password)
 VALUES
 ('박민수', '010-5555-6666', 'minsoo@example.com', 'minsoo', 'pass9101');
 
--- 23. 커피 재료 테이블 더미 데이터
+-- 24. 커피 재료 테이블 더미 데이터
 INSERT INTO ERP.coffee_materials (CoffeeID, MaterialID, RawMaterialQuantity)
 VALUES
 (1, 1, 50),  -- 아메리카노에 자재 1번 사용, 50 단위
