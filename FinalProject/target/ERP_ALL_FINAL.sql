@@ -1,26 +1,3 @@
-DROP TABLE IF EXISTS UserStamp;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS ERP.coffee_materials;
-DROP TABLE IF EXISTS ERP.MBOM;
-DROP TABLE IF EXISTS ERP.StoreInventory;
-DROP TABLE IF EXISTS ERP.QualityControl;
-DROP TABLE IF EXISTS ERP.ProductionEntry;
-DROP TABLE IF EXISTS ERP.ProductionMonitoring;
-DROP TABLE IF EXISTS ERP.ProductionPlanning;
-DROP TABLE IF EXISTS ERP.WorkOrders;
-DROP TABLE IF EXISTS ERP.CoffeeOptionSalesDetails;
-DROP TABLE IF EXISTS ERP.SalesDetails;
-DROP TABLE IF EXISTS ERP.SalesRecords;
-DROP TABLE IF EXISTS ERP.RawMaterialRestockHistory;
-DROP TABLE IF EXISTS ERP.ProductionConsumption;
-DROP TABLE IF EXISTS ERP.FactoryInventory;
-DROP TABLE IF EXISTS ERP.coffeeoptions;
-DROP TABLE IF EXISTS ERP.MaterialsInventory;
-DROP TABLE IF EXISTS ERP.DisposedRecords;
-DROP TABLE IF EXISTS ERP.Coffee;
-DROP TABLE IF EXISTS ERP.Product;
-DROP TABLE IF EXISTS ERP.Suppliers;
-
 CREATE SCHEMA ERP;
 USE ERP;
 
@@ -37,6 +14,7 @@ CREATE TABLE ERP.Product (
     Recommend varchar(30) check (Recommend in ('Y','N')), -- 제품 추천여부(키오스크용)
     DetailDescription varchar(300) NULL, -- 제품 설명(키오스크용)
     PRIMARY KEY (ProductID)
+     
 );
 
 -- 2. 공급업체 (Suppliers)
@@ -184,10 +162,16 @@ CREATE TABLE ERP.WorkOrders (
     Priority VARCHAR(50) NOT NULL,               -- 우선순위
     etc VARCHAR(100) NULL,                       -- 기타
     PRIMARY KEY (OrderID),
+    UNIQUE (OrderID),
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID),  -- 제품 외래 키 연결
     INDEX idx_quantity (Quantity),               -- 수량 인덱스
     INDEX idx_product_name (ProductName)         -- 제품명 인덱스
 );
+
+
+
+
+
 
 -- 14. 생산 계획 (ProductionPlanning)
 CREATE TABLE ERP.ProductionPlanning (
@@ -200,9 +184,25 @@ CREATE TABLE ERP.ProductionPlanning (
     EndDate DATETIME NOT NULL, -- 시작 시간
     etc VARCHAR(100) NULL, -- 기타
     PRIMARY KEY (PlanID),
+    UNIQUE (PlanID),
     FOREIGN KEY (OrderID) REFERENCES ERP.WorkOrders(OrderID)
     
 );
+
+CREATE TABLE ERP.OrderProductMapping (
+    MappingID INT NOT NULL AUTO_INCREMENT,
+    OrderID INT NOT NULL,
+    ProductID INT NOT NULL,
+    PRIMARY KEY (MappingID),
+    FOREIGN KEY (OrderID) REFERENCES ERP.WorkOrders(OrderID) ON DELETE RESTRICT,
+    FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID) ON DELETE RESTRICT,
+    UNIQUE (OrderID, ProductID) -- OrderID와 ProductID 쌍의 고유성 유지
+);
+
+
+ALTER TABLE ERP.OrderProductMapping
+ADD CONSTRAINT unique_order_product UNIQUE (OrderID, ProductID);
+
 
 -- 15. 생산 모니터링 (ProductionMonitoring)
 CREATE TABLE ERP.ProductionMonitoring (
@@ -959,6 +959,10 @@ VALUES
 (1, 1, 50),  -- 아메리카노에 자재 1번 사용, 50 단위
 (2, 2, 30),  -- 카라멜 마끼야또에 자재 2번 사용, 30 단위
 (3, 3, 20);  -- 카페라떼에 자재 3번 사용, 20 단위
+
+
+
+
 
 -- 1. 제품 조회
 SELECT * FROM ERP.Product;

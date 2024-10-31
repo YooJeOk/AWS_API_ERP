@@ -40,13 +40,12 @@ function MBOMForm() {
                         <table className="production-table" style={{ marginBottom: '20px' }}>
                             <thead>
                                 <tr>
-                                    <th>검사 일자</th>
-                                    <th>검사 방법</th>
-                                    <th>품목 코드</th>
-                                    <th>품목명</th>
-                                    <th>수량</th>
-                                    <th>시료</th>
-                                    <th>합격 여부</th>
+                                    <th>주문ID</th>
+                                    <th>상품명</th>
+                                    <th>검사 수량</th>
+                                    <th>검사 날짜</th>
+                                    <th>검사 결과</th>
+                                    <th>기타 사항</th>
                                 </tr>
                             </thead>
                             <tbody>

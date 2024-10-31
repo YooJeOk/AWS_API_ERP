@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Routes, Route } from 'react-router-dom'; // useNavigate, Routes, Route import 추가
+import { useNavigate, Routes, Route } from 'react-router-dom'; 
 import './ProductionPage.css';
 import InputForm3 from './InputForm3';
 import axios from 'axios';
@@ -12,7 +12,7 @@ function ProductionPage3() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/production-planning/basic');
+                const response = await axios.get('http://localhost:8080/api/production-planning');
                 if (response.status === 200) {
                     console.log("Received data:", response.data);
                     setData(response.data);
@@ -34,7 +34,7 @@ function ProductionPage3() {
             <main className="production-content">
                 <div className="production-mainbar">
                     <div className="productionbar">
-                        <h1>생산 내역 조회</h1>
+                        <h1>생산 계획 조회</h1>
                         <button className="create-button" onClick={() => navigate('/input3')}>
                             생성
                         </button>
@@ -42,11 +42,12 @@ function ProductionPage3() {
                     <table className="table production-table">
                         <thead>
                             <tr>
+                                <th>계획 ID</th>
                                 <th>작업 지시ID</th>
-                                <th>생산 품목</th>
+                                <th>상품명</th>
                                 <th>생산 수량</th>
                                 <th>생산 시작 시간</th>
-                                <th>생산 시작 시간</th>
+                                <th>생산 종료 시간</th>
                                 <th>기타사항</th>
                             </tr>
                         </thead>
@@ -54,9 +55,10 @@ function ProductionPage3() {
                             {isDataLoaded ? (
                                 data.map((row, index) => (
                                     <tr key={index}>
+                                        <td>{row.planId}</td>
                                         <td>{row.orderId}</td>
-                                        <td>{row.productId}</td>
-                                        <td>{row.orderQuantity}</td>
+                                        <td>{row.productName}</td>
+                                        <td>{row.quantity}</td>
                                         <td>{row.startDate}</td>
                                         <td>{row.endDate}</td>
                                         <td>{row.etc}</td>
@@ -64,11 +66,10 @@ function ProductionPage3() {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="6">등록된 데이터가 없습니다</td>
+                                    <td colSpan="7">등록된 데이터가 없습니다</td>
                                 </tr>
                             )}
                         </tbody>
-
                     </table>
                 </div>
 

@@ -1,40 +1,47 @@
+// WorkOrderService.java 전체 코드
 package com.ERP.FinalProject.domain.production.planning.service;
 
 import com.ERP.FinalProject.domain.production.planning.model.WorkOrder;
 import com.ERP.FinalProject.domain.production.planning.repository.WorkOrderRepository;
+import com.ERP.FinalProject.domain.production.planning.repository.ProductionPlanningRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class WorkOrderService {
 
     private final WorkOrderRepository workOrderRepository;
+    private final ProductionPlanningRepository productionPlanningRepository;
 
     @Autowired
-    public WorkOrderService(WorkOrderRepository workOrderRepository) {
+    public WorkOrderService(WorkOrderRepository workOrderRepository, ProductionPlanningRepository productionPlanningRepository) {
         this.workOrderRepository = workOrderRepository;
+        this.productionPlanningRepository = productionPlanningRepository;
     }
 
-    // 모든 WorkOrders 데이터 조회
     public List<WorkOrder> getAllWorkOrders() {
         return workOrderRepository.findAll();
     }
 
-    // 특정 OrderID로 WorkOrder 조회
-    public Optional<WorkOrder> getWorkOrderById(Integer orderId) {
-        return workOrderRepository.findById(orderId);
+    public WorkOrder getWorkOrderById(int orderId) {
+        return workOrderRepository.findById(orderId).orElse(null);
     }
 
-    // 새로운 WorkOrder 저장
+    public List<WorkOrder> getAvailableWorkOrders() {
+        List<Integer> usedOrderIds = productionPlanningRepository.findAllOrderIds();
+        return workOrderRepository.findAll().stream()
+                .filter(workOrder -> !usedOrderIds.contains(workOrder.getOrderId()))
+                .collect(Collectors.toList());
+    }
+
     public WorkOrder saveWorkOrder(WorkOrder workOrder) {
         return workOrderRepository.save(workOrder);
     }
 
-    // WorkOrder 삭제
-    public void deleteWorkOrderById(Integer orderId) {
+    public void deleteWorkOrderById(int orderId) {
         workOrderRepository.deleteById(orderId);
     }
 }

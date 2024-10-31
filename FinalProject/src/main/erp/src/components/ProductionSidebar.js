@@ -44,8 +44,8 @@ function ProductionSidebar() {
                         
                         
                         <li><Link to="/production8">● 생산 현황 모니터링</Link></li>
-                        <li><Link to="/input3">● 생산 내역 등록</Link></li>
-                        <li><Link to="/production3">● 생산 내역 조회</Link></li>
+                        <li><Link to="/input3">● 생산 계획 등록</Link></li>
+                        <li><Link to="/production3">● 생산 계획 조회</Link></li>
                         
                     </ul>
                 </div>
