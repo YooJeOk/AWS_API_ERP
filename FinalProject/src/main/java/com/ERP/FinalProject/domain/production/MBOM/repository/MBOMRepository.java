@@ -19,4 +19,6 @@ public interface MBOMRepository extends JpaRepository<MBOM, Integer> {
 		       "JOIN MaterialsInventory m ON mb.materialId = m.materialId")
 
     List<MBOMDTO> findAllWithMaterialName();
+	List<MBOM> findByItemIdAndItemTypeAndSize(Long itemId, MBOM.ItemType itemType, MBOM.Size size);
+
 }
