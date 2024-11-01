@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import SearchBar from '../../components/SalesManagement/SearchBar';
 import SalesTable from '../../components/SalesManagement/SalesTable';
-import ActionButtons from '../../components/SalesManagement/ActionButtons';
 import { Container, Row, Col } from 'react-bootstrap';
 import '../../css/SalesManagement/SalesRecord.css';
 
