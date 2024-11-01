@@ -129,9 +129,12 @@ const handlePaymentSuccess = async (paymentType) => {
     };
 
     console.log('Sending data to server:', JSON.stringify(saleData, null, 2));
-
     const response = await axios.post('/api/sales', saleData);
     console.log('Server response:', response.data);
+
+    // 재고 업데이트 요청
+    await axios.post('/api/inventory/update', { cartItems: saleData.cartItems });
+
   } catch (error) {
     console.error("판매 기록 저장 실패", error.response ? error.response.data : error.message);
   }
@@ -223,7 +226,3 @@ const handlePaymentFailure = (errorMessage) => {
 };
 
 export default PaymentPage;
-
-//네이버나 토스는 결제끝나면 내가만든 결제완료 모달이뜨거든(데이터도 들어옴)?
-//근데 네이버는 네이버샌드박스로 연결되면서 결제승인 눌러도 db에 
-//모달도 안뜨고 데이터가 안들어와
