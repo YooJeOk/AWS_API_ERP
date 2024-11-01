@@ -1,7 +1,6 @@
 import React from 'react';
 import SalesDwmAnalysisTable from '../../components/SalesManagement/SalesDwmAnalysis/SalesDwmAnalysisTable';
 import SalesDwmAnalysisSearchBar from '../../components/SalesManagement/SalesDwmAnalysis/SalesDwmAnalysisSearchBar';
-import ActionButtons from '../../components/SalesManagement/ActionButtons';
 import { Container, Row, Col } from 'react-bootstrap';
 import '../../css/SalesManagement/SalesRecord.css'
 function SalesStatus() {
