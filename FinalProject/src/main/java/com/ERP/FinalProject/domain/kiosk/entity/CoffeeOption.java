@@ -20,9 +20,10 @@ import lombok.NoArgsConstructor;
 public class CoffeeOption {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int optionId;
-    private int materialId;
+	private Long optionId;
+    private Long materialId;
     private String name;
     private int price;
+    private int quantity;
 
 }

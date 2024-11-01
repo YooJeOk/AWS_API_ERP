@@ -15,4 +15,5 @@ public interface MaterialsInventoryRepository extends JpaRepository<MaterialsInv
 	Page<MaterialsInventory> findMaterialsWithStoreInventory(Pageable pageable);
 
 	
+	
 }
