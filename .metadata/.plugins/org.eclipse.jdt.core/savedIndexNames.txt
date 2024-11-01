@@ -32,7 +32,6 @@ INDEX VERSION 1.131+C:\fullstack\Project3\AWS_API_ERP\.metadata\.plugins\org.ecl
 1207250358.index
 1865797976.index
 3607028482.index
-378753145.index
 3128063538.index
 3901294756.index
 2236972452.index

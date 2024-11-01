@@ -1,3 +1,4 @@
+drop SCHEMA ERP;
 CREATE SCHEMA ERP;
 USE ERP;
 
@@ -6,7 +7,7 @@ CREATE TABLE ERP.Product (
     ProductID INT NOT NULL AUTO_INCREMENT, -- 제품ID
     ProductName VARCHAR(100) NULL, -- 제품명
     ProductCategory VARCHAR(50) NULL, -- 제품 카테고리
-    UnitPrice INT NULL, -- 단가
+    UnitPrice float NULL, -- 단가
     SalePrice INT NULL, -- 판매가
     ProductionDate DATETIME NULL, -- 생산 날짜
     ProductImage VARCHAR(200) NULL, -- 제품 이미지
@@ -35,7 +36,7 @@ CREATE TABLE ERP.MaterialsInventory (
     MaterialName VARCHAR(100) NULL, -- 자재명
     Category VARCHAR(50) NULL, -- 카테고리
     Unit VARCHAR(50) NULL, -- 단위 (g, ml 등)
-    UnitPrice INT NULL, -- 단가
+    UnitPrice float NULL, -- 단가
     LastUpdated DATETIME NULL, -- 최종 업데이트
     PRIMARY KEY (MaterialID),
     FOREIGN KEY (SupplierID) REFERENCES ERP.Suppliers(SupplierID)
@@ -48,7 +49,7 @@ CREATE TABLE ERP.RawMaterialRestockHistory (
     MaterialID INT NOT NULL, -- 자재ID
     SupplierID INT NOT NULL, -- 공급업체ID
     RestockQuantity INT NULL, -- 재입고 수량
-    UnitPrice INT NULL, -- 단가
+    UnitPrice float NULL, -- 단가
     RestockDate DATETIME NULL, -- 재입고 날짜
     PRIMARY KEY (RestockID),
     FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID),
@@ -109,6 +110,7 @@ CREATE TABLE ERP.CoffeeOptions (
     MaterialID INT NOT NULL, -- 원자재 ID를 참조
     Name VARCHAR(100) NOT NULL, -- 옵션 이름
     Price INT NOT NULL, -- 옵션 가격 (추가 금액)
+	Quantity INT NOT NULL,             -- 수량
     PRIMARY KEY (OptionID),
     FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
 );
@@ -418,7 +420,6 @@ VALUES
 ('공급업체Y', '010-3333-4444', '서울특별시 강남구', '식자재(커피) 공급', '2024-04-02 09:00:00'),
 ('공급업체O', '010-1111-2222', '서울특별시 강남구', '부자재 공급', '2024-04-01 08:00:00');
 
--- 3 MaterialID
 INSERT INTO ERP.MaterialsInventory (SupplierID, MaterialName, Category, Unit, UnitPrice, LastUpdated)
 VALUES
 
@@ -494,18 +495,18 @@ VALUES
 
 
 -- 9. 커피 추가옵션 insert
-INSERT INTO ERP.CoffeeOptions (MaterialID, Name, Price)
-SELECT MaterialID, '에스프레소 샷', 500 FROM ERP.MaterialsInventory WHERE MaterialName = '원두(에스프레소)'
+INSERT INTO ERP.CoffeeOptions (MaterialID, Name, Price,Quantity)
+SELECT MaterialID, '에스프레소 샷', 500 , 5 FROM ERP.MaterialsInventory WHERE MaterialName = '원두(에스프레소)'
 UNION ALL
-SELECT MaterialID, '헤이즐넛 시럽', 300 FROM ERP.MaterialsInventory WHERE MaterialName = '헤이즐넛 시럽'
+SELECT MaterialID, '헤이즐넛 시럽', 300,5 FROM ERP.MaterialsInventory WHERE MaterialName = '헤이즐넛 시럽'
 UNION ALL
-SELECT MaterialID, '바닐라 시럽', 300 FROM ERP.MaterialsInventory WHERE MaterialName = '바닐라 시럽'
+SELECT MaterialID, '바닐라 시럽', 300,5 FROM ERP.MaterialsInventory WHERE MaterialName = '바닐라 시럽'
 UNION ALL
-SELECT MaterialID, '메이플 시럽', 300 FROM ERP.MaterialsInventory WHERE MaterialName = '메이플 시럽'
+SELECT MaterialID, '메이플 시럽', 300,5 FROM ERP.MaterialsInventory WHERE MaterialName = '메이플 시럽'
 UNION ALL
-SELECT MaterialID, '아이스크림', 1000 FROM ERP.MaterialsInventory WHERE MaterialName = '아이스크림'
+SELECT MaterialID, '아이스크림', 1000, 100 FROM ERP.MaterialsInventory WHERE MaterialName = '아이스크림'
 UNION ALL
-SELECT MaterialID, '우유', 500 FROM ERP.MaterialsInventory WHERE MaterialName = '우유';
+SELECT MaterialID, '우유', 500 ,10 FROM ERP.MaterialsInventory WHERE MaterialName = '우유';
 
 -- 13. 작업 주문 (WorkOrders)
 INSERT INTO ERP.WorkOrders (ProductID, ProductName, Quantity, StartDate, EndDate, Priority, etc)
@@ -611,7 +612,9 @@ VALUES
 (12, NULL, 15, '2024-10-29 00:00:00'), -- 카라멜 러스크
 (13, NULL, 25, '2024-10-29 00:00:00'), -- 캐찰빵
 
--- 커피 재료 재고 (SupplierID = 2)
+-- 커피 재료 재고 
+(NULL, 4, 4000, '2024-10-29 00:00:00'),  -- 물
+(NULL, 19, 5000, '2024-10-29 00:00:00'),  -- 우유
 (NULL, 20, 5000, '2024-10-29 00:00:00'),  -- 원두(에스프레소)
 (NULL, 21, 2000, '2024-10-29 00:00:00'),  -- 카라멜시럽
 (NULL, 22, 1500, '2024-10-29 00:00:00'),  -- 초콜릿 시럽
@@ -630,6 +633,7 @@ VALUES
 (NULL, 33, 250, '2024-10-29 00:00:00'), -- 빨대
 (NULL, 34, 300, '2024-10-29 00:00:00');   -- 캐리어
 
+
 -- 21. MBOM 테이블 더미 데이터
 INSERT INTO ERP.MBOM (ItemID, ItemType, Size, MaterialID, ProductName, Quantity, Unit, UnitPrice, TotalCost)
 VALUES
@@ -644,6 +648,7 @@ VALUES
 (1, 'Product', NULL, 30, '갈릭꽈베기', 1, 'ea', 10, 10),         -- 포장지
 
 -- 단팥도넛 502.5원
+
 (2, 'Product', NULL, 5, '단팥도넛', 60, 'g', 1.5, 60 * 1.5),    -- 밀가루
 (2, 'Product', NULL, 11, '단팥도넛', 5, 'g', 3, 5 * 3),         -- 이스트
 (2, 'Product', NULL, 15, '단팥도넛', 15, 'g', 12, 15 * 12),     -- 버터
@@ -651,7 +656,6 @@ VALUES
 (2, 'Product', NULL, 18, '단팥도넛', 20, 'g', 7, 20 * 7),       -- 팥앙금
 (2, 'Product', NULL, 19, '단팥도넛', 20, 'ml', 3, 20 * 3),      -- 우유
 (2, 'Product', NULL, 30, '단팥도넛', 1, 'ea', 10, 10),          -- 포장지
-
 
 -- 고구마케이크빵 730원
 (3, 'Product', NULL, 2, '고구마케이크빵', 30, 'g', 8, 30 * 8),       -- 고구마필링
@@ -669,9 +673,8 @@ VALUES
 (4, 'Product', NULL, 9, '꽈베기', 5, 'g', 6, 5 * 6),               -- 시나몬 가루
 (4, 'Product', NULL, 11, '꽈베기', 5, 'g', 3, 5 * 3),              -- 이스트
 (4, 'Product', NULL, 17, '꽈베기', 10, 'g', 0.5, 10 * 0.5),        -- 설탕
-(4, 'Product', NULL, 25, '꽈베기', 20, 'ml', 18, 20 * 18),         -- 식용유
+(4, 'Product', NULL, 10, '꽈베기', 20, 'ml', 18, 20 * 18),         -- 올리브오일
 (4, 'Product', NULL, 30, '꽈베기', 1, 'ea', 10, 10),               -- 포장지
-
 
 -- 라우겐 775원
 (5, 'Product', NULL, 5, '라우겐', 100, 'g', 1.5, 100 * 1.5),     -- 밀가루
@@ -684,7 +687,7 @@ VALUES
 (5, 'Product', NULL, 30, '라우겐', 1, 'ea', 10, 10),             -- 포장지
 
 
--- 베이글빵 315원
+
 (6, 'Product', NULL, 5, '베이글빵', 50, 'g', 1.5, 50 * 1.5),     -- 밀가루
 (6, 'Product', NULL, 8, '베이글빵', 5, 'g', 2, 5 * 2),           -- 소금
 (6, 'Product', NULL, 9, '베이글빵', 5, 'g', 6, 5 * 6),           -- 시나몬 가루
@@ -693,8 +696,6 @@ VALUES
 (6, 'Product', NULL, 19, '베이글빵', 20, 'ml', 8, 20 * 8),       -- 우유
 (6, 'Product', NULL, 30, '베이글빵', 1, 'ea', 10, 10),           -- 포장지
 
-
-
 -- 생크림소보로 1225원
 (7, 'Product', NULL, 5, '생크림소보로', 40, 'g', 1.5, 40 * 1.5),    -- 밀가루
 (7, 'Product', NULL, 8, '생크림소보로', 10, 'g', 2, 10 * 2),        -- 소금
@@ -702,10 +703,9 @@ VALUES
 (7, 'Product', NULL, 11, '생크림소보로', 5, 'g', 3, 5 * 3),         -- 이스트
 (7, 'Product', NULL, 15, '생크림소보로', 10, 'g', 12, 10 * 12),     -- 버터
 (7, 'Product', NULL, 17, '생크림소보로', 20, 'g', 0.5, 20 * 0.5),   -- 설탕
-(7, 'Product', NULL, 18, '생크림소보로', 40, 'g', 20, 40 * 20),     -- 생크림
+(7, 'Product', NULL, 16, '생크림소보로', 40, 'g', 20, 40 * 20),     -- 생크림
 (7, 'Product', NULL, 19, '생크림소보로', 20, 'ml', 8, 20 * 8),      -- 우유
 (7, 'Product', NULL, 30, '생크림소보로', 1, 'ea', 10, 10),          -- 포장지
-
 
 -- 꿀버터바게트 1085원
 (8, 'Product', NULL, 5, '꿀버터바게트', 60, 'g', 1.5, 60 * 1.5),       -- 밀가루
@@ -714,7 +714,7 @@ VALUES
 (8, 'Product', NULL, 11, '꿀버터바게트', 5, 'g', 3, 5 * 3),            -- 이스트
 (8, 'Product', NULL, 17, '꿀버터바게트', 20, 'g', 0.5, 20 * 0.5),      -- 설탕
 (8, 'Product', NULL, 19, '꿀버터바게트', 20, 'ml', 8, 20 * 8),         -- 우유
-(8, 'Product', NULL, 25, '꿀버터바게트', 30, 'ml', 25, 30 * 25),       -- 꿀
+(8, 'Product', NULL, 13, '꿀버터바게트', 30, 'ml', 25, 30 * 25),       -- 꿀
 (8, 'Product', NULL, 30, '꿀버터바게트', 1, 'ea', 10, 10),             -- 포장지
 
 -- 애플파이 425원
@@ -750,7 +750,7 @@ VALUES
 (11, 'Product', NULL, 30, '찹쌀브레드', 1, 'ea', 10, 10),               -- 포장지
 
 -- 카라멜러스크 540원
-(12, 'Product', NULL, 4, '카라멜러스크', 10, 'ml', 15, 10 * 15),        -- 카라멜 시럽
+(12, 'Product', NULL, 21, '카라멜러스크', 10, 'ml', 15, 10 * 15),        -- 카라멜 시럽
 (12, 'Product', NULL, 5, '카라멜러스크', 40, 'g', 1.5, 40 * 1.5),       -- 밀가루
 (12, 'Product', NULL, 8, '카라멜러스크', 10, 'g', 2, 10 * 2),           -- 소금
 (12, 'Product', NULL, 11, '카라멜러스크', 5, 'g', 3, 5 * 3),            -- 이스트
@@ -758,7 +758,6 @@ VALUES
 (12, 'Product', NULL, 17, '카라멜러스크', 10, 'g', 0.5, 10 * 0.5),      -- 설탕
 (12, 'Product', NULL, 19, '카라멜러스크', 20, 'ml', 8, 20 * 8),         -- 우유
 (12, 'Product', NULL, 30, '카라멜러스크', 1, 'ea', 10, 10),             -- 포장지
-
 
 -- 캐찰빵 315원
 (13, 'Product', NULL, 5, '캐찰빵', 50, 'g', 1.5, 50 * 1.5),             -- 밀가루
@@ -777,7 +776,7 @@ VALUES
 (1, 'Coffee', 'Regular', 20, '아메리카노', 20, 'g', 20, 20 * 20),       -- 원두(에스프레소)
 (1, 'Coffee', 'Regular', 4, '아메리카노', 100, 'ml', 0.2, 100 * 0.2),  -- 물
 (1, 'Coffee', 'Regular', 25, '아메리카노', 150, 'ml', 2, 150 * 2),      -- 얼음
-(1, 'Coffee', 'Regular', 3, '아메리카노', 1, 'ea', 70, 70),            -- 컵(regular size)
+(1, 'Coffee', 'Regular', 31, '아메리카노', 1, 'ea', 70, 70),            -- 컵(regular size)
 
 -- 카라멜 마끼야또 1392.5원
 (2, 'Coffee', 'Regular', 20, '카라멜 마끼야또', 20, 'g', 20, 20 * 20),       -- 원두(에스프레소)
@@ -786,7 +785,7 @@ VALUES
 (2, 'Coffee', 'Regular', 25, '카라멜 마끼야또', 150, 'ml', 2, 150 * 2),      -- 얼음
 (2, 'Coffee', 'Regular', 31, '카라멜 마끼야또', 1, 'ea', 70, 70),            -- 컵(regular size)
 
---- 카페라떼 1070원
+-- 카페라떼 1070원
 (3, 'Coffee', 'Regular', 20, '카페라떼', 20, 'g', 20, 20 * 20),            -- 원두(에스프레소)
 (3, 'Coffee', 'Regular', 19, '카페라떼', 100, 'ml', 3, 100 * 3),           -- 우유
 (3, 'Coffee', 'Regular', 25, '카페라떼', 150, 'ml', 2, 150 * 2),           -- 얼음
@@ -965,8 +964,13 @@ VALUES
 (2, 2, 30),  -- 카라멜 마끼야또에 자재 2번 사용, 30 단위
 (3, 3, 20);  -- 카페라떼에 자재 3번 사용, 20 단위
 
-
-
+-- 25 유저 스탬프 더미 데이터
+INSERT INTO UserStamp (phone, stamp, coupon) VALUES
+('01012345678', 5, 1),
+('01023456789', 9, 2),
+('01034567890', 8, 1),
+('01045678901', 2, 4),
+('01056789012', 3, 0);
 
 
 -- 1. 제품 조회
@@ -1040,21 +1044,3 @@ SELECT * FROM ERP.coffee_materials;
 
 -- 24. 유저 스탬프 데이터 조회
 SELECT * FROM UserStamp;
-
-
-
-SELECT 
-    mb.ItemID AS itemId,
-    mb.ProductName AS productName,
-    GROUP_CONCAT(CONCAT(m.MaterialName, ': ', mb.Quantity, mb.Unit, ' x ', mb.UnitPrice, '원') SEPARATOR ', ') AS materials,
-    SUM(mb.TotalCost) AS totalCost
-FROM 
-    ERP.MBOM mb
-JOIN 
-    ERP.MaterialsInventory m ON mb.MaterialID = m.MaterialID
-WHERE 
-    mb.ItemType = 'Product'
-GROUP BY 
-    mb.ItemID, mb.ProductName;
-
-

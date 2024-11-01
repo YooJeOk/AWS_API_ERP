@@ -4,9 +4,12 @@ import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM;
 import com.ERP.FinalProject.domain.production.MBOM.entity.MBOMDTO;
 import com.ERP.FinalProject.domain.production.MBOM.service.MBOMService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/mbom")
@@ -31,16 +34,33 @@ public class MBOMController {
         return mbomService.getAllMBOMDTOs();
     }
 
-    // 특정 MBOM을 업데이트하는 엔드포인트
-    @PutMapping("/update/{id}")
-    public MBOM updateMBOM(@PathVariable int id, @RequestBody MBOM mbom) {
-        return mbomService.updateMBOM(id, mbom);
+    // 특정 ID의 MBOM 가져오기
+    @GetMapping("/{id}")
+    public ResponseEntity<MBOM> getMBOMById(@PathVariable int id) {
+        Optional<MBOM> mbom = mbomService.getMBOMById(id);
+        return mbom.map(ResponseEntity::ok)
+                   .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
     }
 
-    // 특정 MBOM을 삭제하는 엔드포인트
+    // 특정 MBOM 업데이트
+    @PutMapping("/update/{id}")
+    public ResponseEntity<MBOM> updateMBOM(@PathVariable int id, @RequestBody MBOM mbom) {
+        MBOM updatedMBOM = mbomService.updateMBOM(id, mbom);
+        if (updatedMBOM != null) {
+            return ResponseEntity.ok(updatedMBOM);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    // 특정 MBOM 삭제
     @DeleteMapping("/delete/{id}")
-    public String deleteMBOM(@PathVariable int id) {
-        mbomService.deleteMBOM(id);
-        return "Deleted successfully";
+    public ResponseEntity<String> deleteMBOM(@PathVariable int id) {
+        try {
+            mbomService.deleteMBOM(id);
+            return ResponseEntity.ok("Deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error deleting: " + e.getMessage());
+        }
     }
 }
