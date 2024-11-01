@@ -3,10 +3,10 @@ import { Table } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import '../../css/SalesManagement/SalesTable.css';
 
-function SalesTable({ searchTerm }) {
+function SalesTable({ searchTerm, startDate, endDate }) {
   const [salesRecords, setSalesRecords] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 12; // 페이지당 항목 수
+  const itemsPerPage = 12;
 
   useEffect(() => {
     const fetchSalesRecords = async () => {
@@ -55,9 +55,17 @@ function SalesTable({ searchTerm }) {
     fetchSalesRecords();
   }, []);
 
-  const filteredRecords = salesRecords.filter(detail =>
-    (detail.productName || "").toLowerCase().includes((searchTerm || "").toLowerCase())
-  );
+  const filteredRecords = salesRecords.filter(detail => {
+    const recordDate = new Date(detail.saleDate);
+    const start = startDate ? new Date(startDate) : null;
+    const end = endDate ? new Date(endDate) : null;
+
+    return (
+      (detail.productName || "").toLowerCase().includes((searchTerm || "").toLowerCase()) &&
+      (!start || recordDate >= start) &&
+      (!end || recordDate <= end)
+    );
+  });
 
   const pageCount = Math.ceil(filteredRecords.length / itemsPerPage);
   const handlePageClick = ({ selected }) => {

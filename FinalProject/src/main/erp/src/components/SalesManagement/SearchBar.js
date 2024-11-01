@@ -4,9 +4,11 @@ import '../../css/SalesManagement/SearchBar.css';
 
 function SearchBar({ onSearch }) {
   const [input, setInput] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   const handleSearchClick = () => {
-    onSearch(input);
+    onSearch(input, startDate, endDate);
   };
 
   return (
@@ -15,17 +17,21 @@ function SearchBar({ onSearch }) {
       <div className="d-flex align-items-center justify-content-between">
         <p className="custom-padding">상품 판매 기록 조회</p>
         <FormControl
-          type="text"
+          type="date"
           placeholder="yyyy-mm-dd"
           className="mr-sm-2 custom-form-control"
           style={{ width: '150px' }}
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
         />
         <span> ~ </span>
         <FormControl
-          type="text"
+          type="date"
           placeholder="yyyy-mm-dd"
           className="ml-sm-2 custom-form-control"
           style={{ width: '150px' }}
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
         />
       </div>
 
@@ -39,7 +45,13 @@ function SearchBar({ onSearch }) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
-        <Button variant="outline-success" className="ml-sm-2 custom-search-button" onClick={handleSearchClick}>Search</Button>
+        <Button
+          variant="outline-success"
+          className="ml-sm-2 custom-search-button"
+          onClick={handleSearchClick}
+        >
+          Search
+        </Button>
       </div>
     </Form>
   );
