@@ -6,11 +6,11 @@
 
 .chart-container {
     display: flex;
-    justify-content: space-around;
-    align-items: center;
+    justify-content: center; /* 중앙 정렬 */
     width: 100%;
     margin-top: 30px;
-    gap: 50px;
+    margin-left: 550px;
+    gap: 50px; /* 차트 간 간격 조정 */
 }
 
 .chart-box {
@@ -21,6 +21,8 @@
     border-radius: 8px;
     height: 700px; /* 높이 증가 */
     background-color: #ffffff;
+    margin: 10px; /* 차트 간 간격 조정 */
+    width: 300px; /* 각 차트의 너비를 조정 */
 }
 
 .pie-chart-container {
@@ -29,7 +31,6 @@
 
 .status-text {
     position: absolute;
-   
     font-size: 1.2em;
     font-weight: bold;
     margin-top: 50px;

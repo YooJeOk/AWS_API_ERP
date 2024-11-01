@@ -4,12 +4,9 @@ import Header from './components/Header';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ProductionSidebar from './components/ProductionSidebar';
 import SalesSidebar from './components/SalesSidebar';  // SalesSidebar 추가
-import InputForm from './components/prodution/InputForm';  
 import InputForm2 from './components/prodution/InputForm2';
 import InputForm3 from './components/prodution/InputForm3';
 import InputForm4 from './components/prodution/InputForm4';
-import InputForm5 from './components/prodution/InputForm5';
-import ProductionPage from './components/prodution/ProductionPage';
 import ProductionPage2 from './components/prodution/ProductionPage2';  
 import ProductionPage3 from './components/prodution/ProductionPage3';
 import ProductionPage4 from './components/prodution/ProductionPage4';
@@ -31,6 +28,16 @@ import SalesDwtdAnalysis from '../../erp/src/pages/SalesManagement/SalesDwtdAnal
 import SalesProductAnalysis from '../../erp/src/pages/SalesManagement/SalesProductAnalysis';
 import SalesStatus from '../../erp/src/pages/SalesManagement/SalesStatus';
 
+//상품 관리
+import InvenSidebar from './components/InventoryManage/InvenSidebar';
+import StoreInventory from './pages/InventoryManage/StoreInventory';
+import FactoryInventory from './pages/InventoryManage/FactoryInventory';
+
+//키오스크 관리
+import KioskSidebar from './components/KioskManagement/KioskSidebar';
+import KioskInventory from './pages/KioskManagement/KioskInventory';
+import KioskRegister from './pages/KioskManagement/KioskRegister';
+
 function App() {
     return (
         <Router>
@@ -43,24 +50,22 @@ function App() {
 
 
                     {/* 생산 관리 페이지들 */}
-                    <Route path="/input" element={<ProductionSidebarWrapper><InputForm /></ProductionSidebarWrapper>} />
-                    <Route path="/production" element={<ProductionSidebarWrapper><ProductionPage /></ProductionSidebarWrapper>} />
+                    
                     <Route path="/input2" element={<ProductionSidebarWrapper><InputForm2 /></ProductionSidebarWrapper>} />
-                    <Route path="/production2" element={<ProductionSidebarWrapper><ProductionPage2 /></ProductionSidebarWrapper>} />
+                    <Route path="/production2/*" element={<ProductionSidebarWrapper><ProductionPage2 /></ProductionSidebarWrapper>} />
                     <Route path="/input3" element={<ProductionSidebarWrapper><InputForm3 /></ProductionSidebarWrapper>} />
-                    <Route path="/production3" element={<ProductionSidebarWrapper><ProductionPage3 /></ProductionSidebarWrapper>} />
+                    <Route path="/production3/*" element={<ProductionSidebarWrapper><ProductionPage3 /></ProductionSidebarWrapper>} />
                     <Route path="/input4" element={<ProductionSidebarWrapper><InputForm4 /></ProductionSidebarWrapper>} />
-                    <Route path="/production4" element={<ProductionSidebarWrapper><ProductionPage4 /></ProductionSidebarWrapper>} />
+                    <Route path="/production4/*" element={<ProductionSidebarWrapper><ProductionPage4 /></ProductionSidebarWrapper>} />
                     <Route path="/production8" element={<ProductionSidebarWrapper><ProductionPage8 /></ProductionSidebarWrapper>} />
                     <Route path="/input8" element={<ProductionSidebarWrapper><InputForm8 /></ProductionSidebarWrapper>} />
-                    <Route path="/input5" element={<ProductionSidebarWrapper><InputForm5 /></ProductionSidebarWrapper>} />
-                    <Route path="/production5" element={<ProductionSidebarWrapper><ProductionPage5 /></ProductionSidebarWrapper>} />
+                    <Route path="/production5/*" element={<ProductionSidebarWrapper><ProductionPage5 /></ProductionSidebarWrapper>} />
                     <Route path="/input6" element={<ProductionSidebarWrapper><InputForm6 /></ProductionSidebarWrapper>} />
-                    <Route path="/production6" element={<ProductionSidebarWrapper><ProductionPage6 /></ProductionSidebarWrapper>} />
+                    <Route path="/production6/*" element={<ProductionSidebarWrapper><ProductionPage6 /></ProductionSidebarWrapper>} />
                     <Route path="/input7" element={<ProductionSidebarWrapper><InputForm7 /></ProductionSidebarWrapper>} />
-                    <Route path="/production7" element={<ProductionSidebarWrapper><ProductionPage7 /></ProductionSidebarWrapper>} />
+                    <Route path="/production7/*" element={<ProductionSidebarWrapper><ProductionPage7 /></ProductionSidebarWrapper>} />
                     <Route path="/input9" element={<ProductionSidebarWrapper><InputForm9 /></ProductionSidebarWrapper>} />
-                    <Route path="/production9" element={<ProductionSidebarWrapper><ProductionPage9 /></ProductionSidebarWrapper>} />
+                    <Route path="/production9/*" element={<ProductionSidebarWrapper><ProductionPage9 /></ProductionSidebarWrapper>} />
 
                     {/* 매출 관리 페이지들에 SalesSidebar 사용 */}
                     <Route path="/SalesRecord" element={<SalesSidebarWrapper><SalesRecord /></SalesSidebarWrapper>} />
@@ -68,6 +73,17 @@ function App() {
                     <Route path="/SalesDwtdAnalysis" element={<SalesSidebarWrapper><SalesDwtdAnalysis /></SalesSidebarWrapper>} />
                     <Route path="/SalesProductAnalysis" element={<SalesSidebarWrapper><SalesProductAnalysis /></SalesSidebarWrapper>} />
                     <Route path="/SalesStatus" element={<SalesSidebarWrapper><SalesStatus /></SalesSidebarWrapper>} />
+
+                    {/* 상품 관리 탭 */}
+                    <Route path="/FactoryInventory" element={<InvenSidebarWrapper><FactoryInventory /></InvenSidebarWrapper>} />
+                    <Route path="/StoreInventory" element={<InvenSidebarWrapper><StoreInventory /></InvenSidebarWrapper>} />
+
+
+                    {/* 키오스크 관리 사이드바 */}
+                    <Route path="/KioskInventory" element={<KioskSidebarWrapper><KioskInventory /></KioskSidebarWrapper>} />
+                    <Route path="/KioskRegister" element={<KioskSidebarWrapper><KioskRegister /></KioskSidebarWrapper>} />
+
+                    
                 </Routes>
             </div>
         </Router>
@@ -86,6 +102,22 @@ const ProductionSidebarWrapper = ({ children }) => (
 const SalesSidebarWrapper = ({ children }) => (
     <div className="main-content" style={{ padding: '0%' }}>
         <SalesSidebar />
+        {children}
+    </div>
+);
+
+// Wrapper 컴포넌트: InvenSidebar를 키오스크 관리 페이지에 적용
+const InvenSidebarWrapper = ({ children }) => (
+    <div className="main-content" style={{ padding: '0%' }}>
+        <InvenSidebar />
+        {children}
+    </div>
+);
+
+// Wrapper 컴포넌트: KioskSidebar를 키오스크 관리 페이지에 적용
+const KioskSidebarWrapper = ({ children }) => (
+    <div className="main-content" style={{ padding: '0%' }}>
+        <KioskSidebar />
         {children}
     </div>
 );

@@ -4,15 +4,22 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.ERP.FinalProject.domain.inventory.dto.ProductDTO;
 import com.ERP.FinalProject.domain.inventory.entity.Product;
 
 public interface KioskProductRepository extends JpaRepository<Product, Long> {
 
-	Page<Product> findByRecommend(String recommend, Pageable pageable);
+	Page<Product> findByRecommendAndOnKiosk(String recommend, String onKiosk, Pageable pageable);
 
-	Page<Product> findByProductCategoryAndRecommend(String productCategory, String recommend, Pageable pageable);
-
-	Page<Product> findByRecommendAndProductCategory(String recommend, String category, Pageable pageable);
+	Page<Product> findByProductCategoryAndRecommendAndOnKiosk(String productCategory, String recommend,String OnKiosk, Pageable pageable);
 	
-	long countByProductCategoryAndRecommend(String category, String recommend);
+	Page<Product> findByRecommendAndProductCategoryAndOnKiosk(String recommend, String category,  String OnKiosk,Pageable pageable);
+	
+	long countByProductCategoryAndRecommendAndOnKiosk(String category, String recommend, String OnKiosk);
+	
+	//키오스크 관리
+	Page<Product> findByOnKiosk(Pageable pageable, String OnKiosk);
+	
+	Page<Product> findByProductCategoryAndOnKiosk(String category, String onKiosk, Pageable pageable);
+	
 }

@@ -1,54 +1,31 @@
 package com.ERP.FinalProject.domain.production.monitoring.controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
 import com.ERP.FinalProject.domain.production.monitoring.model.ProductionMonitoring;
 import com.ERP.FinalProject.domain.production.monitoring.service.ProductionMonitoringService;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import java.util.List;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/production-monitoring")
-@CrossOrigin(origins = "http://localhost:8080")
+@RequestMapping("/monitoring")
 public class ProductionMonitoringController {
 
     @Autowired
     private ProductionMonitoringService service;
 
-    // 모든 모니터링 데이터 조회 ("/data" 경로 추가)
-    @GetMapping("/data")
-    public ResponseEntity<List<ProductionMonitoring>> getAllMonitoringData() {
-        try {
-            List<ProductionMonitoring> data = service.getAllMonitoringData();
-            return ResponseEntity.ok(data);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
+    private Map<Integer, Long> lastMonitorIdMap = new HashMap<>(); // OrderID별로 마지막 MonitorID를 저장하는 맵
 
-    // 특정 OrderID에 따른 데이터 조회
-    @GetMapping("/by-order")
-    public ResponseEntity<List<ProductionMonitoring>> getMonitoringDataByOrderId(@RequestParam Integer orderId) {
-        try {
-            List<ProductionMonitoring> data = service.getMonitoringDataByOrderId(orderId);
-            return ResponseEntity.ok(data);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    @GetMapping("/data/{orderId}")
+    public ProductionMonitoring getNextData(@PathVariable int orderId) {
+        Long lastMonitorId = lastMonitorIdMap.get(orderId); // 해당 OrderID의 마지막 MonitorID를 가져옴
+        ProductionMonitoring data = service.getNextData(orderId, lastMonitorId);
+        
+        if (data != null) {
+            lastMonitorIdMap.put(orderId, data.getMonitorId()); 
         }
-    }
-
-    // 특정 날짜에 따른 데이터 조회
-    @GetMapping("/by-date")
-    public ResponseEntity<List<ProductionMonitoring>> getMonitoringDataByStartDate(@RequestParam String date) {
-        try {
-            List<ProductionMonitoring> data = service.getMonitoringDataByStartDate(date);
-            return ResponseEntity.ok(data);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return data;
     }
 }

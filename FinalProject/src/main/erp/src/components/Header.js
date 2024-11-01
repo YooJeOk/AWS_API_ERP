@@ -16,11 +16,12 @@ function Header() {
                         생산 관리
                         <div className="nav-button-dropdown">
                             <div className="dropdown-content">
-                                <Link to="/production">생산 계획 관리</Link>  
+                                <Link to="/production4">생산 주문 관리</Link>  
                                 <a href="/production8">생산 현황 모니터링</a>
                                 <a href="/production5">소요량 관리</a>
                                 <a href="/production7">품질 관리</a>
-                                <a href="/production9">생산 실적</a>
+                                <a href="/production2">생산 입고 관리</a>
+                                <a href="/production9">생산 실적 관리</a>
                             </div>
                         </div>
                     </div>
@@ -37,10 +38,9 @@ function Header() {
                         상품 관리
                         <div className="nav-button-dropdown">
                             <div className="dropdown-content">
+                                <a href="/FactoryInventory">재고 관리</a>
                                 <a href="#!">입고 관리</a>
                                 <a href="#!">출고 관리</a>
-                                <a href="#!">창고 이동 관리</a>
-                                <a href="#!">재고 관리</a>
                             </div>
                         </div>
                     </div>
@@ -48,8 +48,8 @@ function Header() {
                         키오스크 관리
                         <div className="nav-button-dropdown">
                             <div className="dropdown-content">
-                                <a href='/KioskSelect'>상품 관리</a>
-                                <a href="#!">상품 등록 및 수정</a>
+                                <a href='/KioskInventory'>상품 관리</a>
+                                <a href="/KioskRegister">상품 등록</a>
                             </div>
                         </div>
                     </div>

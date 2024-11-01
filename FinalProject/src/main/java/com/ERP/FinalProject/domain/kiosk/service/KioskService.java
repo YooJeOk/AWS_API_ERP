@@ -1,7 +1,7 @@
 package com.ERP.FinalProject.domain.kiosk.service;
 
 import java.util.ArrayList;
-import java.util.Collections;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+
 import org.springframework.stereotype.Service;
 
 import com.ERP.FinalProject.domain.inventory.entity.Product;
@@ -37,8 +37,8 @@ public class KioskService {
 	
 	public Page<Object> getRecommendedItems(Pageable pageable) {
 	    // 전체 추천 아이템 수를 먼저 계산
-	    long totalProducts = productRepository.countByProductCategoryAndRecommend("bread", "Y");
-	    long totalCoffees = coffeeRepository.countByRecommend("Y");
+	    long totalProducts = productRepository.countByProductCategoryAndRecommendAndOnKiosk("bread", "Y","Y");
+	    long totalCoffees = coffeeRepository.countByRecommendAndOnKiosk("Y","Y");
 	    long totalItems = totalProducts + totalCoffees;
 
 	    int pageSize = pageable.getPageSize();
@@ -52,7 +52,8 @@ public class KioskService {
 	        // 빵 아이템 가져오기
 	        if (startItem < totalProducts) {
 	            int productsToFetch = (int) Math.min(endItem, totalProducts) - startItem;
-	            Page<Product> recommendedProducts = productRepository.findByProductCategoryAndRecommend("bread", "Y", 
+	            Page<Product> recommendedProducts = productRepository
+	            		.findByProductCategoryAndRecommendAndOnKiosk("bread", "Y", "Y",
 	                PageRequest.of(currentPage, productsToFetch));
 	            recommendedItems.addAll(recommendedProducts.getContent());
 	        }
@@ -61,7 +62,7 @@ public class KioskService {
 	        if (endItem > totalProducts) {
 	            int coffeeStartItem = (int) Math.max(0, startItem - totalProducts);
 	            int coffeesToFetch = endItem - Math.max(startItem, (int) totalProducts);
-	            Page<Coffee> recommendedCoffees = coffeeRepository.findByRecommend("Y", 
+	            Page<Coffee> recommendedCoffees = coffeeRepository.findByRecommendAndOnKiosk("Y", "Y",
 	                PageRequest.of(coffeeStartItem / pageSize, coffeesToFetch));
 	            recommendedItems.addAll(recommendedCoffees.getContent());
 	            
@@ -79,20 +80,30 @@ public class KioskService {
 	}
 
     public Page<Product> getBreadItems(Pageable pageable) {
-	    long totalBread = productRepository.countByProductCategoryAndRecommend("bread", "N");
+	    long totalBread = productRepository.countByProductCategoryAndRecommendAndOnKiosk("bread", "N","Y");
 	    int pageSize = pageable.getPageSize();
 	    int currentPage = pageable.getPageNumber();
-        Page<Product> Breads = productRepository.findByRecommendAndProductCategory("N", "bread",PageRequest.of(currentPage, pageSize));
+        Page<Product> Breads = productRepository.findByRecommendAndProductCategoryAndOnKiosk("N", "bread","Y",PageRequest.of(currentPage, pageSize));
      
 	    return new PageImpl<>(Breads.getContent(), pageable, totalBread);
     }
 
     public Page<Coffee> getIceCoffeeItems(Pageable pageable) {
-        return coffeeRepository.findByRecommendAndTemperature("N", "ICE", pageable);
+        long totalIceCoffee = coffeeRepository.countByRecommendAndTemperatureAndOnKiosk("N", "ICE", "Y");
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        Page<Coffee> iceCoffees = coffeeRepository.findByRecommendAndTemperatureAndOnKiosk("N", "ICE", "Y", PageRequest.of(currentPage, pageSize));
+        
+        return new PageImpl<>(iceCoffees.getContent(), pageable, totalIceCoffee);
     }
 
     public Page<Coffee> getHotCoffeeItems(Pageable pageable) {
-        return coffeeRepository.findByRecommendAndTemperature("N", "HOT", pageable);
+        long totalHotCoffee = coffeeRepository.countByRecommendAndTemperatureAndOnKiosk("N", "HOT", "Y");
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        Page<Coffee> hotCoffees = coffeeRepository.findByRecommendAndTemperatureAndOnKiosk("N", "HOT", "Y", PageRequest.of(currentPage, pageSize));
+        
+        return new PageImpl<>(hotCoffees.getContent(), pageable, totalHotCoffee);
     }
     
     //커피옵션

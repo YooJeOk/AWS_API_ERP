@@ -1,22 +1,23 @@
 package com.ERP.FinalProject.domain.kiosk.controller;
 
 import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.ERP.FinalProject.domain.kiosk.entity.CoffeeOptionSalesDetail;
 import com.ERP.FinalProject.domain.kiosk.entity.SalesDetail;
 import com.ERP.FinalProject.domain.kiosk.entity.SalesRecord;
-import com.ERP.FinalProject.domain.kiosk.entity.UserStamp;
+
 import com.ERP.FinalProject.domain.kiosk.service.KioskUserService;
 import com.ERP.FinalProject.domain.kiosk.service.SalesRecordsService;
-import com.fasterxml.jackson.databind.JsonNode;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController

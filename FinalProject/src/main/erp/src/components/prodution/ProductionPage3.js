@@ -1,26 +1,28 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, Routes, Route } from 'react-router-dom'; 
 import './ProductionPage.css';
+import InputForm3 from './InputForm3';
+import axios from 'axios';
 
 function ProductionPage3() {
     const [data, setData] = useState([]);
     const [isDataLoaded, setIsDataLoaded] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        // 데이터를 불러오는 비동기 처리 (임시 데이터 사용)
-        const fetchData = () => {
-            const dummyData = [
-                {
-                    workDate: "2024-10-17",
-                    itemCode: "A123",
-                    itemName: "Item A",
-                    spec: "Spec A",
-                    quantity: "100",
-                    workItemName: "Work Item A",
-                    resources: "Resource X, 2 hours"
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/api/production-planning');
+                if (response.status === 200) {
+                    console.log("Received data:", response.data);
+                    setData(response.data);
+                    setIsDataLoaded(true);
+                } else {
+                    console.error("데이터 불러오기 실패:", response.status);
                 }
-            ];
-            setData(dummyData);
-            setIsDataLoaded(true);
+            } catch (error) {
+                console.error("에러 발생:", error);
+            }
         };
 
         fetchData();
@@ -32,32 +34,34 @@ function ProductionPage3() {
             <main className="production-content">
                 <div className="production-mainbar">
                     <div className="productionbar">
-                        <h1>작업 내역 조회</h1>
-                        <button className="create-button">생성</button>
+                        <h1>생산 계획 조회</h1>
+                        <button className="create-button" onClick={() => navigate('/input3')}>
+                            생성
+                        </button>
                     </div>
-                    <table className="production-table">
+                    <table className="table production-table">
                         <thead>
                             <tr>
-                                <th>작업 일자</th>
-                                <th>생산품목 코드</th>
-                                <th>생산품목명</th>
-                                <th>규격</th>
-                                <th>수량</th>
-                                <th>작업 품목명</th>
-                                <th>투입자원&작업시간</th>
+                                <th>계획 ID</th>
+                                <th>작업 지시ID</th>
+                                <th>상품명</th>
+                                <th>생산 수량</th>
+                                <th>생산 시작 시간</th>
+                                <th>생산 종료 시간</th>
+                                <th>기타사항</th>
                             </tr>
                         </thead>
                         <tbody>
                             {isDataLoaded ? (
                                 data.map((row, index) => (
                                     <tr key={index}>
-                                        <td>{row.workDate}</td>
-                                        <td>{row.itemCode}</td>
-                                        <td>{row.itemName}</td>
-                                        <td>{row.spec}</td>
+                                        <td>{row.planId}</td>
+                                        <td>{row.orderId}</td>
+                                        <td>{row.productName}</td>
                                         <td>{row.quantity}</td>
-                                        <td>{row.workItemName}</td>
-                                        <td>{row.resources}</td>
+                                        <td>{row.startDate}</td>
+                                        <td>{row.endDate}</td>
+                                        <td>{row.etc}</td>
                                     </tr>
                                 ))
                             ) : (
@@ -68,6 +72,10 @@ function ProductionPage3() {
                         </tbody>
                     </table>
                 </div>
+
+                <Routes>
+                    <Route path="/input3" element={<InputForm3 />} />
+                </Routes>
             </main>
         </div>
     );

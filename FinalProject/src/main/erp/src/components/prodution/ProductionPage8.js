@@ -1,105 +1,147 @@
 import React, { useState, useEffect } from 'react';
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 import axios from 'axios';
-import './ProductionPage.css';
+
 import './ChartStyles.css';
 
 function ProductionMonitoringPage() {
-    const [data, setData] = useState([]);
+    const [data, setData] = useState([
+        { orderId: 1, productionRate: 0, temperature: 25, humidity: 50, productName: '갈릭꽈베기' }, 
+        { orderId: 2, productionRate: 0, temperature: 25, humidity: 50, productName: '단팥도넛' },
+        { orderId: 3, productionRate: 0, temperature: 25, humidity: 50, productName: '고구마케이크빵' },
+        { orderId: 4, productionRate: 0, temperature: 25, humidity: 50, productName: '꽈베기' }
+    ]);
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchData = async (orderId, index) => {
             try {
-                const response = await axios.get('/api/production-monitoring/data');
-                setData(response.data);
+                const response = await axios.get(`http://localhost:8080/monitoring/data/${orderId}`);
+                const newData = response.data;
+
+                const sanitizedData = {
+                    orderId: orderId,
+                    productionRate: newData && newData.productionRate ? parseFloat(newData.productionRate) : 0,
+                    temperature: newData && newData.temperature ? parseFloat(newData.temperature) : 0,
+                    humidity: newData && newData.humidity ? parseFloat(newData.humidity) : 0,
+                    productName: data[index].productName // 기존 productName 유지
+                };
+
+                setData((prevData) => {
+                    const updatedData = [...prevData];
+                    updatedData[index] = sanitizedData;
+                    console.log("Updated data:", updatedData);
+                    return updatedData;
+                });
             } catch (error) {
-                console.error("Error fetching production monitoring data:", error);
+                console.error(`OrderID ${orderId} 데이터 로드 오류:`, error);
             }
         };
-        fetchData();
+
+        const intervals = [1, 2, 3, 4].map((orderId, index) => 
+            setInterval(() => fetchData(orderId, index), 5000)
+        );
+
+        return () => intervals.forEach(clearInterval);
     }, []);
 
     const COLORS = ['#FF0000', '#00FF00'];
     const lineNames = ['1라인', '2라인', '3라인', '4라인'];
 
-    const getTemperatureClass = (temp) => {
-        if (temp < 20 || temp > 30) return 'danger';
-        if (temp < 23 || temp > 27) return 'warning';
-        return '';
+    const getNeedleRotation = (temp) => {
+        if (temp < 20) return 180;
+        if (temp > 30) return 0;
+        return 180 - ((temp - 20) * 9);
     };
 
-    const getHumidityClass = (hum) => {
-        if (hum < 45 || hum > 75) return 'danger';
-        if (hum < 50 || hum > 70) return 'warning';
-        return '';
-    };
-
-    const getStatusText = (rate) => {
-        if (rate === 100) return { text: '완료', color: '#28a745' };
-        if (rate > 0) return { text: '작업 중', color: '#ffa500' };
-        return { text: '대기 중', color: '#ff0000' };
+    const getTemperatureColor = (temp) => {
+        if (temp < 20 || temp > 30) return "#FF8042"; 
+        if (temp < 23 || temp > 27) return "#FFBB28"; 
+        return "#00C49F"; 
     };
 
     return (
         <div className="custom-container">
             <main className="production-content">
                 <div className="chart-container">
-                    {data.map((item, index) => {
-                        const status = getStatusText(item.productionRate);
-                        return (
-                            <div key={item.id} className="chart-box">
-                                <div className="pie-chart-container">
-                                    <h3 className="line-name" style={{ fontSize: '1.5em', fontWeight: 'bold', textAlign: 'center' }}>
-                                        {lineNames[index]}
-                                    </h3>
-                                    <ResponsiveContainer width={350} height={300}>
-                                        <PieChart>
-                                            <Pie
-                                                data={[
-                                                    { name: '생산률', value: item.productionRate },
-                                                    { name: '남은 비율', value: 100 - item.productionRate }
-                                                ]}
-                                                dataKey="value"
-                                                cx="50%"
-                                                cy="50%"
-                                                innerRadius={80}
-                                                outerRadius={140}
-                                                startAngle={90}
-                                                endAngle={-270}
-                                                paddingAngle={0}
-                                            >
-                                                {[COLORS[1], COLORS[0]].map((color, idx) => (
-                                                    <Cell key={`cell-${idx}`} fill={color} />
-                                                ))}
-                                            </Pie>
-                                            <Tooltip />
-                                            <text
-                                                x="50%"
-                                                y="50%"
-                                                textAnchor="middle"
-                                                dominantBaseline="middle"
-                                                fontSize={24}
-                                                fontWeight="bold"
-                                            >
-                                                {item.productionRate}%
-                                            </text>
-                                        </PieChart>
-                                    </ResponsiveContainer>
-                                </div>
-                                <div className="metrics-container">
-                                    <div className={`temperature ${getTemperatureClass(item.temperature)}`}>
-                                        온도: {item.temperature}°C
-                                    </div>
-                                    <div className={`humidity ${getHumidityClass(item.humidity)}`}>
-                                        습도: {item.humidity}%
-                                    </div>
-                                    <div className="status-indicator" style={{ color: status.color, fontSize: '1.8em', fontWeight: 'bold', textAlign: 'center', marginTop: '20px' }}>
-                                        {status.text}
+                    {data.map((item, index) => (
+                        <div key={index} className="chart-box">
+                            <div className="pie-chart-container">
+                                <h3 className="line-name" style={{ fontSize: '20px', fontWeight: 'bold', textAlign: 'center' }}>
+                                    {lineNames[index]}
+                                </h3>
+                                <PieChart width={350} height={300}>
+                                    <Pie
+                                        data={[
+                                            { name: '생산률', value: item.productionRate },
+                                            { name: '남은 비율', value: 100 - item.productionRate }
+                                        ]}
+                                        dataKey="value"
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius={80}
+                                        outerRadius={140}
+                                        startAngle={90}
+                                        endAngle={-270}
+                                        paddingAngle={0}
+                                    >
+                                        {[COLORS[1], COLORS[0]].map((color, idx) => (
+                                            <Cell key={`cell-${idx}`} fill={color} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip />
+                                    <text
+                                        x="50%"
+                                        y="50%"
+                                        textAnchor="middle"
+                                        dominantBaseline="middle"
+                                        fontSize={24}
+                                        fontWeight="bold"
+                                    >
+                                        {item.productionRate}%
+                                    </text>
+                                </PieChart>
+                            </div>
+                            <div className="metrics-container">
+                                <div className="temperature" style={{ marginTop: '10px', transform: 'scale(1)', transformOrigin: 'top' }}>
+                                    <h4 style={{ textAlign: 'center', fontSize: '20px' }}>온도 상태</h4>
+                                    <PieChart width={100} height={60}>
+                                        <Pie
+                                            data={[
+                                                { name: '왼쪽 파란색', value: 33.33 },
+                                                { name: '중앙 초록색', value: 33.33 },
+                                                { name: '오른쪽 빨간색', value: 33.34 }
+                                            ]}
+                                            dataKey="value"
+                                            cx="50%"
+                                            cy="100%"
+                                            innerRadius={20}
+                                            outerRadius={40}
+                                            startAngle={180}
+                                            endAngle={0}
+                                        >
+                                            <Cell fill="#0000FF" />  {/* 왼쪽 파란색 */}
+                                            <Cell fill="#00FF00" />  {/* 중앙 초록색 */}
+                                            <Cell fill="#FF0000" />  {/* 오른쪽 빨간색 */}
+                                        </Pie>
+                                        <path
+                                            d={`M50,60 L${50 + 30 * Math.cos((getNeedleRotation(item.temperature) * Math.PI) / 180)},${60 - 30 * Math.sin((getNeedleRotation(item.temperature) * Math.PI) / 180)}`}
+                                            stroke={getTemperatureColor(item.temperature)}
+                                            strokeWidth="2"
+                                        />
+                                    </PieChart>
+                                    <div style={{ textAlign: 'center', marginTop: '5px', color: getTemperatureColor(item.temperature), fontSize: '20px' }}>
+                                        {item.temperature}°C
                                     </div>
                                 </div>
                             </div>
-                        );
-                    })}
+                            <div className="humidity" style={{ fontSize: '20px', color: 'black', textAlign: 'center', marginTop: '10px' }}>
+                                <span>습도: {item.humidity}%</span>
+                            </div>
+                            <div className="product-name" style={{ fontSize: '24px', color: 'black', textAlign: 'center', marginTop: '10px' }}>
+                                <span>{item.productName}</span>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </main>
         </div>

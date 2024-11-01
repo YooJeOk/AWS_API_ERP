@@ -8,7 +8,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.ERP.FinalProject.domain.kiosk.entity.Coffee;
 
 public interface KioskCoffeeRepository extends JpaRepository<Coffee, Long> {
-    long countByRecommend(String recommend);
-	Page<Coffee> findByRecommend(String recommend, Pageable pageable);
-	Page<Coffee> findByRecommendAndTemperature(String recommend, String temperature, Pageable pageable);
+    long countByRecommendAndOnKiosk(String recommend,String OnKisok);
+	Page<Coffee> findByRecommendAndOnKiosk(String recommend,String OnKisok, Pageable pageable);
+	Page<Coffee> findByRecommendAndTemperatureAndOnKiosk(String recommend, String temperature, String OnKiosk, Pageable pageable);
+	Page<Coffee> findByOnKiosk(String string, Pageable pageable);
+    long countByRecommendAndTemperatureAndOnKiosk(String recommend, String temperature, String onKiosk);
 }
+

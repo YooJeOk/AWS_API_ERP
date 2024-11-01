@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './production.css';
 
 function InputForm5() {
-    // 폼 데이터를 관리할 상태를 생성
+    
     const [formData, setFormData] = useState({
         productionPeriod: '',
         baseItem: '',
@@ -10,7 +10,7 @@ function InputForm5() {
         mrpCalculation: '',
     });
 
-    // 폼 데이터가 변경될 때 상태를 업데이트
+    
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -18,11 +18,11 @@ function InputForm5() {
         });
     };
 
-    // 폼 제출 처리
+   
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('폼 제출됨:', formData);
-        // 여기서 formData를 서버로 전송하는 비동기 처리 등을 추가 가능
+        
     };
 
     return (

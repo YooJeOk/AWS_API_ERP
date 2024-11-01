@@ -42,27 +42,6 @@ const PaymentPage = () => {
       document.body.removeChild(naverPayScript);
     };
   }, []);
-
-  // const handleNaverPayment = () => {
-  //   if (window.Naver) {
-  //     const oPay = window.Naver.Pay.create({
-  //       "mode": "development", // development or production
-  //       "clientId": "HN3GGCMDdTgGUfl0kFCo", // clientId
-  //        "chainId": "M3ZnVnhIK3hzWkd" ,// chainId
-  //     });
-
-  //     oPay.open({
-  //       "merchantUserKey": "np_jeihb592280",
-  //       "merchantPayKey": "20241028cQ1px5",
-  //       "productName": "Kiosk Order Payment",
-  //       "totalPayAmount": totalAmount - discountAmount,
-  //       "taxScopeAmount": totalAmount - discountAmount,
-  //       "taxExScopeAmount": "0",
-  //       "returnUrl": "https://developers.pay.naver.com/user/sand-box/payment"
-  //     });
-  //   }
-  // };
-
   const handleCancel = () => {
     navigate('/');
   };
@@ -90,7 +69,6 @@ const handlePaymentClick = (paymentType) => {
         "taxExScopeAmount": "0",
         "returnUrl": "http://localhost:3000/payment"
       });
-
       window.addEventListener('message', async function(e) {
         if (e.data.resultCode === "Success") {
           console("네이버페이 결제 성공")
@@ -151,9 +129,12 @@ const handlePaymentSuccess = async (paymentType) => {
     };
 
     console.log('Sending data to server:', JSON.stringify(saleData, null, 2));
-
     const response = await axios.post('/api/sales', saleData);
     console.log('Server response:', response.data);
+
+    // 재고 업데이트 요청
+    await axios.post('/api/inventory/update', { cartItems: saleData.cartItems });
+
   } catch (error) {
     console.error("판매 기록 저장 실패", error.response ? error.response.data : error.message);
   }
@@ -245,7 +226,3 @@ const handlePaymentFailure = (errorMessage) => {
 };
 
 export default PaymentPage;
-
-//네이버나 토스는 결제끝나면 내가만든 결제완료 모달이뜨거든(데이터도 들어옴)?
-//근데 네이버는 네이버샌드박스로 연결되면서 결제승인 눌러도 db에 
-//모달도 안뜨고 데이터가 안들어와

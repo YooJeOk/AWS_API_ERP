@@ -30,6 +30,9 @@ public class Coffee {
 	@Column(name="CoffeeImage")
     private String coffeeImage;
 	
+	@Column(name="OnKiosk")
+    private String onKiosk;
+	
 	@Column(name="Recommend")
     private String recommend;
 	

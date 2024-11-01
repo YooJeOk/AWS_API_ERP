@@ -16,4 +16,5 @@ public class ProductionPlanningDTO {
     private LocalDateTime endDate; // 생산 계획 종료 날짜
     private int orderQuantity; // 작업 지시에 따른 제품 수량
     private String productName; // 제품 이름
+    private String etc;
 }
