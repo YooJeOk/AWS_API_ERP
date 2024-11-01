@@ -22,7 +22,7 @@ const Cart = ({ items, updateQuantity, removeItem, clearCart }) => {
             <div className="cart-counter w-25 text-right">
               <button
                 className="cart-decrease cart-counter-btn"
-                onClick={() => updateQuantity(item.id, item.type,item.options, item.quantity - 1)}
+                onClick={() => updateQuantity(item.id, item.type, item.name, item.options, item.quantity - 1)}
                 disabled={item.quantity === 1}
               ><DashSquare />
             
@@ -30,7 +30,7 @@ const Cart = ({ items, updateQuantity, removeItem, clearCart }) => {
               <span className="cart-count">{item.quantity}</span>
               <button
                 className="cart-increase cart-counter-btn"
-                onClick={() => updateQuantity(item.id, item.type, item.options, item.quantity + 1)}
+                onClick={() => updateQuantity(item.id, item.type, item.name, item.options, item.quantity + 1)}
               ><PlusSquare /></button>
             </div>
             <div className="cart-price w-25 text-right mb-3">

@@ -6,10 +6,14 @@ import '../../css/SalesManagement/SalesRecord.css';
 
 function SalesRecord() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
-  // SearchBar에서 검색어를 받아오는 함수
-  const handleSearch = (term) => {
+  // SearchBar에서 검색어와 날짜를 받아오는 함수
+  const handleSearch = (term, start, end) => {
     setSearchTerm(term);
+    setStartDate(start);
+    setEndDate(end);
   };
 
   return (
@@ -22,7 +26,7 @@ function SalesRecord() {
             <SearchBar onSearch={handleSearch} />
 
             {/* 상품 판매 기록 테이블 */}
-            <SalesTable searchTerm={searchTerm} />
+            <SalesTable searchTerm={searchTerm} startDate={startDate} endDate={endDate} />
           </Col>
         </Row>
       </Container>
