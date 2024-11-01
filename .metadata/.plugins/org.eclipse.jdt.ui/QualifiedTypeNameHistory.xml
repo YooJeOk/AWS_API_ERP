@@ -30,4 +30,6 @@
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.MBOM.entity.MBOMDetailDTO"/>
     <fullyQualifiedTypeName name="lombok.Data"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.MBOM.entity.MBOM"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.MBOM.entity.MBOMDTO"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.inventory.entity.MaterialsInventory"/>
 </qualifiedTypeNameHistroy>
