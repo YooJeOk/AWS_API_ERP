@@ -51,99 +51,108 @@ const PaymentPage = () => {
   };
 
 
-const handlePaymentClick = (paymentType) => {
-  if (paymentType === '네이버페이') {
-    if (window.Naver) {
-      const oPay = window.Naver.Pay.create({
-        "mode": "development",
-        "clientId": "HN3GGCMDdTgGUfl0kFCo",
-        "chainId": "M3ZnVnhIK3hzWkd",
-      });
+  const handlePaymentClick = (paymentType) => {
+    if (paymentType === '네이버페이') {
+      if (window.Naver) {
+        const oPay = window.Naver.Pay.create({
+          "mode": "development",
+          "clientId": "HN3GGCMDdTgGUfl0kFCo",
+          "chainId": "M3ZnVnhIK3hzWkd",
+        });
 
-      oPay.open({
-        "merchantUserKey": "np_jeihb592280",
-        "merchantPayKey": "20241028cQ1px5",
-        "productName": "Kiosk Order Payment",
-        "totalPayAmount": totalAmount - discountAmount,
-        "taxScopeAmount": totalAmount - discountAmount,
-        "taxExScopeAmount": "0",
-        "returnUrl": "http://localhost:3000/payment"
-      });
-      window.addEventListener('message', async function(e) {
-        if (e.data.resultCode === "Success") {
-          console("네이버페이 결제 성공")
+        oPay.open({
+          "merchantUserKey": "np_jeihb592280",
+          "merchantPayKey": "20241028cQ1px5",
+          "productName": "Kiosk Order Payment",
+          "totalPayAmount": totalAmount - discountAmount,
+          "taxScopeAmount": totalAmount - discountAmount,
+          "taxExScopeAmount": "0",
+          "returnUrl": "http://localhost:3000/payment"
+        });
+        window.addEventListener('message', async function (e) {
+          if (e.data.resultCode === "Success") {
+            console("네이버페이 결제 성공")
+            handlePaymentSuccess(paymentType);
+          } else if (e.data.resultCode === "Fail") {
+            handlePaymentFailure(e.data.resultMessage);
+          }
+        });
+      }
+    } else {
+      const { IMP } = window;
+      IMP.init('imp71261721');
+      IMP.request_pay({
+        pg: paymentType === '카카오페이' ? 'kakaopay' : 'tosspay',
+        pay_method: 'card',
+        amount: totalAmount - discountAmount,
+        name: 'Kiosk Order Payment',
+      }, async (response) => {
+        if (response.success) {
           handlePaymentSuccess(paymentType);
-        } else if (e.data.resultCode === "Fail") {
-          handlePaymentFailure(e.data.resultMessage);
+        } else {
+          handlePaymentFailure(response.error_msg);
         }
       });
     }
-  } else {
-    const { IMP } = window;
-    IMP.init('imp71261721');
-    IMP.request_pay({
-      pg: paymentType === '카카오페이' ? 'kakaopay' : 'tosspay',
-      pay_method: 'card',
-      amount: totalAmount - discountAmount,
-      name: 'Kiosk Order Payment',
-    }, async (response) => {
-      if (response.success) {
-        handlePaymentSuccess(paymentType);
-      } else {
-        handlePaymentFailure(response.error_msg);
-      }
-    });
-  }
-};
+  };
 
-const handlePaymentSuccess = async (paymentType) => {
-  setModalMessage(`${paymentType} 결제가 완료되었습니다.`);
-  setShowModal(true);
-  try {
-    const saleData = {
-      salesRecords: {
-        paymentType,
-        totalSalePrice: totalAmount - discountAmount,
-        orderAmount: totalAmount,
-        discountAmount,
-      },
-      cartItems: cartItems.map(item => ({
-        productId: item.type === 'bread' ? item.id : null,
-        coffeeId: item.type === 'coffee' ? item.id : null,
-        quantity: item.quantity,
-        totalPrice: item.totalPrice,
-        type: item.type,
-        options: item.type === 'coffee' ? {
-          temperature: item.temperature,
-          size: item.options.size,
-          sizeCharge: item.options.sizeCharge,
-          additionalOptions: item.options.additionalOptions.map(option => ({
-            id: option.id,
-            name: option.name,
-            quantity: option.quantity,
-            price: option.price,
-          }))
-        } : null,
-      })),
-      userData,
-    };
+  const handlePaymentSuccess = async (paymentType) => {
+    setModalMessage(`${paymentType} 결제가 완료되었습니다.`);
+    setShowModal(true);
+    try {
+      const saleData = {
+        salesRecords: {
+          paymentType,
+          totalSalePrice: totalAmount - discountAmount,
+          orderAmount: totalAmount,
+          discountAmount,
+        },
+        cartItems: cartItems.map(item => ({
+          productId: item.type === 'bread' ? item.id : null,
+          coffeeId: item.type === 'coffee' ? item.id : null,
+          quantity: item.quantity,
+          totalPrice: item.totalPrice,
+          type: item.type,
+          options: item.type === 'coffee' ? {
+            temperature: item.temperature,
+            size: item.options.size,
+            sizeCharge: item.options.sizeCharge,
+            additionalOptions: item.options.additionalOptions.map(option => ({
+              id: option.id,
+              name: option.name,
+              quantity: option.quantity,
+              price: option.price,
+            }))
+          } : null,
+        })),
+        userData,
+      };
 
-    console.log('Sending data to server:', JSON.stringify(saleData, null, 2));
-    const response = await axios.post('/api/sales', saleData);
-    console.log('Server response:', response.data);
 
-    // 재고 업데이트 요청
-    await axios.post('/api/inventory/update', { cartItems: saleData.cartItems });
+      // 재고 업데이트 요청
+      await axios.post('/api/inventory/update', {
+        cartItems: saleData.cartItems.map(item => ({
+          id: item.productId || item.coffeeId,
+          type: item.type,
+          quantity: item.quantity,
+          options: item.options
+        }))
+      });
 
-  } catch (error) {
-    console.error("판매 기록 저장 실패", error.response ? error.response.data : error.message);
-  }
-};
+      console.log('Sending data to server:', JSON.stringify(saleData, null, 2));
+      const response = await axios.post('/api/sales', saleData);
+      console.log('Server response:', response.data);
 
-const handlePaymentFailure = (errorMessage) => {
-  setModalMessage(`결제가 실패하였습니다: ${errorMessage}`);
-  setShowModal(true);
-};
+
+    } catch (error) {
+      console.error("판매 기록 저장 실패", error.response ? error.response.data : error.message);
+    }
+  };
+
+  const handlePaymentFailure = (errorMessage) => {
+    setModalMessage(`결제가 실패하였습니다: ${errorMessage}`);
+    setShowModal(true);
+  };
 
   const handleStampCouponClick = () => {
     if (!userData || userData.coupon === 0) {

@@ -1,5 +1,6 @@
 package com.ERP.FinalProject.domain.KioskManagement.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -13,5 +14,11 @@ public interface StoreInventoryRepository  extends JpaRepository<StoreInventory,
 	 Optional<StoreInventory> findByProductId(Long productId);
 	 
 	 Optional<StoreInventory> findByMaterialId(Long materialId);
+	 
+	 List<StoreInventory> findAllByMaterialId(Long materialId);
+	 
+	 
+	 
+
 }
 

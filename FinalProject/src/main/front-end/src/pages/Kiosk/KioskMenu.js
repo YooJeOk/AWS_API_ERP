@@ -90,7 +90,7 @@ const KioskMenu = () => {
       const data = await fetchMenuItems(selectedCategory, currentPage);
       if (data) {
         const formattedItems = data.items.map(item => ({
-          id: item.productID || item.coffeeId,
+          id: item.productId || item.coffeeId,
           name: item.productName || item.coffeeName,
           price: item.salePrice,
           image: item.productImage || item.coffeeImage,
@@ -125,7 +125,7 @@ const KioskMenu = () => {
     };
 
     if (item.type === 'bread') {
-      const existingItem = cartItems.find(cartItem => cartItem.id === item.id && cartItem.type===item.type);
+      const existingItem = cartItems.find(cartItem => cartItem.id === item.id && cartItem.type===item.type && cartItem.name===item.name);
       if (existingItem) {
         setCartItems(cartItems.map(cartItem =>
           cartItem.id === item.id && cartItem.type===item.type ? { ...cartItem, quantity: cartItem.quantity + quantity, totalPrice: cartItem.totalPrice + totalPrice } : cartItem
@@ -157,10 +157,10 @@ const KioskMenu = () => {
     setCartItems(prevItems => prevItems.filter((_, i) => i !== index));
   };
 
-  const updateCartItemQuantity = (itemId,itemType, options, newQuantity) => {
+  const updateCartItemQuantity = (itemId,itemType, itemName,options, newQuantity) => {
     if (newQuantity >= 1) {
       setCartItems(cartItems.map(item =>
-        item.id === itemId && item.type ===  itemType &&  JSON.stringify(item.options) === JSON.stringify(options)
+         item.id === itemId && item.type ===  itemType && item.name === itemName &&  JSON.stringify(item.options) === JSON.stringify(options)
           ? { ...item, quantity: newQuantity, totalPrice: calculateItemPrice(item, newQuantity) }
           : item
       ));
