@@ -24,9 +24,6 @@ function SalesRecord() {
 
             {/* 상품 판매 기록 테이블 */}
             <SalesTable searchTerm={searchTerm} />
-
-            {/* 액션 버튼 */}
-            <ActionButtons />
           </Col>
         </Row>
       </Container>

@@ -1,5 +1,6 @@
 package com.ERP.FinalProject.domain.SalesManagement.Entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,14 +12,18 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Entity(name = "SalesManagementProduct") // 고유한 엔터티 이름 설정
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "Product")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer productId;
+    private Integer productID;
+
+    @Column(name = "ProductName")
     private String productName;
- 
+
+    // 나머지 필드 생략
 }

@@ -2,6 +2,8 @@ package com.ERP.FinalProject.domain.SalesManagement.Entity;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,17 +17,29 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SalesRecord {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long saleID;
-	private LocalDateTime saleDate;
-	private String paymentType;
-	private Integer totalSalePrice;
-	private Integer orderAmount;
-	private Integer discountAmount;
+    @Column(name = "SaleID")
+    private int saleID;
 
-    @OneToMany(mappedBy = "salesRecord", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SalesDetail> salesDetails;
+    @Column(name = "SaleDate")
+    private LocalDateTime saleDate;
 
-    // Getters and setters
+    @Column(name = "PaymentType")
+    private String paymentType;
+
+    @Column(name = "TotalSalePrice")
+    private int totalSalePrice;
+
+    @Column(name = "OrderAmount")
+    private int orderAmount;
+
+    @Column(name = "DiscountAmount")
+    private int discountAmount;
+
+    // 일대다 관계 설정
+    @OneToMany(mappedBy = "salesRecord", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("salesRecord") // 순환 참조 방지
+    private List<SalesDetails> salesDetails;
 }
