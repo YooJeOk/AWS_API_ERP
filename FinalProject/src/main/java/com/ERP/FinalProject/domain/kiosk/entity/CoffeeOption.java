@@ -3,6 +3,7 @@ package com.ERP.FinalProject.domain.kiosk.entity;
 
 
 import javax.persistence.Entity;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
