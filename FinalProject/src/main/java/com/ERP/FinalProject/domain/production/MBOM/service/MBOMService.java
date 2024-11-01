@@ -4,9 +4,11 @@ import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM;
 import com.ERP.FinalProject.domain.production.MBOM.entity.MBOMDTO;
 import com.ERP.FinalProject.domain.production.MBOM.repository.MBOMRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MBOMService {
@@ -23,13 +25,13 @@ public class MBOMService {
         return mbomRepository.findAll();
     }
 
-    // MBOMDTO 리스트 반환 (materialName 및 supplier 정보 포함)
+    // MBOMDTO 리스트 반환 (materialName 포함)
     public List<MBOMDTO> getAllMBOMDTOs() {
-        return mbomRepository.findAllWithMaterialNameAndSupplier();
+        return mbomRepository.findAllWithMaterialName();
     }
 
-    public MBOM getMBOMById(int id) {
-        return mbomRepository.findById(id).orElse(null);
+    public Optional<MBOM> getMBOMById(int id) {
+        return mbomRepository.findById(id);
     }
 
     public MBOM addMBOM(MBOM mbom) {
@@ -45,6 +47,11 @@ public class MBOMService {
     }
 
     public void deleteMBOM(int id) {
-        mbomRepository.deleteById(id);
+        try {
+            mbomRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            // 존재하지 않는 ID로 인한 예외를 무시하거나 로그를 기록할 수 있습니다.
+            System.out.println("삭제하려는 MBOM ID가 존재하지 않습니다: " + id);
+        }
     }
 }

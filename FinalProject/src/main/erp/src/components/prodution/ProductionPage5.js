@@ -30,13 +30,15 @@ function ProductionTable() {
     
         fetchData();
     }, []);
-    
-    // category에 따라 'Product'와 'Coffee'로 필터링
-    const filteredData = data.filter(item => 
-        item.itemType === (category === "빵" ? "Product" : category === "커피" ? "Coffee" : "")
-    ).filter(item => item.productName === selectedItem);
 
-    const totalCost = filteredData.reduce((sum, item) => sum + item.unitPrice * (quantity || customQuantity || 1), 0);
+    const filteredData = data
+        .filter(item => item.itemType === (category === "빵" ? "Product" : category === "커피" ? "Coffee" : ""))
+        .filter(item => item.productName === selectedItem);
+
+    const totalCost = filteredData.reduce(
+        (sum, item) => sum + item.unitPrice * item.quantity * (quantity || customQuantity || 1),
+        0
+    );
 
     const getItemsByCategory = () => {
         return [...new Set(
@@ -95,7 +97,7 @@ function ProductionTable() {
                             display: 'flex', 
                             alignItems: 'center', 
                             justifyContent: 'space-between', 
-                            width: '95%',  // 박스를 오른쪽으로 넓힘
+                            width: '95%',
                             margin: '0 auto',
                             fontSize: '22px',
                             marginTop: '30px',
@@ -161,7 +163,7 @@ function ProductionTable() {
                         </div>
                     </div>
                     <div className="production-display" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <div className="production-table-container" style={{ width: "60%", marginBottom: '20px' }}> {/* 박스 너비 수정 */}
+                        <div className="production-table-container" style={{ width: "60%", marginBottom: '20px' }}>
                             <h2 style={{ fontSize: '24px' }}>{selectedItem || "생산 품목을 선택하세요"}</h2>
                             <table className="production-table" style={{ tableLayout: 'fixed', width: '100%' }}>
                                 <thead>
@@ -177,7 +179,7 @@ function ProductionTable() {
                                         filteredData.map((row, index) => (
                                             <tr key={index}>
                                                 <td>{row.materialName}</td>
-                                                <td>{quantity || customQuantity}</td>
+                                                <td>{row.quantity * (quantity || customQuantity)}</td>
                                                 <td>{row.unit}</td>
                                                 <td>{row.unitPrice}</td>
                                             </tr>
