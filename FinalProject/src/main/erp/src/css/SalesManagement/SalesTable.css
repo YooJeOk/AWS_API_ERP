@@ -41,3 +41,78 @@
   max-height: 100%; /* 부모 높이에 맞추기 */
   overflow-y: auto; /* 수직 스크롤 필요 시 표시 */
 }
+.no-column {
+  width: 70px; /* Adjust this width as needed */
+}
+.num-column {
+  width: 70px; /* Adjust this width as needed */
+}
+.unitprice-column{
+  width: 90px;
+}
+.promotion-column{
+  width: 70px;
+
+}
+.totalprice-column{
+  width: 90px;
+
+}
+.payment-column{
+  width: 100px;
+}
+
+/* SalesTable.css */
+
+/* 전체 테이블 스타일 */
+.custom-table {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+/* 페이지네이션 스타일 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  color: #703103;
+}
+
+.pagination li {
+  margin: 0 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #703103;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.pagination li:hover {
+  background-color: #e6aa62;
+}
+
+.pagination .active {
+  background-color: #F0C490;
+  color: #703103;
+  font-weight: bold;
+  border: none;
+}
+
+/* 페이지네이션 이전, 다음 버튼 */
+.pagination li.previous,
+.pagination li.next {
+  font-weight: bold;
+  color: #703103 !important;
+}
+
+.pagination li.disabled {
+  cursor: default;
+  color: #703103;
+}
+.pagination .previous a,
+.pagination .next a {
+  color: #703103;
+  
+}
