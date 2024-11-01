@@ -17,7 +17,6 @@ import InputForm6 from './components/prodution/InputForm6';
 import ProductionPage6 from './components/prodution/ProductionPage6';
 import InputForm7 from './components/prodution/InputForm7';
 import ProductionPage7 from './components/prodution/ProductionPage7';
-import InputForm9 from './components/prodution/InputForm9';
 import ProductionPage9 from './components/prodution/ProductionPage9'; // 날짜별 가동율 실적
 import MainPage from './components/MainPage';
 
@@ -64,7 +63,6 @@ function App() {
                     <Route path="/production6/*" element={<ProductionSidebarWrapper><ProductionPage6 /></ProductionSidebarWrapper>} />
                     <Route path="/input7" element={<ProductionSidebarWrapper><InputForm7 /></ProductionSidebarWrapper>} />
                     <Route path="/production7/*" element={<ProductionSidebarWrapper><ProductionPage7 /></ProductionSidebarWrapper>} />
-                    <Route path="/input9" element={<ProductionSidebarWrapper><InputForm9 /></ProductionSidebarWrapper>} />
                     <Route path="/production9/*" element={<ProductionSidebarWrapper><ProductionPage9 /></ProductionSidebarWrapper>} />
 
                     {/* 매출 관리 페이지들에 SalesSidebar 사용 */}
