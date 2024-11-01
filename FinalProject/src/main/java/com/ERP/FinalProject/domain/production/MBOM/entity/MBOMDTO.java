@@ -8,10 +8,10 @@ import lombok.Data;
 public class MBOMDTO {
 
     private int BOMID;
-    private int ItemID;
+    private Long ItemID;
     private ItemType itemType;
     private Size size;
-    private int materialID;
+    private Long materialID;
     private String materialName;
     private String productName;
     private int quantity;
@@ -20,7 +20,7 @@ public class MBOMDTO {
     private int totalCost;
 
     // 생성자
-    public MBOMDTO(int BOMID, int ItemID, ItemType itemType, Size size, int materialID, 
+    public MBOMDTO(int BOMID, Long ItemID, ItemType itemType, Size size, Long materialID, 
                    String materialName, String productName, int quantity, 
                    String unit, float unitPrice, int totalCost) {
         this.BOMID = BOMID;
