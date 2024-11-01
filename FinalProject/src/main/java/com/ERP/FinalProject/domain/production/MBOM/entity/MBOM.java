@@ -10,27 +10,27 @@ public class MBOM {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int BOMID;
+    private int bomId;  // 필드 이름을 소문자로 변경
 
-    private int ItemID;
+    private int itemId;
     
     @Enumerated(EnumType.STRING)
-    private ItemType ItemType;
+    private ItemType itemType;
     
     @Enumerated(EnumType.STRING)
-    private Size Size;
+    private Size size;
     
-    private int MaterialID;
+    private int materialId;  // materialId로 변경하여 쿼리와 일관성 유지
     
-    private String ProductName;
+    private String productName;
     
-    private int Quantity;
+    private int quantity;
     
-    private String Unit;
+    private String unit;
     
-    private float UnitPrice;
+    private float unitPrice;
     
-    private int TotalCost;
+    private int totalCost;
 
     public enum ItemType {
         Product, Coffee

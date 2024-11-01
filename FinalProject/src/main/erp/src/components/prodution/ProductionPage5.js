@@ -7,17 +7,15 @@ function ProductionTable() {
     const [data, setData] = useState([]);
     const [category, setCategory] = useState("");
     const [selectedItem, setSelectedItem] = useState("");
-    const [size, setSize] = useState("");
     const [quantity, setQuantity] = useState(50);
     const [customInput, setCustomInput] = useState(false);
     const [customQuantity, setCustomQuantity] = useState("");
     const navigate = useNavigate();
 
-    
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/mbom/all');
+                const response = await axios.get('http://localhost:8080/api/mbom/all-with-material-name');
                 if (response.status === 200) {
                     console.log("Received data:", response.data);
                     setData(response.data);
@@ -29,13 +27,14 @@ function ProductionTable() {
                 console.error("에러 발생:", error);
             }
         };
-
+    
         fetchData();
     }, []);
-     // category에 따라 'Product'와 'Coffee'로 필터링
-     const filteredData = data.filter(item => 
+    
+    // category에 따라 'Product'와 'Coffee'로 필터링
+    const filteredData = data.filter(item => 
         item.itemType === (category === "빵" ? "Product" : category === "커피" ? "Coffee" : "")
-    ).filter(item => item.productName === selectedItem && (!size || item.size === size));
+    ).filter(item => item.productName === selectedItem);
 
     const totalCost = filteredData.reduce((sum, item) => sum + item.unitPrice * (quantity || customQuantity || 1), 0);
 
@@ -45,6 +44,7 @@ function ProductionTable() {
                 .map(item => item.productName)
         )];
     };
+
     const handleQuantityChange = (e) => {
         const value = e.target.value;
         if (value === "직접 입력") {
@@ -67,7 +67,7 @@ function ProductionTable() {
 
     const getImagePath = () => {
         if (category === "빵") {
-            return `/images${selectedItem}.jpg`;
+            return `${selectedItem}`;
         } else if (category === "커피") {
             return `/images/coffee/${selectedItem}.jpg`;
         }
@@ -95,7 +95,7 @@ function ProductionTable() {
                             display: 'flex', 
                             alignItems: 'center', 
                             justifyContent: 'space-between', 
-                            width: '90%', 
+                            width: '95%',  // 박스를 오른쪽으로 넓힘
                             margin: '0 auto',
                             fontSize: '22px',
                             marginTop: '30px',
@@ -109,7 +109,6 @@ function ProductionTable() {
                                 onChange={(e) => { 
                                     setCategory(e.target.value); 
                                     setSelectedItem(""); 
-                                    setSize(""); 
                                 }}
                                 style={{ fontSize: '20px', width: '130px' }}
                             >
@@ -130,19 +129,6 @@ function ProductionTable() {
                                 {category && getItemsByCategory().map((item, index) => (
                                     <option key={index} value={item}>{item}</option>
                                 ))}
-                            </select>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                            <label>사이즈:</label>
-                            <select 
-                                value={size} 
-                                onChange={(e) => setSize(e.target.value)} 
-                                style={{ fontSize: '20px', width: '130px' }}
-                                disabled={category !== "커피"}
-                            >
-                                <option value="">사이즈</option>
-                                <option value="Regular">Regular</option>
-                                <option value="Extra">Extra</option>
                             </select>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '5px', width: '170px' }}>
@@ -175,7 +161,7 @@ function ProductionTable() {
                         </div>
                     </div>
                     <div className="production-display" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <div className="production-table-container" style={{ width: "45%", marginBottom: '20px' }}>
+                        <div className="production-table-container" style={{ width: "60%", marginBottom: '20px' }}> {/* 박스 너비 수정 */}
                             <h2 style={{ fontSize: '24px' }}>{selectedItem || "생산 품목을 선택하세요"}</h2>
                             <table className="production-table" style={{ tableLayout: 'fixed', width: '100%' }}>
                                 <thead>

@@ -1,6 +1,7 @@
 package com.ERP.FinalProject.domain.production.MBOM.service;
 
 import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM;
+import com.ERP.FinalProject.domain.production.MBOM.entity.MBOMDTO;
 import com.ERP.FinalProject.domain.production.MBOM.repository.MBOMRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,14 @@ public class MBOMService {
         this.mbomRepository = mbomRepository;
     }
 
+    // 기본 MBOM 엔티티 리스트 반환
     public List<MBOM> getAllMBOMs() {
         return mbomRepository.findAll();
+    }
+
+    // MBOMDTO 리스트 반환 (materialName 및 supplier 정보 포함)
+    public List<MBOMDTO> getAllMBOMDTOs() {
+        return mbomRepository.findAllWithMaterialNameAndSupplier();
     }
 
     public MBOM getMBOMById(int id) {
@@ -31,7 +38,7 @@ public class MBOMService {
 
     public MBOM updateMBOM(int id, MBOM mbom) {
         if (mbomRepository.existsById(id)) {
-            mbom.setBOMID(id);
+            mbom.setBomId(id);
             return mbomRepository.save(mbom);
         }
         return null;
@@ -40,6 +47,4 @@ public class MBOMService {
     public void deleteMBOM(int id) {
         mbomRepository.deleteById(id);
     }
-
-    
 }

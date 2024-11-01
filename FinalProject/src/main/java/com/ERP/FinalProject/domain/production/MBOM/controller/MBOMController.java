@@ -1,6 +1,7 @@
 package com.ERP.FinalProject.domain.production.MBOM.controller;
 
 import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM;
+import com.ERP.FinalProject.domain.production.MBOM.entity.MBOMDTO;
 import com.ERP.FinalProject.domain.production.MBOM.service.MBOMService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,11 @@ public class MBOMController {
         return mbomService.getAllMBOMs();
     }
 
-    
+    // materialName을 포함한 모든 MBOMDTO 항목을 가져오는 엔드포인트
+    @GetMapping("/all-with-material-name")
+    public List<MBOMDTO> getAllMBOMDTOs() {
+        return mbomService.getAllMBOMDTOs();
+    }
 
     // 특정 MBOM을 업데이트하는 엔드포인트
     @PutMapping("/update/{id}")
