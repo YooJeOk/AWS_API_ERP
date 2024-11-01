@@ -15,7 +15,6 @@
     <fullyQualifiedTypeName name="java.sql.PreparedStatement"/>
     <fullyQualifiedTypeName name="java.sql.Connection"/>
     <fullyQualifiedTypeName name="java.sql.Timestamp"/>
-    <fullyQualifiedTypeName name="org.springframework.http.ResponseEntity"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestParam"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestMapping"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.monitoring.repository.ProductionMonitoringRepository"/>
@@ -26,4 +25,11 @@
     <fullyQualifiedTypeName name="org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration"/>
     <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.cdi.JpaRepositoryExtension"/>
     <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.Query"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="org.springframework.http.ResponseEntity"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.MBOM.entity.MBOMDetailDTO"/>
+    <fullyQualifiedTypeName name="lombok.Data"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.MBOM.entity.MBOM"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.MBOM.entity.MBOMDTO"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.inventory.entity.MaterialsInventory"/>
 </qualifiedTypeNameHistroy>
