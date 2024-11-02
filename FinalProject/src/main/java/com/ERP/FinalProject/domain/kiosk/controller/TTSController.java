@@ -36,7 +36,6 @@ public class TTSController {
             audioConfig.put("pitch", -2); // 음정 조절
             audioConfig.put("speakingRate", 1.2); // 속도 조절 
 
-
             requestJson.put("input", input);
             requestJson.put("voice", voice);
             requestJson.put("audioConfig", audioConfig);
