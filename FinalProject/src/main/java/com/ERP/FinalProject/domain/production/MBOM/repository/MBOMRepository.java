@@ -5,6 +5,7 @@ import com.ERP.FinalProject.domain.production.MBOM.entity.MBOMDTO;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,5 +21,8 @@ public interface MBOMRepository extends JpaRepository<MBOM, Integer> {
 
     List<MBOMDTO> findAllWithMaterialName();
 	List<MBOM> findByItemIdAndItemTypeAndSize(Long itemId, MBOM.ItemType itemType, MBOM.Size size);
+
+	@Query("SELECT MAX(m.itemId) FROM MBOM m WHERE m.itemType = :itemType AND m.size = :size")
+	Integer findLastItemIDByTypeAndSize(@Param("itemType") MBOM.ItemType itemType, @Param("size") MBOM.Size size);
 
 }

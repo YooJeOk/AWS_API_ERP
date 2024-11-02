@@ -33,7 +33,8 @@ function ProductionOrderPage() {
                 <div className="production-mainbar">
                     <div className="productionbar">
                         <h1>생산 계획 조회</h1>
-                        <button className="create-button" onClick={() => navigate('/input4')}>
+                        <button className="create-button" onClick={() => navigate('/input4')}
+                         style={{ fontSize: '20px', backgroundColor: '#4CAF50', color: '#fff', padding: '5px 30px', border: 'none', borderRadius: '5px' }}>
                             생성
                         </button>
                     </div>

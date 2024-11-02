@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, Routes, Route } from 'react-router-dom';
 import InputForm8 from './InputForm8';
-import './ProductionPage.css';
+
+
 function ProductionTable() {
     const [data, setData] = useState([]);
     const [category, setCategory] = useState("");
@@ -90,25 +91,25 @@ function ProductionTable() {
                         <h1 style={{ fontSize: '26px', margin: 0 }}>소요량 조회</h1>
                         <div style={{ display: 'flex', gap: '10px' }}>
                             <button 
+                                className="create1-button" 
+                                onClick={() => navigate('/input8')} 
+                                style={{ fontSize: '20px', backgroundColor: '#4CAF50', color: '#fff', padding: '5px 30px', border: 'none', borderRadius: '5px' }}
+                            >
+                                생성
+                            </button>
+                            <button 
                                 className="update-button" 
                                 onClick={() => navigate('/update')} 
-                                style={{ fontSize: '22px', backgroundColor: '#FFA07A', color: '#fff', padding: '10px 30px', border: 'none', borderRadius: '5px' }}
+                                style={{ fontSize: '20px', backgroundColor: '#FFA07A', color: '#fff', padding: '5px 30px', border: 'none', borderRadius: '5px' }}
                             >
                                 수정
                             </button>
                             <button 
                                 className="delete-button" 
                                 onClick={() => navigate('/delete')} 
-                                style={{ fontSize: '22px', backgroundColor: '#FF6B6B', color: '#fff', padding: '10px 30px', border: 'none', borderRadius: '5px' }}
+                                style={{ fontSize: '20px', backgroundColor: '#FF6B6B', color: '#fff', padding: '5px 30px', border: 'none', borderRadius: '5px' }}
                             >
                                 삭제
-                            </button>
-                            <button 
-                                className="create-button" 
-                                onClick={() => navigate('/input8')} 
-                                style={{ fontSize: '22px', backgroundColor: '#4CAF50', color: '#fff', padding: '10px 30px', border: 'none', borderRadius: '5px' }}
-                            >
-                                생성
                             </button>
                         </div>
                     </div>
