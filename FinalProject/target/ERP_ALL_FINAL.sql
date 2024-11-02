@@ -172,8 +172,6 @@ CREATE TABLE ERP.WorkOrders (
 
 
 
-
-
 -- 14. 생산 계획 (ProductionPlanning)
 CREATE TABLE ERP.ProductionPlanning (
     PlanID INT NOT NULL AUTO_INCREMENT, -- 계획ID
@@ -559,6 +557,9 @@ VALUES
     (2, '단팥도넛', 150, '2024-10-29 09:00:00', '2024-10-29 17:00:00', 'Medium', '일반 작업 요청'),
     (3, '고구마케이크빵', 120, '2024-10-30 10:00:00', '2024-10-30 18:00:00', 'Low', '특별 공정 필요'),
     (4, '꽈베기', 180, '2024-10-31 07:30:00', '2024-10-31 15:30:00', 'High', '정시 납기 요구');
+INSERT INTO ERP.WorkOrders (ProductID, ProductName, Quantity, StartDate, EndDate, Priority, etc)
+VALUES
+    (5, '라우겐', 120, '2024-11-01 08:00:00', '2024-11-01 16:00:00', 'Low', '품질 검사 대기');
 
 -- 14. 생산 계획 (ProductionPlanning)
 INSERT INTO ERP.ProductionPlanning (OrderID, ProductID, ProductName, Quantity, StartDate, EndDate, etc)
@@ -622,6 +623,10 @@ VALUES
     (2, 150, 2, '단팥도넛', '불합격', '2024-10-29 18:00:00', '색상 불량'),
     (3, 120, 3, '고구마케이크빵', '합격', '2024-10-30 19:00:00', '정상'),
     (4, 180, 4, '꽈베기', '불합격', '2024-10-31 16:00:00', '크기 불일치');
+
+
+
+
 
 -- 18. 불량 관리 (DefectManagement)
 INSERT INTO DefectManagement (QCID, OrderID, Quantity, ProductID, ProductName, DefectType, DefectQuantity, DefectTimestamp, CauseDescription, Status, Defectrate, etc)

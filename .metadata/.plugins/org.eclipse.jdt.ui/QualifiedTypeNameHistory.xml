@@ -28,8 +28,13 @@
     <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="org.springframework.http.ResponseEntity"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.MBOM.entity.MBOMDetailDTO"/>
-    <fullyQualifiedTypeName name="lombok.Data"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.MBOM.entity.MBOM"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.MBOM.entity.MBOMDTO"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.inventory.entity.MaterialsInventory"/>
+    <fullyQualifiedTypeName name="io.opencensus.common.ServerStatsFieldEnums.Size"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.MBOM.entity.MBOM.ItemType"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.MBOM.entity.MBOM.Size"/>
+    <fullyQualifiedTypeName name="org.springframework.data.repository.query.Param"/>
+    <fullyQualifiedTypeName name="lombok.Data"/>
+    <fullyQualifiedTypeName name="java.util.Optional"/>
 </qualifiedTypeNameHistroy>
