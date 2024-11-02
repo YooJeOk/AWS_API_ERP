@@ -47,16 +47,16 @@ body {
 
 .create-button {
     padding: 10px 50px;
-    background-color:#009952;
-    color: #DFE0DF;
+    background-color:#4CAF50;
+    color: #fff;
     border: none;
     cursor: pointer;
     margin-bottom: 20px;
     border-radius: 5px;
-    font-size: 15px;
-    font-weight: bolder;
+    font-size: 20px;
+    padding: 5px 30px;
 }
-
+ 
 .productionbar {
     display: flex;
     justify-content: space-between;
@@ -252,6 +252,7 @@ body {
 }
 
 .main-dashboard-container {
+
     display: flex;
     flex-direction: column;
     height: calc(100vh - 100px);
