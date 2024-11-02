@@ -78,10 +78,9 @@ function ProductionSidebar() {
                 </div>
 
                 <div className="dropdown">
-                <button className="menu-item" style={{backgroundColor: '#F0C490', color:'white'}}>생산실적 관리</button>
+                <button className="menu-item" style={{backgroundColor: '#F0C490', color:'white'}}>생산 실적 관리</button>
                     <ul className="dropdown-menu">
-                        <li><Link to="/input9">● 생산실적 등록</Link></li>
-                        <li><Link to="/production9">● 날짜별 가동율 실적 조회</Link></li>
+                        <li><Link to="/production9">● 날짜별 생산 실적 조회</Link></li>
                     </ul>
                 </div>
             </div>
