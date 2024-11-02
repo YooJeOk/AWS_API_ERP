@@ -27,5 +27,5 @@ public class Supplier {
     @OneToMany(mappedBy = "supplier")
     private List<MaterialsInventory> materials;
 
-    // Constructors, getters, setters
+    
 }

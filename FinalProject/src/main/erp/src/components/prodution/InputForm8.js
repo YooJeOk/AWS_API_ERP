@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './production.css';
 
 function MBOMForm() {
@@ -18,6 +18,28 @@ function MBOMForm() {
         ProductName: '',
         Size: ''
     });
+
+    const [materialList, setMaterialList] = useState([]);
+    const [page, setPage] = useState(0);
+    const size = 10;
+
+
+    useEffect(() => {
+        fetch(`/api/factory/inventory/materials?page=${page}&size=${size}`)
+            .then(response => response.json())
+            .then(data => setMaterialList(data.content))
+            .catch(error => console.error('Error fetching material list:', error));
+    }, [page]);
+
+
+    useEffect(() => {
+        if (fixedData.ItemType && fixedData.Size) {
+            fetch(`/api/mbom/next-item-id?itemType=${fixedData.ItemType}&size=${fixedData.Size}`)
+                .then(response => response.json())
+                .then(nextItemID => setFixedData(prevData => ({ ...prevData, ItemID: nextItemID })))
+                .catch(error => console.error('Error fetching next ItemID:', error));
+        }
+    }, [fixedData.ItemType, fixedData.Size]);
 
     const handleChange = (index, e) => {
         const newFormData = [...formData];
@@ -49,7 +71,7 @@ function MBOMForm() {
     };
 
     const addRow = () => {
-        if (formData.length < 15) { // 최대 15개의 행까지 추가 가능
+        if (formData.length < 15) {
             setFormData([
                 ...formData,
                 {
@@ -72,9 +94,25 @@ function MBOMForm() {
         return formData.reduce((sum, row) => sum + parseFloat(row.TotalCost || 0), 0).toFixed(2);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('MBOM 데이터 제출:', { ...fixedData, materials: formData });
+        try {
+            const response = await fetch('/api/mbom/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ ...fixedData, materials: formData }),
+            });
+            if (response.ok) {
+                alert("MBOM 데이터가 성공적으로 저장되었습니다.");
+            } else {
+                alert("데이터 저장 중 오류가 발생했습니다.");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("서버 오류가 발생했습니다.");
+        }
     };
 
     return (
@@ -86,20 +124,19 @@ function MBOMForm() {
                         <h1>MBOM 등록</h1>
                     </div>
 
-                    {/* 상단 고정 필드와 총원가 박스, 재료 추가 버튼 및 등록 버튼 */}
                     <div className="fixed-section" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
                         <table className="production-table" style={{ width: '60%' }}>
                             <thead>
                                 <tr>
-                                    <th style={{ width: '25%' }}>상품ID</th>
-                                    <th style={{ width: '25%' }}>상품유형</th>
-                                    <th style={{ width: '25%' }}>상품명</th>
-                                    <th style={{ width: '25%' }}>사이즈</th>
+                                    <th>상품ID</th>
+                                    <th>상품유형</th>
+                                    <th>상품명</th>
+                                    <th>사이즈</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><input type="text" name="ItemID" value={fixedData.ItemID} onChange={handleFixedChange} required style={{ width: '100%' }} /></td>
+                                    <td><input type="text" name="ItemID" value={fixedData.ItemID} readOnly style={{ width: '100%' }} /></td>
                                     <td>
                                         <select name="ItemType" value={fixedData.ItemType} onChange={handleFixedChange} style={{ width: '100%' }}>
                                             <option value="Product">Product</option>
@@ -118,17 +155,9 @@ function MBOMForm() {
                             </tbody>
                         </table>
 
-                        <div style={{
-                            padding: '15px',
-                            border: '1px solid #ddd',
-                            borderRadius: '4px',
-                            minWidth: '240px',
-                            textAlign: 'center',
-                            fontWeight: 'bold',
-                            height: '88px'
-                        }}>
+                        <div style={{ padding: '15px', border: '1px solid #ddd', borderRadius: '4px', minWidth: '240px', textAlign: 'center', fontWeight: 'bold', height: '88px' }}>
                             총원가
-                            <hr style={{ margin: '10px 0', borderTop: '1px solid #ddd' }} /> {/* 가로줄 추가 */}
+                            <hr style={{ margin: '10px 0', borderTop: '1px solid #ddd' }} />
                             {getTotalCostSum()} 원
                         </div>
 
@@ -137,28 +166,34 @@ function MBOMForm() {
                     </div>
 
                     <div style={{ display: 'flex', gap: '20px', marginTop: '20px' }}>
-                        {/* 재료 입력 테이블 */}
                         <div style={{ flex: '1', maxHeight: '600px', overflowY: 'auto', border: '1px solid #ddd', borderRadius: '4px' }}>
-                            <table className="production-table" style={{ width: '100%', position: 'sticky', top: 0, background: '#fff', zIndex: 1 }}>
+                            <table className="production-table" style={{ width: '100%' }}>
                                 <thead>
                                     <tr>
-                                        <th style={{ width: '5%' }}></th>
-                                        <th style={{ width: '10%' }}>재료ID</th>
-                                        <th style={{ width: '10%' }}>수량</th>
-                                        <th style={{ width: '5%' }}>규격</th>
-                                        <th style={{ width: '15%' }}>단가</th>
-                                        <th style={{ width: '15%' }}>총단가</th>
+                                        <th></th>
+                                        <th>재료ID</th>
+                                        <th>수량</th>
+                                        <th>규격</th>
+                                        <th>단가</th>
+                                        <th>총단가</th>
                                     </tr>
                                 </thead>
-                            </table>
-                            <table className="production-table" style={{ width: '100%' }}>
                                 <tbody>
                                     {formData.map((row, index) => (
                                         <tr key={index}>
                                             <td><button onClick={() => deleteRow(index)} style={{ color: 'red', fontSize: '1.2em', background: 'none', border: 'none', cursor: 'pointer' }}>×</button></td>
-                                            <td><input type="text" name="MaterialID" value={row.MaterialID} onChange={(e) => handleChange(index, e)} required style={{ width: '100%' }} /></td>
+                                            <td>
+                                                <select name="MaterialID" value={row.MaterialID} onChange={(e) => handleChange(index, e)} required style={{ width: '100%' }}>
+                                                    <option value="">선택</option>
+                                                    {materialList.map(material => (
+                                                        <option key={material.materialId} value={material.materialId}>
+                                                            {material.materialId} - {material.materialName}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </td>
                                             <td><input type="text" name="Quantity" value={row.Quantity} onChange={(e) => handleQuantityOrPriceChange(index, e)} required style={{ width: '100%' }} /></td>
-                                            <td><input type="text" name="Unit" value={row.Unit} onChange={(e) => handleChange(index, e)} placeholder="EA" style={{ width: '100%' }} /></td>
+                                            <td><input type="text" name="Unit" value={row.Unit} onChange={(e) => handleChange(index, e)} style={{ width: '100%' }} /></td>
                                             <td><input type="text" name="UnitPrice" value={row.UnitPrice} onChange={(e) => handleQuantityOrPriceChange(index, e)} required style={{ width: '100%' }} /></td>
                                             <td><input type="text" name="TotalCost" value={row.TotalCost} readOnly style={{ width: '100%' }} /></td>
                                         </tr>
@@ -167,64 +202,15 @@ function MBOMForm() {
                             </table>
                         </div>
 
-                        {/* 오른쪽 재료 목록 섹션 */}
                         <div style={{ flex: '1', maxHeight: '600px', overflowY: 'auto', border: '1px solid #ddd', borderRadius: '4px', padding: '10px' }}>
-                            <h3>재료 목록</h3>
-                            <pre style={{ whiteSpace: 'pre-wrap', fontSize: '0.9em' }}>
-                                {`
--- 빵 관련 식자재
-(1, '계란', '식자재', 'g', 4, '2024-04-05 10:30:00'),          
-(1, '고구마필링', '식자재', 'g', 8, '2024-04-05 10:35:00'),    
-...
-
--- 커피 재료
-(2, '원두(에스프레소)', '식자재', 'g', 20, '2024-04-06 09:00:00'),     
-(2, '카라멜시럽', '식자재', 'ml', 15, '2024-04-06 09:10:00'),        
-...
-
--- 부자재
-(3, '포장지', '포장재', '개', 20, '2024-04-06 11:00:00'),
-(3, '컵(regular size)', '부자재', '개', 70, '2024-04-06 11:10:00'),
-...
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                `}
-                            </pre>
+                            <h3>재료 목록     공장 재고좀여기띄워줘 해문아</h3>
+                            <ul>
+                                {materialList.map((material) => (
+                                    <li key={material.materialId}>
+                                        {material.materialName} - {material.unit} - {material.unitPrice}원
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
                     </div>
                 </div>

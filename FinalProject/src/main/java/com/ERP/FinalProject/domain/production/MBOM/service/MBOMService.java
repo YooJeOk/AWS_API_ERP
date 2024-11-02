@@ -1,6 +1,8 @@
 package com.ERP.FinalProject.domain.production.MBOM.service;
 
 import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM;
+import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM.ItemType;
+import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM.Size;
 import com.ERP.FinalProject.domain.production.MBOM.entity.MBOMDTO;
 import com.ERP.FinalProject.domain.production.MBOM.repository.MBOMRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +36,22 @@ public class MBOMService {
         return mbomRepository.findById(id);
     }
 
-    public MBOM addMBOM(MBOM mbom) {
-        return mbomRepository.save(mbom);
+    public void saveMBOM(MBOMDTO mbomData) {
+        MBOM mbom = new MBOM();
+        mbom.setBomId(mbomData.getBOMID());
+        mbom.setItemId(mbomData.getItemID());
+        mbom.setItemType(mbomData.getItemType());
+        mbom.setSize(mbomData.getSize());
+        mbom.setMaterialId(mbomData.getMaterialID());
+        mbom.setProductName(mbomData.getProductName());
+        mbom.setQuantity(mbomData.getQuantity());
+        mbom.setUnit(mbomData.getUnit());
+        mbom.setUnitPrice(mbomData.getUnitPrice());
+        mbom.setTotalCost(mbomData.getTotalCost());
+        
+        mbomRepository.save(mbom);
     }
+
 
     public MBOM updateMBOM(int id, MBOM mbom) {
         if (mbomRepository.existsById(id)) {
@@ -54,4 +69,9 @@ public class MBOMService {
             System.out.println("삭제하려는 MBOM ID가 존재하지 않습니다: " + id);
         }
     }
+    public Integer getNextItemID(ItemType itemType, Size size) {
+        Integer lastItemID = mbomRepository.findLastItemIDByTypeAndSize(itemType, size);
+        return (lastItemID != null ? lastItemID + 1 : 1); // 마지막 ID + 1 또는 1 반환
+    }
 }
+
