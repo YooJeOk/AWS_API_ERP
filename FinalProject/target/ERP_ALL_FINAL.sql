@@ -69,17 +69,16 @@ CREATE TABLE ERP.ProductionConsumption (
 
 -- 6. 공장 재고 (FactoryInventory)
 CREATE TABLE ERP.FactoryInventory (
-    FactoryInventoryID INT NOT NULL AUTO_INCREMENT, -- 공장 재고ID
-    ProductID INT NOT NULL, -- 제품ID
-    MaterialID INT NOT NULL, -- 자재ID
-    DisposalID INT NOT NULL, -- 폐기ID
-    QuantityInFactory INT NULL, -- 공장 내 수량
-    FactoryDate DATETIME NULL, -- 공장 날짜
-        etc VARCHAR(100) NULL, -- 기타
+    FactoryInventoryID INT NOT NULL AUTO_INCREMENT,
+    ProductID INT,
+    MaterialID INT,
+    QuantityInFactory INT NOT NULL,
+    FactoryDate DATETIME NOT NULL,
     PRIMARY KEY (FactoryInventoryID),
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID),
     FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
 );
+
 
 -- 7. 폐기 기록 (DisposedRecords)
 CREATE TABLE ERP.DisposedRecords (
@@ -460,8 +459,7 @@ VALUES
 (3, '포장지', '포장재', '개', 20, '2024-04-06 11:00:00'),
 (3, '컵(regular size)', '부자재', '개', 70, '2024-04-06 11:10:00'),
 (3, '컵(extra size)', '부자재', '개', 80, '2024-04-06 11:20:00'),
-(3, '빨대', '부자재', '개', 3, '2024-04-06 11:30:00'),
-(3, '캐리어', '부자재', '개', 2, '2024-04-06 11:40:00');
+(3, '빨대', '부자재', '개', 3, '2024-04-06 11:30:00');
 
 -- 4. 원자재 재입고 이력 (RawMaterialRestockHistory) 테이블 더미 데이터
 INSERT INTO ERP.RawMaterialRestockHistory (MaterialID, SupplierID, RestockQuantity, UnitPrice, RestockDate)
@@ -479,11 +477,57 @@ VALUES
 
 
 -- 6. 공장 재고 (FactoryInventory) 테이블 더미 데이터
-INSERT INTO ERP.FactoryInventory (ProductID, MaterialID, DisposalID, QuantityInFactory, FactoryDate, etc)
+INSERT INTO ERP.FactoryInventory (ProductID, MaterialID, QuantityInFactory, FactoryDate)
 VALUES
-(1, 1, 1, 500, '2024-04-14 09:00:00', '정기 입고'),
-(2, 2, 2, 300, '2024-04-15 10:00:00', '추가 보충'),
-(3, 3, 3, 400, '2024-04-16 11:00:00', '일반 재고');
+-- 빵 아이템 재고
+(1, NULL, 200, '2024-10-29 00:00:00'),  -- 갈릭꽈베기
+(2, NULL, 180, '2024-10-29 00:00:00'),  -- 단팥도넛
+(3, NULL, 190, '2024-10-29 00:00:00'),  -- 고구마케이크빵
+(4, NULL, 220, '2024-10-29 00:00:00'),  -- 꽈베기
+(5, NULL, 150, '2024-10-29 00:00:00'),  -- 라우겐
+(6, NULL, 170, '2024-10-29 00:00:00'),  -- 베이글빵
+(7, NULL, 180, '2024-10-29 00:00:00'),  -- 생크림소보로
+(8, NULL, 130, '2024-10-29 00:00:00'),  -- 꿀버터바게트
+(9, NULL, 120, '2024-10-29 00:00:00'),  -- 애플파이
+(10, NULL, 160, '2024-10-29 00:00:00'), -- 우유도넛
+(11, NULL, 170, '2024-10-29 00:00:00'), -- 찹쌀브레드
+(12, NULL, 100, '2024-10-29 00:00:00'), -- 카라멜 러스크
+(13, NULL, 140, '2024-10-29 00:00:00'), -- 캐찰빵
+
+-- 모든 재료 재고
+(NULL, 1, 10000, '2024-10-29 00:00:00'), -- 계란
+(NULL, 2, 15000, '2024-10-29 00:00:00'), -- 고구마필링
+(NULL, 3, 8000, '2024-10-29 00:00:00'),  -- 마늘
+(NULL, 4, 20000, '2024-10-29 00:00:00'), -- 물
+(NULL, 5, 25000, '2024-10-29 00:00:00'), -- 밀가루
+(NULL, 6, 5000, '2024-10-29 00:00:00'),  -- 베이킹소다
+(NULL, 7, 5000, '2024-10-29 00:00:00'),  -- 베이킹파우더
+(NULL, 8, 3000, '2024-10-29 00:00:00'),  -- 소금
+(NULL, 9, 2000, '2024-10-29 00:00:00'),  -- 시나몬 가루
+(NULL, 10, 10000, '2024-10-29 00:00:00'), -- 올리브오일
+(NULL, 11, 4000, '2024-10-29 00:00:00'), -- 이스트
+(NULL, 12, 1500, '2024-10-29 00:00:00'), -- 파슬리
+(NULL, 13, 8000, '2024-10-29 00:00:00'), -- 꿀
+(NULL, 14, 3000, '2024-10-29 00:00:00'), -- 바닐라 추출물
+(NULL, 15, 12000, '2024-10-29 00:00:00'), -- 버터
+(NULL, 16, 10000, '2024-10-29 00:00:00'), -- 생크림
+(NULL, 17, 15000, '2024-10-29 00:00:00'), -- 설탕
+(NULL, 18, 10000, '2024-10-29 00:00:00'), -- 팥앙금
+(NULL, 19, 20000, '2024-10-29 00:00:00'), -- 우유
+(NULL, 20, 15000, '2024-10-29 00:00:00'), -- 원두(에스프레소)
+(NULL, 21, 8000, '2024-10-29 00:00:00'),  -- 카라멜시럽
+(NULL, 22, 6000, '2024-10-29 00:00:00'),  -- 초콜릿 시럽
+(NULL, 23, 10000, '2024-10-29 00:00:00'), -- 콜드브루 원액
+(NULL, 24, 5000, '2024-10-29 00:00:00'),  -- 연유
+(NULL, 25, 30000, '2024-10-29 00:00:00'), -- 얼음
+(NULL, 26, 7000, '2024-10-29 00:00:00'),  -- 헤이즐넛 시럽
+(NULL, 27, 7000, '2024-10-29 00:00:00'),  -- 바닐라 시럽
+(NULL, 28, 6000, '2024-10-29 00:00:00'),  -- 메이플 시럽
+(NULL, 29, 8000, '2024-10-29 00:00:00'),  -- 아이스크림
+(NULL, 30, 5000, '2024-10-29 00:00:00'),  -- 포장지
+(NULL, 31, 10000, '2024-10-29 00:00:00'), -- 컵(regular size)
+(NULL, 32, 10000, '2024-10-29 00:00:00'), -- 컵(extra size)
+(NULL, 33, 15000, '2024-10-29 00:00:00'); -- 빨대
 
 
 -- 7. 폐기 기록 (DisposedRecords) 테이블 더미 데이터
@@ -630,8 +674,7 @@ VALUES
 (NULL, 30, 100, '2024-10-29 00:00:00'), -- 포장지
 (NULL, 31, 100, '2024-10-29 00:00:00'),  -- 컵(regular size)
 (NULL, 32, 232, '2024-10-29 00:00:00'),  -- 컵(extra size)
-(NULL, 33, 250, '2024-10-29 00:00:00'), -- 빨대
-(NULL, 34, 300, '2024-10-29 00:00:00');   -- 캐리어
+(NULL, 33, 250, '2024-10-29 00:00:00'); -- 빨대
 
 
 -- 21. MBOM 테이블 더미 데이터
