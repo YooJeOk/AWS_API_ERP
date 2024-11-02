@@ -45,7 +45,7 @@ public class StoreInventoryService {
 		StoreInventory storeInventory = storeInventoryRepository.findByProductId(product.getProductId())
 				.orElse(new StoreInventory());
 		dto.setQuantityInStore(storeInventory.getQuantityInStore());
-
+		dto.setMinimumStock(product.getMinimumStock());
 		return dto;
 	}
 
@@ -66,7 +66,8 @@ public class StoreInventoryService {
         StoreInventory storeInventory = storeInventoryRepository.findByMaterialId(material.getMaterialId())
                 .orElse(new StoreInventory());
         dto.setQuantityInStore(storeInventory.getQuantityInStore());
-        
+		dto.setMinimumStock(material.getMinimumStock());
+
         return dto;
     }
 }

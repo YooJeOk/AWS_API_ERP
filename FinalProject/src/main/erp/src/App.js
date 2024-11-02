@@ -31,6 +31,8 @@ import SalesStatus from '../../erp/src/pages/SalesManagement/SalesStatus';
 import InvenSidebar from './components/InventoryManage/InvenSidebar';
 import StoreInventory from './pages/InventoryManage/StoreInventory';
 import FactoryInventory from './pages/InventoryManage/FactoryInventory';
+import InputOrder from './pages/InventoryManage/InputOrder';
+import AutoOrderPage from './pages/InventoryManage/AutoOrderPage';
 
 //키오스크 관리
 import KioskSidebar from './components/KioskManagement/KioskSidebar';
@@ -75,8 +77,10 @@ function App() {
                     {/* 상품 관리 탭 */}
                     <Route path="/FactoryInventory" element={<InvenSidebarWrapper><FactoryInventory /></InvenSidebarWrapper>} />
                     <Route path="/StoreInventory" element={<InvenSidebarWrapper><StoreInventory /></InvenSidebarWrapper>} />
+                    <Route path="/InputOrder" element={<InvenSidebarWrapper><InputOrder /></InvenSidebarWrapper>} />
+                    <Route path="/AutoOrderPage" element={<InvenSidebarWrapper><AutoOrderPage /></InvenSidebarWrapper>} />
 
-
+                    
                     {/* 키오스크 관리 사이드바 */}
                     <Route path="/KioskInventory" element={<KioskSidebarWrapper><KioskInventory /></KioskSidebarWrapper>} />
                     <Route path="/KioskRegister" element={<KioskSidebarWrapper><KioskRegister /></KioskSidebarWrapper>} />

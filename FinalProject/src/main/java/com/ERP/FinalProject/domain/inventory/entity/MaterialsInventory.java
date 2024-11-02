@@ -29,4 +29,8 @@ public class MaterialsInventory {
     private String unit;
     private Double unitPrice;
     private LocalDateTime lastUpdated;
+    private int minimumStock;
+    private String autoOrder;
+    private Integer autoOrderQauntity;
+
 }
