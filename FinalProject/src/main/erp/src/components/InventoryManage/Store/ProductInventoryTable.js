@@ -1,4 +1,5 @@
 import React from 'react';
+import './InventoryTables.css'; 
 
 const ProductInventoryTable = ({ products }) => {
     return (
@@ -13,23 +14,22 @@ const ProductInventoryTable = ({ products }) => {
                         <th>원가</th>
                         <th>판매가</th>
                         <th>매장 수량</th>
-                        {/* <th>생산 날짜</th> */}
-                        {/* <th>추천 여부</th> */}
-                        {/* <th>제품 설명</th> */}
+                        {/* <th>최소 수량</th> */}
                     </tr>
                 </thead>
                 <tbody>
                     {products.map(product => (
-                        <tr key={product.productId}>
-                            <td>{product.productId}</td>
-                            <td>{product.productName}</td>
-                            <td>{product.productCategory}</td>
-                            <td>{product.unitPrice}</td>
-                            <td>{product.salePrice}</td>
-                            <td>{product.quantityInStore}</td>
-                            {/* <td>{new Date(product.productionDate).toLocaleDateString()}</td> */}
-                            {/* <td>{product.recommend}</td> */}
-                            {/* <td>{product.detailDescription}</td> */}
+                        <tr 
+                            key={product.productId}
+                            className={product.quantityInStore < product.minimumStock ? 'table-danger text-bold' : ''}
+                        >
+                            <td className={product.quantityInStore < product.minimumStock ? 'text-red' : ''}>{product.productId}</td>
+                            <td className={product.quantityInStore < product.minimumStock ? 'text-red' : ''}>{product.productName}</td>
+                            <td className={product.quantityInStore < product.minimumStock ? 'text-red' : ''}>{product.productCategory}</td>
+                            <td className={product.quantityInStore < product.minimumStock ? 'text-red' : ''}>{product.unitPrice}</td>
+                            <td className={product.quantityInStore < product.minimumStock ? 'text-red' : ''}>{product.salePrice}</td>
+                            <td className={product.quantityInStore < product.minimumStock ? 'text-red' : ''}>{product.quantityInStore}</td>
+                            {/* <td>{product.minimumStock}</td> */}
                         </tr>
                     ))}
                 </tbody>

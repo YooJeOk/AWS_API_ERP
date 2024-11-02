@@ -30,29 +30,31 @@ function InvenSidebar() {
             }}
         >
             <div className="sidebar-menu" >
-            <div className="dropdown">
+                <div className="dropdown">
                     <button className="menu-item" style={{ backgroundColor: '#F0C490', color: 'white' }}>재고 관리</button>
                     <ul className="dropdown-menu">
                         <li><Link to="/FactoryInventory">공장 재고 조회</Link></li>
                         <li><Link to="/StoreInventory">매장 재고 조회</Link></li>
                     </ul>
                 </div>
+                
+                <div className="dropdown">
+                        <button className="menu-item" style={{ backgroundColor: '#F0C490', color: 'white' }}>매장 주문 관리</button>
+                        <ul className="dropdown-menu">
+                            <li><Link to="/InputOrder">매장 주문 신청</Link></li>
+                            <li><Link to="/StoreInventory">매장 주문 내역</Link></li>
+                        </ul>
+                </div>
 
                 <div className="dropdown">
-                    <Link to="/KioskSelect">
+                    <Link to="/AutoOrderPage">
                         <button className="menu-item" style={{ backgroundColor: '#F0C490', color: 'white' }}>
-                            입고 관리
+                            자동 발주 관리
                         </button>
                     </Link>
                 </div>
 
-                <div className="dropdown">
-                    <Link to="/KioskSelect">
-                        <button className="menu-item" style={{ backgroundColor: '#F0C490', color: 'white' }}>
-                            출고 관리
-                        </button>
-                    </Link>
-                </div>
+
             </div>
         </div>
     );
