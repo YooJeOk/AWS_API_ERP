@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import ProductInventoryTable from '../../components/InventoryManage/ProductInventoryTable';
-import MaterialsInventoryTable from '../../components/InventoryManage/MaterialsInventoryTable';
+import ProductInventoryTable from '../../components/InventoryManage/Store/ProductInventoryTable';
+import MaterialsInventoryTable from '../../components/InventoryManage/Store/MaterialsInventoryTable';
 import Pagination from '../../components/InventoryManage/Pagination';
 import './StoreInventory.css';  
 
@@ -31,6 +31,7 @@ const StoreInventory = () => {
 
     return (
         <div className='store-inven-container container-md mt-4'>
+            <h3 className='text-center'>매장 재고</h3>
             <div className='product-container'>
                 <div className='product-table'>
                     <ProductInventoryTable products={productInventory.content} />
