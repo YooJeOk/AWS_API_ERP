@@ -144,7 +144,7 @@ function MBOMForm() {
                     </div>
 
                     <div className="fixed-section" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-                        <table className="production-table" style={{ width: '60%' }}>
+                        <table className="table production-table" style={{ width: '60%' }}>
                             <thead>
                                 <tr>
                                     <th>상품ID</th>
@@ -186,7 +186,7 @@ function MBOMForm() {
 
                     <div style={{ display: 'flex', gap: '20px', marginTop: '20px' }}>
                         <div style={{ flex: '1', maxHeight: '600px', overflowY: 'auto', border: '1px solid #ddd', borderRadius: '4px' }}>
-                            <table className="production-table" style={{ width: '100%' }}>
+                            <table className="table production-table" style={{ width: '100%' }}>
                                 <thead>
                                     <tr>
                                         <th></th>

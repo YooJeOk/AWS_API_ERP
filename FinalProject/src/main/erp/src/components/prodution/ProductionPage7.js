@@ -42,15 +42,15 @@ function Production7() {
                             생성
                         </button>
                     </div>
-                    <table className="production-table" style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
+                    <table className="table production-table" style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
                         <thead>
                             <tr>
-                                <th style={{ width: '10%', padding: '10px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>주문ID</th>
-                                <th style={{ width: '15%', padding: '10px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>상품명</th>
-                                <th style={{ width: '10%', padding: '10px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>검사 수량</th>
-                                <th style={{ width: '20%', padding: '10px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>검사 날짜</th>
-                                <th style={{ width: '15%', padding: '10px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>검사 결과</th>
-                                <th style={{ width: '20%', padding: '10px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>기타 사항</th>
+                                <th style={{ width: '10%', padding: '10px', border: '1px solid #ddd',  }}>주문ID</th>
+                                <th style={{ width: '15%', padding: '10px', border: '1px solid #ddd',  }}>상품명</th>
+                                <th style={{ width: '10%', padding: '10px', border: '1px solid #ddd',  }}>검사 수량</th>
+                                <th style={{ width: '20%', padding: '10px', border: '1px solid #ddd',  }}>검사 날짜</th>
+                                <th style={{ width: '15%', padding: '10px', border: '1px solid #ddd',  }}>검사 결과</th>
+                                <th style={{ width: '20%', padding: '10px', border: '1px solid #ddd',  }}>기타 사항</th>
                             </tr>
                         </thead>
                         <tbody>

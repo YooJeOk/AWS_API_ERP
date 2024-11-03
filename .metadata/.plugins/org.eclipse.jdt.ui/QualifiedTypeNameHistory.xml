@@ -24,9 +24,7 @@
     <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.config.JpaRepositoryNameSpaceHandler"/>
     <fullyQualifiedTypeName name="org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration"/>
     <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.cdi.JpaRepositoryExtension"/>
-    <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.Query"/>
     <fullyQualifiedTypeName name="java.util.List"/>
-    <fullyQualifiedTypeName name="org.springframework.http.ResponseEntity"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.MBOM.entity.MBOMDetailDTO"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.MBOM.entity.MBOM"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.MBOM.entity.MBOMDTO"/>
@@ -34,7 +32,23 @@
     <fullyQualifiedTypeName name="io.opencensus.common.ServerStatsFieldEnums.Size"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.MBOM.entity.MBOM.ItemType"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.MBOM.entity.MBOM.Size"/>
-    <fullyQualifiedTypeName name="org.springframework.data.repository.query.Param"/>
-    <fullyQualifiedTypeName name="lombok.Data"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.DefectManagement.repository.DefectManagementRepository"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.DefectManagement.entity.DefectManagement"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PutMapping"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.Entry.repository.ProductionEntryRepository"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.Entry.service.ProductionEntryService"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.Entry.entity.ProductionEntry"/>
+    <fullyQualifiedTypeName name="com.google.common.base.Optional"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.GetMapping"/>
+    <fullyQualifiedTypeName name="org.springframework.http.ResponseEntity"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.DefectManagement.service.DefectManagementService"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PathVariable"/>
+    <fullyQualifiedTypeName name="org.springframework.http.HttpStatus"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestBody"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PostMapping"/>
+    <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.Query"/>
     <fullyQualifiedTypeName name="java.util.Optional"/>
+    <fullyQualifiedTypeName name="org.springframework.data.repository.query.Param"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.Entry.entity.ProductionEntryRequest"/>
+    <fullyQualifiedTypeName name="lombok.Data"/>
 </qualifiedTypeNameHistroy>

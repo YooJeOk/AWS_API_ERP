@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, Routes, Route } from 'react-router-dom';
 import InputForm8 from './InputForm8';
-
+import './ProductionPage.css';
 
 function ProductionTable() {
     const [data, setData] = useState([]);
@@ -187,7 +187,7 @@ function ProductionTable() {
                     <div className="production-display" style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <div className="production-table-container" style={{ width: "60%", marginBottom: '20px' }}>
                             <h2 style={{ fontSize: '24px' }}>{selectedItem || "생산 품목을 선택하세요"}</h2>
-                            <table className="production-table" style={{ tableLayout: 'fixed', width: '100%' }}>
+                            <table className="table production-table" style={{ tableLayout: 'fixed', width: '100%' }}>
                                 <thead>
                                     <tr>
                                         <th>소모 품목</th>

@@ -39,7 +39,7 @@ function Production6() {
                             생성
                         </button>
                     </div>
-                    <table className="production-table">
+                    <table className="table production-table">
                         <thead>
                             <tr>
                                 <th>품질 관리ID</th>
