@@ -8,7 +8,7 @@ function MBOMForm() {
             entryDate: '',
             orderID: '',
             productID: '',
-            productName: '', // 제품명 추가
+            productName: '',
             quantity: '',
             etc: ''
         }
@@ -23,9 +23,16 @@ function MBOMForm() {
         setFormData(newFormData);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('입고 등록 데이터:', formData);
+        try {
+            const response = await axios.post('/api/production-entry', formData);
+            console.log('입고 등록 성공:', response.data);
+            alert('입고 등록이 완료되었습니다.');
+        } catch (error) {
+            console.error('입고 등록 오류:', error);
+            alert('입고 등록 중 오류가 발생했습니다.');
+        }
     };
 
     return (

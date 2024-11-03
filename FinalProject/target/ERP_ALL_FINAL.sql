@@ -266,7 +266,6 @@ CREATE TABLE DefectManagement (
     ProductName       VARCHAR(100)  NOT NULL,                  -- 상품명
     DefectType        VARCHAR(50)   NOT NULL,                  -- 불량 유형
     DefectQuantity    INT           NOT NULL,                  -- 불량 수량
-    DefectTimestamp   DATETIME      NOT NULL,                  -- 불량 발견 시간
     CauseDescription  VARCHAR(255)  NULL,                      -- 불량 원인 설명
     Status            ENUM('미처리', '완료') DEFAULT '미처리', -- 불량 처리 상태
     Defectrate        INT           DEFAULT 0 NULL,            -- 불량률
@@ -277,21 +276,22 @@ CREATE TABLE DefectManagement (
 
 -- 19 생산 입고 테이블 (ProductionEntry)
 CREATE TABLE ProductionEntry (
-    EntryID       INT           NOT NULL AUTO_INCREMENT,  -- 입고ID
-    QCID          INT           NOT NULL,  -- 품질관리ID
-    OrderID       INT           NOT NULL,  -- 주문ID
-    Quantity      INT           NOT NULL,      -- 수량
-    ProductID     INT           NOT NULL COMMENT 'PK', -- 상품ID
-    ProductName   VARCHAR(100)  NOT NULL,      -- 상품명
-    EntryDate     DATE          NOT NULL,      -- 입고날짜
-    etc              VARCHAR(100)      NULL, -- 기타
-    PRIMARY KEY (`EntryID`, `QCID`, `OrderID`, `Quantity`, `ProductID`, `ProductName`),
+    EntryID       INT           NOT NULL AUTO_INCREMENT,  -- 입고ID (기본 키)
+    QCID          INT           NOT NULL,                 -- 품질관리ID
+    OrderID       INT           NOT NULL,                 -- 주문ID
+    Quantity      INT           NOT NULL,                 -- 수량
+    ProductID     INT           NOT NULL,                 -- 상품ID
+    ProductName   VARCHAR(100)  NOT NULL,                 -- 상품명
+    EntryDate     DATE          NOT NULL,                 -- 입고날짜
+    etc           VARCHAR(100)  NULL,                     -- 기타
+    PRIMARY KEY (`EntryID`),
     FOREIGN KEY (`QCID`) REFERENCES `QualityControl` (`QCID`),
     FOREIGN KEY (`OrderID`) REFERENCES `QualityControl` (`OrderID`),
-	FOREIGN KEY (`Quantity`) REFERENCES `QualityControl` (`Quantity`),
+    FOREIGN KEY (`Quantity`) REFERENCES `QualityControl` (`Quantity`),
     FOREIGN KEY (`ProductID`) REFERENCES `QualityControl` (`ProductID`),
     FOREIGN KEY (`ProductName`) REFERENCES `QualityControl` (`ProductName`)
 );
+
 
 -- 20. 매장 재고 (StoreInventory)
 CREATE TABLE ERP.StoreInventory (
@@ -629,12 +629,12 @@ VALUES
 
 
 -- 18. 불량 관리 (DefectManagement)
-INSERT INTO DefectManagement (QCID, OrderID, Quantity, ProductID, ProductName, DefectType, DefectQuantity, DefectTimestamp, CauseDescription, Status, Defectrate, etc)
+INSERT INTO DefectManagement (QCID, OrderID, Quantity, ProductID, ProductName, DefectType, DefectQuantity,  CauseDescription, Status, Defectrate, etc)
 VALUES
-    (2, 2, 150, 2, '단팥도넛', '색상 불량', 20, '2024-10-29 18:30:00', '원료 문제', '미처리', 13, NULL),
-    (4, 4, 180, 4, '꽈베기', '크기 불일치', 30, '2024-10-31 16:30:00', '기계 오작동', '미처리', 16, NULL),
-    (2, 2, 150, 2, '단팥도넛', '형태 불량', 10, '2024-10-29 19:00:00', '성형 문제', '완료', 6, NULL),
-    (4, 4, 180, 4, '꽈베기', '표면 오염', 5, '2024-10-31 17:00:00', '작업 환경 불량', '완료', 3, NULL);
+    (1, 4, 150, 2, '단팥도넛', '색상 불량', 20,  '원료 문제', '미처리', 13, NULL),
+    (2, 4, 180, 4, '꽈베기', '크기 불일치', 30,  '기계 오작동', '미처리', 16, NULL),
+    (3, 2, 150, 2, '단팥도넛', '형태 불량', 10,  '성형 문제', '완료', 6, NULL),
+    (4, 4, 180, 4, '꽈베기', '표면 오염', 5,  '작업 환경 불량', '완료', 3, NULL);
 
 -- 19. 생산 입고 (ProductionEntry)
 INSERT INTO ProductionEntry (QCID, OrderID, Quantity, ProductID, ProductName, EntryDate, etc)
