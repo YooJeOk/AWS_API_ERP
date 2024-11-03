@@ -17,7 +17,7 @@ public interface StoreInventoryRepository  extends JpaRepository<StoreInventory,
 	 
 	 List<StoreInventory> findAllByMaterialId(Long materialId);
 	 
-	 
+	 Optional<StoreInventory> findByProductIdOrMaterialId(Long productId, Long materialId);
 	 
 
 }

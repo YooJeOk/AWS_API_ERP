@@ -2,6 +2,7 @@ package com.ERP.FinalProject.domain.inventory.entity;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,8 +30,14 @@ public class Order {
     private int quantity;
     private String unit;
     private String orderType;
-    private String OrderStatus;
+    private String orderStatus;
     private LocalDateTime orderDate;
+    private LocalDateTime completedDate;
+    
+    @Column(name = "ProductID")
+    private Long productId;
 
+    @Column(name = "MaterialID")
+    private Long materialId;
     
 }

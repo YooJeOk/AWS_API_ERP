@@ -36,6 +36,4 @@ public class Product {
     private String recommend;
     private String detailDescription;
     private int minimumStock;
-    private String autoOrder;
-    private Integer autoOrderQauntity;
 }

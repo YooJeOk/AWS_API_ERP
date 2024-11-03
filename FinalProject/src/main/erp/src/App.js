@@ -32,12 +32,14 @@ import InvenSidebar from './components/InventoryManage/InvenSidebar';
 import StoreInventory from './pages/InventoryManage/StoreInventory';
 import FactoryInventory from './pages/InventoryManage/FactoryInventory';
 import InputOrder from './pages/InventoryManage/InputOrder';
-import AutoOrderPage from './pages/InventoryManage/AutoOrderPage';
+import OrderHistory from './pages/InventoryManage/OrderHistory';
+import OrderComplete from './pages/InventoryManage/OrderComplete';
 
 //키오스크 관리
 import KioskSidebar from './components/KioskManagement/KioskSidebar';
 import KioskInventory from './pages/KioskManagement/KioskInventory';
 import KioskRegister from './pages/KioskManagement/KioskRegister';
+
 
 function App() {
     return (
@@ -78,8 +80,11 @@ function App() {
                     <Route path="/FactoryInventory" element={<InvenSidebarWrapper><FactoryInventory /></InvenSidebarWrapper>} />
                     <Route path="/StoreInventory" element={<InvenSidebarWrapper><StoreInventory /></InvenSidebarWrapper>} />
                     <Route path="/InputOrder" element={<InvenSidebarWrapper><InputOrder /></InvenSidebarWrapper>} />
-                    <Route path="/AutoOrderPage" element={<InvenSidebarWrapper><AutoOrderPage /></InvenSidebarWrapper>} />
+                    <Route path="/OrderHistory" element={<InvenSidebarWrapper><OrderHistory /></InvenSidebarWrapper>} />
+                    <Route path="/OrderComplete" element={<InvenSidebarWrapper><OrderComplete /></InvenSidebarWrapper>} />
 
+                    
+                    
                     
                     {/* 키오스크 관리 사이드바 */}
                     <Route path="/KioskInventory" element={<KioskSidebarWrapper><KioskInventory /></KioskSidebarWrapper>} />
