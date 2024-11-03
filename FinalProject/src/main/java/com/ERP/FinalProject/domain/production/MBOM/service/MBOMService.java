@@ -38,15 +38,30 @@ public class MBOMService {
         MBOM mbom = new MBOM();
         mbom.setBomId(mbomData.getBOMID());
         mbom.setItemId(mbomData.getItemID());
-        mbom.setItemType(mbomData.getItemType());
-        mbom.setSize(mbomData.getSize());
+
+        // Enum 값 매핑 및 null 체크
+        if (mbomData.getItemType() != null) {
+            mbom.setItemType(mbomData.getItemType());
+        } else {
+            System.out.println("itemType is null, defaulting to Product");
+            mbom.setItemType(ItemType.Product);  // 기본값 설정 (필요한 경우)
+        }
+
+        if (mbomData.getSize() != null) {
+            mbom.setSize(mbomData.getSize());
+        } else {
+            System.out.println("size is null, setting default to Regular");
+            mbom.setSize(Size.Regular);  // 기본값 설정 (필요한 경우)
+        }
+
         mbom.setMaterialId(mbomData.getMaterialID());
         mbom.setProductName(mbomData.getProductName());
         mbom.setQuantity(mbomData.getQuantity());
         mbom.setUnit(mbomData.getUnit());
         mbom.setUnitPrice(mbomData.getUnitPrice());
         mbom.setTotalCost(mbomData.getTotalCost());
-        
+
+        // 저장
         mbomRepository.save(mbom);
     }
 
