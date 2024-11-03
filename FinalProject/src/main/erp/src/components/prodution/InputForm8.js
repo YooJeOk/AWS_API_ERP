@@ -26,7 +26,6 @@ function MBOMForm() {
     const [itemIdError, setItemIdError] = useState('');
     const size = 10;
 
-    // 공장 재고 재료 목록 가져오기
     useEffect(() => {
         fetch(`/api/factory/inventory/materials?page=${page}&size=${size}`)
             .then(response => response.json())
@@ -34,7 +33,6 @@ function MBOMForm() {
             .catch(error => console.error('Error fetching material list:', error));
     }, [page]);
 
-    // ItemID 입력 시 숫자, 양수 여부 확인 및 중복 체크
     const validateItemID = (value) => {
         if (isNaN(value) || value <= 0) {
             setItemIdError('0보다 큰 숫자만 입력 가능합니다.');
@@ -65,14 +63,13 @@ function MBOMForm() {
         }
     };
 
-    // 각 재료 행의 변경을 처리하고 총단가 자동 계산
     const handleChange = (index, e) => {
         const newFormData = [...formData];
         newFormData[index] = {
             ...newFormData[index],
             [e.target.name]: e.target.value
         };
-        calculateTotalCost(index, newFormData); // 실시간 총단가 계산
+        calculateTotalCost(index, newFormData);
         setFormData(newFormData);
     };
 
@@ -86,7 +83,6 @@ function MBOMForm() {
         handleChange(index, e);
     };
 
-    // 재료 선택 시 MaterialName 자동 입력
     const handleMaterialIDChange = (index, e) => {
         const materialId = e.target.value;
         const selectedMaterial = materialList.find(material => material.materialId === parseInt(materialId));
@@ -96,7 +92,6 @@ function MBOMForm() {
         setFormData(newFormData);
     };
 
-    // 재료 행 추가
     const addRow = () => {
         if (formData.length < 15) {
             setFormData([
@@ -113,38 +108,51 @@ function MBOMForm() {
         }
     };
 
-    // 재료 행 삭제
     const deleteRow = (index) => {
         const newFormData = formData.filter((_, i) => i !== index);
         setFormData(newFormData);
     };
 
-    // 전체 총단가 합산
     const getTotalCostSum = () => {
         return formData.reduce((sum, row) => sum + parseFloat(row.TotalCost || 0), 0).toFixed(2);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (itemIdError) {
             alert(itemIdError);
             return;
         }
 
         try {
-            const response = await fetch('http://localhost:8080/api/mbom/create', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ ...fixedData, materials: formData }),
-            });
-            if (response.ok) {
-                alert("MBOM 데이터가 성공적으로 저장되었습니다.");
-            } else {
-                alert("데이터 저장 중 오류가 발생했습니다.");
+            const formattedDataArray = formData.map((material) => ({
+                ItemID: parseInt(fixedData.ItemID),
+                ItemType: fixedData.ItemType,
+                ProductName: fixedData.ProductName,
+                Size: fixedData.Size || null,
+                MaterialID: parseInt(material.MaterialID),
+                Quantity: parseFloat(material.Quantity),
+                Unit: material.Unit,
+                UnitPrice: parseFloat(material.UnitPrice),
+                TotalCost: parseFloat(material.TotalCost)
+            }));
+
+            for (const formattedData of formattedDataArray) {
+                const response = await fetch('http://localhost:8080/api/mbom/save', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formattedData),
+                });
+
+                if (!response.ok) {
+                    throw new Error("데이터 저장 중 오류가 발생했습니다.");
+                }
             }
+
+            alert("MBOM 데이터가 성공적으로 저장되었습니다.");
         } catch (error) {
             console.error("Error:", error);
             alert("서버 오류가 발생했습니다.");
@@ -153,7 +161,6 @@ function MBOMForm() {
 
     const [totalPages, setTotalPages] = useState(0);
 
-    // 재료 목록 페이지네이션
     useEffect(() => {
         fetch(`http://localhost:8080/api/factory/inventory/materials?page=${page}&size=19`)
             .then(response => response.json())
