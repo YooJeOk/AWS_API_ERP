@@ -1,43 +1,28 @@
 package com.ERP.FinalProject.domain.production.Entry.entity;
 
 import javax.persistence.*;
-
-import lombok.Data;
-
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
-@Data
 public class ProductionEntry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer EntryID; // 입고 ID (기본 키)
+    private Integer entryId; // 자동 증가하는 입고 ID
 
-    @Column(nullable = false)
-    private Integer QCID; // 품질관리 ID
+    private Integer orderId;
+    private Integer qcid;
+    private Integer quantity;
+    private Integer productId;
+    private String productName;
+    private LocalDate entryDate;
+    private String etc;
 
-    @Column(nullable = false)
-    private Integer OrderID; // 주문 ID
-
-    @Column(nullable = false)
-    private Integer quantity; // 수량
-
-    @Column(nullable = false)
-    private Integer productId; // 상품 ID
-
-    @Column(nullable = false, length = 100)
-    private String productName; // 상품명
-
-    @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date entryDate; // 입고 날짜
-
-    @Column(length = 100)
-    private String etc; // 기타 정보
+    // 기본 생성자
+    public ProductionEntry() {
+    }
 
     // Getters and Setters
-
     public Integer getEntryId() {
         return entryId;
     }
@@ -46,20 +31,20 @@ public class ProductionEntry {
         this.entryId = entryId;
     }
 
-    public Integer getQcid() {
-        return qcid;
-    }
-
-    public void setQcid(Integer qcid) {
-        this.qcid = qcid;
-    }
-
     public Integer getOrderId() {
         return orderId;
     }
 
     public void setOrderId(Integer orderId) {
         this.orderId = orderId;
+    }
+
+    public Integer getQcid() {
+        return qcid;
+    }
+
+    public void setQcid(Integer qcid) {
+        this.qcid = qcid;
     }
 
     public Integer getQuantity() {
@@ -86,11 +71,11 @@ public class ProductionEntry {
         this.productName = productName;
     }
 
-    public Date getEntryDate() {
+    public LocalDate getEntryDate() {
         return entryDate;
     }
 
-    public void setEntryDate(Date entryDate) {
+    public void setEntryDate(LocalDate entryDate) {
         this.entryDate = entryDate;
     }
 
@@ -102,4 +87,3 @@ public class ProductionEntry {
         this.etc = etc;
     }
 }
-

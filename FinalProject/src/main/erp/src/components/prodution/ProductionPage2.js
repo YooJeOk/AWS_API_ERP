@@ -13,7 +13,7 @@ function ProductionOrderPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/production-entry');
+                const response = await axios.get('http://localhost:8080/api/production-entries');
                 if (response.status === 200) {
                     console.log("Received data:", response.data);
                     setData(response.data);
@@ -56,12 +56,12 @@ function ProductionOrderPage() {
                             {isDataLoaded ? (
                                 data.map((row, index) => (
                                     <tr key={index}>
-                                        <td>{row.EntryID}</td>
-                                        <td>{row.OrderID}</td>
-                                        <td>{row.QCID}</td>
-                                        <td>{row.ProductName}</td>
-                                        <td>{row.Quantity}</td>
-                                        <td>{row.EntryDate}</td>
+                                        <td>{row.entryId}</td>
+                                        <td>{row.orderId}</td>
+                                        <td>{row.qcid}</td>
+                                        <td>{row.productName}</td>
+                                        <td>{row.quantity}</td>
+                                        <td>{row.entryDate}</td>
                                         <td>{row.etc}</td>
                                     </tr>
                                 ))
