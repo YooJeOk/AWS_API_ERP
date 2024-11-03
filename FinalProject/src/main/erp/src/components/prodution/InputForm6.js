@@ -54,7 +54,7 @@ function MBOMForm() {
                     <h2>미처리된 불량 조회 리스트</h2>
                     {error && <p style={{ color: 'red' }}>{error}</p>}
                     {unprocessedDefects.length > 0 ? (
-                        <table className="production-table">
+                        <table className="table production-table">
                             <thead>
                                 <tr>
                                     <th>품질 관리ID</th>

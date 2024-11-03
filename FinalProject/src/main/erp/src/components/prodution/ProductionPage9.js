@@ -14,7 +14,7 @@ function MBOMView() {
                     <div className="productionbar">
                         <h1>생산 실적 조회</h1>
                     </div>
-                    <table className="production-table">
+                    <table className="table production-table">
                         <thead>
                             <tr>
                                 <th>작업 일자</th>
