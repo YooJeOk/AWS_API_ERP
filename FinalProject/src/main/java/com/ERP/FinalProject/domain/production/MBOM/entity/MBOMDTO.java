@@ -11,7 +11,7 @@ public class MBOMDTO {
     private Long ItemID;
     private ItemType itemType;
     private Size size;
-    private Long materialID;
+    private Long MaterialID;
     private String materialName;
     private String productName;
     private int quantity;
@@ -20,14 +20,14 @@ public class MBOMDTO {
     private int totalCost;
 
     // 생성자
-    public MBOMDTO(int BOMID, Long ItemID, ItemType itemType, Size size, Long materialID, 
+    public MBOMDTO(int BOMID, Long ItemID, ItemType itemType, Size size, Long MaterialID, 
                    String materialName, String productName, int quantity, 
                    String unit, float unitPrice, int totalCost) {
         this.BOMID = BOMID;
         this.ItemID = ItemID;
         this.itemType = itemType;
         this.size = size;
-        this.materialID = materialID;
+        this.MaterialID = MaterialID;
         this.materialName = materialName;
         this.productName = productName;
         this.quantity = quantity;

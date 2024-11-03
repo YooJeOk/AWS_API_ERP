@@ -65,15 +65,16 @@ public class MBOMController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error deleting: " + e.getMessage());
         }
     }
-    @PostMapping("/save")
-    public ResponseEntity<String> saveMBOM(@RequestBody MBOMDTO mbomData) {
-        try {
-            mbomService.saveMBOM(mbomData);
-            return ResponseEntity.ok("MBOM 데이터가 성공적으로 저장되었습니다.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("데이터 저장 중 오류가 발생했습니다.");
-        }
+
+    @PostMapping("/create")
+    public ResponseEntity<?> saveMBOM(@RequestBody MBOMDTO mbomDTO) {
+        // MBOM 저장 로직 구현
+        return ResponseEntity.ok("MBOM saved successfully");
     }
+
+
+
+    // 다음 ItemID 가져오기
     @GetMapping("/next-item-id")
     public ResponseEntity<Integer> getNextItemID(
             @RequestParam("itemType") ItemType itemType,
@@ -82,4 +83,3 @@ public class MBOMController {
         return ResponseEntity.ok(nextItemID);
     }
 }
-

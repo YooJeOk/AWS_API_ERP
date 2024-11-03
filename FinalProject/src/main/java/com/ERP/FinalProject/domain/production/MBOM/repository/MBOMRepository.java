@@ -22,7 +22,7 @@ public interface MBOMRepository extends JpaRepository<MBOM, Integer> {
     List<MBOMDTO> findAllWithMaterialName();
 	List<MBOM> findByItemIdAndItemTypeAndSize(Long itemId, MBOM.ItemType itemType, MBOM.Size size);
 
-	@Query("SELECT MAX(m.itemId) FROM MBOM m WHERE m.itemType = :itemType AND m.size = :size")
-	Integer findLastItemIDByTypeAndSize(@Param("itemType") MBOM.ItemType itemType, @Param("size") MBOM.Size size);
-
+	// 새로운 메서드 추가 (기존 쿼리를 그대로 사용)
+    @Query("SELECT MAX(m.itemId) FROM MBOM m WHERE m.itemType = :itemType AND m.size = :size")
+    Integer findMaxItemIDForTypeAndSize(@Param("itemType") MBOM.ItemType itemType, @Param("size") MBOM.Size size);
 }

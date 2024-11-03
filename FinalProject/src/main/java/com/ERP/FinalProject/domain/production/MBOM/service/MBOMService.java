@@ -22,12 +22,10 @@ public class MBOMService {
         this.mbomRepository = mbomRepository;
     }
 
-    // 기본 MBOM 엔티티 리스트 반환
     public List<MBOM> getAllMBOMs() {
         return mbomRepository.findAll();
     }
 
-    // MBOMDTO 리스트 반환 (materialName 포함)
     public List<MBOMDTO> getAllMBOMDTOs() {
         return mbomRepository.findAllWithMaterialName();
     }
@@ -52,7 +50,6 @@ public class MBOMService {
         mbomRepository.save(mbom);
     }
 
-
     public MBOM updateMBOM(int id, MBOM mbom) {
         if (mbomRepository.existsById(id)) {
             mbom.setBomId(id);
@@ -65,13 +62,13 @@ public class MBOMService {
         try {
             mbomRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            // 존재하지 않는 ID로 인한 예외를 무시하거나 로그를 기록할 수 있습니다.
             System.out.println("삭제하려는 MBOM ID가 존재하지 않습니다: " + id);
         }
     }
+
+    // 다음 ItemID 계산 (새로운 메서드 호출)
     public Integer getNextItemID(ItemType itemType, Size size) {
-        Integer lastItemID = mbomRepository.findLastItemIDByTypeAndSize(itemType, size);
-        return (lastItemID != null ? lastItemID + 1 : 1); // 마지막 ID + 1 또는 1 반환
+        Integer lastItemID = mbomRepository.findMaxItemIDForTypeAndSize(itemType, size);
+        return (lastItemID != null ? lastItemID + 1 : 1);
     }
 }
-
