@@ -109,7 +109,7 @@ function MBOMForm() {
                         <h1>품질검사 등록</h1>
                     </div>
                     <form id="mbom-form" onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
-                        <table className="table production-table" style={{ marginBottom: '20px' }}>
+                        <table className="production-table" style={{ marginBottom: '20px' }}>
                             <thead>
                                 <tr>
                                     <th>주문ID</th>

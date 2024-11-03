@@ -58,8 +58,8 @@ public class DefectManagementService {
     }
 
     
-    // QCID를 기반으로 불량 수량 조회
-    public int getDefectQuantityByQCID(String qcid) {
-        return defectManagementRepository.findDefectQuantityByQCID(qcid).orElse(0);
+ // QCID를 기반으로 불량 수량 조회
+    public int getDefectQuantityByQCID(int qcid) {  // `qcid` 타입을 `int`로 설정
+        return defectManagementRepository.findDefectQuantityByQCID(qcid).orElse(0);  
     }
 }
