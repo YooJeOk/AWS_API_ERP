@@ -39,8 +39,8 @@ function Header() {
                         <div className="nav-button-dropdown">
                             <div className="dropdown-content">
                                 <a href="/FactoryInventory">재고 관리</a>
-                                <a href="/InputOrder">매장 주문 관리</a>
-                                <a href="/AutoOrderPage">자동 발주 관리</a>
+                                <a href="/InputOrder">주문 신청</a>
+                                <a href="/OrderHistory">주문 내역 관리</a>
                             </div>
                         </div>
                     </div>

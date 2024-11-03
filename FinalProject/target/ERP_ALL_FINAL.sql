@@ -14,9 +14,10 @@ CREATE TABLE ERP.Product (
     OnKiosk varchar(30) check (OnKiosk in ('Y','N')), -- 제품이 키오스크에 있는지 확인용
     Recommend varchar(30) check (Recommend in ('Y','N')), -- 제품 추천여부(키오스크용)
     DetailDescription varchar(300) NULL, -- 제품 설명(키오스크용)
+    MinimumStock INT NOT NULL DEFAULT 0, -- 최소재고 
     PRIMARY KEY (ProductID)
-     
 );
+
 
 -- 2. 공급업체 (Suppliers)
 CREATE TABLE ERP.Suppliers (
@@ -38,10 +39,10 @@ CREATE TABLE ERP.MaterialsInventory (
     Unit VARCHAR(50) NULL, -- 단위 (g, ml 등)
     UnitPrice float NULL, -- 단가
     LastUpdated DATETIME NULL, -- 최종 업데이트
+    MinimumStock INT NOT NULL DEFAULT 0, -- 최소 재고
     PRIMARY KEY (MaterialID),
     FOREIGN KEY (SupplierID) REFERENCES ERP.Suppliers(SupplierID)
 );
-
 
 -- 4. 원자재 입고 이력 (RawMaterialRestockHistory)
 CREATE TABLE ERP.RawMaterialRestockHistory (
@@ -97,10 +98,10 @@ CREATE TABLE ERP.Coffee (
     CoffeeName VARCHAR(50) NULL, -- 커피 이름
     SalePrice INT NULL, -- 판매가
     CoffeeImage VARCHAR(200) NULL, -- 커피 이미지
-	OnKiosk varchar(30) check (OnKiosk in ('Y','N')), -- 커피가 키오스크에 있는지 확인용
-	Recommend varchar(30) check (Recommend in ('Y','N')), -- 제품 추천여부(키오스크용)
+   OnKiosk varchar(30) check (OnKiosk in ('Y','N')), -- 커피가 키오스크에 있는지 확인용
+   Recommend varchar(30) check (Recommend in ('Y','N')), -- 제품 추천여부(키오스크용)
     Temperature varchar(30) check (Temperature in ('ICE','HOT')), -- 제품 온도(ICE 이거나 HOT이거나)
-	DetailDescription varchar(300) NULL, -- 제품 설명(키오스크용)
+   DetailDescription varchar(300) NULL, -- 제품 설명(키오스크용)
     PRIMARY KEY (CoffeeID)
 );
 -- 9. 커피부가옵션
@@ -109,7 +110,7 @@ CREATE TABLE ERP.CoffeeOptions (
     MaterialID INT NOT NULL, -- 원자재 ID를 참조
     Name VARCHAR(100) NOT NULL, -- 옵션 이름
     Price INT NOT NULL, -- 옵션 가격 (추가 금액)
-	Quantity INT NOT NULL,             -- 수량
+   Quantity INT NOT NULL,             -- 수량
     PRIMARY KEY (OptionID),
     FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
 );
@@ -146,7 +147,7 @@ CREATE TABLE ERP.CoffeeOptionSalesDetails (
     OptionQuantity INT NOT NULL, -- 옵션 수량
     OptionPrice INT NOT NULL, -- 옵션 가격
     OptionSize varchar(50) NOT NULL, -- 옵션 사이즈
-	OptionTemperature varchar(50) NOT NULL, -- 옵션 온도
+   OptionTemperature varchar(50) NOT NULL, -- 옵션 온도
     PRIMARY KEY (CoffeeOptionDetailID),
     FOREIGN KEY (SaleDetailID) REFERENCES ERP.SalesDetails(SaleDetailID),
     FOREIGN KEY (OptionID) REFERENCES ERP.CoffeeOptions(OptionID)
@@ -178,7 +179,7 @@ CREATE TABLE ERP.ProductionPlanning (
     OrderID INT NOT NULL, -- 작업 지시ID
     ProductID INT NOT NULL, -- 제품ID
     ProductName   VARCHAR(100)  NOT NULL,      -- 상품명
-	Quantity       INT           NOT NULL,      -- 수량
+   Quantity       INT           NOT NULL,      -- 수량
     StartDate DATETIME NOT NULL, -- 시작 시간
     EndDate DATETIME NOT NULL, -- 시작 시간
     etc VARCHAR(100) NULL, -- 기타
@@ -222,7 +223,7 @@ CREATE TABLE ERP.ProductionMonitoring (
 -- 각 제품의 공정 진행 상태를 추적할 수 있습니다. 이 방식으로 세부적인 생산 공정을 관리하고, 전체 생산 상태를 확인할 수 있습니다
 CREATE TABLE ProductionProcessStatus (
     MonitorID INT NOT NULL,                        -- ProductionMonitoring 테이블과 연계
-	Status            VARCHAR(50) NULL,            -- 상태(대기,작업중,완료,위험,경고)
+   Status            VARCHAR(50) NULL,            -- 상태(대기,작업중,완료,위험,경고)
     WeighingComplete BOOLEAN DEFAULT FALSE,        -- 재료 계량 완료 여부 (약 10분)
     DoughComplete BOOLEAN DEFAULT FALSE,           -- 반죽 완료 여부 (약 20분)
     FirstFermentationComplete BOOLEAN DEFAULT FALSE, -- 1차 발효 완료 여부 (약 1시간)
@@ -286,11 +287,9 @@ CREATE TABLE ProductionEntry (
     etc           VARCHAR(100)  NULL,                     -- 기타
     PRIMARY KEY (`EntryID`),
     FOREIGN KEY (`QCID`) REFERENCES `QualityControl` (`QCID`),
-    FOREIGN KEY (`OrderID`) REFERENCES `QualityControl` (`OrderID`),
-    FOREIGN KEY (`Quantity`) REFERENCES `QualityControl` (`Quantity`),
-    FOREIGN KEY (`ProductID`) REFERENCES `QualityControl` (`ProductID`),
-    FOREIGN KEY (`ProductName`) REFERENCES `QualityControl` (`ProductName`)
+    FOREIGN KEY (`OrderID`) REFERENCES `WorkOrders` (`OrderID`)
 );
+
 
 
 -- 20. 매장 재고 (StoreInventory)
@@ -360,6 +359,23 @@ CREATE TABLE UserStamp (
     stamp INT DEFAULT 0,
     coupon INT DEFAULT 0
 );
+-- 26. 주문 내역
+CREATE TABLE OrderHistory (
+    OrderID INT AUTO_INCREMENT PRIMARY KEY,
+    Category VARCHAR(50) NOT NULL,
+	ProductID INT, -- 제품ID
+    MaterialID INT, -- 자재ID
+    ProductName VARCHAR(100) NOT NULL,
+    Quantity INT NOT NULL,
+    Unit VARCHAR(20) NOT NULL,
+    OrderType VARCHAR(50) DEFAULT '수동입력',
+    OrderStatus VARCHAR(50) DEFAULT '미처리',
+    OrderDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    CompletedDate DATETIME,
+	FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID),
+    FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
+    
+);
 
 DELIMITER //
 
@@ -374,22 +390,23 @@ BEGIN
 END; //
 
 DELIMITER ;
-INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, OnKiosk,Recommend, DetailDescription)
+
+-- Product 테이블에 데이터 삽입
+INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, OnKiosk, Recommend, DetailDescription, MinimumStock)
 VALUES 
--- 상품 insert문
-('갈릭꽈베기', 'bread', 2000, 3500, '2024-01-01', '/images/bread/갈릭꽈배기.jpg','Y', 'Y', '결결이 바삭한 식감의 패스트리에 알싸한 남해 마늘의 진한 맛과 향이 더해진 간식형 제품'),
-('단팥도넛', 'bread', 2500, 3700, '2024-01-01', '/images/bread/단팥도넛.jpg','Y', 'N', '달콤한 팥 앙금이 가득한 부드러운 도넛으로 전통과 현대의 맛이 조화로운 디저트'),
-('고구마케이크빵', 'bread', 1800, 3000, '2024-01-01', '/images/bread/고구마케이크빵.jpg', 'Y','Y', '부드러운 빵 속에 달콤한 고구마 필링이 가득한 케이크 스타일의 빵'),
-('꽈베기', 'bread', 2000, 2500, '2024-01-01', '/images/bread/꽈베기.jpg','Y', 'N', '쫄깃한 식감과 달콤한 맛이 일품인 전통적인 꽈배기'),
-('라우겐', 'bread', 2400, 4000, '2024-01-01', '/images/bread/라우겐.jpg', 'Y','N', '독일식 프레첼 빵으로, 짭짤하고 쫄깃한 식감이 특징인 빵'),
-('베이글빵', 'bread', 2000, 3800, '2024-01-01', '/images/bread/베이글빵.jpg','Y', 'N', '쫄깃한 식감과 부드러운 맛이 일품인 클래식한 베이글'),
-('생크림소보로', 'bread', 2000, 3800, '2024-01-01', '/images/bread/생크림소보로.jpg','Y', 'N', '부드러운 생크림과 바삭한 소보로의 조화가 매력적인 달콤한 빵'),
-('꿀버터바게트', 'bread', 2000, 3800, '2024-01-01', '/images/bread/꿀버터바게트.jpg', 'Y','N', '바삭한 바게트에 꿀과 버터가 스며들어 고소하고 달콤한 맛이 돋보이는 빵'),
-('애플파이', 'bread', 3000, 4500, '2024-01-01', '/images/bread/애플파이.jpg','Y', 'N', '바삭한 페이스트리 속에 달콤하고 상큼한 사과 필링이 가득한 클래식한 디저트'),
-('우유도넛', 'bread', 2200, 3300, '2024-01-01', '/images/bread/우유도넛.jpg', 'Y','N', '부드러운 우유 크림이 가득 들어간 폭신폭신한 도넛으로 은은한 우유 향이 일품'),
-('찹쌀브레드', 'bread', 2800, 4200, '2024-01-01', '/images/bread/찹쌀브레드.jpg', 'Y','N', '쫄깃한 찹쌀의 식감과 부드러운 빵의 조화가 일품인 건강한 맛의 브레드'),
-('카라멜 러스크', 'bread', 3500, 5000, '2024-01-01', '/images/bread/카라멜러스크.jpg', 'N','N', '바삭하게 구운 빵에 달콤한 카라멜을 입힌 고급스러운 간식'),
-('캐찰빵', 'bread', 2600, 3800, '2024-01-01', '/images/bread/캐찰빵.jpg', 'N','N', '치즈의 고소함과 달콤한 빵의 조화가 일품인 멕시코 스타일의 특색있는 빵');
+('갈릭꽈베기', 'bread', 2000, 3500, '2024-01-01', '/images/bread/갈릭꽈배기.jpg', 'Y', 'Y', '결결이 바삭한 식감의 패스트리에 알싸한 남해 마늘의 진한 맛과 향이 더해진 간식형 제품', 80),
+('단팥도넛', 'bread', 2500, 3700, '2024-01-01', '/images/bread/단팥도넛.jpg', 'Y', 'N', '달콤한 팥 앙금이 가득한 부드러운 도넛으로 전통과 현대의 맛이 조화로운 디저트', 4),
+('고구마케이크빵', 'bread', 1800, 3000, '2024-01-01', '/images/bread/고구마케이크빵.jpg', 'Y', 'Y', '부드러운 빵 속에 달콤한 고구마 필링이 가득한 케이크 스타일의 빵', 5),
+('꽈베기', 'bread', 2000, 2500, '2024-01-01', '/images/bread/꽈베기.jpg', 'Y', 'N', '쫄깃한 식감과 달콤한 맛이 일품인 전통적인 꽈배기', 6),
+('라우겐', 'bread', 2400, 4000, '2024-01-01', '/images/bread/라우겐.jpg', 'Y', 'N', '독일식 프레첼 빵으로, 짭짤하고 쫄깃한 식감이 특징인 빵', 3),
+('베이글빵', 'bread', 2000, 3800, '2024-01-01', '/images/bread/베이글빵.jpg', 'Y', 'N', '쫄깃한 식감과 부드러운 맛이 일품인 클래식한 베이글', 4),
+('생크림소보로', 'bread', 2000, 3800, '2024-01-01', '/images/bread/생크림소보로.jpg', 'Y', 'N', '부드러운 생크림과 바삭한 소보로의 조화가 매력적인 달콤한 빵', 4),
+('꿀버터바게트', 'bread', 2000, 3800, '2024-01-01', '/images/bread/꿀버터바게트.jpg', 'Y', 'N', '바삭한 바게트에 꿀과 버터가 스며들어 고소하고 달콤한 맛이 돋보이는 빵', 3),
+('애플파이', 'bread', 3000, 4500, '2024-01-01', '/images/bread/애플파이.jpg', 'Y', 'N', '바삭한 페이스트리 속에 달콤하고 상큼한 사과 필링이 가득한 클래식한 디저트', 2),
+('우유도넛', 'bread', 2200, 3300, '2024-01-01', '/images/bread/우유도넛.jpg', 'Y', 'N', '부드러운 우유 크림이 가득 들어간 폭신폭신한 도넛으로 은은한 우유 향이 일품', 3),
+('찹쌀브레드', 'bread', 2800, 4200, '2024-01-01', '/images/bread/찹쌀브레드.jpg', 'Y', 'N', '쫄깃한 찹쌀의 식감과 부드러운 빵의 조화가 일품인 건강한 맛의 브레드', 4),
+('카라멜 러스크', 'bread', 3500, 5000, '2024-01-01', '/images/bread/카라멜러스크.jpg', 'N', 'N', '바삭하게 구운 빵에 달콤한 카라멜을 입힌 고급스러운 간식', 2),
+('캐찰빵', 'bread', 2600, 3800, '2024-01-01', '/images/bread/캐찰빵.jpg', 'N', 'N', '치즈의 고소함과 달콤한 빵의 조화가 일품인 멕시코 스타일의 특색있는 빵', 3);
 
 -- 커피 insert문
 INSERT INTO ERP.Coffee (CoffeeID, CoffeeName, SalePrice, CoffeeImage,OnKiosk,Recommend, Temperature, DetailDescription)
@@ -417,47 +434,48 @@ VALUES
 ('공급업체Y', '010-3333-4444', '서울특별시 강남구', '식자재(커피) 공급', '2024-04-02 09:00:00'),
 ('공급업체O', '010-1111-2222', '서울특별시 강남구', '부자재 공급', '2024-04-01 08:00:00');
 
-INSERT INTO ERP.MaterialsInventory (SupplierID, MaterialName, Category, Unit, UnitPrice, LastUpdated)
-VALUES
+-- MaterialsInventory 테이블에 데이터 삽입
+INSERT INTO ERP.MaterialsInventory (SupplierID, MaterialName, Category, Unit, UnitPrice, LastUpdated, MinimumStock)
+VALUES 
+-- 빵
+(1, '계란', '식자재', 'g', 4, '2024-04-05 10:30:00', 1000),
+(1, '고구마필링', '식자재', 'g', 8, '2024-04-05 10:35:00', 1500),
+(1, '마늘', '식자재', 'g', 10, '2024-04-05 10:45:00', 800),
+(1, '물', '식자재', 'ml', 0.2, '2024-04-05 10:50:00', 400),
+(1, '밀가루', '식자재', 'g', 1.5, '2024-04-05 10:55:00', 2500),
+(1, '베이킹소다', '식자재', 'g', 2, '2024-04-05 11:10:00', 500),
+(1, '베이킹파우더', '식자재', 'g', 2, '2024-04-05 11:15:00', 500),
+(1, '소금', '식자재', 'g', 1, '2024-04-05 11:30:00', 300),
+(1, '시나몬 가루', '식자재', 'g', 6, '2024-04-05 11:40:00', 200),
+(1, '올리브오일', '식자재', 'ml', 10, '2024-04-05 11:50:00', 1000),
+(1, '이스트', '식자재', 'g', 3, '2024-04-05 12:00:00', 400),
+(1, '파슬리', '식자재', 'g', 4, '2024-04-05 12:05:00', 150),
+(1, '꿀', '식자재', 'g', 10, '2024-04-05 10:40:00', 800),
+(1, '바닐라 추출물', '식자재', 'ml', 100, '2024-04-05 11:00:00', 300),
+(1, '버터', '식자재', 'g', 12, '2024-04-05 11:05:00', 1200),
+(1, '생크림', '식자재', 'g', 10, '2024-04-05 11:20:00', 1000),
+(1, '설탕', '식자재', 'g', 0.5, '2024-04-05 11:25:00', 1500),
+(1, '팥앙금', '식자재', 'g', 7, '2024-04-05 12:10:00', 1000),
+(1, '우유', '식자재', 'ml', 3, '2024-04-05 12:10:00', 500),
 
--- 빵 관련 식자재 (1번 공급업체)
-(1, '계란', '식자재', 'g', 4, '2024-04-05 10:30:00'),          
-(1, '고구마필링', '식자재', 'g', 8, '2024-04-05 10:35:00'),    
-(1, '마늘', '식자재', 'g', 10, '2024-04-05 10:45:00'),          
-(1, '물', '식자재', 'ml', 0.2, '2024-04-05 10:50:00'),            
-(1, '밀가루', '식자재', 'g', 1.5, '2024-04-05 10:55:00'),       
-(1, '베이킹소다', '식자재', 'g', 2, '2024-04-05 11:10:00'),     
-(1, '베이킹파우더', '식자재', 'g', 2, '2024-04-05 11:15:00'),   
-(1, '소금', '식자재', 'g', 1, '2024-04-05 11:30:00'),           
-(1, '시나몬 가루', '식자재', 'g', 6, '2024-04-05 11:40:00'),    
-(1, '올리브오일', '식자재', 'ml', 10, '2024-04-05 11:50:00'),   
-(1, '이스트', '식자재', 'g', 3, '2024-04-05 12:00:00'),         
-(1, '파슬리', '식자재', 'g', 4, '2024-04-05 12:05:00'),         
-(1, '꿀', '식자재', 'g', 10, '2024-04-05 10:40:00'),            
-(1, '바닐라 추출물', '식자재', 'ml', 100, '2024-04-05 11:00:00'),
-(1, '버터', '식자재', 'g', 12, '2024-04-05 11:05:00'),          
-(1, '생크림', '식자재', 'g', 10, '2024-04-05 11:20:00'),        
-(1, '설탕', '식자재', 'g', 0.5, '2024-04-05 11:25:00'),         
-(1, '팥앙금', '식자재', 'g', 7, '2024-04-05 12:10:00'),  
-(1, '우유', '식자재', 'ml', 3, '2024-04-05 12:10:00'),  
+-- 커피
+(2, '원두(에스프레소)', '식자재', 'g', 20, '2024-04-06 09:00:00', 5500),
+(2, '카라멜시럽', '식자재', 'ml', 15, '2024-04-06 09:10:00', 200),
+(2, '초콜릿 시럽', '식자재', 'ml', 6, '2024-04-06 09:20:00', 150),
+(2, '콜드브루 원액', '식자재', 'ml', 6, '2024-04-06 09:30:00', 300),
+(2, '연유', '식자재', 'g', 2, '2024-04-06 09:40:00', 100),
+(2, '얼음', '식자재', 'ml', 15, '2024-04-06 09:40:00', 1000),
+(2, '헤이즐넛 시럽', '식자재', 'ml', 6, '2024-04-06 09:10:00', 180),
+(2, '바닐라 시럽', '식자재', 'ml', 6, '2024-04-06 09:20:00', 180),
+(2, '메이플 시럽', '식자재', 'ml', 6, '2024-04-06 09:20:00', 150),
+(2, '아이스크림', '식자재', 'ml', 20, '2024-04-06 09:20:00', 200),
 
--- 커피 재료 (2번 공급업체)
-(2, '원두(에스프레소)', '식자재', 'g', 20, '2024-04-06 09:00:00'),     
-(2, '카라멜시럽', '식자재', 'ml', 15, '2024-04-06 09:10:00'),        
-(2, '초콜릿 시럽', '식자재', 'ml', 6, '2024-04-06 09:20:00'),        
-(2, '콜드브루 원액', '식자재', 'ml', 6, '2024-04-06 09:30:00'),        
-(2, '연유', '식자재', 'g', 2, '2024-04-06 09:40:00'),  
-(2, '얼음', '식자재', 'ml', 15, '2024-04-06 09:40:00'),                 
-(2, '헤이즐넛 시럽', '식자재', 'ml', 6, '2024-04-06 09:10:00'),        
-(2, '바닐라 시럽', '식자재', 'ml', 6, '2024-04-06 09:20:00'),   
-(2, '메이플 시럽', '식자재', 'ml', 6, '2024-04-06 09:20:00'),   
-(2, '아이스크림', '식자재', 'ml', 20, '2024-04-06 09:20:00'),   
-
--- 부자재 (3번 공급업체)
-(3, '포장지', '포장재', '개', 20, '2024-04-06 11:00:00'),
-(3, '컵(regular size)', '부자재', '개', 70, '2024-04-06 11:10:00'),
-(3, '컵(extra size)', '부자재', '개', 80, '2024-04-06 11:20:00'),
-(3, '빨대', '부자재', '개', 3, '2024-04-06 11:30:00');
+-- 부자재
+(3, '포장지', '포장재', '개', 20, '2024-04-06 11:00:00', 10),
+(3, '컵(regular size)', '부자재', '개', 70, '2024-04-06 11:10:00', 10),
+(3, '컵(extra size)', '부자재', '개', 80, '2024-04-06 11:20:00', 23),
+(3, '빨대', '부자재', '개', 3, '2024-04-06 11:30:00', 25),
+(3, '캐리어', '부자재', '개', 2, '2024-04-06 11:40:00', 30);
 
 -- 4. 원자재 재입고 이력 (RawMaterialRestockHistory) 테이블 더미 데이터
 INSERT INTO ERP.RawMaterialRestockHistory (MaterialID, SupplierID, RestockQuantity, UnitPrice, RestockDate)
@@ -1085,3 +1103,6 @@ SELECT * FROM ERP.coffee_materials;
 
 -- 24. 유저 스탬프 데이터 조회
 SELECT * FROM UserStamp;
+
+-- 26. 주문 내역 조회
+SELECT * FROM orderhistory;

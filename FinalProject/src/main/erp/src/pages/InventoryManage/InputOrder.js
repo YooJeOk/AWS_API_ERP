@@ -37,18 +37,20 @@ const InputOrder = () => {
             productName: selectedItem.productName || selectedItem.materialName,
             quantity: parseInt(orderQuantity),
             unit: selectedItem.category === '제품' ? '개' : selectedItem.unit,
-            orderType: '수동입력'
+            orderType: '수동입력',
+            productId: selectedItem.category === '제품' ? selectedItem.productId : null,
+            materialId: selectedItem.category === '자재' ? selectedItem.materialId : null
         };
-
+    
         try {
-            const response = await fetch('http://localhost:8080/api/orders', {
+            const response = await fetch('http://localhost:8080/api/orders/manual', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(orderData),
             });
-
+    
             if (response.ok) {
                 alert('주문 신청이 완료되었습니다.');
                 setShowModal(false);
@@ -67,7 +69,7 @@ const InputOrder = () => {
             <h3 className='text-center'>주문 신청</h3>
             <div className="">
                 <div className="">
-                    <h3 className='mb-4'>제품</h3>
+                    <h4 className='mb-4'>제품:현재수량</h4>
                     <div className='order-product-item-container'>
                         {products.map(product => (
                             <div className='input-order-item' onClick={() => handleItemClick(product, '제품')}>
@@ -78,7 +80,7 @@ const InputOrder = () => {
                 </div>
                 <hr className='mt-5 mb-4'></hr>
                 <div className="">
-                    <h3 className='mb-4'>자재</h3>
+                    <h4 className='mb-4'>자재:현재수량</h4>
                     <div className='order-product-item-container'>
                         {materials.map(material => (
                             <div className='input-order-item' onClick={() => handleItemClick(material, '자재')}>

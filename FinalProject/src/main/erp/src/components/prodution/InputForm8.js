@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './production.css';
+import Pagination from '../InventoryManage/Pagination';
 
 function MBOMForm() {
     const [formData, setFormData] = useState([
@@ -115,6 +116,24 @@ function MBOMForm() {
         }
     };
 
+    //공장 재고
+    const [materialInventory, setMaterialInventory] = useState([]);
+    const [totalPages, setTotalPages] = useState(0);
+
+    useEffect(() => {
+        fetch(`http://localhost:8080/api/factory/inventory/materials?page=${page}&size=5`)
+            .then(response => response.json())
+            .then(data => {
+                setMaterialList(data.content);
+                setTotalPages(data.totalPages);
+            })
+            .catch(error => console.error('Error fetching material list:', error));
+    }, [page, size]);
+
+    const handlePageChange = (newPage) => {
+        setPage(newPage);
+    };
+
     return (
         <div className="custom-container" style={{ minHeight: '90vh', overflow: 'hidden' }}>
             <aside id="sidebar"></aside>
@@ -203,14 +222,19 @@ function MBOMForm() {
                         </div>
 
                         <div style={{ flex: '1', maxHeight: '600px', overflowY: 'auto', border: '1px solid #ddd', borderRadius: '4px', padding: '10px' }}>
-                            <h3>재료 목록     공장 재고좀여기띄워줘 해문아</h3>
+                            <h3>재료 목록 (공장 재고)</h3>
                             <ul>
                                 {materialList.map((material) => (
                                     <li key={material.materialId}>
-                                        {material.materialName} - {material.unit} - {material.unitPrice}원
+                                        {material.materialId} - {material.materialName} 
                                     </li>
                                 ))}
                             </ul>
+                            <Pagination
+                                currentPage={page}
+                                totalPages={totalPages}
+                                onPageChange={handlePageChange}
+                            />
                         </div>
                     </div>
                 </div>

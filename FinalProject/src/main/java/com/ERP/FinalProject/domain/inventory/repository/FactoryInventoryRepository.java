@@ -11,4 +11,6 @@ public interface FactoryInventoryRepository extends JpaRepository<FactoryInvento
 	Optional<FactoryInventory> findByProductId(Long productId);
 
 	Optional<FactoryInventory> findByMaterialId(Long materialId);
+	
+	Optional<FactoryInventory> findByProductIdOrMaterialId(Long productId, Long materialId);
 }

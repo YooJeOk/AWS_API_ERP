@@ -1,4 +1,4 @@
-.order-submit-container,.auto-order-container{
+.order-submit-container,.auto-order-container,.order-complete-container,.order-history-container{
     margin-left: 230px;
     padding: 50px;
 }
@@ -26,4 +26,23 @@
     background-color: #e0e0e0;
     color: #000;
 }
+.order-history-check input[type="checkbox"] {
+    accent-color: #F0C490; 
+}
 
+.order-history-check input[type="checkbox"]:focus {
+    outline: 2px solid #F0C490; 
+    outline-offset: 2px;
+}
+.order-history-check .form-check-input:checked {
+    background-color: #F0C490;
+    border-color: #F0C490;
+}
+
+.order-history-check .form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(240, 196, 144, 0.5);
+}
+.form-right{
+   display: flex;
+   justify-content: end;
+}

@@ -39,20 +39,22 @@ function InvenSidebar() {
                 </div>
                 
                 <div className="dropdown">
-                        <button className="menu-item" style={{ backgroundColor: '#F0C490', color: 'white' }}>매장 주문 관리</button>
-                        <ul className="dropdown-menu">
-                            <li><Link to="/InputOrder">매장 주문 신청</Link></li>
-                            <li><Link to="/StoreInventory">매장 주문 내역</Link></li>
-                        </ul>
-                </div>
-
-                <div className="dropdown">
-                    <Link to="/AutoOrderPage">
+                    <Link to="/InputOrder">
                         <button className="menu-item" style={{ backgroundColor: '#F0C490', color: 'white' }}>
-                            자동 발주 관리
+                            주문 신청
                         </button>
                     </Link>
                 </div>
+
+                <div className="dropdown">
+                        <button className="menu-item" style={{ backgroundColor: '#F0C490', color: 'white' }}>주문 내역 관리</button>
+                        <ul className="dropdown-menu">
+                            <li><Link to="/OrderHistory">미처리 내역</Link></li>
+                            <li><Link to="/OrderComplete">처리 내역</Link></li>
+                        </ul>
+                </div>
+
+
 
 
             </div>

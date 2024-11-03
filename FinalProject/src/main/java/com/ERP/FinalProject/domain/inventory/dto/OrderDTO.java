@@ -9,10 +9,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AutoOrderUpdateRequest {
-    private Long itemId;
-    private String category;
-    private String autoOrder;
-    private Integer autoOrderQuantity;
-
+public class OrderDTO {
+	private String category;
+    private String productName;
+    private int quantity;
+    private String unit;
+    private Long productId;
+    private Long materialId;
 }

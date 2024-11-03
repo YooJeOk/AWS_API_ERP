@@ -19,7 +19,4 @@ public class MaterialsInventoryDTO {
 	private Integer quantityInStore;
 	private LocalDateTime lastUpdated;
     private Integer minimumStock;
-    private String autoOrder;
-    private int autoOrderQauntity;
-
 }
