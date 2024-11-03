@@ -21,8 +21,7 @@ function Header() {
                                 <a href="/production5">소요량 관리</a>
                                 <a href="/production7">품질 관리</a>
                                 <a href="/production2">생산 입고 관리</a>
-                                <a href="/production9">생산 실적 관리</a>
-                            </div>
+                           </div>
                         </div>
                     </div>
                     <div id="sales-button" className="nav-button">

@@ -286,7 +286,7 @@
           <tags>org.eclipse.jdt.ui.CompilationUnitEditor</tags>
         </children>
         <children xsi:type="basic:Part" xmi:id="_7pej0JnPEe-oZfmI8LtxyA" elementId="org.eclipse.e4.ui.compatibility.editor" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor" label="MBOMController.java" iconURI="platform:/plugin/org.eclipse.jdt.ui/icons/full/obj16/jcu_obj.png" closeable="true">
-          <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;MBOMController.java&quot; partName=&quot;MBOMController.java&quot; title=&quot;MBOMController.java&quot; tooltip=&quot;FinalProject/src/main/java/com/ERP/FinalProject/domain/production/MBOM/controller/MBOMController.java&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; path=&quot;/FinalProject/src/main/java/com/ERP/FinalProject/domain/production/MBOM/controller/MBOMController.java&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;0&quot; selectionOffset=&quot;2635&quot; selectionTopPixel=&quot;693&quot;/>&#xD;&#xA;&lt;/editor>"/>
+          <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;MBOMController.java&quot; partName=&quot;MBOMController.java&quot; title=&quot;MBOMController.java&quot; tooltip=&quot;FinalProject/src/main/java/com/ERP/FinalProject/domain/production/MBOM/controller/MBOMController.java&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; path=&quot;/FinalProject/src/main/java/com/ERP/FinalProject/domain/production/MBOM/controller/MBOMController.java&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;0&quot; selectionOffset=&quot;2635&quot; selectionTopPixel=&quot;497&quot;/>&#xD;&#xA;&lt;/editor>"/>
           <tags>Editor</tags>
           <tags>removeOnHide</tags>
           <tags>org.eclipse.jdt.ui.CompilationUnitEditor</tags>
@@ -500,7 +500,7 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_Hx1iRpmkEe-RVtoqCZu3_w" elementId="org.eclipse.ui.workbench.file">
         <tags>Draggable</tags>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_y4RCUJnOEe-oZfmI8LtxyA" elementId="print" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/print_edit.png" tooltip="Print" command="_Hx3YCZmkEe-RVtoqCZu3_w"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_oZfiE5npEe-Ww6lHk9UZrw" elementId="print" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/print_edit.png" tooltip="Print" command="_Hx3YCZmkEe-RVtoqCZu3_w"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_Hx1iU5mkEe-RVtoqCZu3_w" elementId="group.edit" toBeRendered="false">
         <tags>toolbarSeparator</tags>
@@ -534,7 +534,7 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_Hx1ipJmkEe-RVtoqCZu3_w" elementId="org.eclipse.ui.workbench.navigate">
         <tags>Draggable</tags>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_y4S3gJnOEe-oZfmI8LtxyA" elementId="org.eclipse.ui.window.pinEditor" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="Pin Editor" type="Check" command="_Hx3XupmkEe-RVtoqCZu3_w"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_oZfiIJnpEe-Ww6lHk9UZrw" elementId="org.eclipse.ui.window.pinEditor" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="Pin Editor" type="Check" command="_Hx3XupmkEe-RVtoqCZu3_w"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_Hx1ir5mkEe-RVtoqCZu3_w" elementId="org.eclipse.ui.browser.editor" visible="false">
         <tags>Draggable</tags>
