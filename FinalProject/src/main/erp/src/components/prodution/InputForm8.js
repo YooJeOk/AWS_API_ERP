@@ -6,6 +6,7 @@ function MBOMForm() {
     const [formData, setFormData] = useState([
         {
             MaterialID: '',
+            MaterialName: '',
             Quantity: '',
             Unit: 'EA',
             UnitPrice: '',
@@ -22,9 +23,10 @@ function MBOMForm() {
 
     const [materialList, setMaterialList] = useState([]);
     const [page, setPage] = useState(0);
+    const [itemIdError, setItemIdError] = useState('');
     const size = 10;
 
-
+    // 공장 재고 재료 목록 가져오기
     useEffect(() => {
         fetch(`/api/factory/inventory/materials?page=${page}&size=${size}`)
             .then(response => response.json())
@@ -32,51 +34,76 @@ function MBOMForm() {
             .catch(error => console.error('Error fetching material list:', error));
     }, [page]);
 
-
-    useEffect(() => {
-        if (fixedData.ItemType && fixedData.Size) {
-            fetch(`/api/mbom/next-item-id?itemType=${fixedData.ItemType}&size=${fixedData.Size}`)
-                .then(response => response.json())
-                .then(nextItemID => setFixedData(prevData => ({ ...prevData, ItemID: nextItemID })))
-                .catch(error => console.error('Error fetching next ItemID:', error));
+    // ItemID 입력 시 숫자, 양수 여부 확인 및 중복 체크
+    const validateItemID = (value) => {
+        if (isNaN(value) || value <= 0) {
+            setItemIdError('0보다 큰 숫자만 입력 가능합니다.');
+            return;
         }
-    }, [fixedData.ItemType, fixedData.Size]);
 
+        fetch(`/api/mbom/check-item-id/${value}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.exists) {
+                    setItemIdError('이미 존재하는 ItemID입니다.');
+                } else {
+                    setItemIdError('');
+                }
+            })
+            .catch(error => console.error('Error checking ItemID:', error));
+    };
+
+    const handleFixedChange = (e) => {
+        const { name, value } = e.target;
+        setFixedData({
+            ...fixedData,
+            [name]: value
+        });
+
+        if (name === 'ItemID') {
+            validateItemID(value);
+        }
+    };
+
+    // 각 재료 행의 변경을 처리하고 총단가 자동 계산
     const handleChange = (index, e) => {
         const newFormData = [...formData];
         newFormData[index] = {
             ...newFormData[index],
             [e.target.name]: e.target.value
         };
+        calculateTotalCost(index, newFormData); // 실시간 총단가 계산
         setFormData(newFormData);
     };
 
-    const calculateTotalCost = (index) => {
-        const quantity = parseFloat(formData[index].Quantity) || 0;
-        const unitPrice = parseFloat(formData[index].UnitPrice) || 0;
-        const newFormData = [...formData];
+    const calculateTotalCost = (index, newFormData) => {
+        const quantity = parseFloat(newFormData[index].Quantity) || 0;
+        const unitPrice = parseFloat(newFormData[index].UnitPrice) || 0;
         newFormData[index].TotalCost = (quantity * unitPrice).toFixed(2);
-        setFormData(newFormData);
     };
 
     const handleQuantityOrPriceChange = (index, e) => {
         handleChange(index, e);
-        calculateTotalCost(index);
     };
 
-    const handleFixedChange = (e) => {
-        setFixedData({
-            ...fixedData,
-            [e.target.name]: e.target.value
-        });
+    // 재료 선택 시 MaterialName 자동 입력
+    const handleMaterialIDChange = (index, e) => {
+        const materialId = e.target.value;
+        const selectedMaterial = materialList.find(material => material.materialId === parseInt(materialId));
+        const newFormData = [...formData];
+        newFormData[index].MaterialID = materialId;
+        newFormData[index].MaterialName = selectedMaterial ? selectedMaterial.materialName : '';
+        setFormData(newFormData);
     };
 
+    // 재료 행 추가
     const addRow = () => {
         if (formData.length < 15) {
             setFormData([
                 ...formData,
                 {
                     MaterialID: '',
+                    MaterialName: '',
                     Quantity: '',
                     Unit: 'EA',
                     UnitPrice: '',
@@ -86,19 +113,27 @@ function MBOMForm() {
         }
     };
 
+    // 재료 행 삭제
     const deleteRow = (index) => {
         const newFormData = formData.filter((_, i) => i !== index);
         setFormData(newFormData);
     };
 
+    // 전체 총단가 합산
     const getTotalCostSum = () => {
         return formData.reduce((sum, row) => sum + parseFloat(row.TotalCost || 0), 0).toFixed(2);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        if (itemIdError) {
+            alert(itemIdError);
+            return;
+        }
+
         try {
-            const response = await fetch('/api/mbom/save', {
+            const response = await fetch('http://localhost:8080/api/mbom/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -116,12 +151,11 @@ function MBOMForm() {
         }
     };
 
-    //공장 재고
-    const [materialInventory, setMaterialInventory] = useState([]);
     const [totalPages, setTotalPages] = useState(0);
 
+    // 재료 목록 페이지네이션
     useEffect(() => {
-        fetch(`http://localhost:8080/api/factory/inventory/materials?page=${page}&size=5`)
+        fetch(`http://localhost:8080/api/factory/inventory/materials?page=${page}&size=19`)
             .then(response => response.json())
             .then(data => {
                 setMaterialList(data.content);
@@ -155,7 +189,18 @@ function MBOMForm() {
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><input type="text" name="ItemID" value={fixedData.ItemID} readOnly style={{ width: '100%' }} /></td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            name="ItemID"
+                                            value={fixedData.ItemID}
+                                            onChange={handleFixedChange}
+                                            style={{ width: '100%' }}
+                                        />
+                                        {itemIdError && (
+                                            <div style={{ color: 'red', fontSize: '0.8em' }}>{itemIdError}</div>
+                                        )}
+                                    </td>
                                     <td>
                                         <select name="ItemType" value={fixedData.ItemType} onChange={handleFixedChange} style={{ width: '100%' }}>
                                             <option value="Product">Product</option>
@@ -191,6 +236,7 @@ function MBOMForm() {
                                     <tr>
                                         <th></th>
                                         <th>재료ID</th>
+                                        <th>재료이름</th>
                                         <th>수량</th>
                                         <th>규격</th>
                                         <th>단가</th>
@@ -202,18 +248,28 @@ function MBOMForm() {
                                         <tr key={index}>
                                             <td><button onClick={() => deleteRow(index)} style={{ color: 'red', fontSize: '1.2em', background: 'none', border: 'none', cursor: 'pointer' }}>×</button></td>
                                             <td>
-                                                <select name="MaterialID" value={row.MaterialID} onChange={(e) => handleChange(index, e)} required style={{ width: '100%' }}>
+                                                <select name="MaterialID" value={row.MaterialID} onChange={(e) => handleMaterialIDChange(index, e)} required style={{ width: '100%' }}>
                                                     <option value="">선택</option>
                                                     {materialList.map(material => (
                                                         <option key={material.materialId} value={material.materialId}>
-                                                            {material.materialId} - {material.materialName}
+                                                            {material.materialId}
                                                         </option>
                                                     ))}
                                                 </select>
                                             </td>
-                                            <td><input type="text" name="Quantity" value={row.Quantity} onChange={(e) => handleQuantityOrPriceChange(index, e)} required style={{ width: '100%' }} /></td>
-                                            <td><input type="text" name="Unit" value={row.Unit} onChange={(e) => handleChange(index, e)} style={{ width: '100%' }} /></td>
-                                            <td><input type="text" name="UnitPrice" value={row.UnitPrice} onChange={(e) => handleQuantityOrPriceChange(index, e)} required style={{ width: '100%' }} /></td>
+                                            <td><input type="text" name="MaterialName" value={row.MaterialName} readOnly style={{ width: '100%' }} /></td>
+                                            <td><input type="number" name="Quantity" min="1" step="1" value={row.Quantity} onChange={(e) => handleQuantityOrPriceChange(index, e)} required style={{ width: '100%' }} /></td>
+                                            <td>
+                                                <select name="Unit" value={row.Unit} onChange={(e) => handleChange(index, e)} style={{ width: '100%' }}>
+                                                    <option value="ml">ml</option>
+                                                    <option value="g">g</option>
+                                                    <option value="개">개</option>
+                                                </select>
+                                            </td>
+                                            <td style={{ display: 'flex', alignItems: 'center' }}>
+                                                <input type="number" name="UnitPrice" min="1" step="1" value={row.UnitPrice} onChange={(e) => handleQuantityOrPriceChange(index, e)} required style={{ width: '80%' }} />
+                                                <span style={{ marginLeft: '5px' }}>원</span>
+                                            </td>
                                             <td><input type="text" name="TotalCost" value={row.TotalCost} readOnly style={{ width: '100%' }} /></td>
                                         </tr>
                                     ))}
