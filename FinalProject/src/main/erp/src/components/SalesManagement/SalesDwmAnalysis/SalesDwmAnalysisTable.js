@@ -1,42 +1,37 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { createChart } from 'lightweight-charts';
-import '../../../css/SalesManagement/SalesDwmAnalysisTable.css';
 
-const SalesDwmAnalysisTable = () => {
+const SalesDwmAnalysisTable = ({ showStats = true }) => {
   const chartContainerRef = useRef();
-  const chartInstanceRef = useRef();
   const [timePeriod, setTimePeriod] = useState('day');
+  const [chartData, setChartData] = useState([]);
+  const [stats, setStats] = useState({ average: 0, max: 0, min: 0 });
 
-  const dayData = Array.from({ length: 365 }, (_, i) => ({
-    time: new Date(2024, 0, i + 1).toISOString().split('T')[0],
-    value: Math.floor(30000000 + Math.random() * 50000000),
-  }));
+  const fetchData = useCallback(async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/dwm?period=${timePeriod}`);
+      const data = await response.json();
+      const formattedData = data.map((d) => {
+        const time = d.date || d.week || d.month;
+        const formattedTime = time.length === 7 ? `${time}-01` : time;
+        return { time: formattedTime, value: d.totalSales };
+      });
+      setChartData(formattedData);
 
-  const weekData = Array.from({ length: 52 }, (_, i) => ({
-    time: new Date(2024, 0, 1 + i * 7).toISOString().split('T')[0],
-    value: Math.floor(300000000 + Math.random() * 500000000),
-  }));
-
-  const monthData = [
-    { time: '2024-01-01', value: 1500000000 },
-    { time: '2024-02-01', value: 1600000000 },
-    { time: '2024-03-01', value: 1800000000 },
-    { time: '2024-04-01', value: 1700000000 },
-    { time: '2024-05-01', value: 1750000000 },
-    { time: '2024-06-01', value: 1650000000 },
-    { time: '2024-07-01', value: 1800000000 },
-    { time: '2024-08-01', value: 1900000000 },
-    { time: '2024-09-01', value: 1850000000 },
-    { time: '2024-10-01', value: 1950000000 },
-    { time: '2024-11-01', value: 2000000000 },
-    { time: '2024-12-01', value: 2100000000 },
-  ];
-
-  const getData = useCallback(() => {
-    if (timePeriod === 'day') return dayData;
-    if (timePeriod === 'week') return weekData;
-    if (timePeriod === 'month') return monthData;
+      // 통계 계산
+      const values = formattedData.map((d) => d.value);
+      const average = values.reduce((a, b) => a + b, 0) / values.length;
+      const max = Math.max(...values);
+      const min = Math.min(...values);
+      setStats({ average, max, min });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   }, [timePeriod]);
+
+  useEffect(() => {
+    fetchData();
+  }, [timePeriod, fetchData]);
 
   useEffect(() => {
     const chart = createChart(chartContainerRef.current, {
@@ -44,33 +39,43 @@ const SalesDwmAnalysisTable = () => {
       grid: { vertLines: { color: 'white' }, horzLines: { color: 'white' } },
       timeScale: { timeVisible: true, secondsVisible: false },
     });
-    chartInstanceRef.current = chart;
 
     const barSeries = chart.addHistogramSeries({
       color: 'rgba(75, 192, 192, 1)',
       priceLineVisible: false,
     });
-    barSeries.setData(getData());
+    barSeries.setData(chartData);
 
-    chart.priceScale('right').applyOptions({
-      tickMarkFormatter: (value) => Math.floor(value),
+    const averageLineData = chartData.map((d) => ({
+      time: d.time,
+      value: stats.average,
+    }));
+    const lineSeries = chart.addLineSeries({
+      color: 'rgba(255, 99, 132, 1)',
+      lineWidth: 2,
     });
+    lineSeries.setData(averageLineData);
 
-    // 차트 리사이즈 함수
     const resizeChart = () => {
       if (chartContainerRef.current) {
-        chart.resize(chartContainerRef.current.clientWidth, 400); // 높이는 400px로 고정
+        chart.resize(chartContainerRef.current.clientWidth, 400);
       }
     };
-
-    resizeChart(); // 초기 렌더링 시 크기 조정
+    resizeChart();
     window.addEventListener('resize', resizeChart);
 
     return () => {
       window.removeEventListener('resize', resizeChart);
       chart.remove();
     };
-  }, [timePeriod, getData]);
+  }, [chartData, stats.average]);
+
+  // 금액 형식 설정 (소수점 표시 없음)
+  const formatCurrency = (value) =>
+    new Intl.NumberFormat('ko-KR', {
+      style: 'decimal',
+      maximumFractionDigits: 0, // 소수점 없이 표시
+    }).format(value);
 
   return (
     <div>
@@ -86,6 +91,14 @@ const SalesDwmAnalysisTable = () => {
           <option value="month">월</option>
         </select>
       </div>
+
+      {showStats && (
+        <div className="stats" style={{ color: '#703103', fontWeight: 'bold' }}>
+          <p>평균 매출: {formatCurrency(stats.average)} 원</p>
+          <p>최고 매출: {formatCurrency(stats.max)} 원</p>
+          <p>최저 매출: {formatCurrency(stats.min)} 원</p>
+        </div>
+      )}
 
       <div ref={chartContainerRef} style={{ width: '100%', height: '400px', position: 'relative' }} />
     </div>

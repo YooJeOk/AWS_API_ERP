@@ -29,13 +29,13 @@ public class SalesRecord {
     @Column(name = "PaymentType")
     private String paymentType;
 
-    @Column(name = "TotalSalePrice")
+    @Column(name = "TotalSalePrice") //할인 후 판매금액
     private int totalSalePrice;
 
-    @Column(name = "OrderAmount")
+    @Column(name = "OrderAmount") //할인금액 전 판매금액
     private int orderAmount;
 
-    @Column(name = "DiscountAmount")
+    @Column(name = "DiscountAmount") //할인금액
     private int discountAmount;
 
     // 일대다 관계 설정

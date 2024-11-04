@@ -3,7 +3,7 @@ import { Table } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import '../../css/SalesManagement/SalesTable.css';
 
-function SalesTable({ searchTerm, startDate, endDate }) {
+function SalesTable({ searchTerm, startDate, endDate, maxItems = null, showpage = true, showTooltip = false }) {
   const [salesRecords, setSalesRecords] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 12;
@@ -67,12 +67,14 @@ function SalesTable({ searchTerm, startDate, endDate }) {
     );
   });
 
-  const pageCount = Math.ceil(filteredRecords.length / itemsPerPage);
+  const displayedRecords = maxItems ? filteredRecords.slice(0, maxItems) : filteredRecords;
+
+  const pageCount = Math.ceil(displayedRecords.length / itemsPerPage);
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
   };
 
-  const currentItems = filteredRecords.slice(
+  const currentItems = displayedRecords.slice(
     currentPage * itemsPerPage,
     (currentPage + 1) * itemsPerPage
   );
@@ -96,7 +98,10 @@ function SalesTable({ searchTerm, startDate, endDate }) {
           {currentItems.map((detail, index) => (
             <tr key={`${detail.saleID}-${index}`}>
               <td>{detail.saleID}</td>
-              <td>{detail.saleDate ? new Date(detail.saleDate).toLocaleString() : "N/A"}</td>
+              {/* showTooltip이 true일 때 title 속성 및 시:분까지 표시 */}
+              <td title={showTooltip ? new Date(detail.saleDate).toLocaleString() : undefined}>
+                {detail.saleDate ? new Date(detail.saleDate).toLocaleDateString() + ' ' + new Date(detail.saleDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "N/A"}
+              </td>
               <td>{detail.productName}</td>
               <td>{detail.quantitySold}</td>
               <td>{detail.salePrice.toLocaleString()}원</td>
@@ -107,6 +112,7 @@ function SalesTable({ searchTerm, startDate, endDate }) {
           ))}
         </tbody>
       </Table>
+      {showpage && 
       <ReactPaginate
         previousLabel={"이전"}
         nextLabel={"다음"}
@@ -117,7 +123,7 @@ function SalesTable({ searchTerm, startDate, endDate }) {
         onPageChange={handlePageClick}
         containerClassName={"pagination"}
         activeClassName={"active"}
-      />
+      />}
     </div>
   );
 }

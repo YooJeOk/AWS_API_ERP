@@ -9,9 +9,9 @@ import '../../../css/SalesManagement/SearchBar.css';
 
 function SalesDwtdAnalysisSearchBar() {
   return (
-    <Form inline className="d-flex align-items-center justify-content-between">
+    <Form inline="true" className="d-flex align-items-center justify-content-between">
       {/* 왼쪽 영역 */}
-      <div inline className="d-flex align-items-center justify-content-between">
+      <div inline="true" className="d-flex align-items-center justify-content-between">
         <p className="custom-padding">제품별 판매 그래프 분석</p>
       </div>
     </Form>
