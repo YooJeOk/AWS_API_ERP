@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import './KeypadModal.css';
+import useClickSound from '../../hooks/useClickSound';
 
 const KeypadModal = ({ onClose, onSubmit, purpose }) => {
+  const ClickSound = useClickSound();
   const [input, setInput] = useState('');
   const [secondInput, setSecondInput] = useState('');
   const [step, setStep] = useState(1);
 
   const handleKeyPress = (key) => {
+    ClickSound();
     if (input.length < 11 && step === 1) {
       setInput(prev => prev + key);
     } else if (secondInput.length < 11 && step === 2) {
@@ -16,6 +19,7 @@ const KeypadModal = ({ onClose, onSubmit, purpose }) => {
 
   
   const handleDelete = () => {
+    ClickSound();
     if (step === 1) {
       setInput(prev => prev.slice(0, -1));
     } else if (step === 2) {
@@ -24,6 +28,7 @@ const KeypadModal = ({ onClose, onSubmit, purpose }) => {
   };
 
   const handleSubmit = async () => {
+    ClickSound();
     if (purpose === 'joinMember') {
       if (step === 1) {
         setStep(2);

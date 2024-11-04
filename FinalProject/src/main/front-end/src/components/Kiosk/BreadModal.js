@@ -1,16 +1,23 @@
 import React, { useState } from 'react';
+import useClickSound from '../../hooks/useClickSound';
 
 const BreadModal = ({ item, onClose, onAddToCart }) => {
   const [quantity, setQuantity] = useState(1);
+  const ClickSound = useClickSound(); 
 
-  const handleIncrease = () => setQuantity(quantity + 1);
+  const handleIncrease = () => {
+    ClickSound();
+    setQuantity(quantity + 1);
+  }
   const handleDecrease = () => {
     if (quantity > 1) {
+      ClickSound();
       setQuantity(quantity - 1);
     }
   };
 
   const handleAddToCart = () => {
+    ClickSound();
     const totalPrice = item.price * quantity
     console.log("아이템이름:"+item.name)
     console.log("아이템 번호:"+item.id)

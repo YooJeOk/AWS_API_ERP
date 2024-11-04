@@ -1,6 +1,7 @@
 import React from 'react';
 import './PaymentModal.css'; 
 const PaymentModal = ({ message, onClose }) => {
+  
   return (
     <div className="payment-modal-overlay">
       <div className="payment-modal-content">
