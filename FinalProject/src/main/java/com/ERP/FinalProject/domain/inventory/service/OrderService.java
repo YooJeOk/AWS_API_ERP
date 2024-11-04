@@ -69,19 +69,40 @@ public class OrderService {
             order.setOrderStatus("처리 완료");
             order.setCompletedDate(LocalDateTime.now());
             
-            FactoryInventory factoryInventory = factoryInventoryRepository.findByProductIdOrMaterialId(order.getProductId(), order.getMaterialId())
-                .orElseThrow(() -> new RuntimeException("Factory inventory not found"));
-            factoryInventory.setQuantityInFactory(factoryInventory.getQuantityInFactory() - order.getQuantity());
+            if (order.getProductId() != null) {
+                updateInventory(order.getProductId(), order.getQuantity(), true);
+            } else if (order.getMaterialId() != null) {
+                updateInventory(order.getMaterialId(), order.getQuantity(), false);
+            }
+        }
+        orderRepository.saveAll(orders);
+    }
+
+    private void updateInventory(Long itemId, int quantity, boolean isProduct) {
+        if (isProduct) {
+            FactoryInventory factoryInventory = factoryInventoryRepository.findByProductId(itemId)
+                .orElseThrow(() -> new RuntimeException("Factory inventory not found for product: " + itemId));
+            factoryInventory.setQuantityInFactory(factoryInventory.getQuantityInFactory() - quantity);
             factoryInventoryRepository.save(factoryInventory);
             
-            StoreInventory storeInventory = storeInventoryRepository.findByProductIdOrMaterialId(order.getProductId(), order.getMaterialId())
+            StoreInventory storeInventory = storeInventoryRepository.findByProductId(itemId)
                 .orElse(new StoreInventory());
-            storeInventory.setProductId(order.getProductId());
-            storeInventory.setMaterialId(order.getMaterialId());
-            storeInventory.setQuantityInStore(storeInventory.getQuantityInStore() + order.getQuantity());
+            storeInventory.setProductId(itemId);
+            storeInventory.setQuantityInStore(storeInventory.getQuantityInStore() + quantity);
+            storeInventory.setStoreDate(LocalDateTime.now());
+            storeInventoryRepository.save(storeInventory);
+        } else {
+            FactoryInventory factoryInventory = factoryInventoryRepository.findByMaterialId(itemId)
+                .orElseThrow(() -> new RuntimeException("Factory inventory not found for material: " + itemId));
+            factoryInventory.setQuantityInFactory(factoryInventory.getQuantityInFactory() - quantity);
+            factoryInventoryRepository.save(factoryInventory);
+            
+            StoreInventory storeInventory = storeInventoryRepository.findByMaterialId(itemId)
+                .orElse(new StoreInventory());
+            storeInventory.setMaterialId(itemId);
+            storeInventory.setQuantityInStore(storeInventory.getQuantityInStore() + quantity);
             storeInventory.setStoreDate(LocalDateTime.now());
             storeInventoryRepository.save(storeInventory);
         }
-        orderRepository.saveAll(orders);
     }
 }

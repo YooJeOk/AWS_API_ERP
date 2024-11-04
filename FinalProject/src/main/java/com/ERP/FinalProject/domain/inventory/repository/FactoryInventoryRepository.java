@@ -1,5 +1,6 @@
 package com.ERP.FinalProject.domain.inventory.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,5 +13,9 @@ public interface FactoryInventoryRepository extends JpaRepository<FactoryInvento
 
 	Optional<FactoryInventory> findByMaterialId(Long materialId);
 	
-	Optional<FactoryInventory> findByProductIdOrMaterialId(Long productId, Long materialId);
+//	Optional<FactoryInventory> findByProductIdOrMaterialId(Long productId, Long materialId);
+	
+	  List<FactoryInventory> findByProductIdOrMaterialId(Long productId, Long materialId);
+	  
+
 }

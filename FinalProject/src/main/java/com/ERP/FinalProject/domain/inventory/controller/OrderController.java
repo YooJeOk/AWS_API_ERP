@@ -45,6 +45,7 @@ public class OrderController {
 
     @PostMapping("/complete")
     public ResponseEntity<String> completeOrders(@RequestBody List<Long> orderIds) {
+    	System.out.println("컴플리트 컨트롤러 리스트 번호:"+orderIds);
         orderService.completeOrders(orderIds);
         return ResponseEntity.ok("Orders marked as completed");
     }
