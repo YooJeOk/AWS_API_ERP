@@ -1,5 +1,5 @@
 // User.java
-package model;
+package com.ERP.FinalProject.domain.login.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

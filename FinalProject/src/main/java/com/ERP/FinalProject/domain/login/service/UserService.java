@@ -1,10 +1,11 @@
 // UserService.java
-package service;
+package com.ERP.FinalProject.domain.login.service;
 
-import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import repository.UserRepository;
+
+import com.ERP.FinalProject.domain.login.model.User;
+import com.ERP.FinalProject.domain.login.repository.UserRepository;
 
 @Service
 public class UserService {

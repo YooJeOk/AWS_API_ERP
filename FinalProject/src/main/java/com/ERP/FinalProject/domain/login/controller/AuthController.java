@@ -1,11 +1,12 @@
 // AuthController.java
-package controller;
+package com.ERP.FinalProject.domain.login.controller;
 
-import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import service.EmailService;
-import service.UserService;
+
+import com.ERP.FinalProject.domain.login.model.User;
+import com.ERP.FinalProject.domain.login.service.EmailService;
+import com.ERP.FinalProject.domain.login.service.UserService;
 
 import java.util.HashMap;
 import java.util.Map;

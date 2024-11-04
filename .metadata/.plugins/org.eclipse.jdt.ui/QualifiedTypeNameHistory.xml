@@ -47,9 +47,13 @@
     <fullyQualifiedTypeName name="java.util.Optional"/>
     <fullyQualifiedTypeName name="org.springframework.data.repository.query.Param"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.Entry.entity.ProductionEntryRequest"/>
-    <fullyQualifiedTypeName name="lombok.Data"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PostMapping"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.Entry.entity.ProductionEntry"/>
     <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.MBOM.repository.MBOMRepository"/>
+    <fullyQualifiedTypeName name="lombok.Data"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.login.repository.UserRepository"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.login.service.EmailService"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.login.service.UserService"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.login.model.User"/>
 </qualifiedTypeNameHistroy>
