@@ -53,9 +53,9 @@ function App() {
                  
                 <Routes>
                     {/* 메인 페이지 */}
-                    {/* <Route path="/" element={<MainPage />} /> */}
-                    <Route path="/" element={<Login />} />
-                    <Route path="/find" element={<Findpassword />} />
+                    {/* <Route path="/" element={<Login />} /> */}
+                    {/* <Route path="/find" element={<Findpassword />} /> */}
+                    <Route path="/" element={<MainPage />} />
 
 
                     {/* 생산 관리 페이지들 */}
