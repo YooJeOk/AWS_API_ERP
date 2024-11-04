@@ -40,7 +40,7 @@ const Login = () => {
                     />
                 </div>
                 <div className="options">
-                    <a href="#">비밀번호 찾기</a>
+                    <a href="/find">비밀번호 찾기</a>
                 </div>
                 <div className="input-box">
                     <button type="submit">로그인</button>

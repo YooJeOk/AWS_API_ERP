@@ -40,6 +40,9 @@ import KioskSidebar from './components/KioskManagement/KioskSidebar';
 import KioskInventory from './pages/KioskManagement/KioskInventory';
 import KioskRegister from './pages/KioskManagement/KioskRegister';
 
+//로그인
+import Login from './components/로그인/login';
+import Findpassword from './components/로그인/findpassword';
 
 function App() {
     return (
@@ -47,9 +50,12 @@ function App() {
             <Header />
             <div className="custom-container">
                 {/* 생산 관리 경로에만 ProductionSidebar 사용 */}
+                 
                 <Routes>
                     {/* 메인 페이지 */}
-                    <Route path="/" element={<MainPage />} />
+                    {/* <Route path="/" element={<MainPage />} /> */}
+                    <Route path="/" element={<Login />} />
+                    <Route path="/find" element={<Findpassword />} />
 
 
                     {/* 생산 관리 페이지들 */}
