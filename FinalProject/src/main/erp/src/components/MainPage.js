@@ -4,6 +4,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './CustomCalendar.css';
+import { useNavigate } from 'react-router-dom'; // useNavigate import 추가
 import SalesTable from '../components/SalesManagement/SalesTable';
 import SalesStatusSalesTable from '../components/SalesManagement/SalesStatus/SalesStatusSalesTable';
 import SalesDwmAnalysisTable from '../components/SalesManagement/SalesDwmAnalysis/SalesDwmAnalysisTable';
@@ -75,7 +76,7 @@ function MyBigCalendar() {
           </div>
           <div style={{ height: '50%', display: 'flex', flexDirection: 'column' }}>
             <h2 style={{ color: '#703103', fontWeight: 'bold', fontSize: '25px',marginTop:'2%' }}>판매 기록 현황</h2>
-            <SalesTable style={{ flex: '1', width: '100%', overflowY: 'auto' }} />
+            <SalesTable style={{ flex: '1', width: '100%', overflowY: 'auto' }}  maxItems={4} showpage={false} showTooltip={true}/>
           </div>
         </Col>
 
@@ -85,7 +86,7 @@ function MyBigCalendar() {
           <div style={{ height: '50%' }}>
             <SalesStatusSalesTable style={{ width: '100%', overflowY: 'auto' }} />
             <h2 style={{ color: '#703103', fontWeight: 'bold', fontSize: '25px',marginTop:'2%' }}>일/주/월 매출 현황</h2>
-            <SalesDwmAnalysisTable style={{ width: '100%', overflowY: 'auto' }}/>
+            <SalesDwmAnalysisTable style={{ width: '100%', overflowY: 'auto' }} showStats={false} />
           </div>
         </Col>
       </Row>
