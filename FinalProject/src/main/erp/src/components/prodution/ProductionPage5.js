@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, Routes, Route } from 'react-router-dom';
 import InputForm8 from './InputForm8';
+import './ProductionPage.css';
 
 function ProductionTable() {
     const [data, setData] = useState([]);
     const [category, setCategory] = useState("");
     const [selectedItem, setSelectedItem] = useState("");
-    const [quantity, setQuantity] = useState(50);
+    const [quantity, setQuantity] = useState(1); // 초기 수량을 1로 설정
     const [customInput, setCustomInput] = useState(false);
     const [customQuantity, setCustomQuantity] = useState("");
     const navigate = useNavigate();
@@ -30,6 +31,11 @@ function ProductionTable() {
     
         fetchData();
     }, []);
+
+    useEffect(() => {
+        setQuantity(1); // 선택된 품목이 변경될 때마다 수량을 1로 설정
+        setCustomQuantity(""); // 커스텀 수량 초기화
+    }, [selectedItem]);
 
     const filteredData = data
         .filter(item => item.itemType === (category === "빵" ? "Product" : category === "커피" ? "Coffee" : ""))
@@ -69,7 +75,7 @@ function ProductionTable() {
 
     const getImagePath = () => {
         if (category === "빵") {
-            return `${selectedItem}`;
+            return `/images/bread/${selectedItem}.jpg`; // public 폴더 아래 경로 설정
         } else if (category === "커피") {
             return `/images/coffee/${selectedItem}.jpg`;
         }
@@ -83,13 +89,29 @@ function ProductionTable() {
                 <div className="production-mainbar">
                     <div className="productionbar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
                         <h1 style={{ fontSize: '26px', margin: 0 }}>소요량 조회</h1>
-                        <button 
-                            className="create-button" 
-                            onClick={() => navigate('/input8')} 
-                            style={{ fontSize: '22px', margin: 0 }}
-                        >
-                            생성
-                        </button>
+                        <div style={{ display: 'flex', gap: '10px' }}>
+                            <button 
+                                className="create1-button" 
+                                onClick={() => navigate('/input8')} 
+                                style={{ fontSize: '20px', backgroundColor: '#4CAF50', color: '#fff', padding: '5px 30px', border: 'none', borderRadius: '5px' }}
+                            >
+                                생성
+                            </button>
+                            <button 
+                                className="update-button" 
+                                onClick={() => navigate('/update')} 
+                                style={{ fontSize: '20px', backgroundColor: '#FFA07A', color: '#fff', padding: '5px 30px', border: 'none', borderRadius: '5px' }}
+                            >
+                                수정
+                            </button>
+                            <button 
+                                className="delete-button" 
+                                onClick={() => navigate('/delete')} 
+                                style={{ fontSize: '20px', backgroundColor: '#FF6B6B', color: '#fff', padding: '5px 30px', border: 'none', borderRadius: '5px' }}
+                            >
+                                삭제
+                            </button>
+                        </div>
                     </div>
                     <div 
                         className="selection-container" 
@@ -148,7 +170,7 @@ function ProductionTable() {
                                 />
                             ) : (
                                 <select 
-                                    value={quantity || "100"} 
+                                    value={quantity || "1"} 
                                     onChange={handleQuantityChange}
                                     style={{ fontSize: '20px', width: '100%' }}
                                     disabled={!selectedItem}
@@ -165,7 +187,7 @@ function ProductionTable() {
                     <div className="production-display" style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <div className="production-table-container" style={{ width: "60%", marginBottom: '20px' }}>
                             <h2 style={{ fontSize: '24px' }}>{selectedItem || "생산 품목을 선택하세요"}</h2>
-                            <table className="production-table" style={{ tableLayout: 'fixed', width: '100%' }}>
+                            <table className="table production-table" style={{ tableLayout: 'fixed', width: '100%' }}>
                                 <thead>
                                     <tr>
                                         <th>소모 품목</th>
@@ -199,7 +221,17 @@ function ProductionTable() {
                                 </tfoot>
                             </table>
                         </div>
-                        <div className="sample-image" style={{ width: "50%", display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', border: '2px solid blue', padding: '10px', boxSizing: 'border-box', height: '600px', position: 'relative', marginTop:'35px' }}>
+                        <div className="sample-image" style={{ 
+                            width: "50%", 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center', 
+                            textAlign: 'center', 
+                            padding: '120px', 
+                            height: '500px', 
+                            position: 'relative',
+                            marginBottom: '70px' 
+                        }}>
                             {selectedItem ? (
                                 <img src={getImagePath()} alt={selectedItem} style={{ width: "100%", height: "auto" }} />
                             ) : (
@@ -207,22 +239,6 @@ function ProductionTable() {
                                     생산 품목을 선택하면 견본 이미지가 표시됩니다.
                                 </p>
                             )}
-                            <div style={{ position: 'absolute', bottom: '20px', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '20px' }}>
-                                <button 
-                                    className="update-button" 
-                                    onClick={() => navigate('/update')} 
-                                    style={{ fontSize: '22px', backgroundColor: '#FFA07A', color: '#fff', padding: '15px 45px', border: 'none', borderRadius: '5px' }}
-                                >
-                                    수정
-                                </button>
-                                <button 
-                                    className="delete-button" 
-                                    onClick={() => navigate('/delete')} 
-                                    style={{ fontSize: '22px', backgroundColor: '#FF6B6B', color: '#fff', padding: '15px 45px', border: 'none', borderRadius: '5px' }}
-                                >
-                                    삭제
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>

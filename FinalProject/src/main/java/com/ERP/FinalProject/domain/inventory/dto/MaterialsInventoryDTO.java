@@ -18,4 +18,5 @@ public class MaterialsInventoryDTO {
 	private Double unitPrice;
 	private Integer quantityInStore;
 	private LocalDateTime lastUpdated;
+    private Integer minimumStock;
 }

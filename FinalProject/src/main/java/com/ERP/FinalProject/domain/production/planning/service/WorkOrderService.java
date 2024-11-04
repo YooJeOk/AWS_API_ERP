@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,5 +44,14 @@ public class WorkOrderService {
 
     public void deleteWorkOrderById(int orderId) {
         workOrderRepository.deleteById(orderId);
+    }
+ // 검사가 완료되지 않은 주문을 반환
+    public List<WorkOrder> findUninspectedOrders() {
+        return workOrderRepository.findUninspectedOrders();
+    }
+
+    // 특정 주문 ID로 작업 지시 세부 정보 찾기
+    public Optional<WorkOrder> findWorkOrderDetailsById(int orderID) {
+        return workOrderRepository.findById(orderID);
     }
 }

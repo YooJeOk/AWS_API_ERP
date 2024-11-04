@@ -1,16 +1,25 @@
 import React from 'react';
 import { DashSquare, PlusSquare, XLg } from 'react-bootstrap-icons';
-import {useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import useClickSound from '../../hooks/useClickSound';
+import useTTS from '../../hooks/useTTS';
 
 const Cart = ({ items, updateQuantity, removeItem, clearCart }) => {
+  const ClickSound = useClickSound();
+  const playTTS = useTTS(); 
+
   const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
   const totalAmount = items.reduce((sum, item) => sum + item.totalPrice, 0);
   const navigate = useNavigate();
 
   const DetailClick = () => {
+    ClickSound();
+    playTTS("주문 세부내역을 다시 확인해주세요")
     navigate('/detail', { state: { cartItems: items } });
   };
-
+  const formatPrice = (price) => {
+    return price.toLocaleString('ko-KR');
+  };
   return (
     <div className="menu-pay-container container-md cart-fixed">
       <div id="cartContainer" className="cart fs-4 p-2 px-3">
@@ -22,19 +31,25 @@ const Cart = ({ items, updateQuantity, removeItem, clearCart }) => {
             <div className="cart-counter w-25 text-right">
               <button
                 className="cart-decrease cart-counter-btn"
-                onClick={() => updateQuantity(item.id, item.type, item.name, item.options, item.quantity - 1)}
+                onClick={() => {
+                  ClickSound();
+                  updateQuantity(item.id, item.type, item.name, item.options, item.quantity - 1)
+                }}
                 disabled={item.quantity === 1}
               ><DashSquare />
-            
+
               </button>
               <span className="cart-count">{item.quantity}</span>
               <button
                 className="cart-increase cart-counter-btn"
-                onClick={() => updateQuantity(item.id, item.type, item.name, item.options, item.quantity + 1)}
+                onClick={() => {
+                  ClickSound();
+                  updateQuantity(item.id, item.type, item.name, item.options, item.quantity + 1)
+                }}
               ><PlusSquare /></button>
             </div>
             <div className="cart-price w-25 text-right mb-3">
-              ₩{item.totalPrice}
+              ₩{formatPrice(item.totalPrice)}
             </div>
             <button type="button" className="cart-cancel" onClick={() => removeItem(index)}>
               <XLg />
@@ -51,12 +66,12 @@ const Cart = ({ items, updateQuantity, removeItem, clearCart }) => {
           <hr className="pay-boundary" />
           <div className="space-btw">
             <div>주문금액</div>
-            <div>{totalAmount}원</div>
+            <div>{formatPrice(totalAmount)}원</div>
           </div>
         </div>
         <div className="pay-btn-container fs-5">
           <button type="button" className="btn-basic btn-cancle" onClick={clearCart}>전체 취소</button>
-          <button type="button" className="btn-basic btn-pay"  onClick={DetailClick}>
+          <button type="button" className="btn-basic btn-pay" onClick={DetailClick}>
             결제하기
           </button>
         </div>

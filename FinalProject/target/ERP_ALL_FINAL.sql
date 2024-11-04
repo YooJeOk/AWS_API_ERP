@@ -14,9 +14,10 @@ CREATE TABLE ERP.Product (
     OnKiosk varchar(30) check (OnKiosk in ('Y','N')), -- 제품이 키오스크에 있는지 확인용
     Recommend varchar(30) check (Recommend in ('Y','N')), -- 제품 추천여부(키오스크용)
     DetailDescription varchar(300) NULL, -- 제품 설명(키오스크용)
+    MinimumStock INT NOT NULL DEFAULT 0, -- 최소재고 
     PRIMARY KEY (ProductID)
-     
 );
+
 
 -- 2. 공급업체 (Suppliers)
 CREATE TABLE ERP.Suppliers (
@@ -38,10 +39,10 @@ CREATE TABLE ERP.MaterialsInventory (
     Unit VARCHAR(50) NULL, -- 단위 (g, ml 등)
     UnitPrice float NULL, -- 단가
     LastUpdated DATETIME NULL, -- 최종 업데이트
+    MinimumStock INT NOT NULL DEFAULT 0, -- 최소 재고
     PRIMARY KEY (MaterialID),
     FOREIGN KEY (SupplierID) REFERENCES ERP.Suppliers(SupplierID)
 );
-
 
 -- 4. 원자재 입고 이력 (RawMaterialRestockHistory)
 CREATE TABLE ERP.RawMaterialRestockHistory (
@@ -69,17 +70,16 @@ CREATE TABLE ERP.ProductionConsumption (
 
 -- 6. 공장 재고 (FactoryInventory)
 CREATE TABLE ERP.FactoryInventory (
-    FactoryInventoryID INT NOT NULL AUTO_INCREMENT, -- 공장 재고ID
-    ProductID INT NOT NULL, -- 제품ID
-    MaterialID INT NOT NULL, -- 자재ID
-    DisposalID INT NOT NULL, -- 폐기ID
-    QuantityInFactory INT NULL, -- 공장 내 수량
-    FactoryDate DATETIME NULL, -- 공장 날짜
-        etc VARCHAR(100) NULL, -- 기타
+    FactoryInventoryID INT NOT NULL AUTO_INCREMENT,
+    ProductID INT,
+    MaterialID INT,
+    QuantityInFactory INT NOT NULL,
+    FactoryDate DATETIME NOT NULL,
     PRIMARY KEY (FactoryInventoryID),
     FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID),
     FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
 );
+
 
 -- 7. 폐기 기록 (DisposedRecords)
 CREATE TABLE ERP.DisposedRecords (
@@ -98,10 +98,10 @@ CREATE TABLE ERP.Coffee (
     CoffeeName VARCHAR(50) NULL, -- 커피 이름
     SalePrice INT NULL, -- 판매가
     CoffeeImage VARCHAR(200) NULL, -- 커피 이미지
-	OnKiosk varchar(30) check (OnKiosk in ('Y','N')), -- 커피가 키오스크에 있는지 확인용
-	Recommend varchar(30) check (Recommend in ('Y','N')), -- 제품 추천여부(키오스크용)
+   OnKiosk varchar(30) check (OnKiosk in ('Y','N')), -- 커피가 키오스크에 있는지 확인용
+   Recommend varchar(30) check (Recommend in ('Y','N')), -- 제품 추천여부(키오스크용)
     Temperature varchar(30) check (Temperature in ('ICE','HOT')), -- 제품 온도(ICE 이거나 HOT이거나)
-	DetailDescription varchar(300) NULL, -- 제품 설명(키오스크용)
+   DetailDescription varchar(300) NULL, -- 제품 설명(키오스크용)
     PRIMARY KEY (CoffeeID)
 );
 -- 9. 커피부가옵션
@@ -110,7 +110,7 @@ CREATE TABLE ERP.CoffeeOptions (
     MaterialID INT NOT NULL, -- 원자재 ID를 참조
     Name VARCHAR(100) NOT NULL, -- 옵션 이름
     Price INT NOT NULL, -- 옵션 가격 (추가 금액)
-	Quantity INT NOT NULL,             -- 수량
+   Quantity INT NOT NULL,             -- 수량
     PRIMARY KEY (OptionID),
     FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
 );
@@ -147,7 +147,7 @@ CREATE TABLE ERP.CoffeeOptionSalesDetails (
     OptionQuantity INT NOT NULL, -- 옵션 수량
     OptionPrice INT NOT NULL, -- 옵션 가격
     OptionSize varchar(50) NOT NULL, -- 옵션 사이즈
-	OptionTemperature varchar(50) NOT NULL, -- 옵션 온도
+   OptionTemperature varchar(50) NOT NULL, -- 옵션 온도
     PRIMARY KEY (CoffeeOptionDetailID),
     FOREIGN KEY (SaleDetailID) REFERENCES ERP.SalesDetails(SaleDetailID),
     FOREIGN KEY (OptionID) REFERENCES ERP.CoffeeOptions(OptionID)
@@ -173,15 +173,13 @@ CREATE TABLE ERP.WorkOrders (
 
 
 
-
-
 -- 14. 생산 계획 (ProductionPlanning)
 CREATE TABLE ERP.ProductionPlanning (
     PlanID INT NOT NULL AUTO_INCREMENT, -- 계획ID
     OrderID INT NOT NULL, -- 작업 지시ID
     ProductID INT NOT NULL, -- 제품ID
     ProductName   VARCHAR(100)  NOT NULL,      -- 상품명
-	Quantity       INT           NOT NULL,      -- 수량
+   Quantity       INT           NOT NULL,      -- 수량
     StartDate DATETIME NOT NULL, -- 시작 시간
     EndDate DATETIME NOT NULL, -- 시작 시간
     etc VARCHAR(100) NULL, -- 기타
@@ -225,7 +223,7 @@ CREATE TABLE ERP.ProductionMonitoring (
 -- 각 제품의 공정 진행 상태를 추적할 수 있습니다. 이 방식으로 세부적인 생산 공정을 관리하고, 전체 생산 상태를 확인할 수 있습니다
 CREATE TABLE ProductionProcessStatus (
     MonitorID INT NOT NULL,                        -- ProductionMonitoring 테이블과 연계
-	Status            VARCHAR(50) NULL,            -- 상태(대기,작업중,완료,위험,경고)
+   Status            VARCHAR(50) NULL,            -- 상태(대기,작업중,완료,위험,경고)
     WeighingComplete BOOLEAN DEFAULT FALSE,        -- 재료 계량 완료 여부 (약 10분)
     DoughComplete BOOLEAN DEFAULT FALSE,           -- 반죽 완료 여부 (약 20분)
     FirstFermentationComplete BOOLEAN DEFAULT FALSE, -- 1차 발효 완료 여부 (약 1시간)
@@ -269,7 +267,6 @@ CREATE TABLE DefectManagement (
     ProductName       VARCHAR(100)  NOT NULL,                  -- 상품명
     DefectType        VARCHAR(50)   NOT NULL,                  -- 불량 유형
     DefectQuantity    INT           NOT NULL,                  -- 불량 수량
-    DefectTimestamp   DATETIME      NOT NULL,                  -- 불량 발견 시간
     CauseDescription  VARCHAR(255)  NULL,                      -- 불량 원인 설명
     Status            ENUM('미처리', '완료') DEFAULT '미처리', -- 불량 처리 상태
     Defectrate        INT           DEFAULT 0 NULL,            -- 불량률
@@ -280,21 +277,20 @@ CREATE TABLE DefectManagement (
 
 -- 19 생산 입고 테이블 (ProductionEntry)
 CREATE TABLE ProductionEntry (
-    EntryID       INT           NOT NULL AUTO_INCREMENT,  -- 입고ID
-    QCID          INT           NOT NULL,  -- 품질관리ID
-    OrderID       INT           NOT NULL,  -- 주문ID
-    Quantity      INT           NOT NULL,      -- 수량
-    ProductID     INT           NOT NULL COMMENT 'PK', -- 상품ID
-    ProductName   VARCHAR(100)  NOT NULL,      -- 상품명
-    EntryDate     DATE          NOT NULL,      -- 입고날짜
-    etc              VARCHAR(100)      NULL, -- 기타
-    PRIMARY KEY (`EntryID`, `QCID`, `OrderID`, `Quantity`, `ProductID`, `ProductName`),
+    EntryID       INT           NOT NULL AUTO_INCREMENT,  -- 입고ID (기본 키)
+    QCID          INT           NOT NULL,                 -- 품질관리ID
+    OrderID       INT           NOT NULL,                 -- 주문ID
+    Quantity      INT           NOT NULL,                 -- 수량
+    ProductID     INT           NOT NULL,                 -- 상품ID
+    ProductName   VARCHAR(100)  NOT NULL,                 -- 상품명
+    EntryDate     DATE          NOT NULL,                 -- 입고날짜
+    etc           VARCHAR(100)  NULL,                     -- 기타
+    PRIMARY KEY (`EntryID`),
     FOREIGN KEY (`QCID`) REFERENCES `QualityControl` (`QCID`),
-    FOREIGN KEY (`OrderID`) REFERENCES `QualityControl` (`OrderID`),
-	FOREIGN KEY (`Quantity`) REFERENCES `QualityControl` (`Quantity`),
-    FOREIGN KEY (`ProductID`) REFERENCES `QualityControl` (`ProductID`),
-    FOREIGN KEY (`ProductName`) REFERENCES `QualityControl` (`ProductName`)
+    FOREIGN KEY (`OrderID`) REFERENCES `WorkOrders` (`OrderID`)
 );
+
+
 
 -- 20. 매장 재고 (StoreInventory)
 CREATE TABLE ERP.StoreInventory (
@@ -363,6 +359,23 @@ CREATE TABLE UserStamp (
     stamp INT DEFAULT 0,
     coupon INT DEFAULT 0
 );
+-- 26. 주문 내역
+CREATE TABLE OrderHistory (
+    OrderID INT AUTO_INCREMENT PRIMARY KEY,
+    Category VARCHAR(50) NOT NULL,
+	ProductID INT, -- 제품ID
+    MaterialID INT, -- 자재ID
+    ProductName VARCHAR(100) NOT NULL,
+    Quantity INT NOT NULL,
+    Unit VARCHAR(20) NOT NULL,
+    OrderType VARCHAR(50) DEFAULT '수동입력',
+    OrderStatus VARCHAR(50) DEFAULT '미처리',
+    OrderDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    CompletedDate DATETIME,
+	FOREIGN KEY (ProductID) REFERENCES ERP.Product(ProductID),
+    FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
+    
+);
 
 DELIMITER //
 
@@ -377,22 +390,23 @@ BEGIN
 END; //
 
 DELIMITER ;
-INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, OnKiosk,Recommend, DetailDescription)
+
+-- Product 테이블에 데이터 삽입
+INSERT INTO ERP.Product (ProductName, ProductCategory, UnitPrice, SalePrice, ProductionDate, ProductImage, OnKiosk, Recommend, DetailDescription, MinimumStock)
 VALUES 
--- 상품 insert문
-('갈릭꽈베기', 'bread', 2000, 3500, '2024-01-01', '/images/bread/갈릭꽈배기.jpg','Y', 'Y', '결결이 바삭한 식감의 패스트리에 알싸한 남해 마늘의 진한 맛과 향이 더해진 간식형 제품'),
-('단팥도넛', 'bread', 2500, 3700, '2024-01-01', '/images/bread/단팥도넛.jpg','Y', 'N', '달콤한 팥 앙금이 가득한 부드러운 도넛으로 전통과 현대의 맛이 조화로운 디저트'),
-('고구마케이크빵', 'bread', 1800, 3000, '2024-01-01', '/images/bread/고구마케이크빵.jpg', 'Y','Y', '부드러운 빵 속에 달콤한 고구마 필링이 가득한 케이크 스타일의 빵'),
-('꽈베기', 'bread', 2000, 2500, '2024-01-01', '/images/bread/꽈베기.jpg','Y', 'N', '쫄깃한 식감과 달콤한 맛이 일품인 전통적인 꽈배기'),
-('라우겐', 'bread', 2400, 4000, '2024-01-01', '/images/bread/라우겐.jpg', 'Y','N', '독일식 프레첼 빵으로, 짭짤하고 쫄깃한 식감이 특징인 빵'),
-('베이글빵', 'bread', 2000, 3800, '2024-01-01', '/images/bread/베이글빵.jpg','Y', 'N', '쫄깃한 식감과 부드러운 맛이 일품인 클래식한 베이글'),
-('생크림소보로', 'bread', 2000, 3800, '2024-01-01', '/images/bread/생크림소보로.jpg','Y', 'N', '부드러운 생크림과 바삭한 소보로의 조화가 매력적인 달콤한 빵'),
-('꿀버터바게트', 'bread', 2000, 3800, '2024-01-01', '/images/bread/꿀버터바게트.jpg', 'Y','N', '바삭한 바게트에 꿀과 버터가 스며들어 고소하고 달콤한 맛이 돋보이는 빵'),
-('애플파이', 'bread', 3000, 4500, '2024-01-01', '/images/bread/애플파이.jpg','Y', 'N', '바삭한 페이스트리 속에 달콤하고 상큼한 사과 필링이 가득한 클래식한 디저트'),
-('우유도넛', 'bread', 2200, 3300, '2024-01-01', '/images/bread/우유도넛.jpg', 'Y','N', '부드러운 우유 크림이 가득 들어간 폭신폭신한 도넛으로 은은한 우유 향이 일품'),
-('찹쌀브레드', 'bread', 2800, 4200, '2024-01-01', '/images/bread/찹쌀브레드.jpg', 'Y','N', '쫄깃한 찹쌀의 식감과 부드러운 빵의 조화가 일품인 건강한 맛의 브레드'),
-('카라멜 러스크', 'bread', 3500, 5000, '2024-01-01', '/images/bread/카라멜러스크.jpg', 'N','N', '바삭하게 구운 빵에 달콤한 카라멜을 입힌 고급스러운 간식'),
-('캐찰빵', 'bread', 2600, 3800, '2024-01-01', '/images/bread/캐찰빵.jpg', 'N','N', '치즈의 고소함과 달콤한 빵의 조화가 일품인 멕시코 스타일의 특색있는 빵');
+('갈릭꽈베기', 'bread', 2000, 3500, '2024-01-01', '/images/bread/갈릭꽈배기.jpg', 'Y', 'Y', '결결이 바삭한 식감의 패스트리에 알싸한 남해 마늘의 진한 맛과 향이 더해진 간식형 제품', 80),
+('단팥도넛', 'bread', 2500, 3700, '2024-01-01', '/images/bread/단팥도넛.jpg', 'Y', 'N', '달콤한 팥 앙금이 가득한 부드러운 도넛으로 전통과 현대의 맛이 조화로운 디저트', 4),
+('고구마케이크빵', 'bread', 1800, 3000, '2024-01-01', '/images/bread/고구마케이크빵.jpg', 'Y', 'Y', '부드러운 빵 속에 달콤한 고구마 필링이 가득한 케이크 스타일의 빵', 5),
+('꽈베기', 'bread', 2000, 2500, '2024-01-01', '/images/bread/꽈베기.jpg', 'Y', 'N', '쫄깃한 식감과 달콤한 맛이 일품인 전통적인 꽈배기', 6),
+('라우겐', 'bread', 2400, 4000, '2024-01-01', '/images/bread/라우겐.jpg', 'Y', 'N', '독일식 프레첼 빵으로, 짭짤하고 쫄깃한 식감이 특징인 빵', 3),
+('베이글빵', 'bread', 2000, 3800, '2024-01-01', '/images/bread/베이글빵.jpg', 'Y', 'N', '쫄깃한 식감과 부드러운 맛이 일품인 클래식한 베이글', 4),
+('생크림소보로', 'bread', 2000, 3800, '2024-01-01', '/images/bread/생크림소보로.jpg', 'Y', 'N', '부드러운 생크림과 바삭한 소보로의 조화가 매력적인 달콤한 빵', 4),
+('꿀버터바게트', 'bread', 2000, 3800, '2024-01-01', '/images/bread/꿀버터바게트.jpg', 'Y', 'N', '바삭한 바게트에 꿀과 버터가 스며들어 고소하고 달콤한 맛이 돋보이는 빵', 3),
+('애플파이', 'bread', 3000, 4500, '2024-01-01', '/images/bread/애플파이.jpg', 'Y', 'N', '바삭한 페이스트리 속에 달콤하고 상큼한 사과 필링이 가득한 클래식한 디저트', 2),
+('우유도넛', 'bread', 2200, 3300, '2024-01-01', '/images/bread/우유도넛.jpg', 'Y', 'N', '부드러운 우유 크림이 가득 들어간 폭신폭신한 도넛으로 은은한 우유 향이 일품', 3),
+('찹쌀브레드', 'bread', 2800, 4200, '2024-01-01', '/images/bread/찹쌀브레드.jpg', 'Y', 'N', '쫄깃한 찹쌀의 식감과 부드러운 빵의 조화가 일품인 건강한 맛의 브레드', 4),
+('카라멜 러스크', 'bread', 3500, 5000, '2024-01-01', '/images/bread/카라멜러스크.jpg', 'N', 'N', '바삭하게 구운 빵에 달콤한 카라멜을 입힌 고급스러운 간식', 2),
+('캐찰빵', 'bread', 2600, 3800, '2024-01-01', '/images/bread/캐찰빵.jpg', 'N', 'N', '치즈의 고소함과 달콤한 빵의 조화가 일품인 멕시코 스타일의 특색있는 빵', 3);
 
 -- 커피 insert문
 INSERT INTO ERP.Coffee (CoffeeID, CoffeeName, SalePrice, CoffeeImage,OnKiosk,Recommend, Temperature, DetailDescription)
@@ -420,48 +434,48 @@ VALUES
 ('공급업체Y', '010-3333-4444', '서울특별시 강남구', '식자재(커피) 공급', '2024-04-02 09:00:00'),
 ('공급업체O', '010-1111-2222', '서울특별시 강남구', '부자재 공급', '2024-04-01 08:00:00');
 
-INSERT INTO ERP.MaterialsInventory (SupplierID, MaterialName, Category, Unit, UnitPrice, LastUpdated)
-VALUES
+-- MaterialsInventory 테이블에 데이터 삽입
+INSERT INTO ERP.MaterialsInventory (SupplierID, MaterialName, Category, Unit, UnitPrice, LastUpdated, MinimumStock)
+VALUES 
+-- 빵
+(1, '계란', '식자재', 'g', 4, '2024-04-05 10:30:00', 1000),
+(1, '고구마필링', '식자재', 'g', 8, '2024-04-05 10:35:00', 1500),
+(1, '마늘', '식자재', 'g', 10, '2024-04-05 10:45:00', 800),
+(1, '물', '식자재', 'ml', 0.2, '2024-04-05 10:50:00', 400),
+(1, '밀가루', '식자재', 'g', 1.5, '2024-04-05 10:55:00', 2500),
+(1, '베이킹소다', '식자재', 'g', 2, '2024-04-05 11:10:00', 500),
+(1, '베이킹파우더', '식자재', 'g', 2, '2024-04-05 11:15:00', 500),
+(1, '소금', '식자재', 'g', 1, '2024-04-05 11:30:00', 300),
+(1, '시나몬 가루', '식자재', 'g', 6, '2024-04-05 11:40:00', 200),
+(1, '올리브오일', '식자재', 'ml', 10, '2024-04-05 11:50:00', 1000),
+(1, '이스트', '식자재', 'g', 3, '2024-04-05 12:00:00', 400),
+(1, '파슬리', '식자재', 'g', 4, '2024-04-05 12:05:00', 150),
+(1, '꿀', '식자재', 'g', 10, '2024-04-05 10:40:00', 800),
+(1, '바닐라 추출물', '식자재', 'ml', 100, '2024-04-05 11:00:00', 300),
+(1, '버터', '식자재', 'g', 12, '2024-04-05 11:05:00', 1200),
+(1, '생크림', '식자재', 'g', 10, '2024-04-05 11:20:00', 1000),
+(1, '설탕', '식자재', 'g', 0.5, '2024-04-05 11:25:00', 1500),
+(1, '팥앙금', '식자재', 'g', 7, '2024-04-05 12:10:00', 1000),
+(1, '우유', '식자재', 'ml', 3, '2024-04-05 12:10:00', 500),
 
--- 빵 관련 식자재 (1번 공급업체)
-(1, '계란', '식자재', 'g', 4, '2024-04-05 10:30:00'),          
-(1, '고구마필링', '식자재', 'g', 8, '2024-04-05 10:35:00'),    
-(1, '마늘', '식자재', 'g', 10, '2024-04-05 10:45:00'),          
-(1, '물', '식자재', 'ml', 0.2, '2024-04-05 10:50:00'),            
-(1, '밀가루', '식자재', 'g', 1.5, '2024-04-05 10:55:00'),       
-(1, '베이킹소다', '식자재', 'g', 2, '2024-04-05 11:10:00'),     
-(1, '베이킹파우더', '식자재', 'g', 2, '2024-04-05 11:15:00'),   
-(1, '소금', '식자재', 'g', 1, '2024-04-05 11:30:00'),           
-(1, '시나몬 가루', '식자재', 'g', 6, '2024-04-05 11:40:00'),    
-(1, '올리브오일', '식자재', 'ml', 10, '2024-04-05 11:50:00'),   
-(1, '이스트', '식자재', 'g', 3, '2024-04-05 12:00:00'),         
-(1, '파슬리', '식자재', 'g', 4, '2024-04-05 12:05:00'),         
-(1, '꿀', '식자재', 'g', 10, '2024-04-05 10:40:00'),            
-(1, '바닐라 추출물', '식자재', 'ml', 100, '2024-04-05 11:00:00'),
-(1, '버터', '식자재', 'g', 12, '2024-04-05 11:05:00'),          
-(1, '생크림', '식자재', 'g', 10, '2024-04-05 11:20:00'),        
-(1, '설탕', '식자재', 'g', 0.5, '2024-04-05 11:25:00'),         
-(1, '팥앙금', '식자재', 'g', 7, '2024-04-05 12:10:00'),  
-(1, '우유', '식자재', 'ml', 3, '2024-04-05 12:10:00'),  
+-- 커피
+(2, '원두(에스프레소)', '식자재', 'g', 20, '2024-04-06 09:00:00', 5500),
+(2, '카라멜시럽', '식자재', 'ml', 15, '2024-04-06 09:10:00', 200),
+(2, '초콜릿 시럽', '식자재', 'ml', 6, '2024-04-06 09:20:00', 150),
+(2, '콜드브루 원액', '식자재', 'ml', 6, '2024-04-06 09:30:00', 300),
+(2, '연유', '식자재', 'g', 2, '2024-04-06 09:40:00', 100),
+(2, '얼음', '식자재', 'ml', 15, '2024-04-06 09:40:00', 1000),
+(2, '헤이즐넛 시럽', '식자재', 'ml', 6, '2024-04-06 09:10:00', 180),
+(2, '바닐라 시럽', '식자재', 'ml', 6, '2024-04-06 09:20:00', 180),
+(2, '메이플 시럽', '식자재', 'ml', 6, '2024-04-06 09:20:00', 150),
+(2, '아이스크림', '식자재', 'ml', 20, '2024-04-06 09:20:00', 200),
 
--- 커피 재료 (2번 공급업체)
-(2, '원두(에스프레소)', '식자재', 'g', 20, '2024-04-06 09:00:00'),     
-(2, '카라멜시럽', '식자재', 'ml', 15, '2024-04-06 09:10:00'),        
-(2, '초콜릿 시럽', '식자재', 'ml', 6, '2024-04-06 09:20:00'),        
-(2, '콜드브루 원액', '식자재', 'ml', 6, '2024-04-06 09:30:00'),        
-(2, '연유', '식자재', 'g', 2, '2024-04-06 09:40:00'),  
-(2, '얼음', '식자재', 'ml', 15, '2024-04-06 09:40:00'),                 
-(2, '헤이즐넛 시럽', '식자재', 'ml', 6, '2024-04-06 09:10:00'),        
-(2, '바닐라 시럽', '식자재', 'ml', 6, '2024-04-06 09:20:00'),   
-(2, '메이플 시럽', '식자재', 'ml', 6, '2024-04-06 09:20:00'),   
-(2, '아이스크림', '식자재', 'ml', 20, '2024-04-06 09:20:00'),   
-
--- 부자재 (3번 공급업체)
-(3, '포장지', '포장재', '개', 20, '2024-04-06 11:00:00'),
-(3, '컵(regular size)', '부자재', '개', 70, '2024-04-06 11:10:00'),
-(3, '컵(extra size)', '부자재', '개', 80, '2024-04-06 11:20:00'),
-(3, '빨대', '부자재', '개', 3, '2024-04-06 11:30:00'),
-(3, '캐리어', '부자재', '개', 2, '2024-04-06 11:40:00');
+-- 부자재
+(3, '포장지', '포장재', '개', 20, '2024-04-06 11:00:00', 10),
+(3, '컵(regular size)', '부자재', '개', 70, '2024-04-06 11:10:00', 10),
+(3, '컵(extra size)', '부자재', '개', 80, '2024-04-06 11:20:00', 23),
+(3, '빨대', '부자재', '개', 3, '2024-04-06 11:30:00', 25),
+(3, '캐리어', '부자재', '개', 2, '2024-04-06 11:40:00', 30);
 
 -- 4. 원자재 재입고 이력 (RawMaterialRestockHistory) 테이블 더미 데이터
 INSERT INTO ERP.RawMaterialRestockHistory (MaterialID, SupplierID, RestockQuantity, UnitPrice, RestockDate)
@@ -479,11 +493,57 @@ VALUES
 
 
 -- 6. 공장 재고 (FactoryInventory) 테이블 더미 데이터
-INSERT INTO ERP.FactoryInventory (ProductID, MaterialID, DisposalID, QuantityInFactory, FactoryDate, etc)
+INSERT INTO ERP.FactoryInventory (ProductID, MaterialID, QuantityInFactory, FactoryDate)
 VALUES
-(1, 1, 1, 500, '2024-04-14 09:00:00', '정기 입고'),
-(2, 2, 2, 300, '2024-04-15 10:00:00', '추가 보충'),
-(3, 3, 3, 400, '2024-04-16 11:00:00', '일반 재고');
+-- 빵 아이템 재고
+(1, NULL, 200, '2024-10-29 00:00:00'),  -- 갈릭꽈베기
+(2, NULL, 180, '2024-10-29 00:00:00'),  -- 단팥도넛
+(3, NULL, 190, '2024-10-29 00:00:00'),  -- 고구마케이크빵
+(4, NULL, 220, '2024-10-29 00:00:00'),  -- 꽈베기
+(5, NULL, 150, '2024-10-29 00:00:00'),  -- 라우겐
+(6, NULL, 170, '2024-10-29 00:00:00'),  -- 베이글빵
+(7, NULL, 180, '2024-10-29 00:00:00'),  -- 생크림소보로
+(8, NULL, 130, '2024-10-29 00:00:00'),  -- 꿀버터바게트
+(9, NULL, 120, '2024-10-29 00:00:00'),  -- 애플파이
+(10, NULL, 160, '2024-10-29 00:00:00'), -- 우유도넛
+(11, NULL, 170, '2024-10-29 00:00:00'), -- 찹쌀브레드
+(12, NULL, 100, '2024-10-29 00:00:00'), -- 카라멜 러스크
+(13, NULL, 140, '2024-10-29 00:00:00'), -- 캐찰빵
+
+-- 모든 재료 재고
+(NULL, 1, 10000, '2024-10-29 00:00:00'), -- 계란
+(NULL, 2, 15000, '2024-10-29 00:00:00'), -- 고구마필링
+(NULL, 3, 8000, '2024-10-29 00:00:00'),  -- 마늘
+(NULL, 4, 20000, '2024-10-29 00:00:00'), -- 물
+(NULL, 5, 25000, '2024-10-29 00:00:00'), -- 밀가루
+(NULL, 6, 5000, '2024-10-29 00:00:00'),  -- 베이킹소다
+(NULL, 7, 5000, '2024-10-29 00:00:00'),  -- 베이킹파우더
+(NULL, 8, 3000, '2024-10-29 00:00:00'),  -- 소금
+(NULL, 9, 2000, '2024-10-29 00:00:00'),  -- 시나몬 가루
+(NULL, 10, 10000, '2024-10-29 00:00:00'), -- 올리브오일
+(NULL, 11, 4000, '2024-10-29 00:00:00'), -- 이스트
+(NULL, 12, 1500, '2024-10-29 00:00:00'), -- 파슬리
+(NULL, 13, 8000, '2024-10-29 00:00:00'), -- 꿀
+(NULL, 14, 3000, '2024-10-29 00:00:00'), -- 바닐라 추출물
+(NULL, 15, 12000, '2024-10-29 00:00:00'), -- 버터
+(NULL, 16, 10000, '2024-10-29 00:00:00'), -- 생크림
+(NULL, 17, 15000, '2024-10-29 00:00:00'), -- 설탕
+(NULL, 18, 10000, '2024-10-29 00:00:00'), -- 팥앙금
+(NULL, 19, 20000, '2024-10-29 00:00:00'), -- 우유
+(NULL, 20, 15000, '2024-10-29 00:00:00'), -- 원두(에스프레소)
+(NULL, 21, 8000, '2024-10-29 00:00:00'),  -- 카라멜시럽
+(NULL, 22, 6000, '2024-10-29 00:00:00'),  -- 초콜릿 시럽
+(NULL, 23, 10000, '2024-10-29 00:00:00'), -- 콜드브루 원액
+(NULL, 24, 5000, '2024-10-29 00:00:00'),  -- 연유
+(NULL, 25, 30000, '2024-10-29 00:00:00'), -- 얼음
+(NULL, 26, 7000, '2024-10-29 00:00:00'),  -- 헤이즐넛 시럽
+(NULL, 27, 7000, '2024-10-29 00:00:00'),  -- 바닐라 시럽
+(NULL, 28, 6000, '2024-10-29 00:00:00'),  -- 메이플 시럽
+(NULL, 29, 8000, '2024-10-29 00:00:00'),  -- 아이스크림
+(NULL, 30, 5000, '2024-10-29 00:00:00'),  -- 포장지
+(NULL, 31, 10000, '2024-10-29 00:00:00'), -- 컵(regular size)
+(NULL, 32, 10000, '2024-10-29 00:00:00'), -- 컵(extra size)
+(NULL, 33, 15000, '2024-10-29 00:00:00'); -- 빨대
 
 
 -- 7. 폐기 기록 (DisposedRecords) 테이블 더미 데이터
@@ -515,6 +575,9 @@ VALUES
     (2, '단팥도넛', 150, '2024-10-29 09:00:00', '2024-10-29 17:00:00', 'Medium', '일반 작업 요청'),
     (3, '고구마케이크빵', 120, '2024-10-30 10:00:00', '2024-10-30 18:00:00', 'Low', '특별 공정 필요'),
     (4, '꽈베기', 180, '2024-10-31 07:30:00', '2024-10-31 15:30:00', 'High', '정시 납기 요구');
+INSERT INTO ERP.WorkOrders (ProductID, ProductName, Quantity, StartDate, EndDate, Priority, etc)
+VALUES
+    (5, '라우겐', 120, '2024-11-01 08:00:00', '2024-11-01 16:00:00', 'Low', '품질 검사 대기');
 
 -- 14. 생산 계획 (ProductionPlanning)
 INSERT INTO ERP.ProductionPlanning (OrderID, ProductID, ProductName, Quantity, StartDate, EndDate, etc)
@@ -579,13 +642,17 @@ VALUES
     (3, 120, 3, '고구마케이크빵', '합격', '2024-10-30 19:00:00', '정상'),
     (4, 180, 4, '꽈베기', '불합격', '2024-10-31 16:00:00', '크기 불일치');
 
+
+
+
+
 -- 18. 불량 관리 (DefectManagement)
-INSERT INTO DefectManagement (QCID, OrderID, Quantity, ProductID, ProductName, DefectType, DefectQuantity, DefectTimestamp, CauseDescription, Status, Defectrate, etc)
+INSERT INTO DefectManagement (QCID, OrderID, Quantity, ProductID, ProductName, DefectType, DefectQuantity,  CauseDescription, Status, Defectrate, etc)
 VALUES
-    (2, 2, 150, 2, '단팥도넛', '색상 불량', 20, '2024-10-29 18:30:00', '원료 문제', '미처리', 13, NULL),
-    (4, 4, 180, 4, '꽈베기', '크기 불일치', 30, '2024-10-31 16:30:00', '기계 오작동', '미처리', 16, NULL),
-    (2, 2, 150, 2, '단팥도넛', '형태 불량', 10, '2024-10-29 19:00:00', '성형 문제', '완료', 6, NULL),
-    (4, 4, 180, 4, '꽈베기', '표면 오염', 5, '2024-10-31 17:00:00', '작업 환경 불량', '완료', 3, NULL);
+    (1, 4, 150, 2, '단팥도넛', '색상 불량', 20,  '원료 문제', '미처리', 13, NULL),
+    (2, 4, 180, 4, '꽈베기', '크기 불일치', 30,  '기계 오작동', '미처리', 16, NULL),
+    (3, 2, 150, 2, '단팥도넛', '형태 불량', 10,  '성형 문제', '완료', 6, NULL),
+    (4, 4, 180, 4, '꽈베기', '표면 오염', 5,  '작업 환경 불량', '완료', 3, NULL);
 
 -- 19. 생산 입고 (ProductionEntry)
 INSERT INTO ProductionEntry (QCID, OrderID, Quantity, ProductID, ProductName, EntryDate, etc)
@@ -630,8 +697,7 @@ VALUES
 (NULL, 30, 100, '2024-10-29 00:00:00'), -- 포장지
 (NULL, 31, 100, '2024-10-29 00:00:00'),  -- 컵(regular size)
 (NULL, 32, 232, '2024-10-29 00:00:00'),  -- 컵(extra size)
-(NULL, 33, 250, '2024-10-29 00:00:00'), -- 빨대
-(NULL, 34, 300, '2024-10-29 00:00:00');   -- 캐리어
+(NULL, 33, 250, '2024-10-29 00:00:00'); -- 빨대
 
 
 -- 21. MBOM 테이블 더미 데이터
@@ -811,16 +877,12 @@ VALUES
 (6, 'Coffee', 'Regular', 25, '헤이즐넛라떼', 150, 'ml', 2, 150 * 2),      -- 얼음
 (6, 'Coffee', 'Regular', 31, '헤이즐넛라떼', 1, 'ea', 70, 70),            -- 컵(regular size)
 
-
-
-
-
--- 헤이즐넛 아메리카노 970원
-(7, 'Coffee', 'Regular', 20, '헤이즐넛 아메리카노', 20, 'g', 20, 20 * 20),       -- 원두(에스프레소)
-(7, 'Coffee', 'Regular', 26, '헤이즐넛 아메리카노', 15, 'ml', 10, 15 * 10),      -- 헤이즐넛 시럽
-(7, 'Coffee', 'Regular', 4, '헤이즐넛 아메리카노', 100, 'ml', 0.2, 100 * 0.2),   -- 물
-(7, 'Coffee', 'Regular', 25, '헤이즐넛 아메리카노', 150, 'ml', 2, 150 * 2),      -- 얼음
-(7, 'Coffee', 'Regular', 31, '헤이즐넛 아메리카노', 1, 'ea', 70, 70),            -- 컵(regular size)
+-- 헤이즐넛아메리카노 970원
+(7, 'Coffee', 'Regular', 20, '헤이즐넛아메리카노', 20, 'g', 20, 20 * 20),       -- 원두(에스프레소)
+(7, 'Coffee', 'Regular', 26, '헤이즐넛아메리카노', 15, 'ml', 10, 15 * 10),      -- 헤이즐넛 시럽
+(7, 'Coffee', 'Regular', 4, '헤이즐넛아메리카노', 100, 'ml', 0.2, 100 * 0.2),   -- 물
+(7, 'Coffee', 'Regular', 25, '헤이즐넛아메리카노', 150, 'ml', 2, 150 * 2),      -- 얼음
+(7, 'Coffee', 'Regular', 31, '헤이즐넛아메리카노', 1, 'ea', 70, 70),            -- 컵(regular size)
 
 -- 바닐라 아메리카노 1220원
 (8, 'Coffee', 'Regular', 20, '바닐라 아메리카노', 20, 'g', 20, 20 * 20),         -- 원두(에스프레소)
@@ -836,16 +898,16 @@ VALUES
 (10, 'Coffee', 'Regular', 31, '콜드브루라떼', 1, 'ea', 70, 70),                  -- 컵(regular size)
 
 -- 헤이즐넛라떼(핫) 1370원
-(11, 'Coffee', 'Regular', 20, '헤이즐넛라떼', 20, 'g', 20, 20 * 20),             -- 원두(에스프레소)
-(11, 'Coffee', 'Regular', 26, '헤이즐넛라떼', 15, 'ml', 10, 15 * 10),            -- 헤이즐넛 시럽
-(11, 'Coffee', 'Regular', 19, '헤이즐넛라떼', 100, 'ml', 3, 100 * 3),            -- 우유
-(11, 'Coffee', 'Regular', 31, '헤이즐넛라떼', 1, 'ea', 70, 70),                  -- 컵(regular size)
+(11, 'Coffee', 'Regular', 20, '헤이즐넛라떼핫', 20, 'g', 20, 20 * 20),             -- 원두(에스프레소)
+(11, 'Coffee', 'Regular', 26, '헤이즐넛라떼핫', 15, 'ml', 10, 15 * 10),            -- 헤이즐넛 시럽
+(11, 'Coffee', 'Regular', 19, '헤이즐넛라떼핫', 100, 'ml', 3, 100 * 3),            -- 우유
+(11, 'Coffee', 'Regular', 31, '헤이즐넛라떼핫', 1, 'ea', 70, 70),                  -- 컵(regular size)
 
 -- 헤이즐넛아메리카노(핫) 970원
-(12, 'Coffee', 'Regular', 20, '헤이즐넛아메리카노', 20, 'g', 20, 20 * 20),       -- 원두(에스프레소)
-(12, 'Coffee', 'Regular', 26, '헤이즐넛아메리카노', 15, 'ml', 10, 15 * 10),      -- 헤이즐넛 시럽
-(12, 'Coffee', 'Regular', 4, '헤이즐넛아메리카노', 100, 'ml', 0.2, 100 * 0.2),   -- 물
-(12, 'Coffee', 'Regular', 31, '헤이즐넛아메리카노', 1, 'ea', 70, 70),            -- 컵(regular size)
+(12, 'Coffee', 'Regular', 20, '헤이즐넛아메리카노핫', 20, 'g', 20, 20 * 20),       -- 원두(에스프레소)
+(12, 'Coffee', 'Regular', 26, '헤이즐넛아메리카노핫', 15, 'ml', 10, 15 * 10),      -- 헤이즐넛 시럽
+(12, 'Coffee', 'Regular', 4, '헤이즐넛아메리카노핫', 100, 'ml', 0.2, 100 * 0.2),   -- 물
+(12, 'Coffee', 'Regular', 31, '헤이즐넛아메리카노핫', 1, 'ea', 70, 70),            -- 컵(regular size)
 
 -- 연유라떼 1470원
 (13, 'Coffee', 'Regular', 20, '연유라떼', 20, 'g', 20, 20 * 20),                -- 원두(에스프레소)
@@ -855,10 +917,8 @@ VALUES
 (13, 'Coffee', 'Regular', 31, '연유라떼', 1, 'ea', 70, 70),                     -- 컵(regular size)
 
 -- 에스프레소(레귤러) 470원
-(14, 'Coffee', 'Regular', 20, '에스프레소(레귤러)', 20, 'g', 20, 20 * 20),      -- 원두(에스프레소)
-(14, 'Coffee', 'Regular', 31, '에스프레소(레귤러)', 1, 'ea', 70, 70),           -- 컵(regular size)
-
-
+(14, 'Coffee', 'Regular', 20, '에스프레소', 20, 'g', 20, 20 * 20),      -- 원두(에스프레소)
+(14, 'Coffee', 'Regular', 31, '에스프레소', 1, 'ea', 70, 70),           -- 컵(regular size)
 
 
 -- 엑스트라-----------------------------------------------------------------------
@@ -901,15 +961,12 @@ VALUES
 (6, 'Coffee', 'Extra', 25, '헤이즐넛라떼(엑스트라)', 250, 'ml', 2, 250 * 2),    -- 얼음
 (6, 'Coffee', 'Extra', 32, '헤이즐넛라떼(엑스트라)', 1, 'ea', 80, 80),          -- 컵(extra size)
 
-
-
-
--- 헤이즐넛 아메리카노 1410원
-(7, 'Coffee', 'Extra', 20, '헤이즐넛 아메리카노(엑스트라)', 30, 'g', 20, 30 * 20),       -- 원두(에스프레소)
-(7, 'Coffee', 'Extra', 26, '헤이즐넛 아메리카노(엑스트라)', 20, 'ml', 10, 20 * 10),     -- 헤이즐넛 시럽
-(7, 'Coffee', 'Extra', 4, '헤이즐넛 아메리카노(엑스트라)', 150, 'ml', 0.2, 150 * 0.2),   -- 물
-(7, 'Coffee', 'Extra', 25, '헤이즐넛 아메리카노(엑스트라)', 250, 'ml', 2, 250 * 2),      -- 얼음
-(7, 'Coffee', 'Extra', 32, '헤이즐넛 아메리카노(엑스트라)', 1, 'ea', 80, 80),            -- 컵(extra size)
+-- 헤이즐넛아메리카노(엑스트라) 910원
+(7, 'Coffee', 'Extra', 20, '헤이즐넛아메리카노(엑스트라)', 30, 'g', 20, 30 * 20),       -- 원두(에스프레소)
+(7, 'Coffee', 'Extra', 26, '헤이즐넛아메리카노(엑스트라)', 20, 'ml', 10, 20 * 10),     -- 헤이즐넛 시럽
+(7, 'Coffee', 'Extra', 4, '헤이즐넛아메리카노(엑스트라)', 150, 'ml', 0.2, 150 * 0.2),   -- 물
+(7, 'Coffee', 'Extra', 25, '헤이즐넛아메리카노(엑스트라)', 250, 'ml', 2, 250 * 2),    -- 얼음
+(7, 'Coffee', 'Extra', 32, '헤이즐넛아메리카노(엑스트라)', 1, 'ea', 80, 80),           -- 컵(extra size)
 
 -- 바닐라 아메리카노 1410원
 (8, 'Coffee', 'Extra', 20, '바닐라 아메리카노(엑스트라)', 30, 'g', 20, 30 * 20),         -- 원두(에스프레소)
@@ -925,25 +982,27 @@ VALUES
 (10, 'Coffee', 'Extra', 32, '콜드브루라떼(엑스트라)', 1, 'ea', 80, 80),                 -- 컵(extra size)
 
 -- 헤이즐넛라떼(핫, 엑스트라) 1330원
-(11, 'Coffee', 'Extra', 20, '헤이즐넛라떼(엑스트라)', 30, 'g', 20, 30 * 20),            -- 원두(에스프레소)
-(11, 'Coffee', 'Extra', 26, '헤이즐넛라떼(엑스트라)', 20, 'ml', 10, 20 * 10),           -- 헤이즐넛 시럽
-(11, 'Coffee', 'Extra', 19, '헤이즐넛라떼(엑스트라)', 150, 'ml', 3, 150 * 3),           -- 우유
-(11, 'Coffee', 'Extra', 32, '헤이즐넛라떼(엑스트라)', 1, 'ea', 80, 80),                 -- 컵(extra size)
+(11, 'Coffee', 'Extra', 20, '헤이즐넛라떼핫(엑스트라)', 30, 'g', 20, 30 * 20),            -- 원두(에스프레소)
+(11, 'Coffee', 'Extra', 26, '헤이즐넛라떼핫(엑스트라)', 20, 'ml', 10, 20 * 10),           -- 헤이즐넛 시럽
+(11, 'Coffee', 'Extra', 19, '헤이즐넛라떼핫(엑스트라)', 150, 'ml', 3, 150 * 3),           -- 우유
+(11, 'Coffee', 'Extra', 32, '헤이즐넛라떼핫(엑스트라)', 1, 'ea', 80, 80),                 -- 컵(extra size)
 
 -- 헤이즐넛아메리카노(핫, 엑스트라) 910원
-(12, 'Coffee', 'Extra', 20, '헤이즐넛아메리카노(엑스트라)', 30, 'g', 20, 30 * 20),       -- 원두(에스프레소)
-(12, 'Coffee', 'Extra', 26, '헤이즐넛아메리카노(엑스트라)', 20, 'ml', 10, 20 * 10),     -- 헤이즐넛 시럽
-(12, 'Coffee', 'Extra', 4, '헤이즐넛아메리카노(엑스트라)', 150, 'ml', 0.2, 150 * 0.2),   -- 물
-(12, 'Coffee', 'Extra', 32, '헤이즐넛아메리카노(엑스트라)', 1, 'ea', 80, 80),           -- 컵(extra size)
+(12, 'Coffee', 'Extra', 20, '헤이즐넛아메리카노핫(엑스트라)', 30, 'g', 20, 30 * 20),       -- 원두(에스프레소)
+(12, 'Coffee', 'Extra', 26, '헤이즐넛아메리카노핫(엑스트라)', 20, 'ml', 10, 20 * 10),     -- 헤이즐넛 시럽
+(12, 'Coffee', 'Extra', 4, '헤이즐넛아메리카노핫(엑스트라)', 150, 'ml', 0.2, 150 * 0.2),   -- 물
+(12, 'Coffee', 'Extra', 32, '헤이즐넛아메리카노핫(엑스트라)', 1, 'ea', 80, 80),           -- 컵(extra size)
 
 -- 연유라떼(엑스트라) 1690원
 (13, 'Coffee', 'Extra', 20, '연유라떼(엑스트라)', 30, 'g', 20, 30 * 20),               -- 원두(에스프레소)
 (13, 'Coffee', 'Extra', 25, '연유라떼(엑스트라)', 250, 'ml', 2, 250 * 2),              -- 얼음
 (13, 'Coffee', 'Extra', 19, '연유라떼(엑스트라)', 150, 'ml', 3, 150 * 3),              -- 우유
 (13, 'Coffee', 'Extra', 24, '연유라떼(엑스트라)', 30, 'g', 2, 30 * 2),                 -- 연유
-(13, 'Coffee', 'Extra', 32, '연유라떼(엑스트라)', 1, 'ea', 80, 80);                   -- 컵(extra size)
+(13, 'Coffee', 'Extra', 32, '연유라떼(엑스트라)', 1, 'ea', 80, 80),                   -- 컵(extra size)
 
-
+-- 에스프레소(엑스트라) 680원
+(14, 'Coffee', 'Extra', 20, '에스프레소(엑스트라)', 20, 'g', 30, 30 * 20),      -- 원두(에스프레소)
+(14, 'Coffee', 'Extra', 31, '에스프레소(엑스트라)', 1, 'ea', 80, 80);           -- 컵(extra size)
 -- 22. ProductMaterials
 INSERT INTO ProductMaterials (ProductID, MaterialID, Quantity)
 VALUES 
@@ -1044,3 +1103,6 @@ SELECT * FROM ERP.coffee_materials;
 
 -- 24. 유저 스탬프 데이터 조회
 SELECT * FROM UserStamp;
+
+-- 26. 주문 내역 조회
+SELECT * FROM orderhistory;

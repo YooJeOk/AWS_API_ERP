@@ -3,8 +3,13 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import './earn.css';
 import OrderSummary from '../../components/Kiosk/OrderSummary';
 import KeypadModal from '../../components/Kiosk/KeypadModal';
+import useClickSound from '../../hooks/useClickSound';
+import useTTS from '../../hooks/useTTS';
 
 const EarnPage = () => {
+  const ClickSound = useClickSound();
+  const playTTS = useTTS(); 
+
   const navigate = useNavigate();
   const location = useLocation();
   const [showKeypad, setShowKeypad] = useState(false);
@@ -15,15 +20,19 @@ const EarnPage = () => {
   const [userData, setUserData] = useState(null);
 
   const handleCancel = () => {
+    ClickSound();
     navigate('/');
   };
 
   const handlePrevious = () => {
+    ClickSound();
+    playTTS("주문 세부내역을 다시 확인해주세요")
     navigate('/detail', { state: { cartItems ,userData} });
   };
   const handleNext = async () => {
+    ClickSound();
+    playTTS("결제 방식을 선택해주세요")
     try {
-      // await playTTS('결제 방식을 선택해 주세요'); 
       navigate('/payment', { state: { cartItems, userData } });
     } catch (error) {
       console.error("Failed to play TTS message:", error);
@@ -36,38 +45,27 @@ const EarnPage = () => {
     }
   }, [location.state]);
 
-  const playTTS = async (message) => {
-    try {
-      const response = await fetch(`http://localhost:8080/api/tts?text=${encodeURIComponent(message)}`);
-      if (!response.ok) {
-        throw new Error('TTS API request failed');
-      }
-      const blob = await response.blob();
-      const audioUrl = URL.createObjectURL(blob);
-      const audio = new Audio(audioUrl);
-      audio.play();
-    } catch (error) {
-      console.error("Failed to play TTS message:", error);
-    }
-  };
-
   const handlePhoneCheck = () => {
+    ClickSound();
     playTTS('번호를 입력해주세요');
     setKeypadPurpose('phoneCheck');
     setShowKeypad(true);
   };
 
   const handleJoinMember = () => {
+    ClickSound();
     playTTS('번호를 입력해주세요');
     setKeypadPurpose('joinMember');
     setShowKeypad(true);
   };
 
   const handleKeypadClose = () => {
+    ClickSound();
     setShowKeypad(false);
   };
 
   const handleKeypadSubmit = async (number) => {
+    ClickSound();
     if (keypadPurpose === 'phoneCheck') {
       try {
         const response = await fetch(`http://localhost:8080/api/user/${number}`);
@@ -86,10 +84,12 @@ const EarnPage = () => {
     }
     setShowKeypad(false);
   };
-
+  const formatPrice = (price) => {
+    return price.toLocaleString('ko-KR');
+  };
   return (
     <div className="detail-page container-md body-center">
-      <nav className="detail-header text-bold">적립하시겠습니까?</nav>
+      <nav className="detail-header text-bold">적립을 선택해주세요</nav>
       <div className="earn-content">
         <div className="earn-guide fs-4">
           회원이 아니시라면 [회원가입]을, 적립을 원하지 않으시면 결제를 진행해주세요
@@ -125,9 +125,9 @@ const EarnPage = () => {
         )}
       </div>
       <OrderSummary
-        orderAmount={totalAmount}
+        orderAmount={formatPrice(totalAmount)}
         discountAmount={0}
-        totalAmount={totalAmount}
+        totalAmount={formatPrice(totalAmount)}
         onCancel={handleCancel}
         onPrevious={handlePrevious}
         onNext={handleNext}

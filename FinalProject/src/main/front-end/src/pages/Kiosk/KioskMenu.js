@@ -5,8 +5,10 @@ import Cart from '../../components/Kiosk/Cart';
 import './KioskMenu.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { House } from 'react-bootstrap-icons';
+import useClickSound from '../../hooks/useClickSound';
 
 const KioskMenu = () => {
+  const ClickSound = useClickSound(); 
 
   const [selectedCategory, setSelectedCategory] = useState('추천메뉴');
   const [additionalOptions, setAdditionalOptions] = useState([]);
@@ -110,6 +112,7 @@ const KioskMenu = () => {
   }, [selectedCategory, currentPage]);
 
   const handlePageChange = (newPage) => {
+    ClickSound();
     setCurrentPage(newPage);
   };
 
@@ -154,6 +157,7 @@ const KioskMenu = () => {
 
 
   const removeFromCart = (index) => {
+    ClickSound();
     setCartItems(prevItems => prevItems.filter((_, i) => i !== index));
   };
 
@@ -176,12 +180,15 @@ const KioskMenu = () => {
   };
 
   const clearCart = () => {
+    ClickSound();
     setCartItems([]);
   };
   const handlePayment = () => {
+    ClickSound();
     navigate('/detail', { state: { cartItems } });
   };
   const handleHome=()=>{
+    ClickSound();
     navigate('/');
   }
 

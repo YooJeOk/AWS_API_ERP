@@ -367,7 +367,18 @@ button {
 }
 
 /* 모달끝 */
-
+.bag-x{
+  margin-top: 10px;
+  width: 100px;
+  height: 100px;
+  opacity: 0.3;
+  color: #D9BBA0;
+}
+.opacity-7{
+  margin-top: 25px;
+  opacity: 0.5;
+  color: #D9BBA0;
+}
 .item-price {
   font-weight: bold;
   color: #D98C5F;
@@ -395,6 +406,8 @@ button {
   width: 95%;
   height: 140px;
   overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: #ffdeb3 white;
 }
 
 .cart-item {

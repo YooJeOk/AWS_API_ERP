@@ -44,6 +44,7 @@ function ProductionSidebar() {
                         
                         
                         <li><Link to="/production8">● 생산 현황 모니터링</Link></li>
+                        <li><Link to="/produtionmonitering2">● 생산 과정 모니터링</Link></li>
                         <li><Link to="/input3">● 생산 계획 등록</Link></li>
                         <li><Link to="/production3">● 생산 계획 조회</Link></li>
                         
@@ -76,14 +77,7 @@ function ProductionSidebar() {
                         <li><Link to="/production2">● 생산 입고 조회</Link></li>
                     </ul>
                 </div>
-
-                <div className="dropdown">
-                <button className="menu-item" style={{backgroundColor: '#F0C490', color:'white'}}>생산실적 관리</button>
-                    <ul className="dropdown-menu">
-                        <li><Link to="/input9">● 생산실적 등록</Link></li>
-                        <li><Link to="/production9">● 날짜별 가동율 실적 조회</Link></li>
-                    </ul>
-                </div>
+                          
             </div>
         </div>
     );

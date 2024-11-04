@@ -12,7 +12,7 @@ public class MBOM {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int bomId;  // 필드 이름을 소문자로 변경
 
-    private int itemId;
+    private Long itemId;
     
     @Enumerated(EnumType.STRING)
     private ItemType itemType;
@@ -20,7 +20,7 @@ public class MBOM {
     @Enumerated(EnumType.STRING)
     private Size size;
     
-    private int materialId;  // materialId로 변경하여 쿼리와 일관성 유지
+    private Long materialId;  // materialId로 변경하여 쿼리와 일관성 유지
     
     private String productName;
     

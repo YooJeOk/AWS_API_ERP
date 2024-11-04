@@ -2,6 +2,7 @@ import React from 'react';
 import './CouponModal.css';
 
 const CouponModal = ({ message, onClose, onConfirm, onCancel }) => {
+    
     return (
         <div className="coupon-modal-overlay">
             <div className="coupon-modal">

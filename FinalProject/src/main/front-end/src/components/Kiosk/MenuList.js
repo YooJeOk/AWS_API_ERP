@@ -3,21 +3,31 @@ import MenuItem from './MenuItem.js';
 import { CaretLeft, CaretRight } from 'react-bootstrap-icons';
 import BreadModal from './BreadModal.js';
 import CoffeeModal from './CoffeeModal.js';
+import useClickSound from '../../hooks/useClickSound.js';
 
 const MenuList = ({ items, onAddToCart, additionalOptions, currentPage, totalPages, onPageChange, selectedCategory }) => {
   const [selectedItem, setSelectedItem] = useState(null);
-  
+  const ClickSound = useClickSound(); 
+
   const handlePrevPage = () => {
     if (currentPage > 0) {
+      ClickSound();
       onPageChange(currentPage - 1);
     }
   };
 
   const handleNextPage = () => {
     if (currentPage < totalPages - 1) {
+      ClickSound();
       onPageChange(currentPage + 1);
     }
   };
+
+  const itemsPerPage = 6;
+
+  const emptyItems = Array(itemsPerPage - items.length).fill({ type: 'empty', name: 'empty', price: 0 });
+
+  const displayItems = [...items, ...emptyItems];
 
   return (
     <div className="tab-content pt-1">
@@ -35,12 +45,12 @@ const MenuList = ({ items, onAddToCart, additionalOptions, currentPage, totalPag
       </button>
 
       <div className="menu-container">
-        {Array.isArray(items) && items.map((item, index) => (
+        {displayItems.map((item, index) => (
           <MenuItem
             key={`${item.type}-${item.name}-${index}`} 
             item={item}
-            onSelect={() => setSelectedItem(item)}
-            isBest={selectedCategory === '추천메뉴'}
+            onSelect={() => item.type !== 'empty' && setSelectedItem(item)}
+            isBest={selectedCategory === '추천메뉴' && item.type !== 'empty'}
           />
         ))}
       </div>
@@ -61,7 +71,10 @@ const MenuList = ({ items, onAddToCart, additionalOptions, currentPage, totalPag
       {selectedItem && selectedItem.type === 'bread' && (
         <BreadModal
           item={selectedItem}
-          onClose={() => setSelectedItem(null)}
+          onClose={() =>{
+            ClickSound();
+            setSelectedItem(null);
+          }}
           onAddToCart={onAddToCart}
         />
       )}
@@ -69,7 +82,10 @@ const MenuList = ({ items, onAddToCart, additionalOptions, currentPage, totalPag
       {selectedItem && selectedItem.type === 'coffee' && (
         <CoffeeModal
           item={selectedItem}
-          onClose={() => setSelectedItem(null)}
+          onClose={() =>{
+            ClickSound();
+            setSelectedItem(null);
+          }}
           onAddToCart={onAddToCart}
           additionalOptions={additionalOptions}
         />

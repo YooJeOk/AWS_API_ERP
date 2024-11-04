@@ -1,5 +1,6 @@
 package com.ERP.FinalProject.domain.inventory.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -10,10 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.ERP.FinalProject.domain.KioskManagement.entity.StoreInventory;
 import com.ERP.FinalProject.domain.KioskManagement.repository.StoreInventoryRepository;
-import com.ERP.FinalProject.domain.inventory.entity.MBOM;
-import com.ERP.FinalProject.domain.inventory.repository.MBOMRepository;
 import com.ERP.FinalProject.domain.kiosk.entity.CoffeeOption;
 import com.ERP.FinalProject.domain.kiosk.repository.CoffeeOptionsRepository;
+import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM;
+import com.ERP.FinalProject.domain.production.MBOM.repository.MBOMRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,6 +47,7 @@ public class InventoryService {
             }
         }
     }
+
     private void updateBreadInventory(Long productId, int quantity) {
         StoreInventory inventory = storeInventoryRepository.findByProductId(productId)
                 .orElseThrow(() -> new RuntimeException("Inventory not found for product: " + productId));
@@ -53,10 +55,23 @@ public class InventoryService {
         inventory.setQuantityInStore(inventory.getQuantityInStore() - quantity);
         storeInventoryRepository.save(inventory);
     }
+
     private void updateCoffeeInventory(Long coffeeId, Map<String, Object> options, int quantity) {
-        String size = (String) options.get("size");
-        List<MBOM> recipes = mbomRepository.findByItemIdAndItemTypeAndSize(coffeeId, "Coffee", size);
+    	  String sizeStr = (String) options.get("size");
+    	    MBOM.Size size;
+        try {
+            size = MBOM.Size.valueOf(sizeStr);
+        } catch (IllegalArgumentException e) {
+            // 대소문자를 구분하지 않고 일치하는 열거형 값을 찾습니다.
+            size = Arrays.stream(MBOM.Size.values())
+                         .filter(s -> s.name().equalsIgnoreCase(sizeStr))
+                         .findFirst()
+                         .orElseThrow(() -> new IllegalArgumentException("Invalid size: " + sizeStr));
+        }
         
+        List<MBOM> recipes = mbomRepository.findByItemIdAndItemTypeAndSize(coffeeId, MBOM.ItemType.Coffee, size);
+        
+               
         for (MBOM recipe : recipes) {
             List<StoreInventory> inventories = storeInventoryRepository.findAllByMaterialId(recipe.getMaterialId());
             log.info("Found {} inventory items for MaterialId: {}", inventories.size(), recipe.getMaterialId());

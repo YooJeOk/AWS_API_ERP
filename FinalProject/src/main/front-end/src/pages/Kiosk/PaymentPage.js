@@ -6,12 +6,16 @@ import PaymentModal from '../../components/Kiosk/PaymentModal';
 
 import axios from 'axios';
 import CouponModal from '../../components/Kiosk/CouponModal';
+import useClickSound from '../../hooks/useClickSound';
+import useTTS from '../../hooks/useTTS';
 
 const PaymentPage = () => {
+  const playTTS = useTTS(); 
   const navigate = useNavigate();
   const location = useLocation();
   const cartItems = location.state?.cartItems || [];
   const userData = location.state?.userData || null;
+  const ClickSound = useClickSound();
 
   const [discountAmount, setDiscountAmount] = useState(0);
   const totalAmount = cartItems.reduce((sum, item) => sum + item.totalPrice, 0);
@@ -19,12 +23,6 @@ const PaymentPage = () => {
   const [modalMessage, setModalMessage] = useState('');
   const [showCouponModal, setShowCouponModal] = useState(false);
 
-  const playClickSound = () => {
-    const audio = new Audio('/sounds/mouth-bass.mp3');
-    audio.play().catch(error => {
-      console.error("Failed to play click sound:", error);
-    });
-  };
 
   useEffect(() => {
     // 포트원 스크립트 로드
@@ -35,6 +33,7 @@ const PaymentPage = () => {
     // 네이버페이 스크립트 로드
     const naverPayScript = document.createElement('script');
     naverPayScript.src = "https://nsp.pay.naver.com/sdk/js/naverpay.min.js";
+    naverPayScript.onload = () => console.log('Naver Pay script loaded');
     document.body.appendChild(naverPayScript);
 
     return () => {
@@ -42,43 +41,55 @@ const PaymentPage = () => {
       document.body.removeChild(naverPayScript);
     };
   }, []);
+
+
+
   const handleCancel = () => {
+    ClickSound();
     navigate('/');
   };
 
   const handlePrevious = () => {
+    playTTS("적립을 선택해주세요")
+    ClickSound();
     navigate('/earn', { state: { cartItems, userData } });
   };
 
-
-  const handlePaymentClick = (paymentType) => {
+  const handlePaymentClick = async (paymentType) => {
+    ClickSound();
     if (paymentType === '네이버페이') {
+      playTTS("네이버페이를 선택하셨습니다.");
+
+      
       if (window.Naver) {
         const oPay = window.Naver.Pay.create({
-          "mode": "development",
-          "clientId": "HN3GGCMDdTgGUfl0kFCo",
-          "chainId": "M3ZnVnhIK3hzWkd",
+          mode: "development",
+          clientId: "HN3GGCMDdTgGUfl0kFCo",
+          chainId: "M3ZnVnhIK3hzWkd",
         });
 
         oPay.open({
-          "merchantUserKey": "np_jeihb592280",
-          "merchantPayKey": "20241028cQ1px5",
-          "productName": "Kiosk Order Payment",
-          "totalPayAmount": totalAmount - discountAmount,
-          "taxScopeAmount": totalAmount - discountAmount,
-          "taxExScopeAmount": "0",
-          "returnUrl": "http://localhost:3000/payment"
-        });
-        window.addEventListener('message', async function (e) {
-          if (e.data.resultCode === "Success") {
-            console("네이버페이 결제 성공")
-            handlePaymentSuccess(paymentType);
-          } else if (e.data.resultCode === "Fail") {
-            handlePaymentFailure(e.data.resultMessage);
+          merchantUserKey: "np_jeihb592280",
+          merchantPayKey: "20241028cQ1px5",
+          productName: "Kiosk Order Payment",
+          totalPayAmount: totalAmount - discountAmount,
+          taxScopeAmount: totalAmount - discountAmount,
+          taxExScopeAmount: "0",
+          returnUrl: "http://localhost:3001/payment",
+          onSuccess: function() {
+            handlePaymentSuccess('네이버페이');
+          }, 
+          onFailure: function(error) {
+            handlePaymentFailure(error.message);
           }
         });
       }
-    } else {
+    }else {
+      if (paymentType === "카카오페이") {
+        playTTS("카카오페이를 선택하셨습니다.");
+      } else {
+        playTTS("토스페이를 선택하셨습니다.");
+      }
       const { IMP } = window;
       IMP.init('imp71261721');
       IMP.request_pay({
@@ -94,9 +105,12 @@ const PaymentPage = () => {
         }
       });
     }
+
   };
 
+
   const handlePaymentSuccess = async (paymentType) => {
+    playTTS("결제가 완료되었습니다.")
     setModalMessage(`${paymentType} 결제가 완료되었습니다.`);
     setShowModal(true);
     try {
@@ -142,23 +156,37 @@ const PaymentPage = () => {
       console.log('Sending data to server:', JSON.stringify(saleData, null, 2));
       const response = await axios.post('/api/sales', saleData);
       console.log('Server response:', response.data);
-
-
     } catch (error) {
       console.error("판매 기록 저장 실패", error.response ? error.response.data : error.message);
     }
   };
+
+  // useEffect(() => {
+  //   // URL 파라미터에서 resultCode 값 확인
+  //   const searchParams = new URLSearchParams(location.search);
+  //   const resultCode = searchParams.get('resultCode');
+    
+  //   if (resultCode === 'Success') {
+  //     handlePaymentSuccess('네이버페이');
+  //   }
+  // }, [location.search], handlePaymentSuccess);
+
 
   const handlePaymentFailure = (errorMessage) => {
     setModalMessage(`결제가 실패하였습니다: ${errorMessage}`);
     setShowModal(true);
   };
 
+
+
   const handleStampCouponClick = () => {
+    ClickSound();
     if (!userData || userData.coupon === 0) {
-      setModalMessage('사용할 쿠폰의 개수가 없습니다.');
+      playTTS("보유한 쿠폰의 개수가 없습니다.")
+      setModalMessage('보유한 쿠폰의 개수가 없습니다.');
       setShowModal(true);
     } else {
+      playTTS("쿠폰을 사용하시겠습니까?")
       setModalMessage(`쿠폰을 사용하시겠습니까?\n보유한 쿠폰 개수: ${userData.coupon}`);
       setShowCouponModal(true);
     }
@@ -174,8 +202,13 @@ const PaymentPage = () => {
   };
 
   const closeModal = () => {
+    ClickSound();
     setShowModal(false);
   };
+  const formatPrice = (price) => {
+    return price.toLocaleString('ko-KR');
+  };
+
 
   return (
     <div className="detail-page container-md body-center">
@@ -184,7 +217,7 @@ const PaymentPage = () => {
         <div className="payment-text fs-4 px-1">카드 결제</div>
 
         <div className="payment-category mt-2 fs-5 text-bold">
-          <div className="naver-payment" onClick={() => { playClickSound(); handlePaymentClick('네이버페이') }}>
+          <div className="naver-payment" onClick={() => { handlePaymentClick('네이버페이') }}>
             <svg viewBox="0 0 277 105" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M224.585 0C253.528 0 277 23.51 277 52.5C277 81.49 253.528 105 224.585 105H52.4148C23.4719 105 0 81.49 0 52.5C0 23.51 23.4719 0 52.4148 0H224.585Z" fill="#00DE5A" />
               <path d="M52.5013 90.5599C31.4813 90.5599 14.4414 73.5199 14.4414 52.4999C14.4414 31.4799 31.4813 14.4399 52.5013 14.4399C73.5213 14.4399 90.5614 31.4799 90.5614 52.4999C90.5714 73.5199 73.5313 90.5599 52.5013 90.5599ZM59.8513 33.4599V54.39L45.1414 33.4599H33.4713V71.52H45.1614V50.59L59.8713 71.52H71.5414V33.4599H59.8513Z" fill="black" />
@@ -192,11 +225,11 @@ const PaymentPage = () => {
             </svg>
             <div>네이버페이</div>
           </div>
-          <div className="kakao-payment" onClick={() => { playClickSound(); handlePaymentClick('카카오페이') }}>
+          <div className="kakao-payment" onClick={() => { handlePaymentClick('카카오페이') }}>
             <img src="images/payIcon/kakao.png" alt="Kakao Pay" />
             <div>카카오페이</div>
           </div>
-          <div className="toss-payment" onClick={() => { playClickSound(); handlePaymentClick('토스페이') }}>
+          <div className="toss-payment" onClick={() => { handlePaymentClick('토스페이') }}>
             <img src="images/payIcon/toss12.webp" alt="Toss Pay" />
             <div>토스페이</div>
           </div>
@@ -221,9 +254,9 @@ const PaymentPage = () => {
       )}
 
       <OrderSummary
-        orderAmount={totalAmount}
-        discountAmount={discountAmount}
-        totalAmount={totalAmount - discountAmount}
+        orderAmount={formatPrice(totalAmount)}
+        discountAmount={formatPrice(discountAmount)}
+        totalAmount={formatPrice(totalAmount - discountAmount)}
         onCancel={handleCancel}
         onPrevious={handlePrevious}
         nextPath="/"

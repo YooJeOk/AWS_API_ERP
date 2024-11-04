@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import './KioskRegister.css';
 
 const KioskRegister = () => {
@@ -125,20 +125,3 @@ const KioskRegister = () => {
 };
 
 export default KioskRegister;
-{/* <tr key={item.product.productId}>
-<td>{item.product.productId}</td>
-<td>{item.product.productName}</td>
-<td>{item.product.productCategory}</td>
-<td>{item.product.unitPrice}</td>
-<td>{item.product.salePrice}</td>
-<td>{item.inventory}</td>
-</tr> */}
-
-// {coffees.map(item => (
-//     <tr key={item.coffeeId}>
-//         <td>{item.coffeeId}</td>
-//         <td>{item.coffeeName}</td>
-//         <td>{item.unitPrice}</td>
-//         <td>{item.salePrice}</td>
-//     </tr>
-// ))}

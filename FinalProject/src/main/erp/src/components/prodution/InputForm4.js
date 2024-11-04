@@ -64,7 +64,7 @@ function MBOMForm() {
                         <h1>생산 주문 등록</h1>
                     </div>
                     <form id="mbom-form" onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
-                        <table className="production-table" style={{ marginBottom: '20px' }}>
+                        <table className="table production-table" style={{ marginBottom: '20px' }}>
                             <thead>
                                 <tr>
                                     <th>생산 품목 ID</th>
