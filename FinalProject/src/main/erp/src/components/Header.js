@@ -20,7 +20,7 @@ function Header() {
                                 <a href="/production8">생산 현황 모니터링</a>
                                 <a href="/production5">소요량 관리</a>
                                 <a href="/production7">품질 관리</a>
-                                <a href="/production2">생산 입고 관리</a>
+                                <a href="/production2">생산 입고 관리</a>  
                            </div>
                         </div>
                     </div>

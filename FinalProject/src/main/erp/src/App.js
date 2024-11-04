@@ -17,6 +17,7 @@ import InputForm6 from './components/prodution/InputForm6';
 import ProductionPage6 from './components/prodution/ProductionPage6';
 import InputForm7 from './components/prodution/InputForm7';
 import ProductionPage7 from './components/prodution/ProductionPage7';
+import Produtionmonitering2 from './components/prodution/produtionmonitering2';
 import MainPage from './components/MainPage';
 
 //매출관리 섹터
@@ -66,7 +67,7 @@ function App() {
                     <Route path="/production6/*" element={<ProductionSidebarWrapper><ProductionPage6 /></ProductionSidebarWrapper>} />
                     <Route path="/input7" element={<ProductionSidebarWrapper><InputForm7 /></ProductionSidebarWrapper>} />
                     <Route path="/production7/*" element={<ProductionSidebarWrapper><ProductionPage7 /></ProductionSidebarWrapper>} />
-                    
+                    <Route path="/produtionmonitering2/" element={<ProductionSidebarWrapper><Produtionmonitering2 /></ProductionSidebarWrapper>} />
 
                     {/* 매출 관리 페이지들에 SalesSidebar 사용 */}
                     <Route path="/SalesRecord" element={<SalesSidebarWrapper><SalesRecord /></SalesSidebarWrapper>} />

@@ -25,17 +25,13 @@ function MBOMForm() {
     const [page, setPage] = useState(0);
     const [itemIdError, setItemIdError] = useState('');
     const size = 10;
-    const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
-        fetch(`http://localhost:8080/api/factory/inventory/materials?page=${page}&size=${size}`)
+        fetch(`/api/factory/inventory/materials?page=${page}&size=${size}`)
             .then(response => response.json())
-            .then(data => {
-                setMaterialList(data.content || []);
-                setTotalPages(data.totalPages);
-            })
+            .then(data => setMaterialList(data.content))
             .catch(error => console.error('Error fetching material list:', error));
-    }, [page, size]);
+    }, [page]);
 
     const validateItemID = (value) => {
         if (isNaN(value) || value <= 0) {
@@ -162,6 +158,18 @@ function MBOMForm() {
             alert("서버 오류가 발생했습니다.");
         }
     };
+
+    const [totalPages, setTotalPages] = useState(0);
+
+    useEffect(() => {
+        fetch(`http://localhost:8080/api/factory/inventory/materials?page=${page}&size=19`)
+            .then(response => response.json())
+            .then(data => {
+                setMaterialList(data.content);
+                setTotalPages(data.totalPages);
+            })
+            .catch(error => console.error('Error fetching material list:', error));
+    }, [page, size]);
 
     const handlePageChange = (newPage) => {
         setPage(newPage);
