@@ -1,42 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import './ChartStyles.css';
 
+// 각 단계의 라벨과 시간을 배열로 정의
 const stages = [
-    { label: "계량 완료", status: "대기" },
-    { label: "반죽 완료", status: "대기" },
-    { label: "1차 발효 완료", status: "대기" },
-    { label: "분할 완료", status: "대기" },
-    { label: "둥글리기 완료", status: "대기" },
-    { label: "중간 발효 완료", status: "대기" },
-    { label: "정형 완료", status: "대기" },
-    { label: "팬닝 완료", status: "대기" },
-    { label: "2차 발효 완료", status: "대기" },
-    { label: "굽기 완료", status: "대기" },
-    { label: "냉각 완료", status: "대기" },
-    { label: "포장 완료", status: "대기", isEnd: true },
+    { label: "계량 완료", status: "대기", time: 10 },
+    { label: "반죽 완료", status: "대기", time: 20 },
+    { label: "1차 발효 완료", status: "대기", time: 60 },
+    { label: "분할 완료", status: "대기", time: 10 },
+    { label: "둥글리기 완료", status: "대기", time: 10 },
+    { label: "중간 발효 완료", status: "대기", time: 30 },
+    { label: "정형 완료", status: "대기", time: 10 },
+    { label: "팬닝 완료", status: "대기", time: 10 },
+    { label: "2차 발효 완료", status: "대기", time: 60 },
+    { label: "굽기 완료", status: "대기", time: 30 },
+    { label: "냉각 완료", status: "대기", time: 20 },
+    { label: "포장 완료", status: "대기", time: 10 },
 ];
 
-// 상태별 색상과 상태 이름 표시
-const StatusLegend = () => {
-    const statuses = [
-        { name: "대기", color: "#ccc" },
-        { name: "작업중", color: "#B9E0FF" },
-        { name: "완료", color: "rgb(119, 221, 119)" },
-        { name: "경고", color: "#ffa500" },
-        { name: "위험", color: "#ff0000" },
-    ];
-
-    return (
-        <div style={styles.legendContainer}>
-            {statuses.map((status) => (
-                <div key={status.name} style={styles.legendItem}>
-                    <div style={{ ...styles.legendCircle, backgroundColor: status.color }} />
-                    <span style={styles.legendLabel}>{status.name}</span>
-                </div>
-            ))}
-        </div>
-    );
-};
+// 총 시간을 기준으로 각 단계의 진행 비율 계산
+const totalProcessTime = stages.reduce((sum, stage) => sum + stage.time, 0);
 
 const ProcessVisualization = ({ lineName }) => {
     const [progress, setProgress] = useState(0);
@@ -47,7 +29,6 @@ const ProcessVisualization = ({ lineName }) => {
             const newProgress = progress < stages.length - 1 ? progress + 1 : 0;
             setProgress(newProgress);
 
-            // 진행 상태를 업데이트
             if (newProgress === stages.length - 2) setLineStatus("경고");
             else if (newProgress === stages.length - 1) setLineStatus("위험");
             else if (newProgress > 0) setLineStatus("작업중");
@@ -76,10 +57,11 @@ const ProcessVisualization = ({ lineName }) => {
                     else if (index === progress) status = lineStatus === "경고" ? "경고" : "작업중";
 
                     const statusClass = styles[status.toLowerCase()] || {};
+                    const stageWidth = (stage.time / totalProcessTime) * 100;
                     const isEndStyle = stage.isEnd ? styles.endStage : {};
 
                     return (
-                        <div key={index} style={{ ...styles.stage, ...isEndStyle }}>
+                        <div key={index} style={{ ...styles.stage, ...isEndStyle, width: `${stageWidth}%` }}>
                             <div style={{ ...styles.circle, ...statusClass }} />
                             <span style={styles.label}>{stage.label}</span>
                         </div>
@@ -102,19 +84,40 @@ const ProductionLines = () => {
     );
 };
 
+const StatusLegend = () => {
+    const statuses = [
+        { name: "대기", color: "#ccc" },
+        { name: "작업중", color: "#B9E0FF" },
+        { name: "완료", color: "rgb(119, 221, 119)" },
+        { name: "경고", color: "#ffa500" },
+        { name: "위험", color: "#ff0000" },
+    ];
+
+    return (
+        <div style={styles.legendContainer}>
+            {statuses.map((status) => (
+                <div key={status.name} style={styles.legendItem}>
+                    <div style={{ ...styles.legendCircle, backgroundColor: status.color }} />
+                    <span style={styles.legendLabel}>{status.name}</span>
+                </div>
+            ))}
+        </div>
+    );
+};
+
 const styles = {
     productionLinesContainer: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: '40px', 
-        padding: '10px',
+        gap: '20px',
+        padding: '5px',
     },
     legendContainer: {
         display: 'flex',
         justifyContent: 'center',
-        gap: '15px',
-        marginBottom: '20px',
+        gap: '10px',
+        marginBottom: '10px',
     },
     legendItem: {
         display: 'flex',
@@ -134,14 +137,13 @@ const styles = {
         flexDirection: 'column',
         alignItems: 'center',
         width: '80%',
-        margin: '20px',
-        marginLeft: '250px',
+        margin: '10px',
     },
     lineName: {
         fontSize: '24px',
         fontWeight: 'bold',
         color: '#333',
-        marginBottom: '20px',
+        marginBottom: '10px',
     },
     statusLabel: {
         fontSize: '18px',
@@ -154,7 +156,7 @@ const styles = {
         height: '8px',
         backgroundColor: '#ccc',
         borderRadius: '4px',
-        marginBottom: '20px',
+        marginBottom: '10px',
         overflow: 'hidden',
     },
     pipeFill: {
@@ -167,13 +169,12 @@ const styles = {
     },
     stages: {
         display: 'flex',
-        width: '90%',
+        width: '100%',
     },
     stage: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        flex: 1,
     },
     endStage: {
         marginLeft: 'auto',

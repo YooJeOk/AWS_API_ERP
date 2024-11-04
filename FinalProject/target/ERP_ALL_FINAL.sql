@@ -601,7 +601,7 @@ VALUES
 --  진행 중인 작업 (OrderID 4) (온도와 습도를 적정 범위 내에서 설정)
 -- (4, 27.5, 67, 25, 93, '2024-05-10 08:30:00'); -- 적정 온도 27.5°C+-5, 적정 습도 67%+-5
 
--- 임시임 삭제예정
+-- 16 임시임 삭제예정
 INSERT INTO ERP.ProductionMonitoring (OrderID, Temperature, Humidity, ProductionRate, OperationTime, StartTime)
 VALUES
     (1, 25.0, 60.0, 90.0, 480, '2024-10-28 08:00:00'),  -- 갈릭꽈베기
