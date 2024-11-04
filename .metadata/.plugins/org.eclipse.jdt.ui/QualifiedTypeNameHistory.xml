@@ -56,4 +56,5 @@
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.login.service.EmailService"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.login.service.UserService"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.login.model.User"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.login.service.RegisterMail"/>
 </qualifiedTypeNameHistroy>
