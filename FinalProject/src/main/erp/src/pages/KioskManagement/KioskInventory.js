@@ -17,43 +17,65 @@ const KioskInventory = () => {
   const [deletedCoffees, setDeletedCoffees] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [changedItems, setChangedItems] = useState({ products: [], coffees: [] });
+  const [productSearch, setProductSearch] = useState('');
+  const [coffeeSearch, setCoffeeSearch] = useState('');
+  const [productSize, setProductSize] = useState(5);
+  const [coffeeSize, setCoffeeSize] = useState(5);
+  const [expandedProduct, setExpandedProduct] = useState(false);
+  const [expandedCoffee, setExpandedCoffee] = useState(false);
 
   const fetchProducts = useCallback(async () => {
     try {
-      const response = await fetch(`http://localhost:8080/api/kiosk/inventory/products?page=${productPage}&size=5`);
+      const response = await fetch(`http://localhost:8080/api/kiosk/inventory/products?page=${productPage}&size=${productSize}&search=${productSearch}`);
       const data = await response.json();
       setProducts(data);
       if (editMode) {
-        setEditedProducts(prev => ({
-          ...prev,
-          [productPage]: prev[productPage] || data.products.map(item => ({ ...item }))
-        }));
+        setEditedProducts(prev => ({ ...prev, [productPage]: prev[productPage] || data.products.map(item => ({ ...item })) }));
       }
     } catch (error) {
       console.error("상품 데이터 fetch 오류:", error);
     }
-  }, [productPage, editMode]);
-  
+  }, [productPage, editMode, productSearch, productSize]);
+
   const fetchCoffees = useCallback(async () => {
-  try {
-    const response = await fetch(`http://localhost:8080/api/kiosk/inventory/coffees?page=${coffeePage}&size=5`);
-    const data = await response.json();
-    setCoffees(data);
-    if (editMode) {
-      setEditedCoffees(prev => ({
-        ...prev,
-        [coffeePage]: prev[coffeePage] || data.coffees.map(item => ({ ...item }))
-      }));
+    try {
+      const response = await fetch(`http://localhost:8080/api/kiosk/inventory/coffees?page=${coffeePage}&size=${coffeeSize}&search=${coffeeSearch}`);
+      const data = await response.json();
+      setCoffees(data);
+      if (editMode) {
+        setEditedCoffees(prev => ({ ...prev, [coffeePage]: prev[coffeePage] || data.coffees.map(item => ({ ...item })) }));
+      }
+    } catch (error) {
+      console.error("커피 데이터 fetch 오류:", error);
     }
-  } catch (error) {
-    console.error("커피 데이터 fetch 오류:", error);
-  }
-}, [coffeePage, editMode]);
+  }, [coffeePage, editMode, coffeeSearch, coffeeSize]);
 
   useEffect(() => {
     fetchProducts();
     fetchCoffees();
   }, [fetchProducts, fetchCoffees]);
+
+  const handleProductSearch = (e) => {
+    setProductSearch(e.target.value);
+    setProductPage(0);
+  };
+
+  const handleCoffeeSearch = (e) => {
+    setCoffeeSearch(e.target.value);
+    setCoffeePage(0);
+  };
+
+  const toggleProductExpand = () => {
+    setExpandedProduct(!expandedProduct);
+    setProductSize(expandedProduct ? 5 : 10);
+    setProductPage(0);
+  };
+
+  const toggleCoffeeExpand = () => {
+    setExpandedCoffee(!expandedCoffee);
+    setCoffeeSize(expandedCoffee ? 5 : 10);
+    setCoffeePage(0);
+  };
 
   const handleProductChange = (pageIndex, productIndex, field, value) => {
     setEditedProducts(prev => ({
@@ -76,7 +98,7 @@ const KioskInventory = () => {
     return original.map((originalItem, index) => {
       const editedItem = edited[index];
       if (!editedItem) return null;
-  
+
       const changes = {};
       for (const key in originalItem) {
         if (key === 'product') {
@@ -89,10 +111,10 @@ const KioskInventory = () => {
           changes[key] = { from: originalItem[key], to: editedItem[key] };
         }
       }
-      return Object.keys(changes).length > 0 ? { 
+      return Object.keys(changes).length > 0 ? {
         id: originalItem.product ? originalItem.product.productId : originalItem.coffeeId,
         name: originalItem.product ? originalItem.product.productName : originalItem.coffeeName,
-        changes 
+        changes
       } : null;
     }).filter(Boolean);
   };
@@ -101,10 +123,10 @@ const KioskInventory = () => {
   const handleSaveChanges = () => {
     const currentProductPage = editedProducts[productPage] || [];
     const currentCoffeePage = editedCoffees[coffeePage] || [];
-    
+
     const productChanges = checkForChanges(products.products, currentProductPage);
     const coffeeChanges = checkForChanges(coffees.coffees, currentCoffeePage);
-  
+
     if (productChanges.length > 0 || coffeeChanges.length > 0 || deletedProducts.length > 0 || deletedCoffees.length > 0) {
       setChangedItems({ products: productChanges, coffees: coffeeChanges });
       setShowConfirmModal(true);
@@ -200,14 +222,14 @@ const KioskInventory = () => {
             <ul>
               {changedItems.products.map(item => (
                 <li key={item.id}>
-                {item.name} (ID: {item.id}):
-                <ul>
-                  {Object.entries(item.changes).map(([key, value]) => (
-                    <li key={key}>
-                      {key}: {JSON.stringify(value.from)} → {JSON.stringify(value.to)}
-                    </li>
-                  ))}
-                </ul>
+                  {item.name} (ID: {item.id}):
+                  <ul>
+                    {Object.entries(item.changes).map(([key, value]) => (
+                      <li key={key}>
+                        {key}: {JSON.stringify(value.from)} → {JSON.stringify(value.to)}
+                      </li>
+                    ))}
+                  </ul>
                 </li>
               ))}
             </ul>
@@ -219,14 +241,14 @@ const KioskInventory = () => {
             <ul>
               {changedItems.coffees.map(item => (
                 <li key={item.id}>
-                {item.name} (ID: {item.id}):
-                <ul>
-                  {Object.entries(item.changes).map(([key, value]) => (
-                    <li key={key}>
-                      {key}: {JSON.stringify(value.from)} → {JSON.stringify(value.to)}
-                    </li>
-                  ))}
-                </ul>
+                  {item.name} (ID: {item.id}):
+                  <ul>
+                    {Object.entries(item.changes).map(([key, value]) => (
+                      <li key={key}>
+                        {key}: {JSON.stringify(value.from)} → {JSON.stringify(value.to)}
+                      </li>
+                    ))}
+                  </ul>
                 </li>
               ))}
             </ul>
@@ -254,33 +276,61 @@ const KioskInventory = () => {
         )}
       </Modal.Body>
       <Modal.Footer>
-        <button  className="edit-detail-cancel-btn" onClick={onHide}>취소</button>
-        <button  className="edit-detail-certain-btn" onClick={onConfirm}>저장</button>
+        <button className="edit-detail-cancel-btn" onClick={onHide}>취소</button>
+        <button className="edit-detail-certain-btn" onClick={onConfirm}>저장</button>
       </Modal.Footer>
     </Modal>
 
   );
   return (
     <div className='product-coffee-container container-md mt-4'>
-      <div className='edit-container'>
-        <h4>빵 목록</h4>
-        <div>
-          <button className='change-mode-btn' onClick={() => setEditMode(!editMode)}>
-            {editMode ? '편집 모드 종료' : '편집 모드'}
-          </button>
-          {editMode && <button className='change-save-btn' onClick={handleSaveChanges}>변경사항 저장</button>}
-        </div>
-      </div>
+      <h3 className='text-center'>키오스크 재고</h3>
+
       <div className='product-container'>
-        <div className='product-table'>
-          <KioskProduct
-            products={editMode ? editedProducts[productPage] || [] : products.products || []}
-            editMode={editMode}
-            onProductChange={(index, field, value) => handleProductChange(productPage, index, field, value)}
-            onProductDelete={handleDeleteProduct}
-            onCancelDelete={handleCancelDeleteProduct}
-            deletedProducts={deletedProducts}
-          />
+        <div className='d-flex justify-content-between align-items-center mb-3'>
+          <div className='d-flex align-items-center'>
+            <h4 className='mb-0'>빵 목록</h4>
+            <button
+              onClick={toggleProductExpand}
+              className="toggle-expand-btn ms-2"
+            >
+              {expandedProduct ? '-' : '+'}
+            </button>
+          </div>
+          <div className='d-flex justify-content-between align-items-center'>
+            {!editMode && (
+              <input
+                type="text"
+                placeholder="제품 검색"
+                value={productSearch}
+                onChange={handleProductSearch}
+                className="form-control w-auto inven-search mx-3"
+                style={{ maxWidth: '200px', maxHeight: '40px' }}
+              />
+            )}
+            <span className={`edit-container ${(expandedProduct || expandedCoffee) ? 'hidden' : ''}`}>
+              <div>
+                <button className='change-mode-btn' onClick={() => setEditMode(!editMode)}>
+                  {editMode ? '편집 모드 종료' : '편집 모드'}
+                </button>
+                {editMode && <button className='change-save-btn ms-2' onClick={handleSaveChanges}>변경사항 저장</button>}
+              </div>
+            </span>
+          </div>
+        </div>
+        <div className='product-table' style={{ minHeight: '300px' }}>
+          {products.products && products.products.length > 0 ? (
+            <KioskProduct
+              products={editMode ? editedProducts[productPage] || [] : products.products || []}
+              editMode={editMode}
+              onProductChange={(index, field, value) => handleProductChange(productPage, index, field, value)}
+              onProductDelete={handleDeleteProduct}
+              onCancelDelete={handleCancelDeleteProduct}
+              deletedProducts={deletedProducts}
+            />
+          ) : (
+            <p className="text-center">조회 결과가 없습니다.</p>
+          )}
         </div>
         <div className='product-page'>
           <Pagination
@@ -290,16 +340,41 @@ const KioskInventory = () => {
           />
         </div>
       </div>
-      <div className='coffee-container'>
-        <div className='coffee-table'>
-          <KioskCoffee
-            coffees={editMode ? editedCoffees[coffeePage] || [] : coffees.coffees || []}
-            editMode={editMode}
-            onCoffeeChange={(index, field, value) => handleCoffeeChange(coffeePage, index, field, value)}
-            onCoffeeDelete={handleDeleteCoffee}
-            onCancelDelete={handleCancelDeleteCoffee}
-            deletedCoffees={deletedCoffees}
-          />
+      <div className='coffee-container mt-4'>
+        <div className='d-flex justify-content-between align-items-center mb-3'>
+          <div className='d-flex align-items-center'>
+            <h4 className='mb-0'>커피 목록</h4>
+            <button
+              onClick={toggleCoffeeExpand}
+              className="toggle-expand-btn ms-2"
+            >
+              {expandedCoffee ? '-' : '+'}
+            </button>
+          </div>
+          {!editMode && (
+            <input
+              type="text"
+              placeholder="커피 검색"
+              value={coffeeSearch}
+              onChange={handleCoffeeSearch}
+              className="form-control w-auto inven-search"
+              style={{ maxWidth: '200px', maxHeight: '40px' }}
+            />
+          )}
+        </div>
+        <div className='coffee-table' style={{ minHeight: '300px' }}>
+          {coffees.coffees && coffees.coffees.length > 0 ? (
+            <KioskCoffee
+              coffees={editMode ? editedCoffees[coffeePage] || [] : coffees.coffees || []}
+              editMode={editMode}
+              onCoffeeChange={(index, field, value) => handleCoffeeChange(coffeePage, index, field, value)}
+              onCoffeeDelete={handleDeleteCoffee}
+              onCancelDelete={handleCancelDeleteCoffee}
+              deletedCoffees={deletedCoffees}
+            />
+          ) : (
+            <p className="text-center">조회 결과가 없습니다.</p>
+          )}
         </div>
         <div className='coffee-page'>
           <Pagination
@@ -320,4 +395,3 @@ const KioskInventory = () => {
 };
 
 export default KioskInventory;
-

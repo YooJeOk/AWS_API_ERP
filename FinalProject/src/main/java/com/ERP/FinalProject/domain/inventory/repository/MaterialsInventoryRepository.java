@@ -16,7 +16,7 @@ public interface MaterialsInventoryRepository extends JpaRepository<MaterialsInv
 	@Query("SELECT m FROM MaterialsInventory m WHERE EXISTS (SELECT 1 FROM StoreInventory s WHERE s.materialId = m.materialId)")
 	Page<MaterialsInventory> findMaterialsWithStoreInventory(Pageable pageable);
 
-	
-
+	//검색기능
+	 Page<MaterialsInventory> findByMaterialNameContainingOrCategoryContaining(String name, String category, Pageable pageable);
 	
 }
