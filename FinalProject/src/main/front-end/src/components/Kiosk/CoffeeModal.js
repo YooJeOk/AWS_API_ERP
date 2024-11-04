@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { DashSquare, PlusSquare } from 'react-bootstrap-icons'; 
+import useClickSound from '../../hooks/useClickSound';
 
 
 const CoffeeModal = ({ item, onClose, onAddToCart, additionalOptions }) => {
+    const ClickSound = useClickSound(); 
+
     const [selectedSize, setSelectedSize] = useState('regular');
     const [sizeCharge, setSizeCharge] = useState(0);
     const [optionQuantities, setOptionQuantities] = useState({});
 
     const handleSizeSelect = (size) => {
+        ClickSound();
         setSelectedSize(size);
         if (size === 'extra') {
             setSizeCharge(500);
@@ -17,6 +21,7 @@ const CoffeeModal = ({ item, onClose, onAddToCart, additionalOptions }) => {
     };
 
     const handleAddToCart = () => {
+        ClickSound();
         const totalPrice = calculateTotalPrice();
         const options = {
             size: selectedSize,
@@ -32,6 +37,7 @@ const CoffeeModal = ({ item, onClose, onAddToCart, additionalOptions }) => {
         onClose();
     };
     const handleOptionChange = (optionId, change) => {
+        ClickSound();
         setOptionQuantities(prev => {
             const currentQuantity = prev[optionId] || 0;
             const newQuantity = Math.max(0, currentQuantity + change);

@@ -1,22 +1,21 @@
 import { useNavigate } from 'react-router-dom';
 import './Home.css'
+import useClickSound from '../../hooks/useClickSound';
+import useTTS from '../../hooks/useTTS';
+
 const Home = ()=>{
+  const ClickSound = useClickSound(); 
+  const playTTS = useTTS(); 
   const navigate = useNavigate();
 
+
   const handleClick = () => {
+    ClickSound();
+    playTTS("메뉴를 선택해주세요")
     navigate('/kioskMenu');
   };
     return(
-      // <div className='container-md body-center'>
-      //   <div className="main-background">
-      //     <img src="images/kioskMain/KioskMain.webp" alt='메인화면' className="main-background-img"></img>
-      //   </div>
-      //   <div className="select-place ">
-      //     <button type='button' className='take-out-btn' onClick={handleClick}>포장하기</button>
-      //     <button type='button' className='take-out-btn' onClick={handleClick}>먹고가기</button>
-      //   </div>
-      // </div>
-
+ 
       <div className='container-md body-center'>
           <div className='main-logo-container'>
             <div className='main-logo'>

@@ -1,19 +1,15 @@
 import React from 'react';
-
+import useClickSound from '../../hooks/useClickSound';
 
 
 const MenuItem = ({ item, onSelect, isBest }) => {
-  const playClickSound = () => {
-    const audio = new Audio('/sounds/mouth-bass.mp3'); 
-    audio.play().catch(error => {
-      console.error("Failed to play click sound:", error);
-    });
-  };
+  const ClickSound = useClickSound(); 
 
   const handleClick = () => {
-    playClickSound(); 
+    ClickSound(); 
     onSelect(); 
   };
+
   return (
     <div className="menu-item text-center text-bold" onClick={handleClick}>
       <div className="item-front">
