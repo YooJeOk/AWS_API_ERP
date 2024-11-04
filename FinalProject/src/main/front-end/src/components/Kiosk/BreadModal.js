@@ -4,7 +4,7 @@ import useClickSound from '../../hooks/useClickSound';
 const BreadModal = ({ item, onClose, onAddToCart }) => {
   const [quantity, setQuantity] = useState(1);
   const ClickSound = useClickSound(); 
-
+  
   const handleIncrease = () => {
     ClickSound();
     setQuantity(quantity + 1);
@@ -24,7 +24,9 @@ const BreadModal = ({ item, onClose, onAddToCart }) => {
     onAddToCart(item, quantity,'없음',totalPrice);
     onClose();
   };
-
+  const formatPrice = (price) => {
+    return price.toLocaleString('ko-KR');
+  };
   return (
     <div className="modal fade show" style={{display: 'block'}} tabIndex="-1">
       <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -41,7 +43,7 @@ const BreadModal = ({ item, onClose, onAddToCart }) => {
                     <span>{quantity}</span>
                     <button onClick={handleIncrease} className="btn-counter">+</button>
                   </div>
-                  <div className="modal-price">₩{item.price * quantity}</div>
+                  <div className="modal-price">₩{formatPrice(item.price * quantity)}</div>
                 </div>
               </div>
               <div className="modal-footer fs-4">

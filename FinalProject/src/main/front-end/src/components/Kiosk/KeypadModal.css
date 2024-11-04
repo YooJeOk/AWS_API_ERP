@@ -76,3 +76,6 @@
     background-color: #D9BBA0;
     color: white;
   }
+  .empty-item{
+    cursor: auto;
+  }

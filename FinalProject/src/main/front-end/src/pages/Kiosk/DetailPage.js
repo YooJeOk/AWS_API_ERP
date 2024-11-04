@@ -34,7 +34,9 @@ const DetailPage = () => {
       console.error("Failed to play TTS message:", error);
     }
   };
-
+  const formatPrice = (price) => {
+    return price.toLocaleString('ko-KR');
+  };
   return (
     <div className="detail-page container-md body-center">
       <nav className="detail-header text-bold">주문 세부내역을 다시 확인해주세요</nav>
@@ -57,15 +59,15 @@ const DetailPage = () => {
             </div>
             <div className='col-3 space-around mt-5'>
               <div>{item.quantity}개</div>
-              <div className="item-price">₩{item.totalPrice}</div>
+              <div className="item-price">₩{formatPrice(item.totalPrice)}</div>
             </div>
           </div>
         ))}
       </div>
       <OrderSummary
-        orderAmount={totalAmount}
+        orderAmount={formatPrice(totalAmount)}
         discountAmount={0}
-        totalAmount={totalAmount}
+        totalAmount={formatPrice(totalAmount)}
         onCancel={handleCancel}
         onPrevious={handlePrevious}
         onNext={handleNext}

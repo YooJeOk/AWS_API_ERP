@@ -23,6 +23,12 @@ const MenuList = ({ items, onAddToCart, additionalOptions, currentPage, totalPag
     }
   };
 
+  const itemsPerPage = 6;
+
+  const emptyItems = Array(itemsPerPage - items.length).fill({ type: 'empty', name: 'empty', price: 0 });
+
+  const displayItems = [...items, ...emptyItems];
+
   return (
     <div className="tab-content pt-1">
       <button
@@ -39,12 +45,12 @@ const MenuList = ({ items, onAddToCart, additionalOptions, currentPage, totalPag
       </button>
 
       <div className="menu-container">
-        {Array.isArray(items) && items.map((item, index) => (
+        {displayItems.map((item, index) => (
           <MenuItem
             key={`${item.type}-${item.name}-${index}`} 
             item={item}
-            onSelect={() => setSelectedItem(item)}
-            isBest={selectedCategory === '추천메뉴'}
+            onSelect={() => item.type !== 'empty' && setSelectedItem(item)}
+            isBest={selectedCategory === '추천메뉴' && item.type !== 'empty'}
           />
         ))}
       </div>
