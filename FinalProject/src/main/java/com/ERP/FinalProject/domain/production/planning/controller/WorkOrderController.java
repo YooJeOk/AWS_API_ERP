@@ -1,4 +1,3 @@
-// WorkOrderController.java 전체 코드
 package com.ERP.FinalProject.domain.production.planning.controller;
 
 import com.ERP.FinalProject.domain.production.planning.model.WorkOrder;
@@ -7,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/workorders")
@@ -30,8 +30,9 @@ public class WorkOrderController {
     }
 
     @GetMapping("/{orderId}")
-    public WorkOrder getWorkOrderById(@PathVariable int orderId) {
-        return workOrderService.getWorkOrderById(orderId);
+    public Optional<WorkOrder> getWorkOrderById(@PathVariable int orderId) {
+        System.out.println("Fetching WorkOrder with orderId: " + orderId);
+        return workOrderService.findWorkOrderDetailsById(orderId);
     }
 
     @PostMapping
@@ -42,5 +43,11 @@ public class WorkOrderController {
     @DeleteMapping("/{orderId}")
     public void deleteWorkOrder(@PathVariable int orderId) {
         workOrderService.deleteWorkOrderById(orderId);
+    }
+
+    // 검사가 완료되지 않은 주문 ID 목록 반환
+    @GetMapping("/uninspected")
+    public List<WorkOrder> getUninspectedOrders() {
+        return workOrderService.findUninspectedOrders();
     }
 }

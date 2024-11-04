@@ -17,8 +17,7 @@ import InputForm6 from './components/prodution/InputForm6';
 import ProductionPage6 from './components/prodution/ProductionPage6';
 import InputForm7 from './components/prodution/InputForm7';
 import ProductionPage7 from './components/prodution/ProductionPage7';
-import InputForm9 from './components/prodution/InputForm9';
-import ProductionPage9 from './components/prodution/ProductionPage9'; // 날짜별 가동율 실적
+import Produtionmonitering2 from './components/prodution/produtionmonitering2';
 import MainPage from './components/MainPage';
 
 //매출관리 섹터
@@ -32,11 +31,18 @@ import SalesStatus from '../../erp/src/pages/SalesManagement/SalesStatus';
 import InvenSidebar from './components/InventoryManage/InvenSidebar';
 import StoreInventory from './pages/InventoryManage/StoreInventory';
 import FactoryInventory from './pages/InventoryManage/FactoryInventory';
+import InputOrder from './pages/InventoryManage/InputOrder';
+import OrderHistory from './pages/InventoryManage/OrderHistory';
+import OrderComplete from './pages/InventoryManage/OrderComplete';
 
 //키오스크 관리
 import KioskSidebar from './components/KioskManagement/KioskSidebar';
 import KioskInventory from './pages/KioskManagement/KioskInventory';
 import KioskRegister from './pages/KioskManagement/KioskRegister';
+
+//로그인
+import Login from './components/로그인/login';
+import Findpassword from './components/로그인/findpassword';
 
 function App() {
     return (
@@ -44,6 +50,7 @@ function App() {
             <Header />
             <div className="custom-container">
                 {/* 생산 관리 경로에만 ProductionSidebar 사용 */}
+                 
                 <Routes>
                 
                     {/* 메인 페이지 */}
@@ -65,8 +72,7 @@ function App() {
                     <Route path="/production6/*" element={<ProductionSidebarWrapper><ProductionPage6 /></ProductionSidebarWrapper>} />
                     <Route path="/input7" element={<ProductionSidebarWrapper><InputForm7 /></ProductionSidebarWrapper>} />
                     <Route path="/production7/*" element={<ProductionSidebarWrapper><ProductionPage7 /></ProductionSidebarWrapper>} />
-                    <Route path="/input9" element={<ProductionSidebarWrapper><InputForm9 /></ProductionSidebarWrapper>} />
-                    <Route path="/production9/*" element={<ProductionSidebarWrapper><ProductionPage9 /></ProductionSidebarWrapper>} />
+                    <Route path="/produtionmonitering2/" element={<ProductionSidebarWrapper><Produtionmonitering2 /></ProductionSidebarWrapper>} />
 
                     {/* 매출 관리 페이지들에 SalesSidebar 사용 */}
                     <Route path="/SalesRecord" element={<SalesSidebarWrapper><SalesRecord /></SalesSidebarWrapper>} />
@@ -78,8 +84,13 @@ function App() {
                     {/* 상품 관리 탭 */}
                     <Route path="/FactoryInventory" element={<InvenSidebarWrapper><FactoryInventory /></InvenSidebarWrapper>} />
                     <Route path="/StoreInventory" element={<InvenSidebarWrapper><StoreInventory /></InvenSidebarWrapper>} />
+                    <Route path="/InputOrder" element={<InvenSidebarWrapper><InputOrder /></InvenSidebarWrapper>} />
+                    <Route path="/OrderHistory" element={<InvenSidebarWrapper><OrderHistory /></InvenSidebarWrapper>} />
+                    <Route path="/OrderComplete" element={<InvenSidebarWrapper><OrderComplete /></InvenSidebarWrapper>} />
 
-
+                    
+                    
+                    
                     {/* 키오스크 관리 사이드바 */}
                     <Route path="/KioskInventory" element={<KioskSidebarWrapper><KioskInventory /></KioskSidebarWrapper>} />
                     <Route path="/KioskRegister" element={<KioskSidebarWrapper><KioskRegister /></KioskSidebarWrapper>} />

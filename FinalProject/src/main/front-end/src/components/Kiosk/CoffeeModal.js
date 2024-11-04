@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { DashSquare, PlusSquare } from 'react-bootstrap-icons'; 
+import useClickSound from '../../hooks/useClickSound';
 
 
 const CoffeeModal = ({ item, onClose, onAddToCart, additionalOptions }) => {
+    const ClickSound = useClickSound(); 
+
     const [selectedSize, setSelectedSize] = useState('regular');
     const [sizeCharge, setSizeCharge] = useState(0);
     const [optionQuantities, setOptionQuantities] = useState({});
 
     const handleSizeSelect = (size) => {
+        ClickSound();
         setSelectedSize(size);
         if (size === 'extra') {
             setSizeCharge(500);
@@ -17,6 +21,7 @@ const CoffeeModal = ({ item, onClose, onAddToCart, additionalOptions }) => {
     };
 
     const handleAddToCart = () => {
+        ClickSound();
         const totalPrice = calculateTotalPrice();
         const options = {
             size: selectedSize,
@@ -32,6 +37,7 @@ const CoffeeModal = ({ item, onClose, onAddToCart, additionalOptions }) => {
         onClose();
     };
     const handleOptionChange = (optionId, change) => {
+        ClickSound();
         setOptionQuantities(prev => {
             const currentQuantity = prev[optionId] || 0;
             const newQuantity = Math.max(0, currentQuantity + change);
@@ -55,6 +61,11 @@ const CoffeeModal = ({ item, onClose, onAddToCart, additionalOptions }) => {
             regularButton.classList.add('selected');
         }
     }, []);
+
+    const formatPrice = (price) => {
+        return price.toLocaleString('ko-KR');
+      };
+
     return (
         <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1">
             <div className="coffee-modal modal-dialog modal-dialog-centered">
@@ -107,7 +118,8 @@ const CoffeeModal = ({ item, onClose, onAddToCart, additionalOptions }) => {
                                                     <div className='syrup-title col-5'>
                                                         ㄴ {option.name} 추가
                                                     </div>
-                                                    <div className='syrup-price col-3 text-right'>₩{option.price}</div>
+                                                    
+                                                    <div className='syrup-price col-3 text-right'>₩{formatPrice(option.price)}</div>
                                                     <div className='syrup-counter col-4 text-right'>
                                                         <button
                                                             onClick={() => handleOptionChange(option.id, -1)}
@@ -132,7 +144,7 @@ const CoffeeModal = ({ item, onClose, onAddToCart, additionalOptions }) => {
                                 <hr></hr>
 
                                 <div className="counter-container mt-3 fs-3">
-                                    <div className="modal-price text-right">₩{calculateTotalPrice()}</div>
+                                    <div className="modal-price text-right">₩{formatPrice(calculateTotalPrice())}</div>
                                 </div>
                             </div>
                             <div className="modal-footer fs-4">

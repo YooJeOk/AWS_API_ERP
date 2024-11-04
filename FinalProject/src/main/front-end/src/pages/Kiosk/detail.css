@@ -1,11 +1,13 @@
-body{
+body {
     box-sizing: border-box;
 }
 
-button:active,button:focus{
+button:active,
+button:focus {
     outline: none;
     box-shadow: none;
 }
+
 .body-center {
     margin-left: auto;
     margin-right: auto;
@@ -31,65 +33,79 @@ button:active,button:focus{
     display: flex;
     justify-content: space-between;
 }
+
 .space-around {
     display: flex;
     justify-content: space-around;
 }
+
 .detail-page {
     height: 870px;
 }
-.detail-header{
+
+.detail-header {
     background-color: #f0cfa4;
     height: 70px;
     width: 100%;
     font-size: 25px;
     display: flex;
-    justify-content:start; 
-    align-items: center; 
+    justify-content: start;
+    align-items: center;
     padding-left: 20px;
 }
-.detail-content{
+
+.detail-content {
     width: 100%;
     height: 470px;
-    padding-top:10px;
+    padding-top: 10px;
     overflow-y: scroll;
     overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #ffdeb3 white;
 }
-.detail-item{
+.detail-item {
     padding: 5px;
 }
-.detail-item-image-container{
+
+.detail-item-image-container {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.detail-item-image{
+
+.detail-item-image {
     width: 140px;
     height: 140px;
 }
-.summary{
+
+.summary {
     background-color: #E2E2E2;
     padding: 15px;
     box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
     border-radius: 5px;
 
 }
-.detail-button-container{
+
+.detail-button-container {
     width: 100%;
 }
-.all-cancle{
+
+.all-cancle {
     width: 35%;
 }
-.pay-certain-container{
+
+.pay-certain-container {
     width: 65%;
 }
-.pay-container button{
+
+.pay-container button {
     width: 40%;
     border: none;
     height: 100px;
     border-radius: 5px;
 }
-.button-cancel{
+
+.button-cancel {
     background-color: #4F4A4A;
     color: white;
     width: 80%;
@@ -97,14 +113,16 @@ button:active,button:focus{
     height: 100px;
     border-radius: 5px;
 }
-.button-previous{
+
+.button-previous {
     background-color: white;
     color: #D9BBA0;
     border-color: #D9BBA0;
     border: 1px solid #D9BBA0;
     margin-left: 80px;
 }
-.button-next{
+
+.button-next {
     background-color: #D9BBA0;
     color: white;
 }

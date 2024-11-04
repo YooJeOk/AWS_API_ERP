@@ -19,5 +19,9 @@ public class ProductDTO {
 	private LocalDateTime productionDate;
 	private String recommend;
 	private String detailDescription;
+    private Integer minimumStock;
+
+	
+
 
 }

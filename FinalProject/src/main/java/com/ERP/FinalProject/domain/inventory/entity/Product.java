@@ -35,5 +35,5 @@ public class Product {
     private String onKiosk;
     private String recommend;
     private String detailDescription;
-
+    private Integer minimumStock;
 }

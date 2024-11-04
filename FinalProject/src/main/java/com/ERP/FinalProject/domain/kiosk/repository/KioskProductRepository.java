@@ -1,5 +1,7 @@
 package com.ERP.FinalProject.domain.kiosk.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,4 +24,6 @@ public interface KioskProductRepository extends JpaRepository<Product, Long> {
 	
 	Page<Product> findByProductCategoryAndOnKiosk(String category, String onKiosk, Pageable pageable);
 	
+	//자동발주
+
 }

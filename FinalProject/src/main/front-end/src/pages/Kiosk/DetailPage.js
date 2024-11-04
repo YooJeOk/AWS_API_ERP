@@ -2,46 +2,41 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './detail.css';
 import OrderSummary from '../../components/Kiosk/OrderSummary';
+import useClickSound from '../../hooks/useClickSound';
+import useTTS from '../../hooks/useTTS';
 
 const DetailPage = () => {
+  const ClickSound = useClickSound();
+  const playTTS = useTTS(); 
+
   const navigate = useNavigate();
   const location = useLocation();
   const cartItems = location.state?.cartItems || [];
   const totalAmount = cartItems.reduce((sum, item) => sum + item.totalPrice, 0);
 
-
-  // const playTTS = async (message) => {
-  //   try {
-  //     const response = await fetch(`http://localhost:8080/api/tts?text=${encodeURIComponent(message)}`);
-  //     if (!response.ok) {
-  //       throw new Error('TTS API request failed');
-  //     }
-  //     const blob = await response.blob();
-  //     const audioUrl = URL.createObjectURL(blob);
-  //     const audio = new Audio(audioUrl);
-  //     audio.play();
-  //   } catch (error) {
-  //     console.error("Failed to play TTS message:", error);
-  //   }
-  // };
-
   const handleCancel = () => {
+    ClickSound();
     navigate('/');
   };
 
   const handlePrevious = () => {
+    playTTS("메뉴를 선택해주세요")
+    ClickSound();
     navigate('/kioskMenu', { state: { cartItems } });
   };
 
   const handleNext = async () => {
+    playTTS("적립을 선택해주세요")
+    ClickSound();
     try {
-      // await playTTS('적립을 선택해 주세요'); 
       navigate('/earn', { state: { cartItems} });
     } catch (error) {
       console.error("Failed to play TTS message:", error);
     }
   };
-
+  const formatPrice = (price) => {
+    return price.toLocaleString('ko-KR');
+  };
   return (
     <div className="detail-page container-md body-center">
       <nav className="detail-header text-bold">주문 세부내역을 다시 확인해주세요</nav>
@@ -64,15 +59,15 @@ const DetailPage = () => {
             </div>
             <div className='col-3 space-around mt-5'>
               <div>{item.quantity}개</div>
-              <div className="item-price">₩{item.totalPrice}</div>
+              <div className="item-price">₩{formatPrice(item.totalPrice)}</div>
             </div>
           </div>
         ))}
       </div>
       <OrderSummary
-        orderAmount={totalAmount}
+        orderAmount={formatPrice(totalAmount)}
         discountAmount={0}
-        totalAmount={totalAmount}
+        totalAmount={formatPrice(totalAmount)}
         onCancel={handleCancel}
         onPrevious={handlePrevious}
         onNext={handleNext}

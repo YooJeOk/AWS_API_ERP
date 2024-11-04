@@ -20,9 +20,8 @@ function Header() {
                                 <a href="/production8">생산 현황 모니터링</a>
                                 <a href="/production5">소요량 관리</a>
                                 <a href="/production7">품질 관리</a>
-                                <a href="/production2">생산 입고 관리</a>
-                                <a href="/production9">생산 실적 관리</a>
-                            </div>
+                                <a href="/production2">생산 입고 관리</a>  
+                           </div>
                         </div>
                     </div>
                     <div id="sales-button" className="nav-button">
@@ -39,8 +38,8 @@ function Header() {
                         <div className="nav-button-dropdown">
                             <div className="dropdown-content">
                                 <a href="/FactoryInventory">재고 관리</a>
-                                <a href="#!">입고 관리</a>
-                                <a href="#!">출고 관리</a>
+                                <a href="/InputOrder">주문 신청</a>
+                                <a href="/OrderHistory">주문 내역 관리</a>
                             </div>
                         </div>
                     </div>

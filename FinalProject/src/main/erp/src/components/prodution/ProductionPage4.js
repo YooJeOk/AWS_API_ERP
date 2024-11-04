@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Routes, Route } from 'react-router-dom';
 import InputForm4 from './InputForm4';
 import axios from 'axios';
-
+import './ProductionPage.css';
 function ProductionOrderPage() {
     const [data, setData] = useState([]);  // 데이터를 관리할 상태
     const [isDataLoaded, setIsDataLoaded] = useState(false);
@@ -37,7 +37,7 @@ function ProductionOrderPage() {
                             생성
                         </button>
                     </div>
-                    <table className="production-table" style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
+                    <table className="table production-table" style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
                         <thead>
                             <tr>
                                 <th style={{ width: '10%', padding: '10px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>생산 품목 ID</th>

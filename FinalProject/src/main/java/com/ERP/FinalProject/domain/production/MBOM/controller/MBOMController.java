@@ -1,6 +1,8 @@
 package com.ERP.FinalProject.domain.production.MBOM.controller;
 
 import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM;
+import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM.ItemType;
+import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM.Size;
 import com.ERP.FinalProject.domain.production.MBOM.entity.MBOMDTO;
 import com.ERP.FinalProject.domain.production.MBOM.service.MBOMService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,5 +64,21 @@ public class MBOMController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error deleting: " + e.getMessage());
         }
+    }
+
+    // MBOM 데이터 저장 엔드포인트 (POST)
+    @PostMapping("/save")
+    public ResponseEntity<?> saveMBOM(@RequestBody MBOMDTO mbomDTO) {
+        // MBOM 저장 로직 구현
+        return ResponseEntity.ok("MBOM saved successfully");
+    }
+
+    // 다음 ItemID 가져오기
+    @GetMapping("/next-item-id")
+    public ResponseEntity<Integer> getNextItemID(
+            @RequestParam("itemType") ItemType itemType,
+            @RequestParam("size") Size size) {
+        Integer nextItemID = mbomService.getNextItemID(itemType, size);
+        return ResponseEntity.ok(nextItemID);
     }
 }
