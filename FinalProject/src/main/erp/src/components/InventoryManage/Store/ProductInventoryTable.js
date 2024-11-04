@@ -28,7 +28,7 @@ const ProductInventoryTable = ({ products }) => {
                             <td className={product.quantityInStore < product.minimumStock ? 'text-red' : ''}>{product.productCategory}</td>
                             <td className={product.quantityInStore < product.minimumStock ? 'text-red' : ''}>{product.unitPrice}</td>
                             <td className={product.quantityInStore < product.minimumStock ? 'text-red' : ''}>{product.salePrice}</td>
-                            <td className={product.quantityInStore < product.minimumStock ? 'text-red' : ''}>{product.quantityInStore}</td>
+                            <td className={product.quantityInStore < product.minimumStock ? 'text-red' : ''}>{product.quantityInStore}개</td>
                             {/* <td>{product.minimumStock}</td> */}
                         </tr>
                     ))}

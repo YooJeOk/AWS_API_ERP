@@ -12,7 +12,7 @@ const MaterialsInventoryTable = ({ materials }) => {
                         <th>자재명</th>
                         <th>카테고리</th>
                         <th>단가</th>
-                        <th>매장 수량 / 단위</th>
+                        <th>매장 수량</th>
                         {/* <th>최소 수량</th> */}
                     </tr>
                 </thead>
@@ -26,7 +26,7 @@ const MaterialsInventoryTable = ({ materials }) => {
                             <td className={material.quantityInStore < material.minimumStock ? 'text-red' : ''}>{material.materialName}</td>
                             <td className={material.quantityInStore < material.minimumStock ? 'text-red' : ''}>{material.category}</td>
                             <td className={material.quantityInStore < material.minimumStock ? 'text-red' : ''}>{material.unitPrice}</td>
-                            <td className={material.quantityInStore < material.minimumStock ? 'text-red' : ''}>{material.quantityInStore || 'N/A'} / {material.unit}</td>
+                            <td className={material.quantityInStore < material.minimumStock ? 'text-red' : ''}>{material.quantityInStore || 'N/A'}{material.unit}</td>
                             {/* <td>{material.minimumStock}</td> */}
                         </tr>
                     ))}
