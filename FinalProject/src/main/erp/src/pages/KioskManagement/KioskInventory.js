@@ -67,12 +67,18 @@ const KioskInventory = () => {
 
   const toggleProductExpand = () => {
     setExpandedProduct(!expandedProduct);
+    if (!expandedProduct) {
+      setExpandedCoffee(false);
+    }
     setProductSize(expandedProduct ? 5 : 10);
     setProductPage(0);
   };
 
   const toggleCoffeeExpand = () => {
     setExpandedCoffee(!expandedCoffee);
+    if (!expandedCoffee) {
+      setExpandedProduct(false);
+    }
     setCoffeeSize(expandedCoffee ? 5 : 10);
     setCoffeePage(0);
   };
@@ -285,6 +291,7 @@ const KioskInventory = () => {
   return (
     <div className='product-coffee-container container-md mt-4'>
       <h3 className='text-center'>키오스크 재고</h3>
+      {(!expandedCoffee || expandedProduct) && (
 
       <div className='product-container'>
         <div className='d-flex justify-content-between align-items-center mb-3'>
@@ -340,6 +347,9 @@ const KioskInventory = () => {
           />
         </div>
       </div>
+      )}
+            {(!expandedProduct || expandedCoffee) && (
+
       <div className='coffee-container mt-4'>
         <div className='d-flex justify-content-between align-items-center mb-3'>
           <div className='d-flex align-items-center'>
@@ -384,6 +394,8 @@ const KioskInventory = () => {
           />
         </div>
       </div>
+            )}
+
       <ConfirmChangesModal
         show={showConfirmModal}
         onHide={() => setShowConfirmModal(false)}
