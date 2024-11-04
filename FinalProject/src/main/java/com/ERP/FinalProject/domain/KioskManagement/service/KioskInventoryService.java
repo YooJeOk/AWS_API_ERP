@@ -29,14 +29,20 @@ public class KioskInventoryService {
     @Autowired
     private StoreInventoryRepository storeInventoryRepository;
 
-    public Page<Product> getProducts(int page, int size) {
+    public Page<Product> getProducts(int page, int size, String search) {
         Pageable pageable = PageRequest.of(page, size);
+        if (search != null && !search.isEmpty()) {
+            return productRepository.findByProductCategoryAndOnKioskAndProductNameContaining("bread", "Y", search, pageable);
+        }
         return productRepository.findByProductCategoryAndOnKiosk("bread", "Y", pageable);
     }
 
-    public Page<Coffee> getCoffees(int page, int size) {
+    public Page<Coffee> getCoffees(int page, int size, String search) {
         Pageable pageable = PageRequest.of(page, size);
-        return coffeeRepository.findByOnKiosk("Y",pageable);
+        if (search != null && !search.isEmpty()) {
+            return coffeeRepository.findByOnKioskAndCoffeeNameContaining("Y", search, pageable);
+        }
+        return coffeeRepository.findByOnKiosk("Y", pageable);
     }
 
     public Integer getProductInventory(Product product) {

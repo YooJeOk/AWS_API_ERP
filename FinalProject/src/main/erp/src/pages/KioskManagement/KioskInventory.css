@@ -1,7 +1,6 @@
 .edit-container{
     display: flex;
-    justify-content: space-between;
-    margin-top: 0px;
+    align-items: end;
 }
 .change-mode-btn,.change-save-btn{
     font-size: 16px;

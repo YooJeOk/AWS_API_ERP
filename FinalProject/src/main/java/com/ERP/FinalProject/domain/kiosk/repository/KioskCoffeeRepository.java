@@ -13,5 +13,7 @@ public interface KioskCoffeeRepository extends JpaRepository<Coffee, Long> {
 	Page<Coffee> findByRecommendAndTemperatureAndOnKiosk(String recommend, String temperature, String OnKiosk, Pageable pageable);
 	Page<Coffee> findByOnKiosk(String string, Pageable pageable);
     long countByRecommendAndTemperatureAndOnKiosk(String recommend, String temperature, String onKiosk);
+    
+    Page<Coffee> findByOnKioskAndCoffeeNameContaining(String onKiosk, String search, Pageable pageable);
 }
 

@@ -27,3 +27,22 @@
     /* box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;} */
 
 }
+.toggle-expand-btn{
+    padding: 1px 7px;
+    border-radius: 5px;
+    margin-left: 8px;
+    margin-right: 8px;
+    background-color: white;
+    border: 1px solid black;
+    margin-bottom: 2px;
+    /* font-weight: bold; */
+    font-size: 18px;
+}
+/* .toggle-expand-btn:hover{
+    background-color: black;
+    color: white;
+} */
+.inven-search:focus{
+    border-color: #F0C490;
+    box-shadow: 0 0 0 0.2rem rgba(255, 0, 0, 0.25);
+}

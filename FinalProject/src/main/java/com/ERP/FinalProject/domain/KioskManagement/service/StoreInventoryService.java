@@ -19,39 +19,48 @@ import com.ERP.FinalProject.domain.kiosk.repository.KioskProductRepository;
 
 @Service
 public class StoreInventoryService {
-	@Autowired
-	private KioskProductRepository productRepository;
+    @Autowired
+    private KioskProductRepository productRepository;
 
-	@Autowired
-	private MaterialsInventoryRepository materialsInventoryRepository;
-	@Autowired
-	private StoreInventoryRepository storeInventoryRepository;
+    @Autowired
+    private MaterialsInventoryRepository materialsInventoryRepository;
 
-	public Page<ProductDTO> getProductInventory(Pageable pageable) {
-		return productRepository.findAll(pageable).map(this::convertToProductInventoryDTO);
-	}
+    @Autowired
+    private StoreInventoryRepository storeInventoryRepository;
 
-	private ProductDTO convertToProductInventoryDTO(Product product) {
-		ProductDTO dto = new ProductDTO();
-		dto.setProductId(product.getProductId());
-		dto.setProductName(product.getProductName());
-		dto.setProductCategory(product.getProductCategory());
-		dto.setUnitPrice(product.getUnitPrice());
-		dto.setSalePrice(product.getSalePrice());
-		dto.setProductionDate(product.getProductionDate());
-		dto.setRecommend(product.getRecommend());
-		dto.setDetailDescription(product.getDetailDescription());
+    public Page<ProductDTO> getProductInventory(Pageable pageable, String search) {
+        if (search != null && !search.isEmpty()) {
+            return productRepository.findByProductNameContainingOrProductCategoryContaining(search, search, pageable)
+                    .map(this::convertToProductInventoryDTO);
+        }
+        return productRepository.findAll(pageable).map(this::convertToProductInventoryDTO);
+    }
 
-		StoreInventory storeInventory = storeInventoryRepository.findByProductId(product.getProductId())
-				.orElse(new StoreInventory());
-		dto.setQuantityInStore(storeInventory.getQuantityInStore());
-		dto.setMinimumStock(product.getMinimumStock());
-		return dto;
-	}
-
-	public Page<MaterialsInventoryDTO> getMaterialInventory(Pageable pageable) {
+    public Page<MaterialsInventoryDTO> getMaterialInventory(Pageable pageable, String search) {
+        if (search != null && !search.isEmpty()) {
+            return materialsInventoryRepository.findByMaterialNameContainingOrCategoryContaining(search, search, pageable)
+                    .map(this::convertToMaterialInventoryDTO);
+        }
         return materialsInventoryRepository.findMaterialsWithStoreInventory(pageable)
                 .map(this::convertToMaterialInventoryDTO);
+    }
+
+    private ProductDTO convertToProductInventoryDTO(Product product) {
+        ProductDTO dto = new ProductDTO();
+        dto.setProductId(product.getProductId());
+        dto.setProductName(product.getProductName());
+        dto.setProductCategory(product.getProductCategory());
+        dto.setUnitPrice(product.getUnitPrice());
+        dto.setSalePrice(product.getSalePrice());
+        dto.setProductionDate(product.getProductionDate());
+        dto.setRecommend(product.getRecommend());
+        dto.setDetailDescription(product.getDetailDescription());
+
+        StoreInventory storeInventory = storeInventoryRepository.findByProductId(product.getProductId())
+                .orElse(new StoreInventory());
+        dto.setQuantityInStore(storeInventory.getQuantityInStore());
+        dto.setMinimumStock(product.getMinimumStock());
+        return dto;
     }
 
     private MaterialsInventoryDTO convertToMaterialInventoryDTO(MaterialsInventory material) {
@@ -66,7 +75,7 @@ public class StoreInventoryService {
         StoreInventory storeInventory = storeInventoryRepository.findByMaterialId(material.getMaterialId())
                 .orElse(new StoreInventory());
         dto.setQuantityInStore(storeInventory.getQuantityInStore());
-		dto.setMinimumStock(material.getMinimumStock());
+        dto.setMinimumStock(material.getMinimumStock());
 
         return dto;
     }

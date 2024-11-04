@@ -18,38 +18,47 @@ import com.ERP.FinalProject.domain.kiosk.repository.KioskProductRepository;
 
 @Service
 public class FactoryInventoryService {
-	@Autowired
-	private KioskProductRepository productRepository;
+    @Autowired
+    private KioskProductRepository productRepository;
 
-	@Autowired
-	private MaterialsInventoryRepository materialsInventoryRepository;
-	@Autowired
-	private FactoryInventoryRepository factoryInventoryRepository;
+    @Autowired
+    private MaterialsInventoryRepository materialsInventoryRepository;
 
-	public Page<ProductDTO> getProductInventory(Pageable pageable) {
-		return productRepository.findAll(pageable).map(this::convertToProductInventoryDTO);
-	}
+    @Autowired
+    private FactoryInventoryRepository factoryInventoryRepository;
 
-	private ProductDTO convertToProductInventoryDTO(Product product) {
-		ProductDTO dto = new ProductDTO();
-		dto.setProductId(product.getProductId());
-		dto.setProductName(product.getProductName());
-		dto.setProductCategory(product.getProductCategory());
-		dto.setUnitPrice(product.getUnitPrice());
-		dto.setSalePrice(product.getSalePrice());
-		dto.setProductionDate(product.getProductionDate());
-		dto.setRecommend(product.getRecommend());
-		dto.setDetailDescription(product.getDetailDescription());
+    public Page<ProductDTO> getProductInventory(Pageable pageable, String search) {
+        if (search != null && !search.isEmpty()) {
+            return productRepository.findByProductNameContainingOrProductCategoryContaining(search, search, pageable)
+                    .map(this::convertToProductInventoryDTO);
+        }
+        return productRepository.findAll(pageable).map(this::convertToProductInventoryDTO);
+    }
 
-		FactoryInventory factoryInventory = factoryInventoryRepository.findByProductId(product.getProductId())
-				.orElse(new FactoryInventory());
-		dto.setQuantityInStore(factoryInventory.getQuantityInFactory());
-
-		return dto;
-	}
-
-	public Page<MaterialsInventoryDTO> getMaterialInventory(Pageable pageable) {
+    public Page<MaterialsInventoryDTO> getMaterialInventory(Pageable pageable, String search) {
+        if (search != null && !search.isEmpty()) {
+            return materialsInventoryRepository.findByMaterialNameContainingOrCategoryContaining(search, search, pageable)
+                    .map(this::convertToMaterialInventoryDTO);
+        }
         return materialsInventoryRepository.findAll(pageable).map(this::convertToMaterialInventoryDTO);
+    }
+
+    private ProductDTO convertToProductInventoryDTO(Product product) {
+        ProductDTO dto = new ProductDTO();
+        dto.setProductId(product.getProductId());
+        dto.setProductName(product.getProductName());
+        dto.setProductCategory(product.getProductCategory());
+        dto.setUnitPrice(product.getUnitPrice());
+        dto.setSalePrice(product.getSalePrice());
+        dto.setProductionDate(product.getProductionDate());
+        dto.setRecommend(product.getRecommend());
+        dto.setDetailDescription(product.getDetailDescription());
+
+        FactoryInventory factoryInventory = factoryInventoryRepository.findByProductId(product.getProductId())
+                .orElse(new FactoryInventory());
+        dto.setQuantityInStore(factoryInventory.getQuantityInFactory());
+
+        return dto;
     }
 
     private MaterialsInventoryDTO convertToMaterialInventoryDTO(MaterialsInventory material) {

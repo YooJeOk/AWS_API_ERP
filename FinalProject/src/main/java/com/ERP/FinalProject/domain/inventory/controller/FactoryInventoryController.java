@@ -18,20 +18,22 @@ import com.ERP.FinalProject.domain.inventory.service.FactoryInventoryService;
 @RestController
 @RequestMapping("/api/factory/inventory")
 public class FactoryInventoryController {
-	@Autowired
-	private FactoryInventoryService inventoryService;
+    @Autowired
+    private FactoryInventoryService inventoryService;
 
-	@GetMapping("/products")
+    @GetMapping("/products")
     public ResponseEntity<Page<ProductDTO>> getProductInventory(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(inventoryService.getProductInventory(PageRequest.of(page, size)));
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String search) {
+        return ResponseEntity.ok(inventoryService.getProductInventory(PageRequest.of(page, size), search));
     }
 
-	 @GetMapping("/materials")
-	    public ResponseEntity<Page<MaterialsInventoryDTO>> getMaterialInventory(
-	            @RequestParam(defaultValue = "0") int page,
-	            @RequestParam(defaultValue = "10") int size) {
-	        return ResponseEntity.ok(inventoryService.getMaterialInventory(PageRequest.of(page, size)));
-	    }
-	}
+    @GetMapping("/materials")
+    public ResponseEntity<Page<MaterialsInventoryDTO>> getMaterialInventory(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String search) {
+        return ResponseEntity.ok(inventoryService.getMaterialInventory(PageRequest.of(page, size), search));
+    }
+}

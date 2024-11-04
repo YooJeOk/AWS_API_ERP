@@ -53,7 +53,6 @@ const KioskCoffee = ({ coffees, editMode, onCoffeeChange, onCoffeeDelete, onCanc
 
     return (
         <div className='coffee-inner-table'>
-            <h4>커피 목록</h4>
             <table className='table table-bordered'>
                 <thead>
                     <tr>
