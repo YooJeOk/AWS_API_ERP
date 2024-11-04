@@ -12,7 +12,7 @@ const ProductInventoryTable = ({ products }) => {
                         <th>카테고리</th>
                         <th>원가</th>
                         <th>판매가</th>
-                        <th>매장 수량</th>
+                        <th>수량</th>
                         {/* <th>생산 날짜</th> */}
                         {/* <th>추천 여부</th> */}
                         {/* <th>제품 설명</th> */}
@@ -26,7 +26,7 @@ const ProductInventoryTable = ({ products }) => {
                             <td>{product.productCategory}</td>
                             <td>{product.unitPrice}</td>
                             <td>{product.salePrice}</td>
-                            <td>{product.quantityInStore}</td>
+                            <td>{product.quantityInStore}개</td>
                             {/* <td>{new Date(product.productionDate).toLocaleDateString()}</td> */}
                             {/* <td>{product.recommend}</td> */}
                             {/* <td>{product.detailDescription}</td> */}
