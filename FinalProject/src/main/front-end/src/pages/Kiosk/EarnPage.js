@@ -84,7 +84,9 @@ const EarnPage = () => {
     }
     setShowKeypad(false);
   };
-
+  const formatPrice = (price) => {
+    return price.toLocaleString('ko-KR');
+  };
   return (
     <div className="detail-page container-md body-center">
       <nav className="detail-header text-bold">적립을 선택해주세요</nav>
@@ -123,9 +125,9 @@ const EarnPage = () => {
         )}
       </div>
       <OrderSummary
-        orderAmount={totalAmount}
+        orderAmount={formatPrice(totalAmount)}
         discountAmount={0}
-        totalAmount={totalAmount}
+        totalAmount={formatPrice(totalAmount)}
         onCancel={handleCancel}
         onPrevious={handlePrevious}
         onNext={handleNext}

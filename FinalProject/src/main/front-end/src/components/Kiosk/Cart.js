@@ -17,7 +17,9 @@ const Cart = ({ items, updateQuantity, removeItem, clearCart }) => {
     playTTS("주문 세부내역을 다시 확인해주세요")
     navigate('/detail', { state: { cartItems: items } });
   };
-
+  const formatPrice = (price) => {
+    return price.toLocaleString('ko-KR');
+  };
   return (
     <div className="menu-pay-container container-md cart-fixed">
       <div id="cartContainer" className="cart fs-4 p-2 px-3">
@@ -47,7 +49,7 @@ const Cart = ({ items, updateQuantity, removeItem, clearCart }) => {
               ><PlusSquare /></button>
             </div>
             <div className="cart-price w-25 text-right mb-3">
-              ₩{item.totalPrice}
+              ₩{formatPrice(item.totalPrice)}
             </div>
             <button type="button" className="cart-cancel" onClick={() => removeItem(index)}>
               <XLg />
@@ -64,7 +66,7 @@ const Cart = ({ items, updateQuantity, removeItem, clearCart }) => {
           <hr className="pay-boundary" />
           <div className="space-btw">
             <div>주문금액</div>
-            <div>{totalAmount}원</div>
+            <div>{formatPrice(totalAmount)}원</div>
           </div>
         </div>
         <div className="pay-btn-container fs-5">
