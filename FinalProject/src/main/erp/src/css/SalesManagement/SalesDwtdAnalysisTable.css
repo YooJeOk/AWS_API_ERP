@@ -1,0 +1,67 @@
+.sales-dashboard {
+    display: flex;
+    flex-wrap: wrap; /* 화면이 좁아지면 차트가 줄바꿈 됨 */
+    justify-content: space-around;
+    width: 100%;
+    padding: 20px;
+    margin-right: 0; /* 고정된 마진을 제거해 반응형 배치 가능하게 함 */
+    box-sizing: border-box;
+}
+
+.daychart-title, .timechart-title {
+    text-align: center !important;
+}
+
+.daychart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* 기본 100%로 설정해 작은 화면에서도 차트가 잘리지 않게 함 */
+    max-width: 500px; /* 차트가 너무 커지지 않도록 최대 너비 설정 */
+}
+
+.chart-container {
+    width: 100%;
+    max-width: 500px; /* 차트의 최대 너비 설정 */
+    padding: 10px;
+}
+
+.chart-container h3 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* 반응형 조정 */
+@media (min-width: 768px) {
+    .daychart-container, .chart-container {
+        width: 48%; /* 중간 크기 화면에서는 각 차트를 48% 너비로 설정하여 두 개씩 배치 */
+    }
+}
+
+@media (min-width: 1200px) {
+    .sales-dashboard {
+        justify-content: space-between;
+    }
+    .daychart-container, .chart-container {
+        width: 30%; /* 큰 화면에서는 30%로 설정해 여유 공간 확보 */
+    }
+}
+.sales-dashboard {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.daychart-container, .timechart-container {
+    flex: 1 1 45%; /* 반응형 레이아웃을 위해 각 컨테이너가 45% 차지 */
+    min-width: 300px; /* 최소 너비 설정으로 작은 화면에서도 잘리지 않게 함 */
+}
+
+.daychart-title, .timechart-title {
+    text-align: center;
+    margin-bottom: 10px;
+}

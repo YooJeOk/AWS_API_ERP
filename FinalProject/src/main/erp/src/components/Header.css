@@ -1,0 +1,163 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body,
+html {
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+.custom-container {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 100px);
+    overflow: hidden;
+    background-color: #F6F6F6 !important;
+}
+
+
+
+.dropdown-menu {
+    display: none;
+    list-style: none;
+    top: -10px; /* 상위 버튼과 하위 버튼 간의 거리를 좁힘 */
+    padding: 0;
+   
+    
+}
+
+
+.navbar {
+    background-color: #F0C490 !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px;
+    height: 100px;
+    position: relative;
+    z-index: 1000;
+    border-bottom: 1px solid #ccc;
+    
+}
+
+.top-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.logo {
+    height: 85px;
+    width: auto;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+    background-color: #F0C490 !important;
+}
+
+.nav-button {
+    color: rgb(0, 0, 0);
+    padding: 10px 20px;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.3s, color 0.3s;
+    font-size: 15px;
+    font-weight: bold;
+    margin-right: 50px;
+    
+}
+
+.nav-button:hover {
+    
+    color: #703103 !important;
+}
+
+
+.nav-button-dropdown {
+    display: flex;
+    flex-direction: column;
+   
+    position: absolute;
+    top: 100%;
+   
+    left: 0;
+    width: 100%;
+    /* 가로로 확장 */
+    z-index: 3000;
+   
+    display: none;
+    
+    white-space: nowrap;
+    
+}
+
+/* 호버 시 드롭다운 표시 */
+.nav-button:hover .nav-button-dropdown {
+    display: flex;
+    /* 호버 시 드롭다운 메뉴가 보임 */
+}
+
+/* 드롭다운 메뉴 항목 */
+.dropdown-content a {
+    padding: 10px 10px;
+    color: rgb(0, 0, 0);
+    /* 텍스트 색상 */
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.dropdown-content a:hover {
+    font-weight: bold;
+    color: #703103 !important;
+    
+}
+
+/* 로그아웃 버튼 */
+.nav-button.logout {
+    margin-left: 80px;
+    margin-right: 50px;
+}
+
+/* 메인 대시보드 */
+.main-dashboard-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 100px);
+    background-color: #f0f0f0;
+}
+
+#main-dashboard-content {
+    flex-grow: 1;
+    background-color: #ffffff;
+    padding: 20px;
+    color: rgb(0, 0, 0);
+}
+
+/* 메인 콘텐츠 영역 */
+.main-content {
+    flex-grow: 1;
+    background-color: #ffffff;
+    padding: 20px;
+    height: calc(100vh - 100px);
+    width: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+

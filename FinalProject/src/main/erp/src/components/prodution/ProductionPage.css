@@ -1,0 +1,46 @@
+/* 컨테이너 스타일 */
+.custom-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.production-content {
+    flex-grow: 1;
+    padding: 20px;
+    width: 100%;
+}
+
+.production-mainbar {
+    margin-top: 20px;
+}
+
+.productionbar h1 {
+    display: inline-block;
+    margin: 0;
+}
+
+.create-button {
+    margin-left: 20px;
+}
+
+/* 테이블 스타일 */
+.production-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.production-table th, .production-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+/* 데이터 없음 메시지 */
+.no-data {
+    color: red;
+    font-weight: bold;
+}
+
+
+

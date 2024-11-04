@@ -1,0 +1,118 @@
+/* 기본 테이블 스타일 */
+.custom-table {
+  width: 100%; /* 부모 컨테이너 너비에 맞추기 */
+  table-layout: fixed; /* 고정 레이아웃으로 열 너비 균등 배분 */
+  border: 1px solid white;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
+/* 헤더 스타일 */
+.table thead th {
+  background-color: #F0C490;
+  text-align: center;
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 본문 스타일 */
+.table tbody tr {
+  background-color: white;
+  text-align: center;
+}
+
+/* 각 테이블 셀에 세로 구분선을 추가 */
+.custom-table td,
+.custom-table th {
+  border-right: 1px solid #ddd; /* 세로 구분선 색상 설정 */
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  overflow: hidden; /* 내용이 넘칠 경우 숨기기 */
+  text-overflow: ellipsis; /* 긴 텍스트를 생략 처리 */
+}
+
+/* tbody 행에 hover 효과 추가 */
+.custom-table tbody tr:hover {
+  background-color: #f0f0f0 !important;
+}
+
+/* 반응형 테이블 높이와 스크롤 */
+.table-responsive {
+  max-height: 100%; /* 부모 높이에 맞추기 */
+  overflow-y: auto; /* 수직 스크롤 필요 시 표시 */
+}
+.no-column {
+  width: 70px; /* Adjust this width as needed */
+}
+.num-column {
+  width: 70px; /* Adjust this width as needed */
+}
+.unitprice-column{
+  width: 90px;
+}
+.promotion-column{
+  width: 70px;
+
+}
+.totalprice-column{
+  width: 90px;
+
+}
+.payment-column{
+  width: 100px;
+}
+
+/* SalesTable.css */
+
+/* 전체 테이블 스타일 */
+.custom-table {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+/* 페이지네이션 스타일 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  color: #703103;
+}
+
+.pagination li {
+  margin: 0 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #703103;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.pagination li:hover {
+  background-color: #e6aa62;
+}
+
+.pagination .active {
+  background-color: #F0C490;
+  color: #703103;
+  font-weight: bold;
+  border: none;
+}
+
+/* 페이지네이션 이전, 다음 버튼 */
+.pagination li.previous,
+.pagination li.next {
+  font-weight: bold;
+  color: #703103 !important;
+}
+
+.pagination li.disabled {
+  cursor: default;
+  color: #703103;
+}
+.pagination .previous a,
+.pagination .next a {
+  color: #703103;
+  
+}

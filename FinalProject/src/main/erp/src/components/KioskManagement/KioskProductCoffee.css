@@ -1,0 +1,52 @@
+.re-kiosk,.cancle-kiosk,.edit-detail{
+    border: none;
+    padding: 4px;
+    border-radius: 5px;
+    font-size: 16px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+.cancle-kiosk{
+    color: black;
+    background-color: white;
+    border: 1px solid black;
+}
+.re-kiosk{
+    background-color: black;
+    color: white;
+}
+.edit-detail{
+    color: black;
+    background-color: white;
+    border: 1px solid black;
+}
+.sale-price-form:focus{
+    border-color: #F0C490;
+    box-shadow: 0 0 0 0.2rem rgba(255, 99, 71, 0.25); 
+}
+.recommend-switch .form-check-input:checked {
+    background-color: #ff6347; /* 원하는 색상 */
+    border-color: #ff6347; /* 테두리 색상 */
+  }
+  
+  .recommend-switch .form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(255, 99, 71, 0.25); /* 포커스 색상 */
+  }
+  .edit-detail-certain-btn{
+    border: none;
+    border-radius: 5px;
+    padding: 6px;
+    background-color: #F0C490;
+    color: white;
+  }
+  .edit-detail-cancel-btn{
+    border: none;
+    border-radius: 5px;
+    padding: 6px;
+    background-color: white;
+    border: 1px solid black;
+
+  }
+  .edit-description-form:focus{
+    border-color: #F0C490;
+    box-shadow: 0 0 0 0.2rem rgba(255, 99, 71, 0.25); 
+  }

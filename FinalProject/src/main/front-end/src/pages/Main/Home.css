@@ -1,0 +1,49 @@
+.body-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+.main-logo-container{
+    height: 650px;
+    /* background: linear-gradient(to right, #E6B980, #EAC7A7); */
+    /* background: linear-gradient(to right, #D1913C, #FFD194); */
+    background: linear-gradient(to right, #F5E6D3, #E6D0B8);
+    /* background: linear-gradient(to right, #F3E5D0, #E7D4B9); */
+    /* background: linear-gradient(to right, #F0E4D1, #E1CFBA); */
+}
+.main-logo{
+    text-align: center;
+}
+.main-logo-img{
+    width: 450px;
+    height: 450px;
+}
+.select-place{
+    height: 200px;
+    /* background-color: #D9BBA0; */
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 5px solid #F5E6D3;
+    border-left: 5px solid #F5E6D3;
+    border-right: 5px solid #F5E6D3;
+
+}
+.select-place button{
+    border-radius: 10px;
+    width: 40%;
+    height: 110px;
+    margin-left: 30px;
+    font-size: 30px;
+}
+.take-out-btn{
+    background-color: #E6B980;
+    color: white;
+    border: none;
+}
+.here-btn{
+    border: 3px solid #E6B980;
+    background-color: white;
+    color: #E6B980;
+}
