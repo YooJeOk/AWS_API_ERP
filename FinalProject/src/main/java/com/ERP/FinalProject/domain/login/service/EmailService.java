@@ -1,5 +1,5 @@
 // EmailService.java
-package service;
+package com.ERP.FinalProject.domain.login.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;

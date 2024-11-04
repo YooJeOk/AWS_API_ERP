@@ -1,9 +1,10 @@
 // UserRepository.java
-package repository;
+package com.ERP.FinalProject.domain.login.repository;
 
-import model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.ERP.FinalProject.domain.login.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {

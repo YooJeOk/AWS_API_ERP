@@ -1,4 +1,4 @@
-package config;
+package com.ERP.FinalProject.domain.login.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
