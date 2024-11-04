@@ -33,27 +33,16 @@ const PaymentPage = () => {
     // 네이버페이 스크립트 로드
     const naverPayScript = document.createElement('script');
     naverPayScript.src = "https://nsp.pay.naver.com/sdk/js/naverpay.min.js";
+    naverPayScript.onload = () => console.log('Naver Pay script loaded');
     document.body.appendChild(naverPayScript);
-
-    // 네이버페이 결제 성공/실패 메시지 처리 이벤트 리스너 추가
-    const handleNaverPayMessage = async (e) => {
-      if (e.data && e.data.resultCode) {
-        if (e.data.resultCode === "Success") {
-          handlePaymentSuccess('네이버페이');
-        } else if (e.data.resultCode === "Fail") {
-          handlePaymentFailure(e.data.resultMessage);
-        }
-      }
-    };
-
-    window.addEventListener('message', handleNaverPayMessage);
 
     return () => {
       document.body.removeChild(portOneScript);
       document.body.removeChild(naverPayScript);
-      window.removeEventListener('message', handleNaverPayMessage);
     };
   }, []);
+
+
 
   const handleCancel = () => {
     ClickSound();
@@ -66,10 +55,12 @@ const PaymentPage = () => {
     navigate('/earn', { state: { cartItems, userData } });
   };
 
-  const handlePaymentClick = (paymentType) => {
+  const handlePaymentClick = async (paymentType) => {
     ClickSound();
     if (paymentType === '네이버페이') {
       playTTS("네이버페이를 선택하셨습니다.");
+
+      
       if (window.Naver) {
         const oPay = window.Naver.Pay.create({
           mode: "development",
@@ -84,10 +75,16 @@ const PaymentPage = () => {
           totalPayAmount: totalAmount - discountAmount,
           taxScopeAmount: totalAmount - discountAmount,
           taxExScopeAmount: "0",
-          returnUrl: "http://localhost:3001/payment"
+          returnUrl: "http://localhost:3001/payment",
+          onSuccess: function() {
+            handlePaymentSuccess('네이버페이');
+          }, 
+          onFailure: function(error) {
+            handlePaymentFailure(error.message);
+          }
         });
       }
-    } else {
+    }else {
       if (paymentType === "카카오페이") {
         playTTS("카카오페이를 선택하셨습니다.");
       } else {
@@ -108,7 +105,9 @@ const PaymentPage = () => {
         }
       });
     }
+
   };
+
 
   const handlePaymentSuccess = async (paymentType) => {
     playTTS("결제가 완료되었습니다.")
@@ -157,17 +156,28 @@ const PaymentPage = () => {
       console.log('Sending data to server:', JSON.stringify(saleData, null, 2));
       const response = await axios.post('/api/sales', saleData);
       console.log('Server response:', response.data);
-
-
     } catch (error) {
       console.error("판매 기록 저장 실패", error.response ? error.response.data : error.message);
     }
   };
 
+  // useEffect(() => {
+  //   // URL 파라미터에서 resultCode 값 확인
+  //   const searchParams = new URLSearchParams(location.search);
+  //   const resultCode = searchParams.get('resultCode');
+    
+  //   if (resultCode === 'Success') {
+  //     handlePaymentSuccess('네이버페이');
+  //   }
+  // }, [location.search], handlePaymentSuccess);
+
+
   const handlePaymentFailure = (errorMessage) => {
     setModalMessage(`결제가 실패하였습니다: ${errorMessage}`);
     setShowModal(true);
   };
+
+
 
   const handleStampCouponClick = () => {
     ClickSound();
@@ -195,6 +205,10 @@ const PaymentPage = () => {
     ClickSound();
     setShowModal(false);
   };
+  const formatPrice = (price) => {
+    return price.toLocaleString('ko-KR');
+  };
+
 
   return (
     <div className="detail-page container-md body-center">
@@ -240,9 +254,9 @@ const PaymentPage = () => {
       )}
 
       <OrderSummary
-        orderAmount={totalAmount}
-        discountAmount={discountAmount}
-        totalAmount={totalAmount - discountAmount}
+        orderAmount={formatPrice(totalAmount)}
+        discountAmount={formatPrice(discountAmount)}
+        totalAmount={formatPrice(totalAmount - discountAmount)}
         onCancel={handleCancel}
         onPrevious={handlePrevious}
         nextPath="/"

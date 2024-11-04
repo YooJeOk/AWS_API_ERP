@@ -61,6 +61,11 @@ const CoffeeModal = ({ item, onClose, onAddToCart, additionalOptions }) => {
             regularButton.classList.add('selected');
         }
     }, []);
+
+    const formatPrice = (price) => {
+        return price.toLocaleString('ko-KR');
+      };
+
     return (
         <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1">
             <div className="coffee-modal modal-dialog modal-dialog-centered">
@@ -113,7 +118,8 @@ const CoffeeModal = ({ item, onClose, onAddToCart, additionalOptions }) => {
                                                     <div className='syrup-title col-5'>
                                                         ㄴ {option.name} 추가
                                                     </div>
-                                                    <div className='syrup-price col-3 text-right'>₩{option.price}</div>
+                                                    
+                                                    <div className='syrup-price col-3 text-right'>₩{formatPrice(option.price)}</div>
                                                     <div className='syrup-counter col-4 text-right'>
                                                         <button
                                                             onClick={() => handleOptionChange(option.id, -1)}
@@ -138,7 +144,7 @@ const CoffeeModal = ({ item, onClose, onAddToCart, additionalOptions }) => {
                                 <hr></hr>
 
                                 <div className="counter-container mt-3 fs-3">
-                                    <div className="modal-price text-right">₩{calculateTotalPrice()}</div>
+                                    <div className="modal-price text-right">₩{formatPrice(calculateTotalPrice())}</div>
                                 </div>
                             </div>
                             <div className="modal-footer fs-4">
