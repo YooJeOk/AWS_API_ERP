@@ -57,7 +57,7 @@ const StoreInventory = () => {
 
     return (
         <div className='store-inven-container container-md mt-4'>
-            <h3 className='text-center'>매장 재고</h3>
+            <h3 className='text-center mt-0 mb-0'>매장 재고</h3>
             {(!expandedMaterial || expandedProduct) && (
                 <div className='product-container'>
                     <div className='d-flex justify-content-between align-items-center mb-3'>
@@ -79,7 +79,7 @@ const StoreInventory = () => {
                             style={{maxWidth: '200px'}}
                         />
                     </div>
-                    <div className='product-table' style={{ minHeight: '300px' }}>
+                    <div className='product-table' style={{ minHeight: '255px' }}>
                         {productInventory.content.length > 0 ? (
                             <ProductInventoryTable products={productInventory.content} />
                         ) : (
@@ -116,7 +116,7 @@ const StoreInventory = () => {
                             style={{maxWidth: '200px'}}
                         />
                     </div>
-                    <div className='materials-table' style={{ minHeight: '300px' }}>
+                    <div className='materials-table' style={{ minHeight: '240px' }}>
                         {materialInventory.content.length > 0 ? (
                             <MaterialsInventoryTable materials={materialInventory.content} />
                         ) : (
@@ -124,7 +124,7 @@ const StoreInventory = () => {
                         )}
                     </div>
                     <div className='materials-page'>
-                        <Pagination
+                        <Pagination className="mt-0 mb-0"
                             currentPage={materialPage}
                             totalPages={materialInventory.totalPages}
                             onPageChange={setMaterialPage}
