@@ -19,7 +19,7 @@ public interface SalesDwmRepository extends JpaRepository<SalesRecord, Integer> 
            "WHERE sr.saleDate BETWEEN :startDate AND :endDate " +
            "GROUP BY DATE(sr.saleDate) " +
            "ORDER BY DATE(sr.saleDate)")
-    List<Map<String, Object>> findDailySales(@Param("startDate") LocalDateTime startDate, @Pasram("endDate") LocalDateTime endDate);
+    List<Map<String, Object>> findDailySales(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
     // 주별 매출 데이터
     @Query("SELECT FUNCTION('YEARWEEK', sr.saleDate) as week, SUM(sr.totalSalePrice) as totalSales " +
