@@ -289,112 +289,117 @@ const KioskInventory = () => {
 
   );
   return (
-    <div className='product-coffee-container container-md mt-4'>
-      <h3 className='text-center'>키오스크 재고</h3>
+    <div className='product-coffee-container container-md mt-0'>
+      <h3 className='text-center mb-0 mt-3'>키오스크 재고</h3>
       {(!expandedCoffee || expandedProduct) && (
 
-      <div className='product-container'>
-        <div className='d-flex justify-content-between align-items-center mb-3'>
-          <div className='d-flex align-items-center'>
-            <h4 className='mb-0'>빵 목록</h4>
-            <button
-              onClick={toggleProductExpand}
-              className="toggle-expand-btn ms-2"
-            >
-              {expandedProduct ? '-' : '+'}
-            </button>
+        <div className='product-container'>
+          <div className='d-flex justify-content-between align-items-center mb-3'>
+            <div className='d-flex align-items-center'>
+              <h4 className='mb-0'>빵 목록</h4>
+              {!editMode && (
+                <button
+                  onClick={toggleProductExpand}
+                  className="toggle-expand-btn ms-2"
+                >
+                  {expandedProduct ? '-' : '+'}
+                </button>
+              )}
+
+            </div>
+            <div className='d-flex justify-content-between align-items-center'>
+              {!editMode && (
+                <input
+                  type="text"
+                  placeholder="제품 검색"
+                  value={productSearch}
+                  onChange={handleProductSearch}
+                  className="form-control w-auto inven-search mx-3"
+                  style={{ maxWidth: '200px', maxHeight: '40px' }}
+                />
+              )}
+              <span className={`edit-container ${(expandedProduct || expandedCoffee) ? 'hidden' : ''}`}>
+                <div>
+                  <button className='change-mode-btn' onClick={() => setEditMode(!editMode)}>
+                    {editMode ? '편집 모드 종료' : '편집 모드'}
+                  </button>
+                  {editMode && <button className='change-save-btn ms-2' onClick={handleSaveChanges}>변경사항 저장</button>}
+                </div>
+              </span>
+            </div>
           </div>
-          <div className='d-flex justify-content-between align-items-center'>
+          <div className='product-table' style={{ minHeight: '250px' }}>
+            {products.products && products.products.length > 0 ? (
+              <KioskProduct
+                products={editMode ? editedProducts[productPage] || [] : products.products || []}
+                editMode={editMode}
+                onProductChange={(index, field, value) => handleProductChange(productPage, index, field, value)}
+                onProductDelete={handleDeleteProduct}
+                onCancelDelete={handleCancelDeleteProduct}
+                deletedProducts={deletedProducts}
+              />
+            ) : (
+              <p className="text-center">조회 결과가 없습니다.</p>
+            )}
+          </div>
+          <div className='product-page'>
+            <Pagination
+              currentPage={productPage}
+              totalPages={products.totalPages}
+              onPageChange={setProductPage}
+            />
+          </div>
+        </div>
+      )}
+      {(!expandedProduct || expandedCoffee) && (
+
+        <div className='coffee-container mt-0'>
+          <div className='d-flex justify-content-between align-items-center mb-3'>
+            <div className='d-flex align-items-center'>
+              <h4 className='mb-0 mt-0'>커피 목록</h4>
+              {!editMode && (
+                <button
+                  onClick={toggleCoffeeExpand}
+                  className="toggle-expand-btn ms-2"
+                >
+                  {expandedCoffee ? '-' : '+'}
+                </button>
+              )}
+            </div>
             {!editMode && (
               <input
                 type="text"
-                placeholder="제품 검색"
-                value={productSearch}
-                onChange={handleProductSearch}
-                className="form-control w-auto inven-search mx-3"
+                placeholder="커피 검색"
+                value={coffeeSearch}
+                onChange={handleCoffeeSearch}
+                className="form-control w-auto inven-search"
                 style={{ maxWidth: '200px', maxHeight: '40px' }}
               />
             )}
-            <span className={`edit-container ${(expandedProduct || expandedCoffee) ? 'hidden' : ''}`}>
-              <div>
-                <button className='change-mode-btn' onClick={() => setEditMode(!editMode)}>
-                  {editMode ? '편집 모드 종료' : '편집 모드'}
-                </button>
-                {editMode && <button className='change-save-btn ms-2' onClick={handleSaveChanges}>변경사항 저장</button>}
-              </div>
-            </span>
           </div>
-        </div>
-        <div className='product-table' style={{ minHeight: '300px' }}>
-          {products.products && products.products.length > 0 ? (
-            <KioskProduct
-              products={editMode ? editedProducts[productPage] || [] : products.products || []}
-              editMode={editMode}
-              onProductChange={(index, field, value) => handleProductChange(productPage, index, field, value)}
-              onProductDelete={handleDeleteProduct}
-              onCancelDelete={handleCancelDeleteProduct}
-              deletedProducts={deletedProducts}
-            />
-          ) : (
-            <p className="text-center">조회 결과가 없습니다.</p>
-          )}
-        </div>
-        <div className='product-page'>
-          <Pagination
-            currentPage={productPage}
-            totalPages={products.totalPages}
-            onPageChange={setProductPage}
-          />
-        </div>
-      </div>
-      )}
-            {(!expandedProduct || expandedCoffee) && (
-
-      <div className='coffee-container mt-4'>
-        <div className='d-flex justify-content-between align-items-center mb-3'>
-          <div className='d-flex align-items-center'>
-            <h4 className='mb-0'>커피 목록</h4>
-            <button
-              onClick={toggleCoffeeExpand}
-              className="toggle-expand-btn ms-2"
-            >
-              {expandedCoffee ? '-' : '+'}
-            </button>
-          </div>
-          {!editMode && (
-            <input
-              type="text"
-              placeholder="커피 검색"
-              value={coffeeSearch}
-              onChange={handleCoffeeSearch}
-              className="form-control w-auto inven-search"
-              style={{ maxWidth: '200px', maxHeight: '40px' }}
-            />
-          )}
-        </div>
-        <div className='coffee-table' style={{ minHeight: '300px' }}>
-          {coffees.coffees && coffees.coffees.length > 0 ? (
-            <KioskCoffee
-              coffees={editMode ? editedCoffees[coffeePage] || [] : coffees.coffees || []}
-              editMode={editMode}
-              onCoffeeChange={(index, field, value) => handleCoffeeChange(coffeePage, index, field, value)}
-              onCoffeeDelete={handleDeleteCoffee}
-              onCancelDelete={handleCancelDeleteCoffee}
-              deletedCoffees={deletedCoffees}
-            />
-          ) : (
-            <p className="text-center">조회 결과가 없습니다.</p>
-          )}
-        </div>
-        <div className='coffee-page'>
-          <Pagination
-            currentPage={coffeePage}
-            totalPages={coffees.totalPages}
-            onPageChange={setCoffeePage}
-          />
-        </div>
-      </div>
+          <div className='coffee-table' style={{ minHeight: '240px' }}>
+            {coffees.coffees && coffees.coffees.length > 0 ? (
+              <KioskCoffee
+                coffees={editMode ? editedCoffees[coffeePage] || [] : coffees.coffees || []}
+                editMode={editMode}
+                onCoffeeChange={(index, field, value) => handleCoffeeChange(coffeePage, index, field, value)}
+                onCoffeeDelete={handleDeleteCoffee}
+                onCancelDelete={handleCancelDeleteCoffee}
+                deletedCoffees={deletedCoffees}
+              />
+            ) : (
+              <p className="text-center">조회 결과가 없습니다.</p>
             )}
+          </div>
+          <div className='coffee-page'>
+            <Pagination
+              currentPage={coffeePage}
+              totalPages={coffees.totalPages}
+              onPageChange={setCoffeePage}
+            />
+          </div>
+        </div>
+      )}
 
       <ConfirmChangesModal
         show={showConfirmModal}

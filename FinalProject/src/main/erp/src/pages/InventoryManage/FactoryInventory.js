@@ -57,7 +57,7 @@ const FactoryInventory = () => {
 
     return (
         <div className='store-inven-container container-md mt-4'>
-            <h3 className='text-center'>공장 재고</h3>
+            <h3 className='text-center mb-0'>공장 재고</h3>
             {(!expandedMaterial || expandedProduct) && (
                 <div className='product-container'>
                     <div className='d-flex justify-content-between align-items-center mb-3'>
@@ -79,15 +79,15 @@ const FactoryInventory = () => {
                             style={{maxWidth: '200px'}}
                         />
                     </div>
-                    <div className='product-table' style={{ minHeight: '300px' }}>
+                    <div className='product-table mb-0 mt-0' style={{ minHeight: '270px' }}>
                         {productInventory.content.length > 0 ? (
                             <ProductInventoryTable products={productInventory.content} />
                         ) : (
                             <p className="text-center">조회 결과가 없습니다.</p>
                         )}
                     </div>
-                    <div className='product-page'>
-                        <Pagination
+                    <div className='product-page mt-0 mb-0'>
+                        <Pagination className="mb-0"
                             currentPage={productPage}
                             totalPages={productInventory.totalPages}
                             onPageChange={setProductPage}
@@ -99,7 +99,7 @@ const FactoryInventory = () => {
                 <div className='material-container mt-4'>
                     <div className='d-flex justify-content-between align-items-center mb-3'>
                         <div className='d-flex align-items-center'>
-                            <h4 className='mb-0'>자재</h4>
+                            <h4 className='mb-0 mt-0'>자재</h4>
                             <button 
                                 onClick={toggleMaterialExpand}
                                 className="toggle-expand-btn"
@@ -116,7 +116,7 @@ const FactoryInventory = () => {
                             style={{maxWidth: '200px'}}
                         />
                     </div>
-                    <div className='materials-table' style={{ minHeight: '300px' }}>
+                    <div className='materials-table' style={{ minHeight: '240px' }}>
                         {materialInventory.content.length > 0 ? (
                             <MaterialsInventoryTable materials={materialInventory.content} />
                         ) : (
@@ -124,7 +124,7 @@ const FactoryInventory = () => {
                         )}
                     </div>
                     <div className='materials-page'>
-                        <Pagination
+                        <Pagination className="mt-0 mb-0"
                             currentPage={materialPage}
                             totalPages={materialInventory.totalPages}
                             onPageChange={setMaterialPage}
