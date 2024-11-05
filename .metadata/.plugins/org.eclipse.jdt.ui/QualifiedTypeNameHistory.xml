@@ -51,10 +51,10 @@
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.Entry.entity.ProductionEntry"/>
     <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.MBOM.repository.MBOMRepository"/>
-    <fullyQualifiedTypeName name="lombok.Data"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.login.repository.UserRepository"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.login.service.EmailService"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.login.service.UserService"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.login.model.User"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.login.service.RegisterMail"/>
+    <fullyQualifiedTypeName name="lombok.Data"/>
 </qualifiedTypeNameHistroy>
