@@ -3,7 +3,6 @@ import React from 'react';
 const MaterialsInventoryTable = ({ materials }) => {
     return (
         <div className='materials-inner-table'>
-            <h4>자재</h4>
             <table className='table table-bordered'>
                 <thead>
                     <tr>

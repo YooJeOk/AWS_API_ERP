@@ -21,20 +21,22 @@ import com.ERP.FinalProject.domain.inventory.entity.Product;
 @RestController
 @RequestMapping("/api/store/inventory")
 public class StoreInventoryController {
-	@Autowired
-	private StoreInventoryService inventoryService;
+    @Autowired
+    private StoreInventoryService inventoryService;
 
-	@GetMapping("/products")
+    @GetMapping("/products")
     public ResponseEntity<Page<ProductDTO>> getProductInventory(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "50") int size) {
-        return ResponseEntity.ok(inventoryService.getProductInventory(PageRequest.of(page, size)));
+            @RequestParam(defaultValue = "50") int size,
+            @RequestParam(required = false) String search) {
+        return ResponseEntity.ok(inventoryService.getProductInventory(PageRequest.of(page, size), search));
     }
 
-	 @GetMapping("/materials")
-	    public ResponseEntity<Page<MaterialsInventoryDTO>> getMaterialInventory(
-	            @RequestParam(defaultValue = "0") int page,
-	            @RequestParam(defaultValue = "50") int size) {
-	        return ResponseEntity.ok(inventoryService.getMaterialInventory(PageRequest.of(page, size)));
-	    }
-	}
+    @GetMapping("/materials")
+    public ResponseEntity<Page<MaterialsInventoryDTO>> getMaterialInventory(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "50") int size,
+            @RequestParam(required = false) String search) {
+        return ResponseEntity.ok(inventoryService.getMaterialInventory(PageRequest.of(page, size), search));
+    }
+}

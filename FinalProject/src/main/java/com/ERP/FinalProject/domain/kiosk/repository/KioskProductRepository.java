@@ -24,6 +24,9 @@ public interface KioskProductRepository extends JpaRepository<Product, Long> {
 	
 	Page<Product> findByProductCategoryAndOnKiosk(String category, String onKiosk, Pageable pageable);
 	
-	//자동발주
+	//검색기능
+	Page<Product> findByProductNameContainingOrProductCategoryContaining(String name, String category, Pageable pageable);
+	
+    Page<Product> findByProductCategoryAndOnKioskAndProductNameContaining(String category, String onKiosk, String search, Pageable pageable);
 
 }

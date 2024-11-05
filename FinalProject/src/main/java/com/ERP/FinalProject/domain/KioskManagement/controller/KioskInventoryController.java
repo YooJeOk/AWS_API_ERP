@@ -29,38 +29,42 @@ public class KioskInventoryController {
 	private KioskInventoryService kioskInventoryService;
 	
 	@GetMapping("/products")
-	public ResponseEntity<Map<String, Object>> getProducts(@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "5") int size) {
-		Page<Product> productPage = kioskInventoryService.getProducts(page, size);
-		List<Map<String, Object>> products = productPage.getContent().stream().map(product -> {
-			Map<String, Object> productMap = new HashMap<>();
-			productMap.put("product", product);
-			productMap.put("inventory", kioskInventoryService.getProductInventory(product));
-			return productMap;
-		}).collect(Collectors.toList());
+    public ResponseEntity<Map<String, Object>> getProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false) String search) {
+        Page<Product> productPage = kioskInventoryService.getProducts(page, size, search);
+        List<Map<String, Object>> products = productPage.getContent().stream().map(product -> {
+            Map<String, Object> productMap = new HashMap<>();
+            productMap.put("product", product);
+            productMap.put("inventory", kioskInventoryService.getProductInventory(product));
+            return productMap;
+        }).collect(Collectors.toList());
 
-		Map<String, Object> response = new HashMap<>();
-		response.put("products", products);
-		response.put("currentPage", productPage.getNumber());
-		response.put("totalItems", productPage.getTotalElements());
-		response.put("totalPages", productPage.getTotalPages());
+        Map<String, Object> response = new HashMap<>();
+        response.put("products", products);
+        response.put("currentPage", productPage.getNumber());
+        response.put("totalItems", productPage.getTotalElements());
+        response.put("totalPages", productPage.getTotalPages());
 
-		return ResponseEntity.ok(response);
-	}
+        return ResponseEntity.ok(response);
+    }
 
-	@GetMapping("/coffees")
-	public ResponseEntity<Map<String, Object>> getCoffees(@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "5") int size) {
-		Page<Coffee> coffeePage = kioskInventoryService.getCoffees(page, size);
+    @GetMapping("/coffees")
+    public ResponseEntity<Map<String, Object>> getCoffees(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false) String search) {
+        Page<Coffee> coffeePage = kioskInventoryService.getCoffees(page, size, search);
 
-		Map<String, Object> response = new HashMap<>();
-		response.put("coffees", coffeePage.getContent());
-		response.put("currentPage", coffeePage.getNumber());
-		response.put("totalItems", coffeePage.getTotalElements());
-		response.put("totalPages", coffeePage.getTotalPages());
+        Map<String, Object> response = new HashMap<>();
+        response.put("coffees", coffeePage.getContent());
+        response.put("currentPage", coffeePage.getNumber());
+        response.put("totalItems", coffeePage.getTotalElements());
+        response.put("totalPages", coffeePage.getTotalPages());
 
-		return ResponseEntity.ok(response);
-	}
+        return ResponseEntity.ok(response);
+    }
 	
 	//키오스크에 없는 빵들
 	@GetMapping("/register/product")
