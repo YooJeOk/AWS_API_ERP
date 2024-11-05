@@ -1,7 +1,6 @@
 package com.ERP.FinalProject.domain.SalesManagement.Service;
 
 import com.ERP.FinalProject.domain.SalesManagement.Repository.SalesDwtdRepository;
-import com.ERP.FinalProject.domain.SalesManagement.Repository.SalesRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.HashMap;
@@ -28,4 +27,18 @@ public class SalesDwtdService {
 
         return salesByDay;
     }
+    
+    public Map<Integer, Double> getAverageSalesByHour() {
+        List<Object[]> salesData = salesRecordRepository.getAverageSalesByHour();
+        Map<Integer, Double> salesByHour = new HashMap<>();
+
+        for (Object[] data : salesData) {
+            int hour = (int) data[0];
+            double avgSales = (double) data[1];
+            salesByHour.put(hour, avgSales);
+        }
+
+        return salesByHour;
+    }
+    
 }

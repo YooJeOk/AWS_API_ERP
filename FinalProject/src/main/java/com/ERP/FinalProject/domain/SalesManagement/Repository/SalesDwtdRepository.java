@@ -13,4 +13,11 @@ public interface SalesDwtdRepository extends JpaRepository<SalesRecord, Integer>
            "GROUP BY FUNCTION('DAYOFWEEK', sr.saleDate) " +
            "ORDER BY dayOfWeek")
     List<Object[]> getSalesByDayOfWeek();
+    
+    
+    @Query("SELECT FUNCTION('HOUR', sr.saleDate) AS saleHour, AVG(sr.totalSalePrice) AS avgSales " +
+            "FROM SalesManagementSalesRecord sr " +
+            "GROUP BY saleHour " +
+            "ORDER BY saleHour")
+     List<Object[]> getAverageSalesByHour();
 }

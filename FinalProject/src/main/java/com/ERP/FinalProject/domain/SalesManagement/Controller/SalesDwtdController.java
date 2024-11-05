@@ -19,5 +19,10 @@ public class SalesDwtdController {
     public Map<String, Integer> getSalesByDayOfWeek() {
         return salesRecordService.getSalesByDayOfWeek();
     }
+    @GetMapping("/sales-by-hour")
+    public Map<Integer, Double> getAverageSalesByHour() {
+        return salesRecordService.getAverageSalesByHour();
+    }
+
 }
 
