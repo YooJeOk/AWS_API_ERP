@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import './ChartStyles.css';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-// 각 단계의 라벨과 시간을 배열로 정의
-const stages = [
+const initialStages = [
     { label: "계량 완료", status: "대기", time: 10 },
     { label: "반죽 완료", status: "대기", time: 20 },
     { label: "1차 발효 완료", status: "대기", time: 60 },
@@ -17,51 +16,111 @@ const stages = [
     { label: "포장 완료", status: "대기", time: 10 },
 ];
 
-// 총 시간을 기준으로 각 단계의 진행 비율 계산
-const totalProcessTime = stages.reduce((sum, stage) => sum + stage.time, 0);
+const totalProcessTime = initialStages.reduce((sum, stage) => sum + stage.time, 0);
 
-const ProcessVisualization = ({ lineName }) => {
-    const [progress, setProgress] = useState(0);
-    const [lineStatus, setLineStatus] = useState("대기");
+const ProcessVisualization = ({ lineName, lineData }) => {
+    const [stages, setStages] = useState(initialStages);
+    const [remainingTime, setRemainingTime] = useState(
+        lineData.status === "대기" ? 280 * 60 : parseInt(localStorage.getItem(`${lineName}_remainingTime`)) || totalProcessTime * 60
+    );
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            const newProgress = progress < stages.length - 1 ? progress + 1 : 0;
-            setProgress(newProgress);
+        if (lineData.status === "대기") {
+            setRemainingTime(280 * 60); // 280분을 초로 변환하여 고정
+            return;
+        }
 
-            if (newProgress === stages.length - 2) setLineStatus("경고");
-            else if (newProgress === stages.length - 1) setLineStatus("위험");
-            else if (newProgress > 0) setLineStatus("작업중");
-            else setLineStatus("대기");
-        }, 10000);
-        return () => clearInterval(interval);
-    }, [progress]);
+        const savedStages = JSON.parse(localStorage.getItem(`${lineName}_stages`));
+        if (savedStages) {
+            setStages(savedStages);
+        } else {
+            const completedStages = Object.keys(lineData).filter(key => lineData[key] === true).length - 1;
+            const completedTime = stages.slice(0, completedStages).reduce((total, stage) => total + stage.time, 0) * 60;
+            setRemainingTime(totalProcessTime * 60 - completedTime);
+            
+            const updatedStages = initialStages.map((stage, index) => ({
+                ...stage,
+                status: index < completedStages ? "완료" : index === completedStages ? "작업중" : "대기",
+                progress: index < completedStages ? 100 : 0,
+            }));
+            setStages(updatedStages);
+        }
+    }, [lineData, lineName]);
+
+    useEffect(() => {
+        if (lineData.status === "대기") return; // "대기" 상태인 경우 진행 멈춤
+
+        const timer = setInterval(() => {
+            setRemainingTime(prev => {
+                const newRemainingTime = Math.max(prev - 1, 0);
+                localStorage.setItem(`${lineName}_remainingTime`, newRemainingTime);
+                return newRemainingTime;
+            });
+            setStages(prevStages => {
+                const currentStageIndex = prevStages.findIndex(stage => stage.status === "작업중");
+                if (currentStageIndex === -1) return prevStages;
+
+                const updatedStages = [...prevStages];
+                const currentStage = updatedStages[currentStageIndex];
+                currentStage.progress = Math.min((currentStage.progress || 0) + (100 / currentStage.time / 60), 100);
+
+                if (currentStage.progress >= 100) {
+                    currentStage.status = "완료";
+                    if (currentStageIndex + 1 < updatedStages.length) {
+                        updatedStages[currentStageIndex + 1].status = "작업중";
+                    }
+                }
+                localStorage.setItem(`${lineName}_stages`, JSON.stringify(updatedStages));
+                return updatedStages;
+            });
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [stages, lineName, lineData.status]);
+
+    const formatTime = (seconds) => {
+        const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+        const secs = (seconds % 60).toString().padStart(2, '0');
+        return `${mins}:${secs}`;
+    };
+
+    const lineStyle = {
+        color: lineData.status === "경고" ? "#ff0000" : "#333",
+        animation: lineData.status === "경고" ? "blink 1s infinite" : "none",
+    };
 
     return (
         <div style={styles.processContainer}>
-            <h3 style={styles.lineName}>
-                {lineName} <span style={{ ...styles.statusLabel, color: styles[lineStatus].backgroundColor }}>{lineStatus}</span>
+            <h3 style={{ ...styles.lineName, ...lineStyle }}>
+                {lineName} 
+                <span style={styles.remainingTime}>남은 시간: {formatTime(remainingTime)}</span>
             </h3>
-            <div style={styles.pipe}>
-                <div
-                    style={{
-                        ...styles.pipeFill,
-                        width: `${(progress / stages.length) * 100}%`,
-                    }}
-                />
+            <div style={styles.pipeContainer}>
+                <div style={styles.pipe}>
+                    {stages.map((stage, index) => {
+                        const stageWidth = (stage.time / totalProcessTime) * 100;
+                        const leftPosition = (index === 0 ? 0 : (stages.slice(0, index).reduce((total, s) => total + s.time, 0) / totalProcessTime) * 100);
+                        return (
+                            <div
+                                key={index}
+                                style={{
+                                    ...styles.pipeFill,
+                                    left: `${leftPosition}%`,
+                                    width: `${(stage.progress || 0) * (stageWidth / 100)}%`,
+                                    backgroundColor: stage.status === "완료" ? "#77DD77" : stage.status === "작업중" ? "#B9E0FF" : "#ccc",
+                                }}
+                            />
+                        );
+                    })}
+                </div>
             </div>
             <div style={styles.stages}>
                 {stages.map((stage, index) => {
-                    let status = "대기";
-                    if (index < progress) status = "완료";
-                    else if (index === progress) status = lineStatus === "경고" ? "경고" : "작업중";
-
-                    const statusClass = styles[status.toLowerCase()] || {};
+                    const statusClass = styles[stage.status.toLowerCase()] || {};
                     const stageWidth = (stage.time / totalProcessTime) * 100;
-                    const isEndStyle = stage.isEnd ? styles.endStage : {};
 
                     return (
-                        <div key={index} style={{ ...styles.stage, ...isEndStyle, width: `${stageWidth}%` }}>
+                        <div key={index} style={{ ...styles.stage, width: `${stageWidth}%` }}>
                             <div style={{ ...styles.circle, ...statusClass }} />
                             <span style={styles.label}>{stage.label}</span>
                         </div>
@@ -73,13 +132,27 @@ const ProcessVisualization = ({ lineName }) => {
 };
 
 const ProductionLines = () => {
+    const [productionData, setProductionData] = useState([]);
+
+    useEffect(() => {
+        const fetchProductionData = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/api/production-process-status/all');
+                setProductionData(response.data);
+            } catch (error) {
+                console.error('Error fetching production data:', error);
+            }
+        };
+
+        fetchProductionData();
+    }, []);
+
     return (
         <div style={styles.productionLinesContainer}>
             <StatusLegend />
-            <ProcessVisualization lineName="1 라인" />
-            <ProcessVisualization lineName="2 라인" />
-            <ProcessVisualization lineName="3 라인" />
-            <ProcessVisualization lineName="4 라인" />
+            {productionData.map(lineData => (
+                <ProcessVisualization key={lineData.monitorID} lineName={`${lineData.monitorID}라인`} lineData={lineData} />
+            ))}
         </div>
     );
 };
@@ -89,8 +162,7 @@ const StatusLegend = () => {
         { name: "대기", color: "#ccc" },
         { name: "작업중", color: "#B9E0FF" },
         { name: "완료", color: "rgb(119, 221, 119)" },
-        { name: "경고", color: "#ffa500" },
-        { name: "위험", color: "#ff0000" },
+        { name: "경고", color: "#ff0000" },
     ];
 
     return (
@@ -138,34 +210,36 @@ const styles = {
         alignItems: 'center',
         width: '80%',
         margin: '10px',
+        paddingLeft: '100px',
     },
     lineName: {
         fontSize: '24px',
         fontWeight: 'bold',
-        color: '#333',
-        marginBottom: '10px',
     },
-    statusLabel: {
-        fontSize: '18px',
-        marginLeft: '10px',
+    remainingTime: {
+        fontSize: '20px',
+        marginTop: '10px',
         fontWeight: 'bold',
+    },
+    pipeContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        width: '100%',
+        marginBottom: '10px',
+        position: 'relative',
     },
     pipe: {
         position: 'relative',
-        width: '90%',
+        width: '100%',
         height: '8px',
         backgroundColor: '#ccc',
         borderRadius: '4px',
-        marginBottom: '10px',
         overflow: 'hidden',
     },
     pipeFill: {
         position: 'absolute',
         top: 0,
-        left: 0,
         height: '100%',
-        backgroundColor: '#4caf50',
-        transition: 'width 10s linear',
     },
     stages: {
         display: 'flex',
@@ -176,16 +250,11 @@ const styles = {
         flexDirection: 'column',
         alignItems: 'center',
     },
-    endStage: {
-        marginLeft: 'auto',
-        flex: 'unset',
-    },
     circle: {
         width: '30px',
         height: '30px',
         borderRadius: '50%',
         marginBottom: '8px',
-        transition: 'background-color 0.5s ease, box-shadow 0.5s ease',
     },
     label: {
         fontSize: '14px',
@@ -196,24 +265,17 @@ const styles = {
     },
     작업중: {
         backgroundColor: '#B9E0FF',
-        animation: 'pulse 1s infinite',
     },
     완료: {
         backgroundColor: 'rgb(119, 221, 119)',
     },
     경고: {
-        backgroundColor: '#ffa500',
-    },
-    위험: {
         backgroundColor: '#ff0000',
     },
-    "@keyframes pulse": {
-        "0%, 100%": {
-            transform: 'scale(1)',
-        },
-        "50%": {
-            transform: 'scale(1.2)',
-        },
+    '@keyframes blink': {
+        '0%': { opacity: 1 },
+        '50%': { opacity: 0.5 },
+        '100%': { opacity: 1 },
     },
 };
 
