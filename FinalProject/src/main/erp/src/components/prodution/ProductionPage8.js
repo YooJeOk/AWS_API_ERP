@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 import axios from 'axios';
-
 import './ChartStyles.css';
 
 function ProductionMonitoringPage() {
     const [data, setData] = useState([
-        { orderId: 1, productionRate: 0, temperature: 25, humidity: 50, productName: '갈릭꽈베기' }, 
+        { orderId: 1, productionRate: 0, temperature: 25, humidity: 50, productName: '갈릭꽈베기' },
         { orderId: 2, productionRate: 0, temperature: 25, humidity: 50, productName: '단팥도넛' },
         { orderId: 3, productionRate: 0, temperature: 25, humidity: 50, productName: '고구마케이크빵' },
         { orderId: 4, productionRate: 0, temperature: 25, humidity: 50, productName: '꽈베기' }
     ]);
+    const [isEmergencyActive, setIsEmergencyActive] = useState(false);
+    const [showEmergencyModal, setShowEmergencyModal] = useState(false);
 
     useEffect(() => {
         const fetchData = async (orderId, index) => {
@@ -23,7 +24,7 @@ function ProductionMonitoringPage() {
                     productionRate: newData && newData.productionRate ? parseFloat(newData.productionRate) : 0,
                     temperature: newData && newData.temperature ? parseFloat(newData.temperature) : 0,
                     humidity: newData && newData.humidity ? parseFloat(newData.humidity) : 0,
-                    productName: data[index].productName // 기존 productName 유지
+                    productName: data[index].productName
                 };
 
                 setData((prevData) => {
@@ -32,12 +33,17 @@ function ProductionMonitoringPage() {
                     console.log("Updated data:", updatedData);
                     return updatedData;
                 });
+
+                // Check if any temperature exceeds danger threshold of 37 degrees
+                if (sanitizedData.temperature >= 37) {
+                    setIsEmergencyActive(true);
+                }
             } catch (error) {
                 console.error(`OrderID ${orderId} 데이터 로드 오류:`, error);
             }
         };
 
-        const intervals = [1, 2, 3, 4].map((orderId, index) => 
+        const intervals = [1, 2, 3, 4].map((orderId, index) =>
             setInterval(() => fetchData(orderId, index), 5000)
         );
 
@@ -54,14 +60,45 @@ function ProductionMonitoringPage() {
     };
 
     const getTemperatureColor = (temp) => {
-        if (temp < 20 || temp > 30) return "#FF8042"; 
-        if (temp < 23 || temp > 27) return "#FFBB28"; 
-        return "#00C49F"; 
+        if (temp < 20 || temp > 30) return "#FF8042";
+        if (temp < 23 || temp > 27) return "#FFBB28";
+        return "#00C49F";
+    };
+
+    const handleEmergencyClick = () => {
+        setShowEmergencyModal(true);
+    };
+
+    const confirmEmergencyStop = () => {
+        setShowEmergencyModal(false);
+        alert("모든 생산이 중지되었습니다.");
+        // 실제 정지 로직 (서버에 정지 요청 전송 등의 추가 로직 가능)
+        setIsEmergencyActive(false);
+    };
+
+    const cancelEmergencyStop = () => {
+        setShowEmergencyModal(false);
     };
 
     return (
         <div className="custom-container">
             <main className="production-content">
+                <button
+                    className={`emergency-button ${isEmergencyActive ? 'active' : ''}`}
+                    onClick={handleEmergencyClick}
+                    disabled={!isEmergencyActive}
+                >
+                    긴급 정지
+                </button>
+                {showEmergencyModal && (
+                    <div className="emergency-modal">
+                        <div className="emergency-modal-content">
+                            <h2>정말로 위험과 손해를 감수하시고 책임을 지시겠습니까?</h2>
+                            <button onClick={confirmEmergencyStop}>예</button>
+                            <button onClick={cancelEmergencyStop}>아니오</button>
+                        </div>
+                    </div>
+                )}
                 <div className="chart-container">
                     {data.map((item, index) => (
                         <div key={index} className="chart-box">
@@ -119,9 +156,9 @@ function ProductionMonitoringPage() {
                                             startAngle={180}
                                             endAngle={0}
                                         >
-                                            <Cell fill="#0000FF" />  {/* 왼쪽 파란색 */}
-                                            <Cell fill="#00FF00" />  {/* 중앙 초록색 */}
-                                            <Cell fill="#FF0000" />  {/* 오른쪽 빨간색 */}
+                                            <Cell fill="#0000FF" />
+                                            <Cell fill="#00FF00" />
+                                            <Cell fill="#FF0000" />
                                         </Pie>
                                         <path
                                             d={`M50,60 L${50 + 30 * Math.cos((getNeedleRotation(item.temperature) * Math.PI) / 180)},${60 - 30 * Math.sin((getNeedleRotation(item.temperature) * Math.PI) / 180)}`}
