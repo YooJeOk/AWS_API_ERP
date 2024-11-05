@@ -1,4 +1,4 @@
 /.metadata/
 # ignore properties file
-application.properties
+FinalProject/src/main/resources/application.properties
 application-API-KEY.properties
