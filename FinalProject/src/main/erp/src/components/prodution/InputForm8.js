@@ -127,15 +127,15 @@ function MBOMForm() {
 
         try {
             const formattedDataArray = formData.map((material) => ({
-                ItemID: parseInt(fixedData.ItemID),
+                itemID: parseInt(fixedData.ItemID),
                 itemType: fixedData.ItemType,
-                ProductName: fixedData.ProductName,
+                productName: fixedData.ProductName,
                 size: fixedData.Size || null,
-                MaterialID: parseInt(material.MaterialID),
-                Quantity: parseFloat(material.Quantity),
-                Unit: material.Unit,
-                UnitPrice: parseFloat(material.UnitPrice),
-                TotalCost: parseFloat(material.TotalCost)
+                materialID: parseInt(material.MaterialID),
+                quantity: parseFloat(material.Quantity),
+                unit: material.Unit,
+                unitPrice: parseFloat(material.UnitPrice),
+                totalCost: parseFloat(material.TotalCost)
             }));
 
             for (const formattedData of formattedDataArray) {

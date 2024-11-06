@@ -36,22 +36,19 @@ public class MBOMService {
 
     public void saveMBOM(MBOMDTO mbomData) {
         MBOM mbom = new MBOM();
-        mbom.setBomId(mbomData.getBOMID());
         mbom.setItemId(mbomData.getItemID());
-
+        
         // Enum 값 매핑 및 null 체크
         if (mbomData.getItemType() != null) {
             mbom.setItemType(mbomData.getItemType());
         } else {
-            System.out.println("itemType is null, defaulting to Product");
-            mbom.setItemType(ItemType.Product);  // 기본값 설정 (필요한 경우)
+            mbom.setItemType(ItemType.Product);  // 기본값 설정
         }
 
         if (mbomData.getSize() != null) {
             mbom.setSize(mbomData.getSize());
-        } else {
-            System.out.println("size is null, setting default to Regular");
-            mbom.setSize(Size.Regular);  // 기본값 설정 (필요한 경우)
+        } else if (mbomData.getItemType() == ItemType.Coffee) {
+            mbom.setSize(Size.Regular);  // Coffee의 경우 기본값 설정
         }
 
         mbom.setMaterialId(mbomData.getMaterialID());
