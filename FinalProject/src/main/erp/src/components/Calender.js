@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -9,20 +9,50 @@ const localizer = momentLocalizer(moment);
 function MyBigCalendar() {
   const [events, setEvents] = useState([]);
 
-  // 날짜 선택 시 새로운 일정 추가
-  const handleSelect = ({ start, end }) => {
-    const title = window.prompt('새 일정 제목:');
-    if (title) {
-      setEvents([...events, { start, end, title }]);
-    }
-  };
+  // 서버에서 일정 데이터를 불러오기
+  useEffect(() => {
+    fetch('http://localhost:8080/api/events')
+      .then((response) => response.json())
+      .then((data) => {
+        const formattedData = data.map(event => ({
+          ...event,
+          start: new Date(event.date),
+          end: new Date(event.date),
+        }));
+        setEvents(formattedData);
+      });
+  }, []);
 
-  // 이벤트 클릭 시 일정 제거
-  const handleEventClick = (event) => {
-    if (window.confirm(`"${event.title}" 일정을 삭제하시겠습니까?`)) {
-      setEvents(events.filter((e) => e !== event));
-    }
-  };
+// 일정 추가
+const handleSelect = ({ start }) => {
+  const title = window.prompt('새 일정 제목:');
+  if (title) {
+    const newEvent = { date: start, title };
+    fetch('http://localhost:8080/api/add', { // POST URL 확인
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newEvent),
+    })
+      .then((response) => response.json())
+      .then((event) => {
+        setEvents((prevEvents) => [
+          ...prevEvents,
+          { ...event, start: new Date(event.date), end: new Date(event.date) },
+        ]);
+      });
+  }
+};
+
+// 일정 삭제
+const handleEventClick = (event) => {
+  if (window.confirm(`"${event.title}" 일정을 삭제하시겠습니까?`)) {
+    fetch(`http://localhost:8080/api/events/${event.id}`, { // DELETE URL 확인
+      method: 'DELETE',
+    }).then(() => {
+      setEvents((prevEvents) => prevEvents.filter((e) => e.id !== event.id));
+    });
+  }
+};
 
   return (
     <Calendar
@@ -30,12 +60,12 @@ function MyBigCalendar() {
       localizer={localizer}
       events={events}
       defaultView="month"
-      views={['month']} // 주간/하루 삭제
+      views={['month']}
       style={{ width: 700, height: 500 }}
-      step={15} // 15분 단위로 시간 선택 가능
-      timeslots={4} // 각 시간대마다 4개 슬롯 (15분 간격으로 설정됨)
-      onSelectSlot={handleSelect} // 일정 추가 기능
-      onSelectEvent={handleEventClick} // 일정 삭제 기능
+      step={15}
+      timeslots={4}
+      onSelectSlot={handleSelect}
+      onSelectEvent={handleEventClick}
     />
   );
 }
