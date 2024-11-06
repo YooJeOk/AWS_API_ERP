@@ -9,6 +9,7 @@ import NotFound from './pages/Error/NotFound';
 import DetailPage from './pages/Kiosk/DetailPage';
 import EarnPage from './pages/Kiosk/EarnPage';
 import PaymentPage from './pages/Kiosk/PaymentPage';
+import PaymentComplete from './pages/Kiosk/PaymentComplete';
 
 
 //경로설정!
@@ -24,6 +25,7 @@ const router = createBrowserRouter([
       {path:'/detail',element:<DetailPage />},
       {path:'/earn',element:<EarnPage />},
       {path:'/payment',element:<PaymentPage />},
+      {path:'/payment-complete',element:<PaymentComplete/>}
     ],
   }
 ]);

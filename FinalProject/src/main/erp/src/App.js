@@ -41,8 +41,8 @@ import KioskInventory from './pages/KioskManagement/KioskInventory';
 import KioskRegister from './pages/KioskManagement/KioskRegister';
 
 //로그인
-import Login from './components/로그인/login';
-import Findpassword from './components/로그인/findpassword';
+// import Login from './components/로그인/login';
+// import Findpassword from './components/로그인/findpassword';
 
 function App() {
     return (

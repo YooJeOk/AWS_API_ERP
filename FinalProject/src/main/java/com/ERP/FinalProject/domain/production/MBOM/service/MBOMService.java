@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 @Service
 public class MBOMService {
 
@@ -36,22 +38,19 @@ public class MBOMService {
 
     public void saveMBOM(MBOMDTO mbomData) {
         MBOM mbom = new MBOM();
-        mbom.setBomId(mbomData.getBOMID());
         mbom.setItemId(mbomData.getItemID());
-
+        
         // Enum 값 매핑 및 null 체크
         if (mbomData.getItemType() != null) {
             mbom.setItemType(mbomData.getItemType());
         } else {
-            System.out.println("itemType is null, defaulting to Product");
-            mbom.setItemType(ItemType.Product);  // 기본값 설정 (필요한 경우)
+            mbom.setItemType(ItemType.Product);  // 기본값 설정
         }
 
         if (mbomData.getSize() != null) {
             mbom.setSize(mbomData.getSize());
-        } else {
-            System.out.println("size is null, setting default to Regular");
-            mbom.setSize(Size.Regular);  // 기본값 설정 (필요한 경우)
+        } else if (mbomData.getItemType() == ItemType.Coffee) {
+            mbom.setSize(Size.Regular);  // Coffee의 경우 기본값 설정
         }
 
         mbom.setMaterialId(mbomData.getMaterialID());
@@ -73,13 +72,16 @@ public class MBOMService {
         return null;
     }
 
-    public void deleteMBOM(int id) {
-        try {
-            mbomRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException e) {
-            System.out.println("삭제하려는 MBOM ID가 존재하지 않습니다: " + id);
+ // MBOMService.java
+    @Transactional
+    public int deleteByProductName(String productName) {
+        Integer itemId = mbomRepository.findItemIdByProductName(productName);
+        if (itemId != null) {
+            return mbomRepository.deleteByItemId(Long.valueOf(itemId));
         }
+        return 0; // 삭제할 데이터가 없는 경우
     }
+
 
     // 다음 ItemID 계산 (새로운 메서드 호출)
     public Integer getNextItemID(ItemType itemType, Size size) {

@@ -10,7 +10,6 @@
     <fullyQualifiedTypeName name="javax.persistence.Id"/>
     <fullyQualifiedTypeName name="java.time.LocalDateTime"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.planning.model.ProductionPlanningDTO"/>
-    <fullyQualifiedTypeName name="javax.transaction.Transactional"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.planning.model.ProductionPlanning"/>
     <fullyQualifiedTypeName name="java.sql.PreparedStatement"/>
     <fullyQualifiedTypeName name="java.sql.Connection"/>
@@ -56,5 +55,10 @@
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.login.service.UserService"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.login.model.User"/>
     <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.login.service.RegisterMail"/>
+<<<<<<< HEAD
     <fullyQualifiedTypeName name="lombok.Data"/>
+=======
+    <fullyQualifiedTypeName name="javax.transaction.Transactional"/>
+    <fullyQualifiedTypeName name="java.util.Map"/>
+>>>>>>> main
 </qualifiedTypeNameHistroy>

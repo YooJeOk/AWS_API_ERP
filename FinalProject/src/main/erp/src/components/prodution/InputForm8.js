@@ -127,15 +127,15 @@ function MBOMForm() {
 
         try {
             const formattedDataArray = formData.map((material) => ({
-                ItemID: parseInt(fixedData.ItemID),
-                ItemType: fixedData.ItemType,
-                ProductName: fixedData.ProductName,
-                Size: fixedData.Size || null,
-                MaterialID: parseInt(material.MaterialID),
-                Quantity: parseFloat(material.Quantity),
-                Unit: material.Unit,
-                UnitPrice: parseFloat(material.UnitPrice),
-                TotalCost: parseFloat(material.TotalCost)
+                itemID: parseInt(fixedData.ItemID),
+                itemType: fixedData.ItemType,
+                productName: fixedData.ProductName,
+                size: fixedData.Size || null,
+                materialID: parseInt(material.MaterialID),
+                quantity: parseFloat(material.Quantity),
+                unit: material.Unit,
+                unitPrice: parseFloat(material.UnitPrice),
+                totalCost: parseFloat(material.TotalCost)
             }));
 
             for (const formattedData of formattedDataArray) {
@@ -162,7 +162,7 @@ function MBOMForm() {
     const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
-        fetch(`http://localhost:8080/api/factory/inventory/materials?page=${page}&size=19`)
+        fetch(`http://localhost:8080/api/factory/inventory/materials?page=${page}&size=38`)
             .then(response => response.json())
             .then(data => {
                 setMaterialList(data.content);

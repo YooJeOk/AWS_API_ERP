@@ -14,7 +14,7 @@ CREATE TABLE ERP.Product (
     OnKiosk varchar(30) check (OnKiosk in ('Y','N')), -- 제품이 키오스크에 있는지 확인용
     Recommend varchar(30) check (Recommend in ('Y','N')), -- 제품 추천여부(키오스크용)
     DetailDescription varchar(300) NULL, -- 제품 설명(키오스크용)
-    MinimumStock INT NOT NULL DEFAULT 0, -- 최소재고 
+    MinimumStock INT NULL, -- 최소재고 
     PRIMARY KEY (ProductID)
 );
 
@@ -39,7 +39,7 @@ CREATE TABLE ERP.MaterialsInventory (
     Unit VARCHAR(50) NULL, -- 단위 (g, ml 등)
     UnitPrice float NULL, -- 단가
     LastUpdated DATETIME NULL, -- 최종 업데이트
-    MinimumStock INT NOT NULL DEFAULT 0, -- 최소 재고
+    MinimumStock INT NULL, -- 최소 재고
     PRIMARY KEY (MaterialID),
     FOREIGN KEY (SupplierID) REFERENCES ERP.Suppliers(SupplierID)
 );
@@ -376,6 +376,13 @@ CREATE TABLE OrderHistory (
     FOREIGN KEY (MaterialID) REFERENCES ERP.MaterialsInventory(MaterialID)
     
 );
+-- 27. 캘린더
+CREATE TABLE calendar(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    date DATE NOT NULL
+);
+
 
 DELIMITER //
 
@@ -1031,6 +1038,24 @@ INSERT INTO UserStamp (phone, stamp, coupon) VALUES
 ('01045678901', 2, 4),
 ('01056789012', 3, 0);
 
+-- 주문 내역
+INSERT INTO OrderHistory (Category, ProductID, MaterialID, ProductName, Quantity, Unit, OrderType, OrderStatus, OrderDate, CompletedDate)
+VALUES
+('빵', 1, NULL, '갈릭꽈베기', 50, '개', '수동입력', '처리 완료', '2024-11-01 09:00:00', '2024-11-02 14:30:00'),
+('커피', NULL, 20, '원두(에스프레소)', 5000, 'g', '수동입력', '처리 완료', '2024-11-02 10:15:00', '2024-11-03 11:45:00'),
+('빵', 3, NULL, '고구마케이크빵', 30, '개', '수동입력', '처리 완료', '2024-11-03 08:30:00', '2024-11-04 13:20:00'),
+('부자재', NULL, 31, '컵(regular size)', 1000, '개', '수동입력', '처리 완료', '2024-11-04 11:45:00', '2024-11-05 16:00:00'),
+('빵', 5, NULL, '라우겐', 40, '개', '수동입력', '처리 완료', '2024-11-05 09:30:00', '2024-11-06 15:15:00'),
+('커피', NULL, 21, '카라멜시럽', 2000, 'ml', '수동입력', '미처리', '2024-11-06 10:00:00', NULL),
+('빵', 2, NULL, '단팥도넛', 60, '개', '수동입력', '미처리', '2024-11-07 08:45:00', NULL),
+('부자재', NULL, 33, '빨대', 5000, '개', '수동입력', '미처리', '2024-11-08 11:30:00', NULL),
+('빵', 4, NULL, '꽈베기', 45, '개', '수동입력', '미처리', '2024-11-09 09:15:00', NULL),
+('커피', NULL, 27, '바닐라 시럽', 1500, 'ml', '수동입력', '미처리', '2024-11-10 10:30:00', NULL),
+('빵', 6, NULL, '베이글빵', 35, '개', '수동입력', '미처리', '2024-11-11 08:00:00', NULL),
+('부자재', NULL, 32, '컵(extra size)', 800, '개', '수동입력', '미처리', '2024-11-12 13:45:00', NULL),
+('커피', NULL, 23, '콜드브루 원액', 3000, 'ml', '수동입력', '미처리', '2024-11-13 09:30:00', NULL),
+('빵', 8, NULL, '꿀버터바게트', 25, '개', '수동입력', '미처리', '2024-11-14 11:15:00', NULL),
+('부자재', NULL, 30, '포장지', 2000, '개', '수동입력', '미처리', '2024-11-15 14:00:00', NULL);
 
 -- 1. 제품 조회
 SELECT * FROM ERP.Product;
