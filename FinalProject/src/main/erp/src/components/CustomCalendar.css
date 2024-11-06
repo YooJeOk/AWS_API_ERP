@@ -64,13 +64,21 @@
   
   /* 이벤트 스타일 */
   .rbc-event {
-    background-color: #F0C490;
+    background-color: #F0C490 !important;
     color: white;
     border-radius: 4px;
     padding: 3px 5px;
     font-size: 0.9rem;
   }
-  
+  .dlv.rbc-event.rbc.rbc-selected{
+    background-color: #F0C490;
+  }
+  .div.rbc-event.rbc.rbc-selected:focus,
+  .div.rbc-event.rbc.rbc-selected:active,
+  .div.rbc-event.rbc.rbc-selected:hover{
+    transition: none;
+    background-color: #F0C490;
+  }
   .rbc-event:hover {
     background-color: #f0b873;
   }
@@ -113,4 +121,30 @@
   border-color: #F0C490;
   box-shadow: none !important; /* Bootstrap 클릭 시 기본 그림자 제거 */
   outline: none !important; /* 외곽선 제거 */
+}
+.event-container{
+
+  .event-container {
+    background-color: #F0C490;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .event-container button {
+    color: #703103;
+    font-weight: bold;
+    background-color: #F0C490;
+    border: none;
+    padding: 0px;
+  }
+  
+  .event-container button:active,
+  .event-container button:focus,
+  .event-container button:focus:active {
+    background-color: #F0C490;
+    outline: none;
+    box-shadow: none;
+  }
+  
 }
