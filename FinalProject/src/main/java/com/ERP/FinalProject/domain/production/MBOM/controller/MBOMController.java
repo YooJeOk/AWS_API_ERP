@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -90,5 +91,12 @@ public class MBOMController {
             @RequestParam("size") Size size) {
         Integer nextItemID = mbomService.getNextItemID(itemType, size);
         return ResponseEntity.ok(nextItemID);
+    }
+    @GetMapping("/check-item-id/{itemId}")
+    public ResponseEntity<Map<String, Boolean>> checkItemIdExists(@PathVariable int itemId) {
+        boolean exists = mbomService.checkItemIdExists(itemId);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("exists", exists);
+        return ResponseEntity.ok(response);
     }
 }
