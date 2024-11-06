@@ -14,7 +14,7 @@ CREATE TABLE ERP.Product (
     OnKiosk varchar(30) check (OnKiosk in ('Y','N')), -- 제품이 키오스크에 있는지 확인용
     Recommend varchar(30) check (Recommend in ('Y','N')), -- 제품 추천여부(키오스크용)
     DetailDescription varchar(300) NULL, -- 제품 설명(키오스크용)
-    MinimumStock INT NOT NULL DEFAULT 0, -- 최소재고 
+    MinimumStock INT NULL, -- 최소재고 
     PRIMARY KEY (ProductID)
 );
 
@@ -39,7 +39,7 @@ CREATE TABLE ERP.MaterialsInventory (
     Unit VARCHAR(50) NULL, -- 단위 (g, ml 등)
     UnitPrice float NULL, -- 단가
     LastUpdated DATETIME NULL, -- 최종 업데이트
-    MinimumStock INT NOT NULL DEFAULT 0, -- 최소 재고
+    MinimumStock INT NULL, -- 최소 재고
     PRIMARY KEY (MaterialID),
     FOREIGN KEY (SupplierID) REFERENCES ERP.Suppliers(SupplierID)
 );
