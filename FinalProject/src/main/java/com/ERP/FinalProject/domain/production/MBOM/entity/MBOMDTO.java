@@ -2,9 +2,13 @@ package com.ERP.FinalProject.domain.production.MBOM.entity;
 
 import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM.ItemType;
 import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM.Size;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class MBOMDTO {
 
     private int BOMID;

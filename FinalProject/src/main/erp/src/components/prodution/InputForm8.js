@@ -128,9 +128,9 @@ function MBOMForm() {
         try {
             const formattedDataArray = formData.map((material) => ({
                 ItemID: parseInt(fixedData.ItemID),
-                ItemType: fixedData.ItemType,
+                itemType: fixedData.ItemType,
                 ProductName: fixedData.ProductName,
-                Size: fixedData.Size || null,
+                size: fixedData.Size || null,
                 MaterialID: parseInt(material.MaterialID),
                 Quantity: parseFloat(material.Quantity),
                 Unit: material.Unit,
