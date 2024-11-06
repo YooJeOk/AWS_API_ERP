@@ -2,16 +2,20 @@ package com.ERP.FinalProject.domain.production.MBOM.entity;
 
 import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM.ItemType;
 import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM.Size;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class MBOMDTO {
 
     private int BOMID;
     private Long ItemID;
     private ItemType itemType;
     private Size size;
-    private Long MaterialID;
+    private Long materialID;
     private String materialName;
     private String productName;
     private int quantity;
@@ -27,7 +31,7 @@ public class MBOMDTO {
         this.ItemID = ItemID;
         this.itemType = itemType;
         this.size = size;
-        this.MaterialID = MaterialID;
+        this.materialID = materialID;
         this.materialName = materialName;
         this.productName = productName;
         this.quantity = quantity;

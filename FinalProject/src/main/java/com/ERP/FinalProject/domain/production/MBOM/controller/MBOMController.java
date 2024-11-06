@@ -1,6 +1,7 @@
 package com.ERP.FinalProject.domain.production.MBOM.controller;
 
 import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM;
+
 import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM.ItemType;
 import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM.Size;
 import com.ERP.FinalProject.domain.production.MBOM.entity.MBOMDTO;
@@ -69,10 +70,14 @@ public class MBOMController {
     // MBOM 데이터 저장 엔드포인트 (POST)
     @PostMapping("/save")
     public ResponseEntity<?> saveMBOM(@RequestBody MBOMDTO mbomDTO) {
-        // MBOM 저장 로직 구현
-        return ResponseEntity.ok("MBOM saved successfully");
+        try {
+            mbomService.saveMBOM(mbomDTO);
+            return ResponseEntity.ok("MBOM saved successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .body("Error saving MBOM: " + e.getMessage());
+        }
     }
-
     // 다음 ItemID 가져오기
     @GetMapping("/next-item-id")
     public ResponseEntity<Integer> getNextItemID(
