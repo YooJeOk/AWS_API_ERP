@@ -21,22 +21,26 @@ function ProductionMonitoringPage() {
 
                 const sanitizedData = {
                     orderId: orderId,
-                    productionRate: newData && newData.productionRate ? parseFloat(newData.productionRate) : 0,
-                    temperature: newData && newData.temperature ? parseFloat(newData.temperature) : 0,
-                    humidity: newData && newData.humidity ? parseFloat(newData.humidity) : 0,
+                    productionRate: newData.productionRate || 0,
+                    temperature: newData.temperature || 0,
+                    humidity: newData.humidity || 0,
                     productName: data[index].productName
                 };
 
                 setData((prevData) => {
                     const updatedData = [...prevData];
                     updatedData[index] = sanitizedData;
-                    console.log("Updated data:", updatedData);
                     return updatedData;
                 });
 
-                // Check if any temperature exceeds danger threshold of 37 degrees
-                if (sanitizedData.temperature >= 37) {
+                // 온도가 38도 이상일 경우 서버에 알림 요청 보내기
+                if (sanitizedData.temperature >= 38) {
                     setIsEmergencyActive(true);
+                    await axios.post('http://localhost:8080/api/alert', {
+                        orderId: sanitizedData.orderId,
+                        temperature: sanitizedData.temperature,
+                        productName: sanitizedData.productName
+                    });
                 }
             } catch (error) {
                 console.error(`OrderID ${orderId} 데이터 로드 오류:`, error);
@@ -72,7 +76,6 @@ function ProductionMonitoringPage() {
     const confirmEmergencyStop = () => {
         setShowEmergencyModal(false);
         alert("모든 생산이 중지되었습니다.");
-        // 실제 정지 로직 (서버에 정지 요청 전송 등의 추가 로직 가능)
         setIsEmergencyActive(false);
     };
 
