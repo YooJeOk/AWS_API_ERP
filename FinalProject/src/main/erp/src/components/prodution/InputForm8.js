@@ -162,7 +162,7 @@ function MBOMForm() {
     const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
-        fetch(`http://localhost:8080/api/factory/inventory/materials?page=${page}&size=19`)
+        fetch(`http://localhost:8080/api/factory/inventory/materials?page=${page}&size=38`)
             .then(response => response.json())
             .then(data => {
                 setMaterialList(data.content);

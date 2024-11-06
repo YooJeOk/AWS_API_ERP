@@ -7,6 +7,7 @@ import com.ERP.FinalProject.domain.SalesManagement.Repository.SalesProductReposi
 import com.ERP.FinalProject.domain.SalesManagement.Service.SalesProductService;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
@@ -26,16 +27,16 @@ public class SalesProductController {
             @RequestParam("startDate") String startDate,
             @RequestParam("endDate") String endDate) {
 
-        LocalDate start = LocalDate.parse(startDate);
-        LocalDate end = LocalDate.parse(endDate);
+        LocalDateTime start = LocalDate.parse(startDate).atStartOfDay();
+        LocalDateTime end = LocalDate.parse(endDate).atTime(23, 59, 59);
 
-        List<Object[]> results = salesProductRepository.findSalesByProductAndDateRange(start.atStartOfDay(), end.atTime(23, 59, 59));
+        List<Object[]> results = salesProductRepository.findSalesByProductAndDateRange(start, end);
         return results.stream().map(row -> {
             Map<String, Object> map = new HashMap<>();
-            map.put("name", row[0]);
-            map.put("sales", row[1]);
-            map.put("date", row[2].toString());
+            map.put("name", row[0]);   // 제품 또는 커피 이름
+            map.put("sales", row[1]);  // 판매 수량
             return map;
         }).collect(Collectors.toList());
     }
 }
+

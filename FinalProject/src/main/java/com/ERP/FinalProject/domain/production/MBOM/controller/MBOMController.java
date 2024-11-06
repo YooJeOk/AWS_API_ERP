@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -38,7 +39,7 @@ public class MBOMController {
     }
 
     // 특정 ID의 MBOM 가져오기
-    @GetMapping("/{id}")
+    @GetMapping("/{itemid}")
     public ResponseEntity<MBOM> getMBOMById(@PathVariable int id) {
         Optional<MBOM> mbom = mbomService.getMBOMById(id);
         return mbom.map(ResponseEntity::ok)
@@ -46,7 +47,7 @@ public class MBOMController {
     }
 
     // 특정 MBOM 업데이트
-    @PutMapping("/update/{id}")
+    @PutMapping("/update/{itemid}")
     public ResponseEntity<MBOM> updateMBOM(@PathVariable int id, @RequestBody MBOM mbom) {
         MBOM updatedMBOM = mbomService.updateMBOM(id, mbom);
         if (updatedMBOM != null) {
@@ -56,17 +57,21 @@ public class MBOMController {
         }
     }
 
-    // 특정 MBOM 삭제
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteMBOM(@PathVariable int id) {
+    @DeleteMapping("/delete-by-product-name")
+    public ResponseEntity<String> deleteByProductName(@RequestBody Map<String, String> request) {
+        String productName = request.get("productName");
+
+        if (productName == null || productName.isEmpty()) {
+            return ResponseEntity.badRequest().body("상품 이름이 필요합니다.");
+        }
+
         try {
-            mbomService.deleteMBOM(id);
-            return ResponseEntity.ok("Deleted successfully");
+            int deletedCount = mbomService.deleteByProductName(productName);
+            return ResponseEntity.ok(deletedCount + "개의 항목이 삭제되었습니다.");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error deleting: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 실패: " + e.getMessage());
         }
     }
-
     // MBOM 데이터 저장 엔드포인트 (POST)
     @PostMapping("/save")
     public ResponseEntity<?> saveMBOM(@RequestBody MBOMDTO mbomDTO) {

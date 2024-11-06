@@ -53,7 +53,7 @@ function Header() {
                         </div>
                     </div>
                 </div>
-                <button id="logout-button" className="nav-button logout">로그아웃</button>
+              
             </div>
         </div>
     );
