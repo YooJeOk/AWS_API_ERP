@@ -49,4 +49,7 @@ public interface MBOMRepository extends JpaRepository<MBOM, Integer> {
     @Modifying
     @Query("DELETE FROM MBOM m WHERE m.itemId = :itemId")
     int deleteByItemId(@Param("itemId") Long itemId);
+    
+    boolean existsByItemId(int itemId);
+  
 }
