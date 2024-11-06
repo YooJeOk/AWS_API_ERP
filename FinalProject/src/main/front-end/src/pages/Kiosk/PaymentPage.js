@@ -60,7 +60,14 @@ const PaymentPage = () => {
     if (paymentType === '네이버페이') {
       playTTS("네이버페이를 선택하셨습니다.");
 
-      
+      sessionStorage.setItem('paymentData', JSON.stringify({
+        cartItems,
+        totalAmount,
+        discountAmount,
+        userData
+      }));
+       // 임시 주문 ID 생성 (실제로는 서버에서 생성하는 것이 좋습니다)
+    const tempOrderId = 'ORDER_' + Date.now();
       if (window.Naver) {
         const oPay = window.Naver.Pay.create({
           mode: "development",
@@ -75,13 +82,7 @@ const PaymentPage = () => {
           totalPayAmount: totalAmount - discountAmount,
           taxScopeAmount: totalAmount - discountAmount,
           taxExScopeAmount: "0",
-          returnUrl: "http://localhost:3001/payment",
-          onSuccess: function() {
-            handlePaymentSuccess('네이버페이');
-          }, 
-          onFailure: function(error) {
-            handlePaymentFailure(error.message);
-          }
+          returnUrl: `http://localhost:3001/payment-complete?orderId=${tempOrderId}`,        
         });
       }
     }else {
@@ -110,7 +111,6 @@ const PaymentPage = () => {
 
 
   const handlePaymentSuccess = async (paymentType) => {
-    playTTS("결제가 완료되었습니다.")
     setModalMessage(`${paymentType} 결제가 완료되었습니다.`);
     setShowModal(true);
     try {
@@ -161,23 +161,10 @@ const PaymentPage = () => {
     }
   };
 
-  // useEffect(() => {
-  //   // URL 파라미터에서 resultCode 값 확인
-  //   const searchParams = new URLSearchParams(location.search);
-  //   const resultCode = searchParams.get('resultCode');
-    
-  //   if (resultCode === 'Success') {
-  //     handlePaymentSuccess('네이버페이');
-  //   }
-  // }, [location.search], handlePaymentSuccess);
-
-
   const handlePaymentFailure = (errorMessage) => {
     setModalMessage(`결제가 실패하였습니다: ${errorMessage}`);
     setShowModal(true);
   };
-
-
 
   const handleStampCouponClick = () => {
     ClickSound();
@@ -204,6 +191,7 @@ const PaymentPage = () => {
   const closeModal = () => {
     ClickSound();
     setShowModal(false);
+    navigate('/'); 
   };
   const formatPrice = (price) => {
     return price.toLocaleString('ko-KR');
