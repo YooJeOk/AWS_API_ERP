@@ -108,6 +108,7 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="false"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="C:\Fullstack\Project3\AWS_API_ERP\FinalProject\src\main\erp"/>
 			<item value="C:\fullstack\Project3\AWS_API_ERP\FinalProject"/>
 			<item value="C:\Fullstack\Project3\AWS_API_ERP\FinalProject"/>
 			<item value="C:\fullstack\Project3\AWS_API_ERP"/>
