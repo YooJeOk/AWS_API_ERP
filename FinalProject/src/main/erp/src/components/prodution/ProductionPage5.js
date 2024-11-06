@@ -73,6 +73,26 @@ function ProductionTable() {
         }
     };
 
+    const handleDeleteSelectedItem = async () => {
+        if (!selectedItem) {
+            alert("삭제할 생산 품목을 선택해 주세요.");
+            return;
+        }
+        if (window.confirm(`${selectedItem}에 해당하는 모든 데이터를 삭제하시겠습니까?`)) {
+            try {
+                await axios.delete(`http://localhost:8080/api/mbom/delete-by-product-name`, {
+                    data: { productName: selectedItem }
+                });
+                setData(data.filter(item => item.productName !== selectedItem));
+                alert(`${selectedItem} 삭제되었습니다.`);
+                setSelectedItem("");
+            } catch (error) {
+                console.error("삭제 실패:", error);
+                alert("삭제 실패");
+            }
+        }
+    };
+
     const getImagePath = () => {
         if (category === "빵") {
             return `/images/bread/${selectedItem}.jpg`; // public 폴더 아래 경로 설정
@@ -98,15 +118,8 @@ function ProductionTable() {
                                 생성
                             </button>
                             <button 
-                                className="update-button" 
-                                onClick={() => navigate('/update')} 
-                                style={{ fontSize: '20px', backgroundColor: '#FFA07A', color: '#fff', padding: '5px 30px', border: 'none', borderRadius: '5px' }}
-                            >
-                                수정
-                            </button>
-                            <button 
                                 className="delete-button" 
-                                onClick={() => navigate('/delete')} 
+                                onClick={handleDeleteSelectedItem} 
                                 style={{ fontSize: '20px', backgroundColor: '#FF6B6B', color: '#fff', padding: '5px 30px', border: 'none', borderRadius: '5px' }}
                             >
                                 삭제

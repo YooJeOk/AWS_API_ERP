@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 @Service
 public class MBOMService {
 
@@ -70,13 +72,16 @@ public class MBOMService {
         return null;
     }
 
-    public void deleteMBOM(int id) {
-        try {
-            mbomRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException e) {
-            System.out.println("삭제하려는 MBOM ID가 존재하지 않습니다: " + id);
+ // MBOMService.java
+    @Transactional
+    public int deleteByProductName(String productName) {
+        Integer itemId = mbomRepository.findItemIdByProductName(productName);
+        if (itemId != null) {
+            return mbomRepository.deleteByItemId(Long.valueOf(itemId));
         }
+        return 0; // 삭제할 데이터가 없는 경우
     }
+
 
     // 다음 ItemID 계산 (새로운 메서드 호출)
     public Integer getNextItemID(ItemType itemType, Size size) {
