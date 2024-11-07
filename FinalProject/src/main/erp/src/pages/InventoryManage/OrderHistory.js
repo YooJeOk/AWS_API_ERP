@@ -47,6 +47,8 @@ const OrderHistory = () => {
                 setSelectedOrders([]);
             } else {
                 alert('주문 처리에 실패했습니다.');
+                
+
             }
         } catch (error) {
             console.error('Error completing orders:', error);
