@@ -102,7 +102,7 @@ function ProductionMonitoringPage() {
                         </div>
                     </div>
                 )}
-                <div className="chart-container">
+                <div className="chart-container1">
                     {data.map((item, index) => (
                         <div key={index} className="chart-box">
                             <div className="pie-chart-container">
