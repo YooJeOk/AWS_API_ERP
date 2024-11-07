@@ -88,4 +88,7 @@ public class MBOMService {
         Integer lastItemID = mbomRepository.findMaxItemIDForTypeAndSize(itemType, size);
         return (lastItemID != null ? lastItemID + 1 : 1);
     }
+    public boolean checkItemIdExists(int itemId) {
+        return mbomRepository.existsByItemId(itemId);
+    }
 }

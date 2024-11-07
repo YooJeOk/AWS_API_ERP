@@ -587,12 +587,9 @@ VALUES
     (5, '라우겐', 120, '2024-11-01 08:00:00', '2024-11-01 16:00:00', 'Low', '품질 검사 대기');
 
 -- 14. 생산 계획 (ProductionPlanning)
-INSERT INTO ERP.ProductionPlanning (OrderID, ProductID, ProductName, Quantity, StartDate, EndDate, etc)
-VALUES
-    (1, 1, '갈릭꽈베기', 100, '2024-10-28 08:00:00', '2024-10-28 16:00:00', '긴급 생산 필요'),
-    (2, 2, '단팥도넛', 150, '2024-10-29 09:00:00', '2024-10-29 17:00:00', '표준 생산 절차'),
-    (3, 3, '고구마케이크빵', 120, '2024-10-30 10:00:00', '2024-10-30 18:00:00', '특별 생산 주의 사항'),
-    (4, 4, '꽈베기', 180, '2024-10-31 07:30:00', '2024-10-31 15:30:00', '정시 생산 완료 필요');
+-- INSERT INTO ERP.ProductionPlanning (OrderID, ProductID, ProductName, Quantity, StartDate, EndDate, etc)
+-- VALUES
+   
 
 
 
@@ -642,30 +639,19 @@ VALUES
 (4, '작업중', TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE);             -- 모든 공정 완료
 
 -- 17. 품질 관리 (QualityControl)
-INSERT INTO QualityControl (OrderID, Quantity, ProductID, ProductName, TestResult, TestDate, etc)
-VALUES 
-    (1, 100, 1, '갈릭꽈베기', '합격', '2024-10-28 17:00:00', '테스트 통과'),
-    (2, 150, 2, '단팥도넛', '불합격', '2024-10-29 18:00:00', '색상 불량'),
-    (3, 120, 3, '고구마케이크빵', '합격', '2024-10-30 19:00:00', '정상'),
-    (4, 180, 4, '꽈베기', '불합격', '2024-10-31 16:00:00', '크기 불일치');
-
-
-
-
+-- INSERT INTO QualityControl (OrderID, Quantity, ProductID, ProductName, TestResult, TestDate, etc)
+-- VALUES 
+   
 
 -- 18. 불량 관리 (DefectManagement)
-INSERT INTO DefectManagement (QCID, OrderID, Quantity, ProductID, ProductName, DefectType, DefectQuantity,  CauseDescription, Status, Defectrate, etc)
-VALUES
-    (1, 4, 150, 2, '단팥도넛', '색상 불량', 20,  '원료 문제', '미처리', 13, NULL),
-    (2, 4, 180, 4, '꽈베기', '크기 불일치', 30,  '기계 오작동', '미처리', 16, NULL),
-    (3, 2, 150, 2, '단팥도넛', '형태 불량', 10,  '성형 문제', '완료', 6, NULL),
-    (4, 4, 180, 4, '꽈베기', '표면 오염', 5,  '작업 환경 불량', '완료', 3, NULL);
+-- INSERT INTO DefectManagement (QCID, OrderID, Quantity, ProductID, ProductName, DefectType, DefectQuantity,  CauseDescription, Status, Defectrate, etc)
+-- VALUES
+    
 
 -- 19. 생산 입고 (ProductionEntry)
-INSERT INTO ProductionEntry (QCID, OrderID, Quantity, ProductID, ProductName, EntryDate, etc)
-VALUES 
-    (1, 1, 100, 1, '갈릭꽈베기', '2024-10-28', '입고 완료'),
-    (3, 3, 120, 3, '고구마케이크빵', '2024-10-30', '입고 완료');
+-- INSERT INTO ProductionEntry (QCID, OrderID, Quantity, ProductID, ProductName, EntryDate, etc)
+-- VALUES 
+    
 
 -- 20. 매장 재고 (StoreInventory) 테이블 더미 데이터
 select * from StoreInventory;
