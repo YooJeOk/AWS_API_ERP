@@ -41,4 +41,15 @@ public interface MBOMRepository extends JpaRepository<MBOM, Integer> {
                  @Param("unit") String unit, 
                  @Param("unitPrice") float unitPrice, 
                  @Param("totalCost") int totalCost);
+    
+    
+    @Query("SELECT m.itemId FROM MBOM m WHERE m.productName = :productName")
+    Integer findItemIdByProductName(String productName);
+ // MBOMRepository.java
+    @Modifying
+    @Query("DELETE FROM MBOM m WHERE m.itemId = :itemId")
+    int deleteByItemId(@Param("itemId") Long itemId);
+    
+    boolean existsByItemId(int itemId);
+  
 }

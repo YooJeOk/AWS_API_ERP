@@ -191,7 +191,7 @@ const PaymentPage = () => {
   const closeModal = () => {
     ClickSound();
     setShowModal(false);
-    navigate('/'); 
+    
   };
   const formatPrice = (price) => {
     return price.toLocaleString('ko-KR');

@@ -57,10 +57,10 @@ function MBOMForm() {
             ...fixedData,
             [name]: value
         });
+    };
 
-        if (name === 'ItemID') {
-            validateItemID(value);
-        }
+    const handleItemIdBlur = (e) => {
+        validateItemID(e.target.value);
     };
 
     const handleChange = (index, e) => {
@@ -153,6 +153,7 @@ function MBOMForm() {
             }
 
             alert("MBOM 데이터가 성공적으로 저장되었습니다.");
+            window.location.reload();
         } catch (error) {
             console.error("Error:", error);
             alert("서버 오류가 발생했습니다.");
@@ -162,7 +163,7 @@ function MBOMForm() {
     const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
-        fetch(`http://localhost:8080/api/factory/inventory/materials?page=${page}&size=19`)
+        fetch(`http://localhost:8080/api/factory/inventory/materials?page=${page}&size=38`)
             .then(response => response.json())
             .then(data => {
                 setMaterialList(data.content);
@@ -202,6 +203,7 @@ function MBOMForm() {
                                             name="ItemID"
                                             value={fixedData.ItemID}
                                             onChange={handleFixedChange}
+                                            onBlur={handleItemIdBlur}
                                             style={{ width: '100%' }}
                                         />
                                         {itemIdError && (

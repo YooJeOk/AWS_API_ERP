@@ -26,6 +26,8 @@ const InputOrder = () => {
         setMaterials(data.content);
     };
 
+    
+
     const handleItemClick = (item, category) => {
         setSelectedItem({ ...item, category });
         setShowModal(true);
@@ -108,6 +110,7 @@ const InputOrder = () => {
                         <Form.Group  className='mt-2'>
                             <Form.Label>수량</Form.Label>
                             <Form.Control
+                            className='inven-search'
                                 type="number"
                                 value={orderQuantity}
                                 onChange={(e) => setOrderQuantity(e.target.value)}
@@ -118,7 +121,8 @@ const InputOrder = () => {
                         </Form.Group>
                         <Form.Group className='mt-2'>
                             <Form.Label>단위</Form.Label>
-                            <Form.Control type="text" value={selectedItem?.category === '제품' ? '개' : selectedItem?.unit} readOnly />
+                            <Form.Control type="text"                             className='inven-search'
+ value={selectedItem?.category === '제품' ? '개' : selectedItem?.unit} readOnly />
                         </Form.Group>
                     </Form>
                 </Modal.Body>
