@@ -26,6 +26,8 @@ const InputOrder = () => {
         setMaterials(data.content);
     };
 
+    
+
     const handleItemClick = (item, category) => {
         setSelectedItem({ ...item, category });
         setShowModal(true);

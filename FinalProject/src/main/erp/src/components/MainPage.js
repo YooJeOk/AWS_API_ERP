@@ -109,6 +109,7 @@ function MyBigCalendar() {
           justifyContent: 'space-between',
           backgroundColor: '#F0C490',
           
+          
         }}
       >
         <span style={{ fontWeight: 'bold', textDecoration: 'none', color: '#703103' }}>{dateEvents[0].title}</span>
@@ -155,7 +156,7 @@ function MyBigCalendar() {
         <Col sm={6} style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
           <h2 style={{ color: '#703103', fontWeight: 'bold', fontSize: '25px', marginTop: '2%' }}>매출 현황</h2>
           <div style={{ height: '50%' }}>
-            <SalesStatusSalesTable style={{ width: '100%', overflowY: 'auto' }} />
+            <SalesStatusSalesTable  showpage={false} style={{ width: '100%', overflowY: 'auto' } } />
             <h2 style={{ color: '#703103', fontWeight: 'bold', fontSize: '25px', marginTop: '2%' }}>일/주/월 매출 현황</h2>
             <SalesDwmAnalysisTable style={{ width: '100%', overflowY: 'auto' }} showStats={false} />
           </div>

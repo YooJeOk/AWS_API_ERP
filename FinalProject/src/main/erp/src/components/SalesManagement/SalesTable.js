@@ -56,9 +56,9 @@ function SalesTable({ searchTerm, startDate, endDate, maxItems = null, showpage 
   }, []);
 
   const filteredRecords = salesRecords.filter(detail => {
-    const recordDate = new Date(detail.saleDate);
-    const start = startDate ? new Date(startDate) : null;
-    const end = endDate ? new Date(endDate) : null;
+    const recordDate = new Date(detail.saleDate).setHours(0, 0, 0, 0); // 날짜만 비교하도록 시간 초기화
+    const start = startDate ? new Date(startDate).setHours(0, 0, 0, 0) : null;
+    const end = endDate ? new Date(endDate).setHours(0, 0, 0, 0) : null;
 
     return (
       (detail.productName || "").toLowerCase().includes((searchTerm || "").toLowerCase()) &&
