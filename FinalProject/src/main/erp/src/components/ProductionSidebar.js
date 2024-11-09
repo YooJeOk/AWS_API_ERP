@@ -31,6 +31,14 @@ function ProductionSidebar() {
         >
             <div className="sidebar-menu" >
                 <div className="dropdown">
+                <button className="menu-item" style={{backgroundColor: '#F0C490', color:'white'}}>소요량 관리</button>
+                    <ul className="dropdown-menu">
+                        <li><Link to="/input8">● 소요량 등록</Link></li>
+                        <li><Link to="/production5">● 소요량 조회</Link></li>
+                    </ul>
+                </div>
+
+                <div className="dropdown">
                 <button className="menu-item" style={{backgroundColor: '#F0C490', color:'white'}}>생산 주문 관리</button>
                     <ul className="dropdown-menu">
                         <li><Link to="/input4">● 생산 주문 등록</Link></li>
@@ -39,25 +47,29 @@ function ProductionSidebar() {
                 </div>
 
                 <div className="dropdown">
+                <button className="menu-item" style={{backgroundColor: '#F0C490', color:'white'}}>생산 계획 관리</button>
+                    <ul className="dropdown-menu">
+                        
+                        
+                        
+                        <li><Link to="/input3">● 생산 계획 등록</Link></li>
+                        <li><Link to="/production3">● 생산 계획 조회</Link></li>
+                        
+                    </ul>
+                </div>
+                <div className="dropdown">
                 <button className="menu-item" style={{backgroundColor: '#F0C490', color:'white'}}>생산 공정 관리</button>
                     <ul className="dropdown-menu">
                         
                         
                         <li><Link to="/production8">● 생산 현황 모니터링</Link></li>
                         <li><Link to="/produtionmonitering2">● 생산 과정 모니터링</Link></li>
-                        <li><Link to="/input3">● 생산 계획 등록</Link></li>
-                        <li><Link to="/production3">● 생산 계획 조회</Link></li>
+                        
                         
                     </ul>
                 </div>
 
-                <div className="dropdown">
-                <button className="menu-item" style={{backgroundColor: '#F0C490', color:'white'}}>소요량 관리</button>
-                    <ul className="dropdown-menu">
-                        <li><Link to="/input8">● 소요량 등록</Link></li>
-                        <li><Link to="/production5">● 소요량 조회</Link></li>
-                    </ul>
-                </div>
+
 
                <div className="dropdown">
                 <button className="menu-item" style={{backgroundColor: '#F0C490', color:'white'}}>품질 관리</button>

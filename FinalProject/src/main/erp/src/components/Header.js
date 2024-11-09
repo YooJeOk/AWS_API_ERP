@@ -16,9 +16,10 @@ function Header() {
                         생산 관리
                         <div className="nav-button-dropdown">
                             <div className="dropdown-content">
-                                <Link to="/production4">생산 주문 관리</Link>  
-                                <a href="/production8">생산 현황 모니터링</a>
                                 <a href="/production5">소요량 관리</a>
+                                <Link to="/production4">생산 주문 관리</Link>
+                                <a href="/production3">생산 계획 관리</a>  
+                                <a href="/production8">생산 공정 관리</a>
                                 <a href="/production7">품질 관리</a>
                                 <a href="/production2">생산 입고 관리</a>  
                            </div>

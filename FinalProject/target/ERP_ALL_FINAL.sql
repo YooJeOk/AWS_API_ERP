@@ -981,8 +981,8 @@ INSERT INTO ERP.ProductionProcessStatus (MonitorID, Status, WeighingComplete, Do
                                                             ShapingComplete, PanningComplete, SecondFermentationComplete, 
                                                             BakingComplete, CoolingComplete, PackagingComplete) 
 VALUES 
-(1, '작업중', FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE),   -- 1차 발효 단계 대기
-(2, '완료', FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE),  -- 모든 공정 대기 상태
+(1, '대기', FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE),   -- 1차 발효 단계 대기
+(2, '완료', TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE),  -- 모든 공정 대기 상태
 (3, '경고', TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE),           -- 냉각 및 포장 대기
 (4, '작업중', TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);             -- 모든 공정 완료
 
