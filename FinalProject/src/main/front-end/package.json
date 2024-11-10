@@ -22,7 +22,8 @@
     "redux": "^5.0.1",
     "web-vitals": "^2.1.4"
   },
-  "proxy": "http://localhost:8080",
+  "proxy": "http://43.202.135.200:8080",
+
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
