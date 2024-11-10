@@ -82,12 +82,15 @@ const ProcessVisualization = ({ lineName, lineData, emergencyStopped, toggleEmer
         lineData.status === "완료" ? 0 : lineData.status === "대기" ? 280 * 60 : parseInt(localStorage.getItem(`${lineName}_remainingTime`)) || totalProcessTime * 60
     );
 
+    /*
+    // 초기화 기능 주석 처리
     const resetLineStorage = () => {
         localStorage.removeItem(`${lineName}_remainingTime`);
         localStorage.removeItem(`${lineName}_stages`);
         setRemainingTime(280 * 60);
         setStages(initialStages);
     };
+    */
 
     useEffect(() => {
         if (lineData.status === "완료") {
@@ -179,7 +182,7 @@ const ProcessVisualization = ({ lineName, lineData, emergencyStopped, toggleEmer
                 <span style={styles.status}>상태: {lineData.status}</span>
                 <span style={styles.productName}>제품명: {lineData.productName}</span>
                 <span style={styles.remainingTime}>남은 시간: {formatTime(remainingTime)}</span>
-                <button onClick={resetLineStorage} style={styles.resetButton}>초기화</button>
+                {/* <button onClick={resetLineStorage} style={styles.resetButton}>초기화</button> */}
                 {lineData.status === "경고" && (
                     <button onClick={toggleEmergencyStop} style={styles.emergencyStopButton}>
                         {emergencyStopped ? "재가동" : "비상정지"}

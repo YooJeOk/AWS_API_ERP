@@ -56,7 +56,29 @@ body {
     font-size: 20px;
     padding: 5px 30px;
 }
- 
+.modify-button {
+    padding: 10px 50px;
+    background-color:#ffc107;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-size: 20px;
+    padding: 5px 30px;
+}
+.delete-button {
+    padding: 10px 50px;
+    background-color:#dc3545;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-size: 20px;
+    padding: 5px 30px;
+}
+
 .productionbar {
     display: flex;
     justify-content: space-between;

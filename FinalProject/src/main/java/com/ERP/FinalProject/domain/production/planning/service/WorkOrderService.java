@@ -1,4 +1,3 @@
-// WorkOrderService.java 전체 코드
 package com.ERP.FinalProject.domain.production.planning.service;
 
 import com.ERP.FinalProject.domain.production.planning.model.WorkOrder;
@@ -42,15 +41,10 @@ public class WorkOrderService {
         return workOrderRepository.save(workOrder);
     }
 
-    public void deleteWorkOrderById(int orderId) {
-        workOrderRepository.deleteById(orderId);
-    }
- // 검사가 완료되지 않은 주문을 반환
     public List<WorkOrder> findUninspectedOrders() {
         return workOrderRepository.findUninspectedOrders();
     }
 
-    // 특정 주문 ID로 작업 지시 세부 정보 찾기
     public Optional<WorkOrder> findWorkOrderDetailsById(int orderID) {
         return workOrderRepository.findById(orderID);
     }

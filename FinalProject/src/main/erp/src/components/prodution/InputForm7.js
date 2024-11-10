@@ -4,15 +4,15 @@ import './production.css';
 
 function MBOMForm() {
     const [formData, setFormData] = useState({
-        orderID: '',             // 주문 ID (선택형)
-        productID: '',           // 상품 ID
-        productName: '',         // 상품명
-        quantity: '',            // 수량 (int형)
-        testDate: '',            // 검사 날짜 (datetime-local)
-        testResult: '',          // 검사 결과 (선택형)
-        etc: ''                  // 기타 사항
+        orderID: '',
+        productID: '',
+        productName: '',
+        quantity: '',
+        testDate: '',
+        testResult: '',
+        etc: ''
     });
-    const [availableOrderIDs, setAvailableOrderIDs] = useState([]); // 검사가 안 끝난 생산 완료 주문 ID 리스트
+    const [availableOrderIDs, setAvailableOrderIDs] = useState([]);
 
     useEffect(() => {
         const fetchAvailableOrderIDs = async () => {
@@ -28,12 +28,10 @@ function MBOMForm() {
         fetchAvailableOrderIDs();
     }, []);
 
-    // OrderID 변경 시 WorkOrders에서 데이터 불러오기
     const handleOrderIDChange = async (e) => {
         const orderID = e.target.value;
         setFormData((prevData) => ({ ...prevData, orderID }));
 
-        // orderID가 빈 값이 아니고 숫자일 때만 요청을 수행하도록 함
         if (orderID && !isNaN(orderID)) {
             try {
                 const response = await axios.get(`http://localhost:8080/api/workorders/${orderID}`);
@@ -41,7 +39,7 @@ function MBOMForm() {
                     const { productId = '', productName = '', quantity = '' } = response.data;
                     setFormData((prevData) => ({
                         ...prevData,
-                        productID: productId,   // productID 설정
+                        productID: productId,
                         productName,
                         quantity
                     }));
@@ -60,7 +58,6 @@ function MBOMForm() {
         }
     };
 
-    // 기타 필드 상태 업데이트
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
@@ -69,7 +66,6 @@ function MBOMForm() {
         }));
     };
 
-    // 폼 제출 처리
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -84,6 +80,23 @@ function MBOMForm() {
             const response = await axios.post('http://localhost:8080/api/quality-control', postData);
             if (response.status === 200) {
                 alert('품질검사가 성공적으로 등록되었습니다.');
+
+                if (formData.testResult === '불합격') {
+                    const defectData = {
+                        QCID: response.data.qcid,
+                        OrderID: postData.orderID,
+                        Quantity: postData.quantity,
+                        ProductID: postData.productID,
+                        ProductName: postData.productName,
+                        DefectType: '불합격',
+                        DefectQuantity: postData.quantity,
+                        Status: '미처리',
+                        Defectrate: 0
+                    };
+
+                    
+                }
+
                 setFormData({
                     orderID: '',
                     productID: '',
@@ -106,10 +119,10 @@ function MBOMForm() {
             <main className="production-content">
                 <div className="production-mainbar">
                     <div className="productionbar" style={{ marginBottom: '20px' }}>
-                        <h1>품질검사 등록</h1>
+                        <h1 className="custom-padding">품질검사 등록</h1>
                     </div>
                     <form id="mbom-form" onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
-                        <table className="production-table" style={{ marginBottom: '20px' }}>
+                        <table className="table production-table" style={{ marginBottom: '20px' }}>
                             <thead>
                                 <tr>
                                     <th>주문ID</th>

@@ -37,5 +37,11 @@ public class ProductionEntryController {
         List<ProductionEntry> entries = productionEntryService.getAllProductionEntries();
         return ResponseEntity.ok(entries);
     }
+    // 입고 내역에 없는 QCID 목록을 반환하는 엔드포인트
+    @GetMapping("/available-qcids")
+    public ResponseEntity<List<Integer>> getAvailableQCIDs() {
+        List<Integer> availableQcids = productionEntryService.getAvailableQCIDs();
+        return ResponseEntity.ok(availableQcids);
+    }
 }
 

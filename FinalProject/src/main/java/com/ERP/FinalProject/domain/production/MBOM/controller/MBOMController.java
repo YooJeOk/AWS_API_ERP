@@ -1,7 +1,6 @@
 package com.ERP.FinalProject.domain.production.MBOM.controller;
 
 import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM;
-
 import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM.ItemType;
 import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM.Size;
 import com.ERP.FinalProject.domain.production.MBOM.entity.MBOMDTO;
@@ -27,19 +26,16 @@ public class MBOMController {
         this.mbomService = mbomService;
     }
 
-    // 모든 MBOM 항목을 가져오는 엔드포인트
     @GetMapping("/all")
     public List<MBOM> getAllMBOMs() {
         return mbomService.getAllMBOMs();
     }
 
-    // materialName을 포함한 모든 MBOMDTO 항목을 가져오는 엔드포인트
     @GetMapping("/all-with-material-name")
     public List<MBOMDTO> getAllMBOMDTOs() {
         return mbomService.getAllMBOMDTOs();
     }
 
-    // 특정 ID의 MBOM 가져오기
     @GetMapping("/{itemid}")
     public ResponseEntity<MBOM> getMBOMById(@PathVariable int id) {
         Optional<MBOM> mbom = mbomService.getMBOMById(id);
@@ -47,7 +43,6 @@ public class MBOMController {
                    .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
     }
 
-    // 특정 MBOM 업데이트
     @PutMapping("/update/{itemid}")
     public ResponseEntity<MBOM> updateMBOM(@PathVariable int id, @RequestBody MBOM mbom) {
         MBOM updatedMBOM = mbomService.updateMBOM(id, mbom);
@@ -73,7 +68,7 @@ public class MBOMController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 실패: " + e.getMessage());
         }
     }
-    // MBOM 데이터 저장 엔드포인트 (POST)
+
     @PostMapping("/save")
     public ResponseEntity<?> saveMBOM(@RequestBody MBOMDTO mbomDTO) {
         try {
@@ -84,7 +79,7 @@ public class MBOMController {
                                  .body("Error saving MBOM: " + e.getMessage());
         }
     }
-    // 다음 ItemID 가져오기
+
     @GetMapping("/next-item-id")
     public ResponseEntity<Integer> getNextItemID(
             @RequestParam("itemType") ItemType itemType,
@@ -92,6 +87,7 @@ public class MBOMController {
         Integer nextItemID = mbomService.getNextItemID(itemType, size);
         return ResponseEntity.ok(nextItemID);
     }
+
     @GetMapping("/check-item-id/{itemId}")
     public ResponseEntity<Map<String, Boolean>> checkItemIdExists(@PathVariable int itemId) {
         boolean exists = mbomService.checkItemIdExists(itemId);

@@ -20,7 +20,7 @@ function Header() {
                                 <Link to="/production4">생산 주문 관리</Link>
                                 <a href="/production3">생산 계획 관리</a>  
                                 <a href="/production8">생산 공정 관리</a>
-                                <a href="/production7">품질 관리</a>
+                                <a href="/production7">품질 검사관리</a>
                                 <a href="/production2">생산 입고 관리</a>  
                            </div>
                         </div>

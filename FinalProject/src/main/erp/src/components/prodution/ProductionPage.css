@@ -20,11 +20,8 @@
     margin: 0;
 }
 
-.create-button {
-    margin-left: 20px;
-}
 
-/* 테이블 스타일 */
+
 .production-table {
     width: 100%;
     border-collapse: collapse;
