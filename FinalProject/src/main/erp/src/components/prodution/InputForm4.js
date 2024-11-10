@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Modal from 'react-modal';
 import './production.css';
+
+Modal.setAppElement('#root'); // Modal을 사용할 루트 엘리먼트 설정
 
 function MBOMForm() {
     const [productOptions, setProductOptions] = useState([]);
@@ -15,6 +18,7 @@ function MBOMForm() {
             etc: ''
         }
     ]);
+    const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 설정
 
     useEffect(() => {
         const fetchProductOptions = async () => {
@@ -72,12 +76,17 @@ function MBOMForm() {
                         etc: ''
                     }
                 ]);
+                setIsModalOpen(true); // 등록 성공 시 모달 창 열기
             } else {
                 console.error('생산 주문 등록 실패:', response.status);
             }
         } catch (error) {
             console.error('서버로 데이터 전송 중 오류 발생:', error);
         }
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false); // 모달 창 닫기
     };
 
     return (
@@ -131,7 +140,14 @@ function MBOMForm() {
                                         <td><input type="text" name="quantity" value={row.quantity} onChange={(e) => handleChange(index, e)} required /></td>
                                         <td><input type="datetime-local" name="startDate" value={row.startDate} onChange={(e) => handleChange(index, e)} required /></td>
                                         <td><input type="datetime-local" name="endDate" value={row.endDate} onChange={(e) => handleChange(index, e)} required /></td>
-                                        <td><input type="text" name="priority" value={row.priority} onChange={(e) => handleChange(index, e)} required /></td>
+                                        <td>
+                                            <select name="priority" value={row.priority} onChange={(e) => handleChange(index, e)} required>
+                                                <option value="">선택</option>
+                                                <option value="Low">Low</option>
+                                                <option value="Medium">Medium</option>
+                                                <option value="High">High</option>
+                                            </select>
+                                        </td>
                                         <td><input type="text" name="etc" value={row.etc} onChange={(e) => handleChange(index, e)} /></td>
                                     </tr>
                                 ))}
@@ -141,6 +157,17 @@ function MBOMForm() {
                     </form>
                 </div>
             </main>
+            <Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                contentLabel="등록 완료"
+                className="modal"
+                overlayClassName="overlay"
+            >
+                <h2>등록 완료</h2>
+                <p>생산 주문이 성공적으로 등록되었습니다.</p>
+                <button onClick={closeModal}>닫기</button>
+            </Modal>
         </div>
     );
 }
