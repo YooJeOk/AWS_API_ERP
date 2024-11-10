@@ -1,21 +1,25 @@
+// Production6.js
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
-import './ProductionPage.css';
-import InputForm6 from './InputForm6';
+import Pagination from './Pagination';
+import SearchBar3 from './SearchBar3';
+import './Production6.css';
 
 function Production6() {
-    const [data, setData] = useState([]); // 불량 관리 데이터를 저장할 상태
-    const [error, setError] = useState(null); // 에러 메시지 상태
-    const navigate = useNavigate();
+    const [data, setData] = useState([]);
+    const [filteredData, setFilteredData] = useState([]);
+    const [error, setError] = useState(null);
+    const [currentPage, setCurrentPage] = useState(0);
+    const itemsPerPage = 12;
 
-    // 데이터 가져오기
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/defects'); // API URL을 실제 서버 주소로 변경
+                const response = await axios.get('http://localhost:8080/api/defects');
                 if (response.status === 200) {
-                    setData(response.data);
+                    const sortedData = response.data.reverse();
+                    setData(sortedData);
+                    setFilteredData(sortedData);
                 } else {
                     setError("데이터를 불러오는 데 실패했습니다.");
                 }
@@ -28,17 +32,64 @@ function Production6() {
         fetchData();
     }, []);
 
+    const handleStatusUpdate = async (qcid) => {
+        try {
+            const response = await axios.put(`http://localhost:8080/api/defects/complete/qcid/${qcid}`);
+            if (response.status === 200) {
+                setData(prevData =>
+                    prevData.map(item =>
+                        item.qcid === qcid ? { ...item, status: '완료' } : item
+                    )
+                );
+                setFilteredData(prevData =>
+                    prevData.map(item =>
+                        item.qcid === qcid ? { ...item, status: '완료' } : item
+                    )
+                );
+            } else {
+                setError("상태 업데이트에 실패했습니다.");
+            }
+        } catch (error) {
+            console.error("상태 업데이트 오류:", error);
+            setError("상태 업데이트 중 오류가 발생했습니다.");
+        }
+    };
+
+    const handleSearch = (searchTerm) => {
+        const lowerCaseSearchTerm = searchTerm.toLowerCase();
+
+        const filtered = data.filter(item =>
+            (item.orderId && item.orderId.toString().includes(lowerCaseSearchTerm)) ||
+            (item.productName && item.productName.toLowerCase().includes(lowerCaseSearchTerm)) ||
+            (item.quantity && item.quantity.toString().includes(lowerCaseSearchTerm)) ||
+            (item.defectType && item.defectType.toLowerCase().includes(lowerCaseSearchTerm)) ||
+            (item.causeDescription && item.causeDescription.toLowerCase().includes(lowerCaseSearchTerm)) ||
+            (item.status && item.status.toLowerCase().includes(lowerCaseSearchTerm)) ||
+            (item.defectRate && item.defectRate.toString().includes(lowerCaseSearchTerm)) ||
+            (item.etc && item.etc.toLowerCase().includes(lowerCaseSearchTerm))
+        );
+
+        setFilteredData(filtered);
+        setCurrentPage(0);
+    };
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
+    const startIndex = currentPage * itemsPerPage;
+    const selectedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
+    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
     return (
         <div className="custom-container">
             <aside id="sidebar"></aside>
             <main className="production-content">
                 <div className="production-mainbar">
                     <div className="productionbar">
-                        <h1>불량 조회</h1>
-                        <button className="create-button" onClick={() => navigate('/input6')}>
-                            생성
-                        </button>
+                        <h1 className="custom-padding">불량 검사 결과 조회</h1>
                     </div>
+                    <SearchBar3 onSearch={handleSearch} />
                     <table className="table production-table">
                         <thead>
                             <tr>
@@ -48,7 +99,7 @@ function Production6() {
                                 <th>상품 수량</th>
                                 <th>불량 유형</th>
                                 <th>불량 수량</th>
-                                <th>불량 원인</th>
+                                <th style={{ width: '20%' }}>불량 원인</th>
                                 <th>불량 처리 상태</th>
                                 <th>불량률</th>
                                 <th>기타</th>
@@ -59,8 +110,8 @@ function Production6() {
                                 <tr>
                                     <td colSpan="10" style={{ textAlign: 'center', color: 'red' }}>{error}</td>
                                 </tr>
-                            ) : data.length > 0 ? (
-                                data.map((row, index) => (
+                            ) : selectedData.length > 0 ? (
+                                selectedData.map((row, index) => (
                                     <tr key={index}>
                                         <td>{row.qcid}</td>
                                         <td>{row.orderId}</td>
@@ -69,7 +120,17 @@ function Production6() {
                                         <td>{row.defectType}</td>
                                         <td>{row.defectQuantity}</td>
                                         <td>{row.causeDescription}</td>
-                                        <td>{row.status}</td>
+                                        <td>
+                                            {row.status === '미처리' ? (
+                                                <button
+                                                    onClick={() => handleStatusUpdate(row.qcid)}
+                                                    className="status-button">
+                                                    미처리
+                                                </button>
+                                            ) : (
+                                                <span className="status-complete">완료</span>
+                                            )}
+                                        </td>
                                         <td>{row.defectRate}</td>
                                         <td>{row.etc}</td>
                                     </tr>
@@ -81,11 +142,12 @@ function Production6() {
                             )}
                         </tbody>
                     </table>
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                    />
                 </div>
-
-                <Routes>
-                    <Route path="/input6" element={<InputForm6 />} />
-                </Routes>
             </main>
         </div>
     );

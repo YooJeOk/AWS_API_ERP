@@ -12,19 +12,20 @@ function MBOMForm() {
         entryDate: '',           // 입고 날짜 및 시간 (datetime-local)
         etc: ''                  // 기타 사항
     });
-    const [availableQCIDs, setAvailableQCIDs] = useState([]); // 완료된 불량 처리 품질 검사 ID 리스트
+    const [availableQCIDs, setAvailableQCIDs] = useState([]); // 입고되지 않은 품질 검사 ID 리스트
+
+    const fetchAvailableQCIDs = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/api/available-qcids'); // 수정된 엔드포인트
+            if (response.status === 200) {
+                setAvailableQCIDs(response.data);
+            }
+        } catch (error) {
+            console.error("사용 가능한 품질 검사 ID를 가져오는 중 오류 발생:", error);
+        }
+    };
 
     useEffect(() => {
-        const fetchAvailableQCIDs = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/api/defects/completed');
-                if (response.status === 200) {
-                    setAvailableQCIDs(response.data);
-                }
-            } catch (error) {
-                console.error("사용 가능한 품질 검사 ID를 가져오는 중 오류 발생:", error);
-            }
-        };
         fetchAvailableQCIDs();
     }, []);
 
@@ -85,6 +86,11 @@ function MBOMForm() {
             const response = await axios.post('http://localhost:8080/api/production-entry', postData);
             if (response.status === 200) {
                 alert('생산 입고가 성공적으로 등록되었습니다.');
+
+                // 등록 후 최신 리스트를 다시 가져오기
+                await fetchAvailableQCIDs();
+
+                // 폼 초기화
                 setFormData({
                     qcid: '',
                     orderId: '',
@@ -107,7 +113,7 @@ function MBOMForm() {
             <main className="production-content">
                 <div className="production-mainbar">
                     <div className="productionbar" style={{ marginBottom: '20px' }}>
-                        <h1>생산 입고 등록</h1>
+                        <h1 className="custom-padding">생산 입고 등록</h1>
                     </div>
                     <form id="mbom-form" onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
                         <table className="table production-table" style={{ marginBottom: '20px' }}>
@@ -128,8 +134,8 @@ function MBOMForm() {
                                         <select name="qcid" value={formData.qcid} onChange={handleQCIDChange} required>
                                             <option value="">품질 검사 ID 선택</option>
                                             {availableQCIDs.map((qc, index) => (
-                                                <option key={qc.qcid || index} value={qc.qcid}>
-                                                    {qc.qcid}
+                                                <option key={qc || index} value={qc}>
+                                                    {qc}
                                                 </option>
                                             ))}
                                         </select>

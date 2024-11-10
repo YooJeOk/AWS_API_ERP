@@ -1,12 +1,17 @@
 package com.ERP.FinalProject.domain.production.Entry.repository;
 
-import com.ERP.FinalProject.domain.production.Entry.entity.ProductionEntry;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-@Repository
-public interface ProductionEntryRepository extends JpaRepository<ProductionEntry, Integer> {
+import com.ERP.FinalProject.domain.production.Entry.entity.ProductionEntry;
 
-    // QCID로 이미 입고된 항목이 있는지 확인
-    boolean existsByQcid(int qcid);
+import java.util.List;
+
+public interface ProductionEntryRepository extends JpaRepository<ProductionEntry, Long> {
+
+    boolean existsByQcid(Integer qcid);
+
+    @Query("SELECT p.qcid FROM ProductionEntry p WHERE p.qcid IS NOT NULL")
+    List<Integer> findAllQcids(); // 입고 내역에 존재하는 모든 QCID를 조회하는 메서드
 }

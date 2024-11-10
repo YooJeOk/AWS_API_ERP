@@ -18,5 +18,9 @@ public interface DefectManagementRepository extends JpaRepository<DefectManageme
 
     // QCID를 기반으로 불량 수량 조회
     @Query("SELECT SUM(d.defectQuantity) FROM DefectManagement d WHERE d.qcid = :qcid")
-    Optional<Integer> findDefectQuantityByQCID(@Param("qcid") int qcid); // `qcid` 타입을 `int`로 설정
+    Optional<Integer> findDefectQuantityByQCID(@Param("qcid") int qcid);
+
+    // "완료" 상태의 QCID만 가져오는 메서드
+    @Query("SELECT d.qcid FROM DefectManagement d WHERE d.status = '완료'")
+    List<Integer> findCompletedQcids();
 }

@@ -12,99 +12,143 @@ function ProductionMonitoringPage() {
     ]);
     const [isEmergencyActive, setIsEmergencyActive] = useState(false);
     const [showEmergencyModal, setShowEmergencyModal] = useState(false);
+    const [isColorBlindMode, setIsColorBlindMode] = useState(false);
+    const [dangerOverlayIndex, setDangerOverlayIndex] = useState(null);
+    const [completedModal, setCompletedModal] = useState(null);
+    const [alertSent80, setAlertSent80] = useState(false);
+    const [language, setLanguage] = useState('ko');
+    const intervals = React.useRef([]);
 
-    useEffect(() => {
-        const fetchData = async (orderId, index) => {
-            try {
-                const response = await axios.get(`http://localhost:8080/monitoring/data/${orderId}`);
-                const newData = response.data;
+    const fetchData = async (orderId, index) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/monitoring/data/${orderId}`);
+            const newData = response.data;
 
-                const sanitizedData = {
-                    orderId: orderId,
-                    productionRate: newData.productionRate || 0,
-                    temperature: newData.temperature || 0,
-                    humidity: newData.humidity || 0,
-                    productName: data[index].productName
-                };
+            const sanitizedData = {
+                orderId: orderId,
+                productionRate: newData.productionRate || 0,
+                temperature: newData.temperature || 0,
+                humidity: newData.humidity || 0,
+                productName: data[index].productName
+            };
 
-                setData((prevData) => {
-                    const updatedData = [...prevData];
-                    updatedData[index] = sanitizedData;
-                    return updatedData;
-                });
+            setData((prevData) => {
+                const updatedData = [...prevData];
+                updatedData[index] = sanitizedData;
+                return updatedData;
+            });
 
-                // 온도가 38도 이상일 경우 서버에 알림 요청 보내기
-                if (sanitizedData.temperature >= 38) {
-                    setIsEmergencyActive(true);
-                    await axios.post('http://localhost:8080/api/alert', {
-                        orderId: sanitizedData.orderId,
-                        temperature: sanitizedData.temperature,
-                        productName: sanitizedData.productName
-                    });
-                }
-            } catch (error) {
-                console.error(`OrderID ${orderId} 데이터 로드 오류:`, error);
+            if (sanitizedData.temperature >= 50 && index === 2) {
+                setDangerOverlayIndex(2);
+            } else if (index === 2) {
+                setDangerOverlayIndex(null);
             }
-        };
 
-        const intervals = [1, 2, 3, 4].map((orderId, index) =>
-            setInterval(() => fetchData(orderId, index), 5000)
-        );
+            if (sanitizedData.temperature >= 80 && !alertSent80) {
+                setAlertSent80(true);
+                intervals.current.forEach(clearInterval);
+                await axios.post('http://localhost:8080/api/send-one', {
+                    orderId: sanitizedData.orderId,
+                    temperature: sanitizedData.temperature,
+                    productName: sanitizedData.productName
+                });
+            }
 
-        return () => intervals.forEach(clearInterval);
-    }, []);
-
-    const COLORS = ['#FF0000', '#00FF00'];
-    const lineNames = ['1라인', '2라인', '3라인', '4라인'];
-
-    const getNeedleRotation = (temp) => {
-        if (temp < 20) return 180;
-        if (temp > 30) return 0;
-        return 180 - ((temp - 20) * 9);
+            if (sanitizedData.productionRate === 100) {
+                setCompletedModal(sanitizedData.productName);
+                setTimeout(() => setCompletedModal(null), 3000);
+            }
+        } catch (error) {
+            console.error(`OrderID ${orderId} 데이터 로드 오류:`, error);
+        }
     };
 
-    const getTemperatureColor = (temp) => {
-        if (temp < 20 || temp > 30) return "#FF8042";
-        if (temp < 23 || temp > 27) return "#FFBB28";
-        return "#00C49F";
+    useEffect(() => {
+        if (!isEmergencyActive) {
+            intervals.current = [1, 2, 3, 4].map((orderId, index) =>
+                setInterval(() => fetchData(orderId, index), 5000)
+            );
+        } else {
+            intervals.current.forEach(clearInterval);
+            intervals.current = [];
+        }
+
+        return () => intervals.current.forEach(clearInterval);
+    }, [isEmergencyActive]);
+
+    const COLORS = isColorBlindMode ? ['#4FC3F7', '#FFF176'] : ['#FF9999', '#99FF99'];
+    const lineNames = language === 'ko' ? ['1라인', '2라인', '3라인', '4라인'] : ['Line 1', 'Line 2', 'Line 3', 'Line 4'];
+
+    const toggleColorBlindMode = () => {
+        setIsColorBlindMode((prev) => !prev);
+    };
+
+    const toggleLanguage = () => {
+        setLanguage((prevLanguage) => (prevLanguage === 'ko' ? 'en' : 'ko'));
     };
 
     const handleEmergencyClick = () => {
         setShowEmergencyModal(true);
+        setIsEmergencyActive(true);
+        intervals.current.forEach(clearInterval);
     };
 
-    const confirmEmergencyStop = () => {
-        setShowEmergencyModal(false);
-        alert("모든 생산이 중지되었습니다.");
+    const handleReactivationClick = () => {
         setIsEmergencyActive(false);
+        setShowEmergencyModal(false);
+        intervals.current = [1, 2, 3, 4].map((orderId, index) =>
+            setInterval(() => fetchData(orderId, index), 5000)
+        );
     };
 
-    const cancelEmergencyStop = () => {
-        setShowEmergencyModal(false);
+    const handleClearAlert = () => {
+        setDangerOverlayIndex(null);
+        setAlertSent80(false);
     };
 
     return (
         <div className="custom-container">
+            {completedModal && (
+                <div className="completed-modal" style={{ zIndex: 10, width: '550px', height: '150px', backgroundColor: '#4CAF50', fontWeight: 'bold' }}>
+                    <h2 style={{ fontSize: '21px', color: 'white', textAlign: 'center' }}>
+                        {completedModal} {language === 'ko' ? '생산 완료! 다음 공정으로 이동합니다.' : 'Production Complete! Moving to the next process.'}
+                    </h2>
+                </div>
+            )}
+            {showEmergencyModal && (
+                <div className="emergency-modal" style={{ zIndex: 20, border: '3px solid red', padding: '10px', position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+                    <h2 style={{ fontWeight: 'bold', fontSize: '24px' }}>{language === 'ko' ? '비상 정지 중...' : 'Emergency Stop Active...'}</h2>
+                </div>
+            )}
             <main className="production-content">
-                <button
-                    className={`emergency-button ${isEmergencyActive ? 'active' : ''}`}
-                    onClick={handleEmergencyClick}
-                    disabled={!isEmergencyActive}
-                >
-                    긴급 정지
-                </button>
-                {showEmergencyModal && (
-                    <div className="emergency-modal">
-                        <div className="emergency-modal-content">
-                            <h2>정말로 위험과 손해를 감수하시고 책임을 지시겠습니까?</h2>
-                            <button onClick={confirmEmergencyStop}>예</button>
-                            <button onClick={cancelEmergencyStop}>아니오</button>
-                        </div>
-                    </div>
-                )}
-                <div className="chart-container1">
+                <div className="button-container">
+                    <button className="color-blind-button" onClick={toggleColorBlindMode} style={{ marginRight: '50px', width: '150px', fontWeight: 'bold' }}>
+                        {isColorBlindMode ? (language === 'ko' ? '일반 모드' : 'Normal Mode') : (language === 'ko' ? '적녹색약 모드' : 'Color Blind Mode')}
+                    </button>
+                    <button className="language-button" onClick={toggleLanguage} style={{ marginRight: '50px', width: '150px', fontWeight: 'bold' }}>
+                        {language === 'ko' ? '영어' : 'Korean'}
+                    </button>
+                    <button className="clear-alert-button" onClick={handleClearAlert} style={{ marginRight: '50px', width: '150px', fontWeight: 'bold' }}>
+                        {language === 'ko' ? '알림 끄기' : 'Clear Alert'}
+                    </button>
+                    <button
+                        className="emergency-button"
+                        onClick={isEmergencyActive ? handleReactivationClick : handleEmergencyClick}
+                        style={{ width: '150px', fontWeight: 'bold' }}
+                    >
+                        {isEmergencyActive ? (language === 'ko' ? '재가동' : 'Restart') : (language === 'ko' ? '비상 정지' : 'Emergency Stop')}
+                    </button>
+                </div>
+                <div className="chart-container1" style={{ position: 'relative' }}>
                     {data.map((item, index) => (
-                        <div key={index} className="chart-box">
+                        <div key={index} className="chart-box" style={{ position: 'relative' }}>
+                            {dangerOverlayIndex === index && index === 2 && (
+                                <div className="danger-overlay">
+                                    <div className="blinking">
+                                        {language === 'ko' ? '위험: 온도 초과' : 'Danger: Temperature Exceeded'}
+                                    </div>
+                                </div>
+                            )}
                             <div className="pie-chart-container">
                                 <h3 className="line-name" style={{ fontSize: '20px', fontWeight: 'bold', textAlign: 'center' }}>
                                     {lineNames[index]}
@@ -112,8 +156,8 @@ function ProductionMonitoringPage() {
                                 <PieChart width={350} height={300}>
                                     <Pie
                                         data={[
-                                            { name: '생산률', value: item.productionRate },
-                                            { name: '남은 비율', value: 100 - item.productionRate }
+                                            { name: language === 'ko' ? '생산률' : 'Production Rate', value: item.productionRate },
+                                            { name: language === 'ko' ? '남은 비율' : 'Remaining', value: 100 - item.productionRate }
                                         ]}
                                         dataKey="value"
                                         cx="50%"
@@ -122,7 +166,6 @@ function ProductionMonitoringPage() {
                                         outerRadius={140}
                                         startAngle={90}
                                         endAngle={-270}
-                                        paddingAngle={0}
                                     >
                                         {[COLORS[1], COLORS[0]].map((color, idx) => (
                                             <Cell key={`cell-${idx}`} fill={color} />
@@ -142,42 +185,19 @@ function ProductionMonitoringPage() {
                                 </PieChart>
                             </div>
                             <div className="metrics-container">
-                                <div className="temperature" style={{ marginTop: '10px', transform: 'scale(1)', transformOrigin: 'top' }}>
-                                    <h4 style={{ textAlign: 'center', fontSize: '20px' }}>온도 상태</h4>
-                                    <PieChart width={100} height={60}>
-                                        <Pie
-                                            data={[
-                                                { name: '왼쪽 파란색', value: 33.33 },
-                                                { name: '중앙 초록색', value: 33.33 },
-                                                { name: '오른쪽 빨간색', value: 33.34 }
-                                            ]}
-                                            dataKey="value"
-                                            cx="50%"
-                                            cy="100%"
-                                            innerRadius={20}
-                                            outerRadius={40}
-                                            startAngle={180}
-                                            endAngle={0}
-                                        >
-                                            <Cell fill="#0000FF" />
-                                            <Cell fill="#00FF00" />
-                                            <Cell fill="#FF0000" />
-                                        </Pie>
-                                        <path
-                                            d={`M50,60 L${50 + 30 * Math.cos((getNeedleRotation(item.temperature) * Math.PI) / 180)},${60 - 30 * Math.sin((getNeedleRotation(item.temperature) * Math.PI) / 180)}`}
-                                            stroke={getTemperatureColor(item.temperature)}
-                                            strokeWidth="2"
-                                        />
-                                    </PieChart>
-                                    <div style={{ textAlign: 'center', marginTop: '5px', color: getTemperatureColor(item.temperature), fontSize: '20px' }}>
+                                <div className="temperature">
+                                    <h4 style={{ textAlign: 'center', fontSize: '20px' }}>
+                                        {language === 'ko' ? '온도 상태' : 'Temperature'}
+                                    </h4>
+                                    <div style={{ textAlign: 'center', color: item.temperature >= 50 ? '#FF0000' : '#00C49F', fontSize: '20px' }}>
                                         {item.temperature}°C
                                     </div>
                                 </div>
                             </div>
-                            <div className="humidity" style={{ fontSize: '20px', color: 'black', textAlign: 'center', marginTop: '10px' }}>
-                                <span>습도: {item.humidity}%</span>
+                            <div className="humidity" style={{ fontSize: '20px', textAlign: 'center', marginTop: '10px' }}>
+                                <span>{language === 'ko' ? '습도' : 'Humidity'}: {item.humidity}%</span>
                             </div>
-                            <div className="product-name" style={{ fontSize: '24px', color: 'black', textAlign: 'center', marginTop: '10px' }}>
+                            <div className="product-name" style={{ fontSize: '24px', textAlign: 'center', marginTop: '10px' }}>
                                 <span>{item.productName}</span>
                             </div>
                         </div>

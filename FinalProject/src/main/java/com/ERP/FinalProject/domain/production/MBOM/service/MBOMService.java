@@ -1,18 +1,13 @@
 package com.ERP.FinalProject.domain.production.MBOM.service;
 
 import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM;
-import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM.ItemType;
-import com.ERP.FinalProject.domain.production.MBOM.entity.MBOM.Size;
 import com.ERP.FinalProject.domain.production.MBOM.entity.MBOMDTO;
 import com.ERP.FinalProject.domain.production.MBOM.repository.MBOMRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
-
-import javax.transaction.Transactional;
 
 @Service
 public class MBOMService {
@@ -38,29 +33,21 @@ public class MBOMService {
 
     public void saveMBOM(MBOMDTO mbomData) {
         MBOM mbom = new MBOM();
-        mbom.setItemId(mbomData.getItemID());
+        mbom.setItemId(mbomData.getItemID().longValue());
+        mbom.setItemType(mbomData.getItemType() != null ? mbomData.getItemType() : MBOM.ItemType.Product);
         
-        // Enum 값 매핑 및 null 체크
-        if (mbomData.getItemType() != null) {
-            mbom.setItemType(mbomData.getItemType());
-        } else {
-            mbom.setItemType(ItemType.Product);  // 기본값 설정
-        }
-
         if (mbomData.getSize() != null) {
             mbom.setSize(mbomData.getSize());
-        } else if (mbomData.getItemType() == ItemType.Coffee) {
-            mbom.setSize(Size.Regular);  // Coffee의 경우 기본값 설정
+        } else if (mbomData.getItemType() == MBOM.ItemType.Coffee) {
+            mbom.setSize(MBOM.Size.Regular);
         }
 
-        mbom.setMaterialId(mbomData.getMaterialID());
+        mbom.setMaterialId(mbomData.getMaterialID().longValue());
         mbom.setProductName(mbomData.getProductName());
         mbom.setQuantity(mbomData.getQuantity());
         mbom.setUnit(mbomData.getUnit());
         mbom.setUnitPrice(mbomData.getUnitPrice());
         mbom.setTotalCost(mbomData.getTotalCost());
-
-        // 저장
         mbomRepository.save(mbom);
     }
 
@@ -72,22 +59,20 @@ public class MBOMService {
         return null;
     }
 
- // MBOMService.java
     @Transactional
     public int deleteByProductName(String productName) {
         Integer itemId = mbomRepository.findItemIdByProductName(productName);
         if (itemId != null) {
             return mbomRepository.deleteByItemId(Long.valueOf(itemId));
         }
-        return 0; // 삭제할 데이터가 없는 경우
+        return 0;
     }
 
-
-    // 다음 ItemID 계산 (새로운 메서드 호출)
-    public Integer getNextItemID(ItemType itemType, Size size) {
+    public Integer getNextItemID(MBOM.ItemType itemType, MBOM.Size size) {
         Integer lastItemID = mbomRepository.findMaxItemIDForTypeAndSize(itemType, size);
         return (lastItemID != null ? lastItemID + 1 : 1);
     }
+
     public boolean checkItemIdExists(int itemId) {
         return mbomRepository.existsByItemId(itemId);
     }

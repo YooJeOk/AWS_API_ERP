@@ -7,6 +7,7 @@ import com.ERP.FinalProject.domain.production.Entry.entity.ProductionEntryReques
 import com.ERP.FinalProject.domain.production.Entry.repository.ProductionEntryRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,6 +56,16 @@ public class ProductionEntryService {
     }
     public List<ProductionEntry> getAllProductionEntries() {
         return productionEntryRepository.findAll();
+    }
+ // 입고 내역에 없는 QCID만 반환하는 메서드
+    public List<Integer> getAvailableQCIDs() {
+        List<Integer> allQcids = defectManagementRepository.findCompletedQcids(); // 완료된 QCID 조회
+        List<Integer> registeredQcids = productionEntryRepository.findAllQcids(); // 이미 입고된 QCID 조회
+
+        // 입고되지 않은 QCID만 필터링하여 반환
+        return allQcids.stream()
+                       .filter(qcid -> !registeredQcids.contains(qcid))
+                       .collect(Collectors.toList());
     }
     
 }

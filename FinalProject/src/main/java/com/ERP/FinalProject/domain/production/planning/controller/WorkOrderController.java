@@ -4,7 +4,6 @@ import com.ERP.FinalProject.domain.production.planning.model.WorkOrder;
 import com.ERP.FinalProject.domain.production.planning.service.WorkOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -40,12 +39,6 @@ public class WorkOrderController {
         return workOrderService.saveWorkOrder(workOrder);
     }
 
-    @DeleteMapping("/{orderId}")
-    public void deleteWorkOrder(@PathVariable int orderId) {
-        workOrderService.deleteWorkOrderById(orderId);
-    }
-
-    // 검사가 완료되지 않은 주문 ID 목록 반환
     @GetMapping("/uninspected")
     public List<WorkOrder> getUninspectedOrders() {
         return workOrderService.findUninspectedOrders();
