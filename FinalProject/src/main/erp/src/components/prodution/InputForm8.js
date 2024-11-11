@@ -15,7 +15,7 @@ function MBOMForm() {
     ]);
 
     const [fixedData, setFixedData] = useState({
-        ItemID: '',
+        ItemID: 14,
         ItemType: 'Product',
         ProductName: '',
         Size: ''
@@ -33,34 +33,19 @@ function MBOMForm() {
             .catch(error => console.error('Error fetching material list:', error));
     }, [page]);
 
-    const validateItemID = (value) => {
-        if (isNaN(value) || value <= 0) {
-            setItemIdError('0보다 큰 숫자만 입력 가능합니다.');
-            return;
-        }
-
-        fetch(`/api/mbom/check-item-id/${value}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.exists) {
-                    setItemIdError('이미 존재하는 ItemID입니다.');
-                } else {
-                    setItemIdError('');
-                }
-            })
-            .catch(error => console.error('Error checking ItemID:', error));
-    };
-
     const handleFixedChange = (e) => {
         const { name, value } = e.target;
+        let updatedItemID = fixedData.ItemID;
+
+        if (name === "ItemType") {
+            updatedItemID = value === "Product" ? 14 : 15;
+        }
+
         setFixedData({
             ...fixedData,
-            [name]: value
+            [name]: value,
+            ItemID: updatedItemID
         });
-    };
-
-    const handleItemIdBlur = (e) => {
-        validateItemID(e.target.value);
     };
 
     const handleChange = (index, e) => {
@@ -127,7 +112,7 @@ function MBOMForm() {
 
         try {
             const formattedDataArray = formData.map((material) => ({
-                itemID: parseInt(fixedData.ItemID),
+                itemID: fixedData.ItemID,
                 itemType: fixedData.ItemType,
                 productName: fixedData.ProductName,
                 size: fixedData.Size || null,
@@ -153,6 +138,13 @@ function MBOMForm() {
             }
 
             alert("MBOM 데이터가 성공적으로 저장되었습니다.");
+            
+            // ItemID를 등록 후 증가
+            setFixedData(prevState => ({
+                ...prevState,
+                ItemID: prevState.ItemID + 1
+            }));
+
             window.location.reload();
         } catch (error) {
             console.error("Error:", error);
@@ -182,7 +174,7 @@ function MBOMForm() {
             <main className="production-content" style={{ padding: '0 50px' }}>
                 <div className="production-mainbar">
                     <div className="productionbar">
-                        <h1>MBOM 등록</h1>
+                        <h1 className="custom-padding">MBOM 등록</h1>
                     </div>
 
                     <div className="fixed-section" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
@@ -202,13 +194,9 @@ function MBOMForm() {
                                             type="number"
                                             name="ItemID"
                                             value={fixedData.ItemID}
-                                            onChange={handleFixedChange}
-                                            onBlur={handleItemIdBlur}
+                                            readOnly
                                             style={{ width: '100%' }}
                                         />
-                                        {itemIdError && (
-                                            <div style={{ color: 'red', fontSize: '0.8em' }}>{itemIdError}</div>
-                                        )}
                                     </td>
                                     <td>
                                         <select name="ItemType" value={fixedData.ItemType} onChange={handleFixedChange} style={{ width: '100%' }}>
@@ -228,7 +216,7 @@ function MBOMForm() {
                             </tbody>
                         </table>
 
-                        <div style={{ padding: '15px', border: '1px solid #ddd', borderRadius: '4px', minWidth: '240px', textAlign: 'center', fontWeight: 'bold', height: '88px' }}>
+                        <div style={{ padding: '15px', border: '1px solid #ddd', borderRadius: '4px', minWidth: '240px', textAlign: 'center', fontWeight: 'bold', height: '88px',marginBottom:"15px" }}>
                             총원가
                             <hr style={{ margin: '10px 0', borderTop: '1px solid #ddd' }} />
                             {getTotalCostSum()} 원
@@ -238,7 +226,7 @@ function MBOMForm() {
                         <button className="create-button" onClick={handleSubmit} style={{ minWidth: '100px' }}>등록</button>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '20px', marginTop: '20px' }}>
+                    <div style={{ display: 'flex', gap: '20px', marginTop: '5px' }}>
                         <div style={{ flex: '1', maxHeight: '600px', overflowY: 'auto', border: '1px solid #ddd', borderRadius: '4px' }}>
                             <table className="table production-table" style={{ width: '100%' }}>
                                 <thead>
@@ -287,7 +275,7 @@ function MBOMForm() {
                         </div>
 
                         <div style={{ flex: '1', maxHeight: '600px', overflowY: 'auto', border: '1px solid #ddd', borderRadius: '4px', padding: '10px' }}>
-                            <h3>재료 목록 (공장 재고)</h3>
+                            <h3>재료 목록 </h3>
                             <ul>
                                 {materialList.map((material) => (
                                     <li key={material.materialId}>

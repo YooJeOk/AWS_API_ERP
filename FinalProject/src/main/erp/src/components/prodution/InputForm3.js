@@ -85,7 +85,7 @@ function MBOMForm() {
             <main className="production-content">
                 <div className="production-mainbar">
                     <div className="productionbar" style={{ marginBottom: '20px' }}>
-                        <h1>생산 계획 등록</h1>
+                        <h1 className="custom-padding">생산 계획 등록</h1>
                     </div>
                     <form id="mbom-form" onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
                         <table className="table production-table" style={{ marginBottom: '20px' }}>

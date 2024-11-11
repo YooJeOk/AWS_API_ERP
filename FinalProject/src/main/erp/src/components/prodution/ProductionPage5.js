@@ -108,12 +108,12 @@ function ProductionTable() {
             <main className="production-content">
                 <div className="production-mainbar">
                     <div className="productionbar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-                        <h1 style={{ fontSize: '26px', margin: 0 }}>소요량 조회</h1>
+                        <h1  className="custom-padding" style={{ fontSize: '26px', margin: 0 }}>소요량 조회</h1>
                         <div style={{ display: 'flex', gap: '10px' }}>
                             <button 
-                                className="create1-button" 
+                                className="create-button" 
                                 onClick={() => navigate('/input8')} 
-                                style={{ fontSize: '20px', backgroundColor: '#4CAF50', color: '#fff', padding: '5px 30px', border: 'none', borderRadius: '5px' }}
+                                
                             >
                                 생성
                             </button>

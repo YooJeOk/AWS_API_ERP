@@ -1,4 +1,5 @@
 import React from 'react';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -13,7 +14,6 @@ import ProductionPage4 from './components/prodution/ProductionPage4';
 import ProductionPage8 from './components/prodution/ProductionPage8';  // 모니터링
 import InputForm8 from './components/prodution/InputForm8';
 import ProductionPage5 from './components/prodution/ProductionPage5';
-import InputForm6 from './components/prodution/InputForm6';
 import ProductionPage6 from './components/prodution/ProductionPage6';
 import InputForm7 from './components/prodution/InputForm7';
 import ProductionPage7 from './components/prodution/ProductionPage7';
@@ -68,7 +68,6 @@ function App() {
                     <Route path="/production8" element={<ProductionSidebarWrapper><ProductionPage8 /></ProductionSidebarWrapper>} />
                     <Route path="/input8" element={<ProductionSidebarWrapper><InputForm8 /></ProductionSidebarWrapper>} />
                     <Route path="/production5/*" element={<ProductionSidebarWrapper><ProductionPage5 /></ProductionSidebarWrapper>} />
-                    <Route path="/input6" element={<ProductionSidebarWrapper><InputForm6 /></ProductionSidebarWrapper>} />
                     <Route path="/production6/*" element={<ProductionSidebarWrapper><ProductionPage6 /></ProductionSidebarWrapper>} />
                     <Route path="/input7" element={<ProductionSidebarWrapper><InputForm7 /></ProductionSidebarWrapper>} />
                     <Route path="/production7/*" element={<ProductionSidebarWrapper><ProductionPage7 /></ProductionSidebarWrapper>} />

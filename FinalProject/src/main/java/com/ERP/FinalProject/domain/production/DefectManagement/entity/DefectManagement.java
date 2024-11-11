@@ -36,10 +36,10 @@ public class DefectManagement {
     private String causeDescription;
 
     @Column(name = "Status", columnDefinition = "ENUM('미처리', '완료') DEFAULT '미처리'")
-    private String status;
+    private String status = "미처리"; // 기본값 설정
 
     @Column(name = "Defectrate", nullable = true)
-    private Integer defectRate;
+    private Integer defectRate = 0; // 기본값 0 설정
 
     @Column(name = "etc", length = 100)
     private String etc;

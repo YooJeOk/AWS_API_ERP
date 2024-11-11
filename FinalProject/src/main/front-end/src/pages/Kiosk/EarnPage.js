@@ -5,6 +5,7 @@ import OrderSummary from '../../components/Kiosk/OrderSummary';
 import KeypadModal from '../../components/Kiosk/KeypadModal';
 import useClickSound from '../../hooks/useClickSound';
 import useTTS from '../../hooks/useTTS';
+import AlertModal from '../../components/Kiosk/AlertModal';
 
 const EarnPage = () => {
   const ClickSound = useClickSound();
@@ -14,6 +15,8 @@ const EarnPage = () => {
   const location = useLocation();
   const [showKeypad, setShowKeypad] = useState(false);
   const [keypadPurpose, setKeypadPurpose] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   const cartItems = location.state?.cartItems || [];
   const totalAmount = cartItems.reduce((sum, item) => sum + item.totalPrice, 0);
@@ -77,7 +80,9 @@ const EarnPage = () => {
         setUserData(data);
       } catch (error) {
         console.error(error);
-        alert('조회된 번호가 없습니다.');
+        // alert('조회된 번호가 없습니다.');
+        setAlertMessage('조회된 번호가 없습니다.');
+        setShowAlert(true);
       }
     } else if (keypadPurpose === 'joinMember') {
       console.log("회원가입완료");
@@ -138,6 +143,12 @@ const EarnPage = () => {
           onClose={handleKeypadClose}
           onSubmit={handleKeypadSubmit}
           purpose={keypadPurpose}
+        />
+      )}
+        {showAlert && (
+        <AlertModal 
+          message={alertMessage} 
+          onClose={() => setShowAlert(false)} 
         />
       )}
     </div>

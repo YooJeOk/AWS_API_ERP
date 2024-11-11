@@ -1,21 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Modal from 'react-modal';
 import './production.css';
 
+Modal.setAppElement('#root'); // Modal을 사용할 루트 엘리먼트 설정
+
 function MBOMForm() {
+    const [productOptions, setProductOptions] = useState([]);
     const [formData, setFormData] = useState([
         {
-            productId: '',       // ProductID와 매칭
-            productName: '',     // ProductName과 매칭
-            quantity: '',        // Quantity와 매칭
-            startDate: '',       // StartDate와 매칭
-            endDate: '',         // EndDate와 매칭
-            priority: '',        // Priority와 매칭
-            etc: ''              // 기타사항과 매칭
+            productId: '',
+            productName: '',
+            quantity: '',
+            startDate: '',
+            endDate: '',
+            priority: '',
+            etc: ''
         }
     ]);
+    const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 설정
 
-    // 필드 상태 업데이트
+    useEffect(() => {
+        const fetchProductOptions = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/api/products'); // 서버 API 엔드포인트
+                if (response.status === 200) {
+                    setProductOptions(response.data);
+                } else {
+                    console.error('상품 데이터를 불러오는데 실패했습니다:', response.status);
+                }
+            } catch (error) {
+                console.error('서버로부터 상품 데이터를 가져오는 중 오류 발생:', error);
+            }
+        };
+
+        fetchProductOptions();
+    }, []);
+
+    const handleProductNameChange = (index, value) => {
+        const selectedProduct = productOptions.find((option) => option.productName === value);
+        const newFormData = [...formData];
+        newFormData[index] = {
+            ...newFormData[index],
+            productName: value,
+            productId: selectedProduct ? selectedProduct.productId : ''
+        };
+        setFormData(newFormData);
+    };
+
     const handleChange = (index, e) => {
         const newFormData = [...formData];
         newFormData[index] = {
@@ -25,17 +57,14 @@ function MBOMForm() {
         setFormData(newFormData);
     };
 
-    // 폼 제출 처리
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         try {
-            // formData 배열의 첫 번째 객체만 전송
             const response = await axios.post('http://localhost:8080/api/workorders', formData[0]);
-            
+
             if (response.status === 200) {
                 console.log('생산 주문이 성공적으로 등록되었습니다:', response.data);
-                // 필요한 경우 폼 초기화
                 setFormData([
                     {
                         productId: '',
@@ -47,6 +76,7 @@ function MBOMForm() {
                         etc: ''
                     }
                 ]);
+                setIsModalOpen(true); // 등록 성공 시 모달 창 열기
             } else {
                 console.error('생산 주문 등록 실패:', response.status);
             }
@@ -55,13 +85,17 @@ function MBOMForm() {
         }
     };
 
+    const closeModal = () => {
+        setIsModalOpen(false); // 모달 창 닫기
+    };
+
     return (
         <div className="custom-container">
             <aside id="sidebar"></aside>
             <main className="production-content">
                 <div className="production-mainbar">
                     <div className="productionbar" style={{ marginBottom: '20px' }}>
-                        <h1>생산 주문 등록</h1>
+                        <h1 className="custom-padding">생산 주문 등록</h1>
                     </div>
                     <form id="mbom-form" onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
                         <table className="table production-table" style={{ marginBottom: '20px' }}>
@@ -79,12 +113,41 @@ function MBOMForm() {
                             <tbody>
                                 {formData.map((row, index) => (
                                     <tr key={index}>
-                                        <td><input type="text" name="productId" value={row.productId} onChange={(e) => handleChange(index, e)} required /></td>
-                                        <td><input type="text" name="productName" value={row.productName} onChange={(e) => handleChange(index, e)} required /></td>
+                                        <td>
+                                            <input
+                                                type="text"
+                                                name="productId"
+                                                value={row.productId}
+                                                readOnly
+                                                disabled
+                                            />
+                                        </td>
+                                        <td>
+                                            <select
+                                                name="productName"
+                                                value={row.productName}
+                                                onChange={(e) => handleProductNameChange(index, e.target.value)}
+                                                required
+                                            >
+                                                <option value="">선택</option>
+                                                {productOptions.map((option) => (
+                                                    <option key={option.productName} value={option.productName}>
+                                                        {option.productName}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </td>
                                         <td><input type="text" name="quantity" value={row.quantity} onChange={(e) => handleChange(index, e)} required /></td>
                                         <td><input type="datetime-local" name="startDate" value={row.startDate} onChange={(e) => handleChange(index, e)} required /></td>
                                         <td><input type="datetime-local" name="endDate" value={row.endDate} onChange={(e) => handleChange(index, e)} required /></td>
-                                        <td><input type="text" name="priority" value={row.priority} onChange={(e) => handleChange(index, e)} required /></td>
+                                        <td>
+                                            <select name="priority" value={row.priority} onChange={(e) => handleChange(index, e)} required>
+                                                <option value="">선택</option>
+                                                <option value="Low">Low</option>
+                                                <option value="Medium">Medium</option>
+                                                <option value="High">High</option>
+                                            </select>
+                                        </td>
                                         <td><input type="text" name="etc" value={row.etc} onChange={(e) => handleChange(index, e)} /></td>
                                     </tr>
                                 ))}
@@ -94,6 +157,17 @@ function MBOMForm() {
                     </form>
                 </div>
             </main>
+            <Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                contentLabel="등록 완료"
+                className="modal"
+                overlayClassName="overlay"
+            >
+                <h2>등록 완료</h2>
+                <p>생산 주문이 성공적으로 등록되었습니다.</p>
+                <button onClick={closeModal}>닫기</button>
+            </Modal>
         </div>
     );
 }

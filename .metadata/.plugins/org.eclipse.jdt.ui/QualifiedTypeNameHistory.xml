@@ -1,4 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
     <fullyQualifiedTypeName name="java.util.HashMap"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.monitoring.service.AligoSmsService"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.monitoring.service.ProductionMonitoringService"/>
+    <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.Query"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestMapping"/>
+    <fullyQualifiedTypeName name="org.springframework.http.ResponseEntity"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.inventory.entity.Product"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.MBOM.repository.ProductRepository"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.MBOM.entity.Product"/>
+    <fullyQualifiedTypeName name="java.sql.Date"/>
+    <fullyQualifiedTypeName name="javax.persistence.Table"/>
+    <fullyQualifiedTypeName name="org.springframework.http.HttpStatus"/>
+    <fullyQualifiedTypeName name="java.util.Optional"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.Qualitytest.repository.QualitytestRepository"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.Qualitytest.service.QualitytestService"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.DefectManagement.repository.DefectManagementRepository"/>
+    <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.JpaRepository"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.Qualitytest.entity.QualityControl"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="javax.persistence.Entity"/>
+    <fullyQualifiedTypeName name="org.springframework.data.annotation.Id"/>
+    <fullyQualifiedTypeName name="javax.persistence.GeneratedValue"/>
+    <fullyQualifiedTypeName name="javax.persistence.GenerationType"/>
+    <fullyQualifiedTypeName name="org.threeten.bp.LocalDateTime"/>
+    <fullyQualifiedTypeName name="java.time.LocalDateTime"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.Entry.entity.ProductionEntry"/>
+    <fullyQualifiedTypeName name="java.util.stream.Collectors"/>
+    <fullyQualifiedTypeName name="com.ERP.FinalProject.domain.production.DefectManagement.entity.DefectManagement"/>
 </qualifiedTypeNameHistroy>

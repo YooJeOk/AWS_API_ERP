@@ -1,0 +1,102 @@
+.custom-container {
+    display: flex;
+}
+
+#sidebar {
+    width: 200px;
+    background-color: #f4f4f4;
+}
+
+.production-content {
+    flex: 1;
+}
+
+.production-mainbar {
+    padding: 20px;
+}
+
+.productionbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.table th {
+    font-weight: bold;
+    background-color: #f2f2f2;
+}
+
+.status-button {
+    background-color: #ff4d4d; /* 미처리 상태 버튼 빨간색 */
+    color: white;
+    padding: 3px 7px; /* 세로 길이 조정 */
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 0.9em; /* 텍스트 크기 조정 */
+}
+
+.status-button:hover {
+    background-color: #ff6666;
+}
+
+.status-complete {
+    color: green;
+    font-weight: bold;
+}
+
+.highlight-row {
+    background-color: #ffeb3b; /* 미처리 항목 강조 표시 */
+}
+
+.pagebtn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+
+.table th:nth-child(8), /* 불량 처리 상태 칸 너비 조정 */
+.table td:nth-child(8) {
+    width: 10%; /* 불량 처리 상태 칸의 너비를 늘립니다 */
+}
+
+.status-button {
+    background-color: #ff4d4d; /* 미처리 상태 버튼 빨간색 */
+    color: white;
+    padding: 3px 8px; /* 세로 길이 조정 */
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 0.9em; /* 텍스트 크기 조정 */
+    width: 100%; /* 버튼 크기를 칸에 맞춤 */
+}
+
+.status-complete {
+    color: green;
+    font-weight: bold;
+    display: inline-block;
+    width: 100%; /* 완료 텍스트도 칸에 맞춰 넓이를 설정 */
+    text-align: center;
+}
+
+.button-group1 {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    
+}
