@@ -52,7 +52,7 @@ function MyBigCalendar() {
       const adjustedStartDate = new Date(eventDates.start);
       adjustedStartDate.setDate(adjustedStartDate.getDate() + 1);
   
-      const newEvent = { date: adjustedStartDate, title: newEventTitle };
+      const newEvent = { date: adjustedStartDate, title: newEventTitle }; // 올바른 제목 설정
       fetch('http://localhost:8080/api/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -64,8 +64,8 @@ function MyBigCalendar() {
             ...prevEvents,
             { ...event, start: new Date(event.date), end: new Date(event.date) },
           ]);
-          setNewEventTitle('');
-          setShowAddEventModal(false);
+          setNewEventTitle(''); // 제목 초기화
+          setShowAddEventModal(false); // 모달 닫기
         });
     }
   };
@@ -100,6 +100,13 @@ function MyBigCalendar() {
 
   const renderEvent = ({ event }) => {
     const dateEvents = events.filter((evt) => moment(evt.start).isSame(event.start, 'day'));
+  
+    // 2번째 이벤트는 렌더링하지 않음
+    if (dateEvents.indexOf(event) === 1) {
+      return null;
+    }
+  
+    // 기본 렌더링
     return (
       <div
         className="event-container"
@@ -108,23 +115,25 @@ function MyBigCalendar() {
           alignItems: 'center',
           justifyContent: 'space-between',
           backgroundColor: '#F0C490',
-          
-          
         }}
       >
-        <span style={{ fontWeight: 'bold', textDecoration: 'none', color: '#703103' }}>{dateEvents[0].title}</span>
+        <span style={{ fontWeight: 'bold', textDecoration: 'none', color: '#703103' }}>
+          {event.title}
+        </span>
         {dateEvents.length > 1 && (
           <Button
             variant="link"
             style={{ padding: 0, fontSize: '14px', marginLeft: 'auto', color: '#703103', fontWeight: 'bold' }}
             onClick={() => handleMoreEventsClick(event.start)}
           >
-            +
+            +{dateEvents.length - 1} more
           </Button>
         )}
       </div>
     );
   };
+  
+  
 
   return (
     <Container fluid className="custom-background" style={{ height: '100vh', padding: '0' }}>
@@ -132,19 +141,21 @@ function MyBigCalendar() {
         {/* 왼쪽 영역: 캘린더와 SalesTable을 위아래 50%로 배치 */}
         <Col sm={6} style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
           <div style={{ height: '50%' }}>
-            <Calendar
-              selectable
-              localizer={localizer}
-              events={events}
-              defaultView="month"
-              views={['month']}
-              style={{ width: '100%', height: '100%' }}
-              step={15}
-              timeslots={4}
-              onSelectSlot={handleSelect}
-              onSelectEvent={handleEventClick}
-              components={{ event: renderEvent }}
-            />
+          <Calendar
+  selectable
+  localizer={localizer}
+  events={events}
+  defaultView="month"
+  views={['month']}
+  style={{ width: '100%', height: '100%' }}
+  step={15}
+  timeslots={4}
+  onSelectSlot={handleSelect}
+  onSelectEvent={handleEventClick}
+  components={{
+    event: renderEvent, // 커스터마이즈된 renderEvent 함수 사용
+  }}
+/>
           </div>
           <div style={{ height: '50%', display: 'flex', flexDirection: 'column' }}>
             <h2 style={{ color: '#703103', fontWeight: 'bold', fontSize: '25px', marginTop: '2%' }}>판매 기록 현황</h2>

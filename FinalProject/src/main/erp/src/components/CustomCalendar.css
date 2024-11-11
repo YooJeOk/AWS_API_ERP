@@ -122,6 +122,13 @@
   box-shadow: none !important; /* Bootstrap 클릭 시 기본 그림자 제거 */
   outline: none !important; /* 외곽선 제거 */
 }
+.rbc-show-more {
+  display: none !important;
+}
+.form-control:focus {
+  border-color: #F0C490;
+  box-shadow: 0 0 0 0.25rem rgba(240, 196, 144, 0.5);
+}
 .event-container{
 
   .event-container {
