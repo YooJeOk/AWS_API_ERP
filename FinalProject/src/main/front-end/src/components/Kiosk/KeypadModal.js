@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './KeypadModal.css';
 import useClickSound from '../../hooks/useClickSound';
+import AlertModal from './AlertModal';
+
 
 const KeypadModal = ({ onClose, onSubmit, purpose }) => {
   const ClickSound = useClickSound();
@@ -8,6 +10,8 @@ const KeypadModal = ({ onClose, onSubmit, purpose }) => {
   const [secondInput, setSecondInput] = useState('');
   const [step, setStep] = useState(1);
 
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
   const handleKeyPress = (key) => {
     ClickSound();
     if (input.length < 11 && step === 1) {
@@ -32,7 +36,9 @@ const KeypadModal = ({ onClose, onSubmit, purpose }) => {
     if (purpose === 'joinMember') {
       if (step === 1) {
         setStep(2);
-        alert('번호를 한번 더 입력해주세요.');
+        // alert('');
+        setAlertMessage('번호를 한번 더 입력해주세요.');
+        setShowAlert(true);
       } else {
         if (input === secondInput) {
           try {
@@ -46,14 +52,22 @@ const KeypadModal = ({ onClose, onSubmit, purpose }) => {
             if (!response.ok) {
               throw new Error('Failed to register user');
             }
-            alert('회원가입이 완료되었습니다.');
-            onSubmit(secondInput);
+            // alert('회원가입이 완료되었습니다.');
+
+            setAlertMessage('회원가입이 완료되었습니다.');
+            setShowAlert(true);
+            setTimeout(() => {
+              onSubmit(secondInput);
+            }, 1000); // 1초 후 실행
+            // onSubmit(secondInput);
           } catch (error) {
             console.error(error);
             alert('등록에 실패했습니다.');
           }
         } else {
-          alert('두 번호가 일치하지 않습니다!');
+          // alert('두 번호가 일치하지 않습니다!');
+          setAlertMessage('두 번호가 일치하지 않습니다!');
+          setShowAlert(true);
           setInput('');
           setSecondInput('');
           setStep(1);
@@ -82,6 +96,12 @@ const KeypadModal = ({ onClose, onSubmit, purpose }) => {
           </button>
         </div>
       </div>
+      {showAlert && (
+        <AlertModal 
+          message={alertMessage} 
+          onClose={() => setShowAlert(false)} 
+        />
+      )}
     </div>
   );
 };
