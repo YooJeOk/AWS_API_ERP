@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { createChart } from 'lightweight-charts';
 
-const SalesDwmAnalysisTable = ({ showStats = true }) => {
+const SalesDwmAnalysisTable = React.forwardRef(({ showStats = true }, ref) => {
   const chartContainerRef = useRef();
   const [timePeriod, setTimePeriod] = useState('day');
   const [chartData, setChartData] = useState([]);
@@ -18,14 +18,13 @@ const SalesDwmAnalysisTable = ({ showStats = true }) => {
       });
       setChartData(formattedData);
 
-      // 통계 계산
       const values = formattedData.map((d) => d.value);
       const average = values.reduce((a, b) => a + b, 0) / values.length;
       const max = Math.max(...values);
       const min = Math.min(...values);
       setStats({ average, max, min });
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error('Error fetching data:', error);
     }
   }, [timePeriod]);
 
@@ -70,15 +69,14 @@ const SalesDwmAnalysisTable = ({ showStats = true }) => {
     };
   }, [chartData, stats.average]);
 
-  // 금액 형식 설정 (소수점 표시 없음)
   const formatCurrency = (value) =>
     new Intl.NumberFormat('ko-KR', {
       style: 'decimal',
-      maximumFractionDigits: 0, // 소수점 없이 표시
+      maximumFractionDigits: 0,
     }).format(value);
 
   return (
-    <div>
+    <div ref={ref}>
       <div className="d-flex justify-content-end">
         <select
           className="form-select m-2 custom-select"
@@ -103,6 +101,6 @@ const SalesDwmAnalysisTable = ({ showStats = true }) => {
       <div ref={chartContainerRef} style={{ width: '100%', height: '400px', position: 'relative' }} />
     </div>
   );
-};
+});
 
 export default SalesDwmAnalysisTable;
