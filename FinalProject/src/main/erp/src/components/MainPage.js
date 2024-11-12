@@ -20,7 +20,6 @@ function MyBigCalendar() {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedDateEvents, setSelectedDateEvents] = useState([]);
 
-  // 서버에서 일정 데이터를 불러오기
   useEffect(() => {
     fetch('http://localhost:8080/api/events')
       .then((response) => response.json())
@@ -34,25 +33,22 @@ function MyBigCalendar() {
       });
   }, []);
 
-  // 일정 추가 모달 열기
   const handleSelect = ({ start, end }) => {
     setEventDates({ start, end });
     setShowAddEventModal(true);
   };
 
-  // 일정 삭제 모달 열기
   const handleEventClick = (event) => {
     setSelectedEvent(event);
     setShowDeleteEventModal(true);
   };
 
-  // 일정 추가
   const handleAddEvent = () => {
     if (newEventTitle) {
       const adjustedStartDate = new Date(eventDates.start);
       adjustedStartDate.setDate(adjustedStartDate.getDate() + 1);
   
-      const newEvent = { date: adjustedStartDate, title: newEventTitle }; // 올바른 제목 설정
+      const newEvent = { date: adjustedStartDate, title: newEventTitle };
       fetch('http://localhost:8080/api/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -64,13 +60,12 @@ function MyBigCalendar() {
             ...prevEvents,
             { ...event, start: new Date(event.date), end: new Date(event.date) },
           ]);
-          setNewEventTitle(''); // 제목 초기화
-          setShowAddEventModal(false); // 모달 닫기
+          setNewEventTitle('');
+          setShowAddEventModal(false);
         });
     }
   };
 
-  // 일정 삭제
   const handleDeleteEvent = (eventId) => {
     fetch(`http://localhost:8080/api/events/${eventId}`, {
       method: 'DELETE',
@@ -82,14 +77,12 @@ function MyBigCalendar() {
     });
   };
 
-  // 날짜에 있는 모든 일정을 볼 수 있는 모달 열기
   const handleMoreEventsClick = (date) => {
     const dateEvents = events.filter((event) => moment(event.start).isSame(date, 'day'));
     setSelectedDateEvents(dateEvents);
     setShowEventListModal(true);
   };
 
-  // 모달 닫기
   const closeModal = () => {
     setShowAddEventModal(false);
     setShowDeleteEventModal(false);
@@ -101,12 +94,10 @@ function MyBigCalendar() {
   const renderEvent = ({ event }) => {
     const dateEvents = events.filter((evt) => moment(evt.start).isSame(event.start, 'day'));
   
-    // 2번째 이벤트는 렌더링하지 않음
     if (dateEvents.indexOf(event) === 1) {
       return null;
     }
   
-    // 기본 렌더링
     return (
       <div
         className="event-container"
@@ -133,48 +124,42 @@ function MyBigCalendar() {
     );
   };
   
-  
-
   return (
     <Container fluid className="custom-background" style={{ height: '100vh', padding: '0' }}>
       <Row style={{ height: '100%' }}>
-        {/* 왼쪽 영역: 캘린더와 SalesTable을 위아래 50%로 배치 */}
         <Col sm={6} style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
           <div style={{ height: '50%' }}>
-          <Calendar
-  selectable
-  localizer={localizer}
-  events={events}
-  defaultView="month"
-  views={['month']}
-  style={{ width: '100%', height: '100%' }}
-  step={15}
-  timeslots={4}
-  onSelectSlot={handleSelect}
-  onSelectEvent={handleEventClick}
-  components={{
-    event: renderEvent, // 커스터마이즈된 renderEvent 함수 사용
-  }}
-/>
+            <Calendar
+              selectable
+              localizer={localizer}
+              events={events}
+              defaultView="month"
+              views={['month']}
+              style={{ width: '100%', height: '100%' }}
+              step={15}
+              timeslots={4}
+              onSelectSlot={handleSelect}
+              onSelectEvent={handleEventClick}
+              components={{
+                event: renderEvent,
+              }}
+            />
           </div>
           <div style={{ height: '50%', display: 'flex', flexDirection: 'column' }}>
             <h2 style={{ color: '#703103', fontWeight: 'bold', fontSize: '25px', marginTop: '2%' }}>판매 기록 현황</h2>
             <SalesTable style={{ flex: '1', width: '100%', overflowY: 'auto' }} maxItems={4} showpage={false} showTooltip={true} />
           </div>
         </Col>
-
-        {/* 오른쪽 영역: SalesStatusSalesTable과 ProductionPage9를 위아래 50%로 배치 */}
         <Col sm={6} style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
           <h2 style={{ color: '#703103', fontWeight: 'bold', fontSize: '25px', marginTop: '2%' }}>매출 현황</h2>
           <div style={{ height: '50%' }}>
-            <SalesStatusSalesTable  showpage={false} style={{ width: '100%', overflowY: 'auto' } } />
+            <SalesStatusSalesTable showpage={false} style={{ width: '100%', overflowY: 'auto' }} />
             <h2 style={{ color: '#703103', fontWeight: 'bold', fontSize: '25px', marginTop: '2%' }}>일/주/월 매출 현황</h2>
             <SalesDwmAnalysisTable style={{ width: '100%', overflowY: 'auto' }} showStats={false} />
           </div>
         </Col>
       </Row>
 
-      {/* 일정 추가 모달 */}
       <Modal show={showAddEventModal} onHide={closeModal} centered>
         <Modal.Header closeButton>
           <Modal.Title>새 일정 추가</Modal.Title>
@@ -202,7 +187,6 @@ function MyBigCalendar() {
         </Modal.Footer>
       </Modal>
 
-      {/* 일정 삭제 확인 모달 */}
       <Modal show={showDeleteEventModal} onHide={closeModal} centered>
         <Modal.Header closeButton>
           <Modal.Title>일정 삭제 확인</Modal.Title>
@@ -222,7 +206,6 @@ function MyBigCalendar() {
         </Modal.Footer>
       </Modal>
 
-      {/* 전체 일정 모달 */}
       <Modal show={showEventListModal} onHide={closeModal} centered>
         <Modal.Header closeButton>
           <Modal.Title>전체 일정</Modal.Title>

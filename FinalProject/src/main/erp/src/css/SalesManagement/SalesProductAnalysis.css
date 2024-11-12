@@ -1,33 +1,32 @@
 /* 날짜 input 스타일링 */
 .date-input {
-    border: none; /* 테두리 제거 */
-    outline: none; /* 클릭 시 검은색 윤곽선 제거 */
-    background-color: #F6F6F6; /* 원하는 배경 색상 */
-    padding: 5px 10px; /* 내부 여백 */
-    border-radius: 5px; /* 모서리 둥글게 */
-    font-size: 14px; /* 글자 크기 */
-    color: #F0C490; /* 텍스트 색상 */
+    border: none;
+    outline: none;
+    background-color: lightgray;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: black;
     font-weight: bold;
 }
 
 .date-input:focus {
-     /* 포커스 시에도 윤곽선 제거 */
-    outline-color: #F0C490;
-    background-color: #F6F6F6; /* 포커스 시 배경 색상 변경 */
+    outline-color: lightgray;
+    background-color: lightgray;
 }
 
 /* DatePicker 스타일링 */
 .custom-date-input {
-    border: none; /* 테두리 제거 */
-    background-color: #f0f0f0; /* 배경색 */
+    border: none;
+    background-color: lightgray;
     padding: 5px 10px;
     border-radius: 5px;
     font-size: 14px;
-    color: #333;
+    color: black;
 }
 
 .custom-date-input:focus {
-    outline: none; /* 포커스 윤곽선 제거 */
+    outline: none;
 }
 
 .react-datepicker__input-container input {

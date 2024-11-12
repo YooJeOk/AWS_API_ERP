@@ -1,18 +1,16 @@
 /* ActionButtons.css */
 .custom-button {
-    background-color: #F0C490;
-    color: white;
-    border-color: #F0C490;
-    width: 120px;
-    text-align: center;
-    font-weight: bold;
-    margin-left: 50px;
-    align-self: flex-end;
+  background-color: lightgray;
+  color: black;
+  border-color: lightgray;
+  width: 120px;
+  text-align: center;
+  font-weight: bold;
+  margin-left: 50px;
+  align-self: flex-end;
+}
 
-  }
-  
-  .custom-button:hover {
-    background-color: #e0b080; /* Hover 효과 */
-    border-color: #e0b080;
-  }
-  
+.custom-button:hover {
+  background-color: lightslategray;
+  border-color: lightslategray;
+}
