@@ -6,3 +6,5 @@ FinalProject/src/main/front-end -> 키오스크 프론트 엔드
 
 
 FinalProject/src/main/java/com/ERP/FinalProject -> 전체 백엔드
+
+FinalProject/target/ERP_ALL_FINAL.sql -> DB create, insert문
