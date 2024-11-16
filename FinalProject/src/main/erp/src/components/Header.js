@@ -10,7 +10,7 @@ function Header() {
                 <img src="logo-black.png" alt="숨쉰당 로고" className="logo" />
                 <div className="nav-menu">
                     <div id="main-button" className="nav-button" >
-                        <Link to="/"   style={{textDecoration: 'none', color: '#703103' }}>메인 화면</Link>  
+                        <Link to="/"   style={{textDecoration: 'none', color: ' #ffffff' }}>메인 화면</Link>  
                     </div>
                     <div id="production-button" className="nav-button">
                         생산 관리

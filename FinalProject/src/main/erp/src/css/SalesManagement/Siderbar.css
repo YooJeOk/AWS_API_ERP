@@ -1,21 +1,20 @@
 .custom-sidebar {
-    margin-top: 5px;
-  }
-  
-  .custom-sidebar-item {
-    color: #703103; /* 글꼴 색상 */
-    background-color: white; /* 배경색 */
-    margin-top: 20px;
-    text-align: center;
-    font-weight: bold;
-  }
-  .custom-sidebar-submenu-item {
-    color: #F0C490; /* 글꼴 색상 */
-    margin-top: 0%;
+  margin-top: 5px;
+}
 
-  }
+.custom-sidebar-item {
+  color: black; /* 글꼴 색상 */
+  background-color: white; /* 배경색 */
+  margin-top: 20px;
+  text-align: center;
+  font-weight: bold;
+}
 
-  .p-0{
-    color: #703103;
-    
-  }
+.custom-sidebar-submenu-item {
+  color: lightgray; /* 글꼴 색상 */
+  margin-top: 0%;
+}
+
+.p-0 {
+  color: black;
+}

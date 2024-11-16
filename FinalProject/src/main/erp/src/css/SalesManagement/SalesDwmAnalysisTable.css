@@ -1,15 +1,16 @@
 .custom-select {
-    width: 100px;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-  }
-  
-  .custom-select:focus {
-    border-color: #F0C490 !important;
-    color:#703103;
-    font-weight: bold;
-    box-shadow: 0 0 0 0.2rem rgba(240, 196, 144, 0.5); /* 테두리 강조 효과 */
-  }
-  .stats{
-    color:#703103 !important;
-    font-weight: bold;
-  }
+  width: 100px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.custom-select:focus {
+  border-color: lightgray !important;
+  color: black;
+  font-weight: bold;
+  box-shadow: 0 0 0 0.2rem rgba(200, 200, 200, 0.5);
+}
+
+.stats {
+  color: black !important;
+  font-weight: bold;
+}

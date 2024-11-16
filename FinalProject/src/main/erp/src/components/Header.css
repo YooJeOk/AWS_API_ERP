@@ -32,7 +32,7 @@ html {
 
 
 .navbar {
-    background-color: #F0C490 !important;
+    background-color: #5e9fff !important;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -61,7 +61,7 @@ html {
     display: flex;
     gap: 10px;
     margin-left: auto;
-    background-color: #F0C490 !important;
+    background-color:  #5e9fff !important;
 }
 
 .nav-button {
@@ -69,7 +69,6 @@ html {
     padding: 10px 20px;
     cursor: pointer;
     position: relative;
-    transition: background-color 0.3s, color 0.3s;
     font-size: 15px;
     font-weight: bold;
     margin-right: 50px;
@@ -78,46 +77,40 @@ html {
 
 .nav-button:hover {
     
-    color: #703103 !important;
+    color:  #ffffff !important;
 }
 
 
 .nav-button-dropdown {
     display: flex;
     flex-direction: column;
-   
     position: absolute;
     top: 100%;
-   
     left: 0;
     width: 100%;
-    /* 가로로 확장 */
     z-index: 3000;
-   
     display: none;
-    
     white-space: nowrap;
     
 }
 
-/* 호버 시 드롭다운 표시 */
+
 .nav-button:hover .nav-button-dropdown {
     display: flex;
-    /* 호버 시 드롭다운 메뉴가 보임 */
+    
 }
 
 /* 드롭다운 메뉴 항목 */
 .dropdown-content a {
     padding: 10px 10px;
-    color: rgb(0, 0, 0);
-    /* 텍스트 색상 */
+    color: rgb(255, 255, 255);
     text-decoration: none;
     font-size: 13px;
 }
 
 .dropdown-content a:hover {
     font-weight: bold;
-    color: #703103 !important;
+    color: #ffffff !important;
     
 }
 
